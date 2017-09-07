@@ -89,8 +89,10 @@
 
                 <li><a href="@Url.Action("Index", "Application")"><span class="fa fa-circle-o"></span> Book Course</a></li>
                 <li><a href="@Url.Action("ViewApplicants", "Application")"><span class="fa fa-dot-circle-o"></span>Applicants</a></li>
-                <li><a href="@Url.Action("NonCetApplication", "Application")"><span class="fa fa-dot-circle-o"></span> Non-CET Dev</a></li>
-                <li><a href="@Url.Action("CetApplication", "Application")"><span class="fa fa-dot-circle-o"></span> CET Dev</a></li>
+                <li><a href="@Url.Action("ApplicationForm", "Report")"><span class="fa fa-circle-o"></span>Application Form</a></li>
+
+                @*<li><a href="@Url.Action("NonCetApplication", "Application")"><span class="fa fa-dot-circle-o"></span> Non-CET Dev</a></li>
+                <li><a href="@Url.Action("CetApplication", "Application")"><span class="fa fa-dot-circle-o"></span> CET Dev</a></li>*@
                 
 
             </ul>
@@ -109,7 +111,16 @@
 
             </ul>
         </li>
+        
+        <li class="xn-openable ">
+            <a href="#"><span class="fa fa-files-o"></span> <span class="xn-text">Certification</span></a>
+            <ul>
 
+                <li><a href="@Url.Action("CertificateDesignList", "Certification")"><span class="fa fa-circle-o"></span>Design Certificate</a></li>
+
+
+            </ul>
+        </li>
 
     </ul>
     <!-- END X-NAVIGATION -->

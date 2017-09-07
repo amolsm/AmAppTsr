@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Entities\Application.cs" />
     <Compile Include="Entities\Batch.cs" />
+    <Compile Include="Entities\CertificateDesign.cs" />
     <Compile Include="Entities\CetInterview.cs" />
     <Compile Include="Entities\CetMark.cs" />
     <Compile Include="Entities\CetMaster.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="Entities\OnlinePaymentInfo.cs" />
     <Compile Include="Entities\OrganisationMaster.cs" />
     <Compile Include="Entities\Package.cs" />
+    <Compile Include="Entities\Principal.cs" />
     <Compile Include="Entities\StudentFeeDetail.cs" />
     <Compile Include="Models\AddmissionCetCreateVM.cs" />
     <Compile Include="Models\AddmissionCetListVM.cs" />
@@ -80,10 +82,12 @@
     <Compile Include="Models\ApplicationSumPayNonCetVM.cs" />
     <Compile Include="Models\BatchCreateVM.cs" />
     <Compile Include="Models\BatchListVM.cs" />
+    <Compile Include="Models\CertificateDesignCertificateVM.cs" />
     <Compile Include="Models\CourseFeeListVM.cs" />
     <Compile Include="Models\EmailModel.cs" />
     <Compile Include="Models\EntranceMarksListVM.cs" />
     <Compile Include="Models\FeesApplicantList.cs" />
+    <Compile Include="Models\FeesViewPaymentDetailsVM.cs" />
     <Compile Include="Models\MasterCourseCreateVM.cs" />
     <Compile Include="Models\MasterCourseDocsSelectVM.cs" />
     <Compile Include="Models\MasterCourseDocsVM.cs" />
@@ -92,6 +96,7 @@
     <Compile Include="Models\MasterEmployeeListVM.cs" />
     <Compile Include="Models\MasterPackageCreateVM.cs" />
     <Compile Include="Models\MastersCourseFeeCreateVM.cs" />
+    <Compile Include="Models\ReportApplicationVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

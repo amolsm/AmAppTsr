@@ -35,5 +35,11 @@ namespace Tsr.Infra
         public DbSet<InterviewMaster> InterviewMasters { get; set; }
         public DbSet<MedicalMaster> MedicalMasters { get; set; }
         public DbSet<CetMedical> CetMedicals { get; set; }
+
+        public DbSet<CertificateDesign> CertificateDesigns { get; set; }
+
+        public DbSet<Principal> Principals { get; set; }
+
+
     }
 }

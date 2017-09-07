@@ -213,8 +213,8 @@ namespace Tsr.Web.Controllers
         {
             var list = from ap in db.Applications
                        join b in db.Batches on ap.BatchId equals b.BatchId
-                       join opi in db.OnlinePaymentInfos on ap.ApplicationId equals opi.ApplicationId
-                       
+                       //join opi in db.OnlinePaymentInfos on ap.ApplicationId equals opi.ApplicationId
+
                        where (b.BatchId == BatchId)
                        select new ApplicationApplicantsList
                        {
@@ -222,7 +222,7 @@ namespace Tsr.Web.Controllers
                            ApplicationId = ap.ApplicationId,
                            BatchName = b.BatchCode,
                            Name = ap.FirstName + " " + ap.LastName,
-                           PaidAmount = opi.amount,
+                           //PaidAmount = opi.amount,
                            Email = ap.Email,
                            Cell = ap.CellNo
                        };

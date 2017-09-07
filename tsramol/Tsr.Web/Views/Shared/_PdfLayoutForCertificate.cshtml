@@ -1,0 +1,40 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Applicant List</title>
+    <link href="~/Content/wiz/assets/css/bootstrap.min.css" rel="stylesheet" />
+
+    <style>
+        html {
+            font-family: Arial;
+        }
+
+        table {
+            border: 1px solid black;
+            border-spacing: 0px;
+        }
+
+            table tr th {
+                background-color: gray;
+                color: white;
+                padding: 5px;
+            }
+
+            table tr td {
+                margin: 0px;
+                padding: 5px;
+            }
+
+        .mystyle {
+            border-bottom: 0.5px solid black;
+        }
+    </style>
+</head>
+<body>
+    @RenderBody()
+</body>
+</html>

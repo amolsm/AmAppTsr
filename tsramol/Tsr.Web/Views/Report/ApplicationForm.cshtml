@@ -1,0 +1,99 @@
+﻿@model Tsr.Core.Models.ReportApplicationVM
+@{
+    ViewBag.Title = "ApplicationForm";
+}
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Common/Scripts/Commondropdownjs.js"></script>
+<!-- START BREADCRUMB -->
+<ul class="breadcrumb push-down-0">
+    <li><a href="#">Test</a></li>
+    <li class="active">ApplicationForm</li>
+
+</ul>
+<!-- END BREADCRUMB -->
+
+<div class="page-content-wrap">
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="form-horizontal">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Application Form</h3>
+
+                        </div>
+
+
+                        <div class="panel-body">
+                            @using (Html.BeginForm("ApplicationForm", "Report", FormMethod.Post, new { area = "CI3S", @target = "_blank" }))
+                            {
+                                @Html.AntiForgeryToken()
+
+
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            Category
+                                        </div>
+                                        @Html.DropDownListFor(model => model.CategoryId
+           , (IEnumerable<SelectListItem>)ViewBag.Categories, " ", new { @class = "form-control", @onchange = "FillCourse()" })
+                                    </div>
+                                </div>
+
+
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            Course
+                                        </div>
+                                        @Html.DropDownListFor(model => model.CourseId,
+                                         new SelectList(Enumerable.Empty<SelectListItem>(), "CourseId", "CourseName"), " ", new { @class = "form-control", @onchange = "FillBatch()" })
+                                    </div>
+                                </div>
+
+
+                                <div class="col-lg-3">
+
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            Batch
+                                        </div>
+                                        @Html.DropDownListFor(model => model.BatchId,
+                                         new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "BatchName"), " ", new { @class = "form-control" })
+                                    </div>
+                                </div>
+
+                                        <div class="col-lg-3">
+
+                                            <div class="input-group">
+                                                <input class="btn btn-primary" type="submit" value="View Application form" />
+
+                                            </div>
+                                        </div>
+
+
+
+                            }
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+
+<!-- END PAGE CONTENT WRAPPER -->
+
+

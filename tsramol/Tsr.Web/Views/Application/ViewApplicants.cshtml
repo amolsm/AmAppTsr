@@ -17,7 +17,7 @@
         <div class="row">
             <div class="col-md-12">
 
-                <form class="form-horizontal">
+                <div class="form-horizontal">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title">Applicants List</h3>
@@ -28,14 +28,14 @@
                             <div class="row">
 
                                 <div class="col-md-12">
-                                    
+                                   
                                         <div class="form-group">
                                            
                                             <div class="col-md-3">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                                     @Html.DropDownList("CategoryId",
-                                                (IEnumerable<SelectListItem>)ViewBag.Categories, "Select Category", new { @class = "form-control", @onchange = "FillCourse()" })
+                                         (IEnumerable<SelectListItem>)ViewBag.Categories, "Select Category", new { @class = "form-control", @onchange = "FillCourse()" })
                                                 </div>
 
                                             </div>
@@ -44,8 +44,8 @@
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                                     @Html.DropDownList("CourseId",
-                   new SelectList(Enumerable.Empty<SelectListItem>(), "CourseId", "CourseName"),
-              " ", new { @class = "form-control", @onchange = "FillBatch()" })
+            new SelectList(Enumerable.Empty<SelectListItem>(), "CourseId", "CourseName"),
+       " ", new { @class = "form-control", @onchange = "FillBatch()" })
                                                 </div>
 
                                             </div>
@@ -54,22 +54,24 @@
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                                     @Html.DropDownList("BatchId",
-                   new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "BatchCode"),
-              " ", new { @class = "form-control" })
+            new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "BatchCode"),
+       " ", new { @class = "form-control" })
                                                 </div>
 
                                             </div>
 
                                             <div class="col-md-3">
                                                 <div class="input-group">
-                                                    <input class="btn btn-primary" type="button" value="Search" onclick="Search()"/>
-                                                </div>
+                                                    <input class="btn btn-primary" type="button" value="Search" onclick="Search()" />
+
+                                                    &nbsp;&nbsp;&nbsp;<input class="btn btn-primary" type="button" value="View In Pdf" onclick="location.href='@Url.Action("GetApplicationApplicantList", "Report")?id=' + document.getElementById('BatchId').value" />
+                                              </div>
 
                                             </div>
 
                                         </div>
-                                    
-                                    
+                                 
+
                                 </div>
 
 
@@ -80,7 +82,7 @@
                             </div>
                         </div>
                     </div>
-                </form>
+                </div>
 
             </div>
         </div>
@@ -137,4 +139,5 @@
       
       $("#dvResult").load('@(Url.Action("GetApplicantList", "Application",null, Request.Url.Scheme))?BatchId=' + BatchId);
   }
+  
 </script>

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tsr.Infra", "Tsr.Infra\Tsr.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tsr.Web", "Tsr.Web\Tsr.Web.csproj", "{C0C49944-24B2-4D04-87E7-4D7A4875C511}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tsr.ToPdf", "Tsr.ToPdf\Tsr.ToPdf.csproj", "{9DFD69C9-4E4A-4D63-A6F8-E73287026E96}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{C0C49944-24B2-4D04-87E7-4D7A4875C511}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0C49944-24B2-4D04-87E7-4D7A4875C511}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0C49944-24B2-4D04-87E7-4D7A4875C511}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DFD69C9-4E4A-4D63-A6F8-E73287026E96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DFD69C9-4E4A-4D63-A6F8-E73287026E96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DFD69C9-4E4A-4D63-A6F8-E73287026E96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DFD69C9-4E4A-4D63-A6F8-E73287026E96}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

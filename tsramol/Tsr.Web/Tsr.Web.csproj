@@ -52,6 +52,10 @@
       <HintPath>..\packages\Fluentx.Mvc.1.0.4\lib\Fluentx.Mvc.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="itextsharp, Version=5.5.12.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.12\lib\itextsharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.0.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.0.6\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
       <Private>True</Private>
@@ -203,6 +207,7 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Common\AmountInWords.cs" />
     <Compile Include="Common\DropdownData.cs" />
     <Compile Include="Common\MessageService.cs" />
     <Compile Include="Common\RemotePost.cs" />
@@ -214,6 +219,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MasterDetailsController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -224,6 +230,9 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Common\CSS\Certificate.css" />
+    <Content Include="Common\CSS\FeeReciept.css" />
+    <Content Include="Common\Scripts\Commondropdownjs.js" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\css\animate\animate.css" />
@@ -307,6 +316,8 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Img\avatar.png" />
+    <Content Include="Img\border.png" />
+    <Content Include="Img\DNV LOGO.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
@@ -861,11 +872,16 @@
     <Content Include="Views\Admission\TopStudentsList.cshtml" />
     <Content Include="Views\Admission\Interview.cshtml" />
     <Content Include="Views\Admission\InterviewList.cshtml" />
+    <Content Include="Views\Report\ApplicationForm.cshtml" />
+    <Content Include="Views\Fees\ViewPaymentDetails.cshtml" />
+    <Content Include="Views\Shared\_PdfLayoutForCertificate.cshtml" />
+    <Content Include="Views\Certification\CertificateDesignList.cshtml" />
+    <Content Include="Views\Report\GetAdmissionApplicantList.cshtml" />
+    <Content Include="Views\Report\GetApplicationApplicantList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="audio\" />
-    <Folder Include="Views\Certification\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -882,6 +898,10 @@
     <ProjectReference Include="..\Tsr.Infra\Tsr.Infra.csproj">
       <Project>{8d4d04e0-ea89-44d7-9d55-9a80ff997651}</Project>
       <Name>Tsr.Infra</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tsr.ToPdf\Tsr.ToPdf.csproj">
+      <Project>{9dfd69c9-4e4a-4d63-a6f8-e73287026e96}</Project>
+      <Name>Tsr.ToPdf</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

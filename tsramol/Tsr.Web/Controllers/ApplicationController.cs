@@ -15,6 +15,9 @@ using System.Web.UI;
 using Tsr.Web.Common;
 using Fluentx.Mvc;
 using System.Security.Cryptography;
+using System.IO;
+using iTextSharp.text.pdf;
+using iTextSharp.text;
 
 namespace Tsr.Web.Controllers
 {
@@ -907,6 +910,109 @@ namespace Tsr.Web.Controllers
 
             
             return PartialView("ApplicantsList", list.ToList());
+        }
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult Export(string CategoryId, string CourseId, string BatchId)
+        {
+            using (MemoryStream stream = new System.IO.MemoryStream())
+            {
+                int BatchIds = 0;
+                BatchIds = Convert.ToInt32(BatchId);
+                var list = from ap in db.Applications
+                           join b in db.Batches on ap.BatchId equals b.BatchId
+                           join opi in db.OnlinePaymentInfos on ap.ApplicationId equals opi.ApplicationId
+                           into opis
+                           from opi in opis.DefaultIfEmpty()
+                               //join apl in db.Applied on ap.ApplicationId equals apl.ApplicationId
+                           where (b.BatchId == BatchIds)
+                           select new ApplicationApplicantsList
+                           {
+                               ApplicationCode = ap.ApplicationCode,
+                               ApplicationId = ap.ApplicationId,
+                               BatchName = b.BatchCode,
+                               Name = ap.FirstName + " " + ap.LastName,
+                               PaymentStatus = (opi == null) ? "Pending" : "Success",
+                               Email = ap.Email,
+                               Cell = ap.CellNo
+                           };
+                iTextSharp.text.Document pdfDoc = new iTextSharp.text.Document(PageSize.A4, 36, 72, 108, 180);
+                PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
+                pdfDoc.Open();
+                pdfDoc.AddTitle("Applicants List");
+
+                PdfPTable table = new PdfPTable(5);
+                iTextSharp.text.Font f = FontFactory.GetFont("Arial", 10, iTextSharp.text.Font.BOLD, BaseColor.BLACK);
+
+                table.TotalWidth = 525f;
+                table.LockedWidth = true;
+                Chunk beginning = new Chunk("Sir Mohammad Yusuf Seamen Welfare Foundation\n Training Ship Rahaman\n At Post Nhava, Tal. Panvel, Dist. Raigad, Maharashtra - 410206", f);
+                PdfPCell header = new PdfPCell(new Phrase(beginning));
+                header.Colspan = 5;
+                header.HorizontalAlignment = Element.ALIGN_CENTER;
+                header.UseVariableBorders = true;
+                header.BackgroundColor = BaseColor.WHITE;
+                table.AddCell(header);
+                Chunk main = new Chunk("Applicants List", f);
+                PdfPCell mainheading = new PdfPCell(new Phrase(main));
+                mainheading.BackgroundColor = BaseColor.WHITE;
+                mainheading.HorizontalAlignment = Element.ALIGN_CENTER;
+                mainheading.Colspan = 5;
+                table.AddCell(mainheading);
+                Chunk cthead1 = new Chunk("Application Code", f);
+                PdfPCell thead1 = new PdfPCell(new Phrase(cthead1));
+                thead1.BackgroundColor = BaseColor.WHITE;
+                table.AddCell(thead1);
+                Chunk cthead2 = new Chunk("Name", f);
+                PdfPCell thead2 = new PdfPCell(new Phrase(cthead2));
+                thead2.BackgroundColor = BaseColor.WHITE;
+                table.AddCell(thead2);
+                Chunk cthead3 = new Chunk("Email", f);
+                PdfPCell thead3 = new PdfPCell(new Phrase(cthead3));
+                thead3.BackgroundColor = BaseColor.WHITE;
+                table.AddCell(thead3);
+                Chunk cthead4 = new Chunk("Cell", f);
+                PdfPCell thead4 = new PdfPCell(new Phrase(cthead4));
+                thead4.BackgroundColor = BaseColor.WHITE;
+                table.AddCell(thead4);
+                Chunk cthead5 = new Chunk("Payment Status", f);
+                PdfPCell thead5 = new PdfPCell(new Phrase(cthead5));
+                thead5.BackgroundColor = BaseColor.WHITE;
+                table.AddCell(thead5);
+
+
+                //actual width of table in points
+
+                //fix the absolute width of the table
+                table.LockedWidth = true;
+
+                //relative col widths in proportions - 1/3 and 2/3
+                float[] widths = new float[] { 100f, 100f, 100f, 100f, 100f };
+                table.SetWidths(widths);
+                table.HorizontalAlignment = 0;
+                //leave a gap before and after the table
+                table.SpacingBefore = 20f;
+                table.SpacingAfter = 30f;
+
+
+                foreach (var s in list)
+                {
+                    table.AddCell(s.ApplicationCode.ToString());
+                    table.AddCell(s.Name.ToString());
+                    table.AddCell(s.Email.ToString());
+                    table.AddCell(s.Cell.ToString());
+                    table.AddCell(s.PaymentStatus.ToString());
+                }
+
+                Paragraph p = new Paragraph();
+                p.IndentationLeft = 0;
+                table.HorizontalAlignment = Element.ALIGN_LEFT;
+                p.Add(table);
+                pdfDoc.Add(p);
+                pdfDoc.Close();
+                return File(stream.ToArray(), "application/pdf");
+
+            }
         }
     }
 }
