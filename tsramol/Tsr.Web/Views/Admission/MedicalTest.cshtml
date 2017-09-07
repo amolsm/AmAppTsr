@@ -1,15 +1,15 @@
 ﻿
-@model List<Tsr.Core.Models.AdmissionInterviewListVM>
+@model List<Tsr.Core.Models.AdmissionMedicalListVM>
 
 @{
-    ViewBag.Title = "Interview";
+    ViewBag.Title = "Medical Test";
 }
 
 <!-- START BREADCRUMB -->
 <ul class="breadcrumb push-down-0">
     <li><a href="#">Home</a></li>
     <li><a href="#">Admission</a></li>
-    <li><a href="#">Interview</a></li>
+    <li><a href="#">Medical Test</a></li>
     @*<li class="active">Error 404</li>*@
 </ul>
 <!-- END BREADCRUMB -->
@@ -22,7 +22,7 @@
                 <div class="form-horizontal">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Interview</h3>
+                            <h3 class="panel-title">Medical</h3>
 
                         </div>
 
@@ -49,7 +49,7 @@
                                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                                 @Html.DropDownList("BatchId",
                    new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "BatchCode"),
-              " ", new { @class = "form-control"})
+              " ", new { @class = "form-control" })
                                             </div>
 
                                         </div>
@@ -62,7 +62,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                       
+
                                     </div>
 
 
@@ -72,7 +72,7 @@
 
                             </div>
                             <div id="dvResult">
-                                @{Html.RenderPartial("InterviewList", Model);}
+                                @{Html.RenderPartial("MedicalList", Model);}
 
                             </div>
                         </div>
@@ -109,11 +109,11 @@
         });
     }
 
-    
+
    function Search() {
       var BatchId = $('#BatchId').val();
-      
-      $("#dvResult").load('@(Url.Action("GetListForInterview", "Admission",null, Request.Url.Scheme))?BatchId=' + BatchId );
+
+      $("#dvResult").load('@(Url.Action("GetListForMedical", "Admission",null, Request.Url.Scheme))?BatchId=' + BatchId );
       //$('#customers2').DataTable();
   }
 </script>

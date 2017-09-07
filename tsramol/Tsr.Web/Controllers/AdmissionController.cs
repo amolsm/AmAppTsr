@@ -394,8 +394,39 @@ namespace Tsr.Web.Controllers
             ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
 
             var obj = new List<AdmissionInterviewListVM>();
-
+           // ViewBag.MedicalMaster = new SelectList(db.MedicalMasters.ToList(), "MedicalMasterId", "MedicalMasterCode");
             return View(obj);
+        }
+        [HttpPost]
+        public async Task<ActionResult> Interview(List<AdmissionInterviewListVM> obj, int? MedicalMasterId)
+        {
+            if (obj != null && MedicalMasterId != null)
+            {
+                foreach (var item in obj)
+                {
+                    if (item.Select == true)
+                    {
+                        var ap = await db.Applications.FindAsync(item.ApplicationId);
+
+                        CetMedical ci = new CetMedical
+                        {
+                            ApplicationId = item.ApplicationId,
+                            BatchId = (int)ap.BatchId,
+                            MedicalMasterId = (int)MedicalMasterId
+                        };
+                        db.CetMedicals.Add(ci);
+                    }
+                }
+                await db.SaveChangesAsync();
+            }
+            var a = from c in db.Courses
+                    join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
+                    where (c.IsActive == true && cc.CetRequired == true)
+                    select new { c.CourseId, c.CourseName };
+            ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
+
+            var l = new List<AdmissionInterviewListVM>();
+            return View(l);
         }
         [HttpGet]
         public ActionResult GetListForInterview(int? BatchId)
@@ -405,6 +436,7 @@ namespace Tsr.Web.Controllers
                 var list = from cis in db.CetInterviews
                            join ap in db.Applications on cis.ApplicationId equals ap.ApplicationId
                            join b in db.Batches on cis.BatchId equals b.BatchId
+                           join cim in db.InterviewMasters on cis.InterviewMasterId equals cim.InterviewMasterId
                            where (cis.BatchId == BatchId)
                            select new AdmissionInterviewListVM
                            {
@@ -414,8 +446,8 @@ namespace Tsr.Web.Controllers
                                Email = ap.Email,
                                Name = ap.FirstName + " " + ap.LastName
                            };
-
-                
+                ViewBag.Flag = "1";
+                ViewBag.MedicalMaster = new SelectList(db.MedicalMasters.ToList(), "MedicalMasterId", "MedicalCode");
                 return PartialView("InterviewList", list.ToList());
             }
             var obj = new List<AdmissionInterviewListVM>();
@@ -426,9 +458,42 @@ namespace Tsr.Web.Controllers
         #region MedicalTest
         public ActionResult MedicalTest()
         {
-            return View();
-        }
+            var a = from c in db.Courses
+                    join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
+                    where (c.IsActive == true && cc.CetRequired == true)
+                    select new { c.CourseId, c.CourseName };
+            ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
 
+            var obj = new List<AdmissionMedicalListVM>();
+            // ViewBag.MedicalMaster = new SelectList(db.MedicalMasters.ToList(), "MedicalMasterId", "MedicalMasterCode");
+            return View(obj);
+            
+        }
+        [HttpGet]
+        public ActionResult GetListForMedical(int? BatchId)
+        {
+            if (BatchId != null)
+            {
+                var list = from mt in db.CetMedicals
+                           join ap in db.Applications on mt.ApplicationId equals ap.ApplicationId
+                           join b in db.Batches on mt.BatchId equals b.BatchId
+                           join mm in db.MedicalMasters on mt.MedicalMasterId equals mm.MedicalMasterId
+                           where (mt.BatchId == BatchId)
+                           select new AdmissionMedicalListVM
+                           {
+                               ApplicationId = ap.ApplicationId,
+                               ApplicationCode = ap.ApplicationCode,
+                               Cell = ap.CellNo,
+                               Email = ap.Email,
+                               Name = ap.FirstName + " " + ap.LastName
+                           };
+                ViewBag.Flag = "1";
+                ViewBag.MedicalMaster = new SelectList(db.MedicalMasters.ToList(), "MedicalMasterId", "MedicalCode");
+                return PartialView("MedicalList", list.ToList());
+            }
+            var obj = new List<AdmissionMedicalListVM>();
+            return PartialView("MedicalList", obj.ToList());
+        }
         #endregion
 
         #region FinalMerit

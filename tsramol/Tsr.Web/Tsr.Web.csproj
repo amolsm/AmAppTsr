@@ -861,6 +861,8 @@
     <Content Include="Views\Admission\TopStudentsList.cshtml" />
     <Content Include="Views\Admission\Interview.cshtml" />
     <Content Include="Views\Admission\InterviewList.cshtml" />
+    <Content Include="Views\Admission\MedicalTest.cshtml" />
+    <Content Include="Views\Admission\MedicalList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

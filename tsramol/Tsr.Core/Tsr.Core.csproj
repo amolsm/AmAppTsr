@@ -67,6 +67,7 @@
     <Compile Include="Models\AddmissionCetCreateVM.cs" />
     <Compile Include="Models\AddmissionCetListVM.cs" />
     <Compile Include="Models\AdmissionInterviewListVM.cs" />
+    <Compile Include="Models\AdmissionMedicalListVM.cs" />
     <Compile Include="Models\AdmissionStudentCetMarks.cs" />
     <Compile Include="Models\AdmissionViewApplicantsVM.cs" />
     <Compile Include="Models\ApplicationApplicantsList.cs" />
