@@ -1,0 +1,97 @@
+﻿@model Tsr.Core.Models.ApplicationIndexVM
+
+@{
+    Layout = "~/Views/Shared/_LayoutApplication.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+<div class="wizard-navigation">
+    <ul>
+        <li><a href="#course" data-toggle="tab">Course</a></li>
+        <li><a href="#terms" data-toggle="tab">Terms</a></li>
+        
+    </ul>
+</div>
+
+<div class="tab-content">
+    <div class="tab-pane" id="course">
+        <div class="row">
+            <div class="col-sm-12">
+                <h4 class="info-text"> Let's start with the basic details</h4>
+            </div>
+
+
+            <div class="col-sm-6 col-sm-offset-3">
+                <div class="form-group label-floating">
+                    <label class="control-label">Course Category</label>
+                    @Html.DropDownListFor(model => model.CategoryId
+                     , (IEnumerable<SelectListItem>)ViewBag.Categories, " ", new { @class = "form-control", @onchange = "FillCourse()" })
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-sm-offset-3">
+                <div class="form-group label-floating">
+                    <label class="control-label">Course </label>
+                    @Html.DropDownListFor(model => model.CourseId,
+                                         new SelectList(Enumerable.Empty<SelectListItem>(), "CourseId", "CourseName"), " ", new { @class = "form-control", @onchange = "FillBatch()" })
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-sm-offset-3">
+                <div class="form-group label-floating">
+                    <label class="control-label">Batch </label>
+                    @Html.DropDownListFor(model => model.BatchId,
+                                         new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "BatchName"), " ", new { @class = "form-control" })
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <div class="tab-pane" id="terms">
+        <h4 class="info-text">Candidate should have following All Documents for Apply this Course </h4>
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3">
+                <div id="checkboxContainer"></div>
+
+            </div>
+
+            @*<div class="col-sm-10 col-sm-offset-1">
+                    <div class="col-sm-4 col-sm-offset-2">
+                        <div class="choice" data-toggle="wizard-radio" rel="tooltip" title="Select this option if you dont have any of document">
+                            <input type="radio" name="rdoTerm" value="No">
+                            <div class="icon">
+                                <i class="material-icons">close</i>
+                            </div>
+                            <h6>No</h6>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="choice" data-toggle="wizard-radio" rel="tooltip" title="Select this option if you have all documents">
+                            <input type="radio" name="rdoTerm" value="Yes">
+                            <div class="icon">
+                                <i class="material-icons">check</i>
+                            </div>
+                            <h6>Yes</h6>
+                        </div>
+                    </div>
+                </div>*@
+        </div>
+    </div>
+    
+</div>
+
+<div class="wizard-footer">
+    <div class="pull-right">
+        <input type='button' class='btn btn-next btn-fill btn-primary btn-wd' name='next' value='Next' />
+        
+        <input type='submit' class='btn btn-finish btn-fill btn-primary btn-wd' name='finish' value='Agree' />
+    </div>
+    <div class="pull-left">
+        <input type='button' class='btn btn-previous btn-fill btn-default btn-wd' name='previous' value='Previous' />
+    </div>
+    <div class="clearfix"></div>
+</div>
+}

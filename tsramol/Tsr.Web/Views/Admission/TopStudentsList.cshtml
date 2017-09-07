@@ -1,0 +1,57 @@
+﻿
+@model List<Tsr.Core.Models.EntranceMarksListVM>
+<script src="~/Scripts/js/plugins/datatables/jquery.dataTables.min.js"></script>
+@using (Html.BeginForm("TopStudents", "Admission", FormMethod.Post))
+{
+    <table id="customers2" class="table datatable">
+        <thead>
+            <tr>
+
+                <th>Application Code</th>
+                <th>Name</th>
+                <th>Marks1</th>
+                <th>Marks2</th>
+                <th>Marks3</th>
+                <th>Marks4</th>
+                @*<th>Action</th>*@
+            </tr>
+        </thead>
+        <tbody>
+
+            @for (int i = 0; i < Model.Count(); i++)
+            {
+                <tr>
+                    @Html.Hidden("obj[" + @i + "].ApplicationId", Model[i].ApplicationId)
+                    <td>@Html.TextBox("obj[" + @i + "].ApplicationCode", Model[i].ApplicationCode, new { @readonly = "readonly" })</td>
+                    <td>@Html.TextBox("obj[" + @i + "].Name", Model[i].Name, new { @readonly = "readonly" })</td>
+                    <td>@Html.TextBox("obj[" + @i + "].Marks1", Model[i].Marks1, new { @readonly = "readonly" })</td>
+                    <td>@Html.TextBox("obj[" + @i + "].Marks2", Model[i].Marks2, new { @readonly = "readonly" })</td>
+                    <td>@Html.TextBox("obj[" + @i + "].Marks3", Model[i].Marks3, new { @readonly = "readonly" })</td>
+                    <td>@Html.TextBox("obj[" + @i + "].Marks4", Model[i].Marks4, new { @readonly = "readonly" })</td>
+                   
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+     if (ViewBag.Flag == "1")
+        {
+        <div class="col-md-3">
+            <div class="input-group">
+                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                @Html.DropDownList("InterviewMasterId",(IEnumerable<SelectListItem>)ViewBag.InterveiwMasters, "Select Interview", new { @class = "form-control" })
+            </div>
+
+        </div>
+
+    <div class="col-md-3">
+        <div class="input-group">
+           <input class="btn btn-primary" type="submit" value="Mark for Interview" /> 
+            
+        </div>
+
+    </div>
+            
+        }
+}

@@ -1,0 +1,565 @@
+﻿@model Tsr.Core.Models.ApplicationCetVM
+
+@{
+    Layout = "~/Views/Shared/_LayoutApplication.cshtml";
+}
+
+@using (Html.BeginForm("CetApplication","Application",FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.CourseId)
+    @Html.HiddenFor(model => model.CategoryId)
+    @Html.HiddenFor(model => model.BatchId)
+    <div class="wizard-navigation">
+        <ul>
+            <li><a href="#personalDetails" data-toggle="tab">Personal Details</a></li>
+            <li><a href="#basicDetails" data-toggle="tab">Basic Details</a></li>
+            <li><a href="#description" data-toggle="tab">Address</a></li>
+            <li><a href="#academic" data-toggle="tab">Academic Details</a></li>
+        </ul>
+    </div>
+
+    <div class="tab-content">
+
+        <div class="tab-pane" id="personalDetails">
+            <h4 class="info-text">Course: @Model.CourseName </h4>
+            <div class="row">
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating">
+                        <label class="control-label">First Name</label>
+                        @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Middle Name</label>
+                        @Html.EditorFor(model => model.MiddleName, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Mother Name</label>
+                        @Html.EditorFor(model => model.MotherName, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Last Name</label>
+                        @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Email</label>
+                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Cell No</label>
+                        @Html.EditorFor(model => model.CellNo, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating is-focused">
+                        <label class="control-label">Date Of Birth</label>
+                        @Html.TextBoxFor(model => model.DateOfBirth, new { @class = "form-control", @type = "Date" })
+                    </div>
+                </div>
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Place Of Birth</label>
+                        @Html.EditorFor(model => model.PlaceOfBirth, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Select Gender</label>
+                        @Html.DropDownListFor(model => model.Gender,(IEnumerable<SelectListItem>)ViewBag.Gender," ", new { @class = "form-control" } )
+                    </div>
+                </div>
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Citizenship</label>
+                        @Html.EditorFor(model => model.Citizenship, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Caste</label>
+                        @Html.EditorFor(model => model.Caste, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Religion</label>
+                        @Html.EditorFor(model => model.Religion, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+               
+
+                
+            </div>
+        </div>
+        <div class="tab-pane" id="basicDetails">
+            <div class="row">
+                <h4 class="info-text"> Drop us a small description. </h4>
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Height</label>
+                        @Html.EditorFor(model => model.Height, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Weight</label>
+                        @Html.EditorFor(model => model.Weight, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+                
+
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Father Occupation</label>
+                        @Html.EditorFor(model => model.FatherOccupation, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Annual Income Of Parents</label>
+                        @Html.EditorFor(model => model.AnnualIncome, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Identification Marks</label>
+                        @Html.EditorFor(model => model.IdentificationMark, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Passport No</label>
+                        @Html.EditorFor(model => model.PassportNo, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Select Shirt Size</label>
+                        @Html.DropDownListFor(model => model.ShirtSize,(IEnumerable<SelectListItem>)ViewBag.ShirtSize," ",new { @class = "form-control" } )
+                    </div>
+                </div>
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Select Pant Size</label>
+                        @Html.DropDownListFor(model => model.PantSize, (IEnumerable<SelectListItem>)ViewBag.PantSize, " ", new { @class = "form-control" } )
+                    </div>
+                </div>
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Select Shoe Size</label>
+                        @Html.DropDownListFor(model => model.ShoeSize, (IEnumerable<SelectListItem>)ViewBag.ShoeSize, " ", new { @class = "form-control" } )
+                    </div>
+                </div>
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Preferred Meals</label>
+                        @Html.DropDownListFor(model => model.PreferredMeal, (IEnumerable<SelectListItem>)ViewBag.Meals, " ", new { @class = "form-control" } )
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="description">
+            <div class="row">
+                <h4 class="info-text"> Drop us a small description. </h4>
+                <div class="col-sm-10 col-sm-offset-1">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h6 >Permenent Address </h6>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Address</label>
+                                    @Html.TextAreaFor(model => model.PermenentAddress,  new { @class = "form-control", @rows = "5" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">City</label>
+                                    @Html.TextBoxFor(model => model.PermenentCity,  new { @class = "form-control"  })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">State</label>
+                                    @Html.TextBoxFor(model => model.PermenentState, new { @class = "form-control" } )
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">PIN</label>
+                                    @Html.TextBoxFor(model => model.PermenentPin,  new { @class = "form-control" } )
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">ContactNo</label>
+                                    @Html.TextBoxFor(model => model.PermenentContactNo,  new { @class = "form-control" } )
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Father's Email</label>
+                                    @Html.TextBoxFor(model => model.FatherEmail, new { @class = "form-control"  })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h6>Present Address </h6>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Address</label>
+                                    @Html.TextAreaFor(model => model.PresentAddress, new { @class = "form-control", @rows = "5" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">City</label>
+                                    @Html.TextBoxFor(model => model.PresentCity, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">State</label>
+                                    @Html.TextBoxFor(model => model.PresentState, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">PIN</label>
+                                    @Html.TextBoxFor(model => model.PresentPin, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">ContactNo</label>
+                                    @Html.TextBoxFor(model => model.PresentContactNo, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h6>Local Guardian Informatioin</h6>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Guardian Name</label>
+                                    @Html.TextBoxFor(model => model.GuardianName, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Relation</label>
+                                    @Html.TextBoxFor(model => model.GuardianRelation, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Address</label>
+                                    @Html.TextAreaFor(model => model.GuardianAddress, new { @class = "form-control", @rows = "5" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">City</label>
+                                    @Html.TextBoxFor(model => model.GuardianCity, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">State</label>
+                                    @Html.TextBoxFor(model => model.GuardianState, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">PIN</label>
+                                    @Html.TextBoxFor(model => model.GuardianPin, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">ContactNo</label>
+                                    @Html.TextBoxFor(model => model.GuardianContact, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Email</label>
+                                    @Html.TextBoxFor(model => model.GuardianEmail, new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                
+                
+                    
+                
+                
+                
+            </div>
+        </div>
+
+        <div class="tab-pane" id="academic">
+            <div class="row">
+                
+                <div class="col-sm-10 col-sm-offset-1">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h6>Class 10/SSC </h6>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Name Of School</label>
+                                    @Html.TextBoxFor(model => model.SchoolName, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Board</label>
+                                    @Html.TextBoxFor(model => model.SchoolBoard, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Address</label>
+                                    @Html.TextAreaFor(model => model.SchoolAddress, new { @class = "form-control", @rows = "5" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">City</label>
+                                    @Html.TextBoxFor(model => model.SchoolCity, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">State</label>
+                                    @Html.TextBoxFor(model => model.SchoolState, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">PIN</label>
+                                    @Html.TextBoxFor(model => model.SchoolPin, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Passing Year</label>
+                                    @Html.TextBoxFor(model => model.SchoolPassingYear, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Total Percentage</label>
+                                    @Html.TextBoxFor(model => model.SchoolPercentage, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">English Marks</label>
+                                    @Html.TextBoxFor(model => model.SchoolEnglish, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Mathematics Marks</label>
+                                    @Html.TextBoxFor(model => model.SchoolMath, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Science Marks</label>
+                                    @Html.TextBoxFor(model => model.SchoolScience, new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h6>Intermediate/10+2/HSC/Diploma</h6>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Name Of School/College</label>
+                                    @Html.TextBoxFor(model => model.InterSchoolName, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Board</label>
+                                    @Html.TextBoxFor(model => model.InterBoard, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Address</label>
+                                    @Html.TextAreaFor(model => model.InterAddress, new { @class = "form-control", @rows = "5" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">City</label>
+                                    @Html.TextBoxFor(model => model.InterCity, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">State</label>
+                                    @Html.TextBoxFor(model => model.InterState, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">PIN</label>
+                                    @Html.TextBoxFor(model => model.InterPin, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Passing Year</label>
+                                    @Html.TextBoxFor(model => model.InterPassingYear, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Total Percentage</label>
+                                    @Html.TextBoxFor(model => model.InterPercentage, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Physics Marks</label>
+                                    @Html.TextBoxFor(model => model.InterPhysics, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Chemistry Marks</label>
+                                    @Html.TextBoxFor(model => model.InterChemistry, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Mathematics Marks</label>
+                                    @Html.TextBoxFor(model => model.InterMath, new { @class = "form-control" })
+                                </div>
+                            </div>
+
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Roll No of Board Exam</label>
+                                    @Html.TextBoxFor(model => model.InterRollNo, new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h6>Graduation Details</h6>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Name Of College</label>
+                                    @Html.TextBoxFor(model => model.GradCollegeName, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">University</label>
+                                    @Html.TextBoxFor(model => model.GradUniversity, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Address</label>
+                                    @Html.TextAreaFor(model => model.GradAddress, new { @class = "form-control", @rows = "5" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">City</label>
+                                    @Html.TextBoxFor(model => model.GradCity, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">State</label>
+                                    @Html.TextBoxFor(model => model.GradState, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">PIN</label>
+                                    @Html.TextBoxFor(model => model.GradPin, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Passing Year</label>
+                                    @Html.TextBoxFor(model => model.GradPassingYear, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Total Percentage</label>
+                                    @Html.TextBoxFor(model => model.GradPercentage, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Subjects</label>
+                                    @Html.TextBoxFor(model => model.GradSubjects, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Passed In first Attempt?</label>
+                                    @Html.TextBoxFor(model => model.GradPassAttempt, new { @class = "form-control" })
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+
+
+            </div>
+        </div>
+
+    </div>
+    <div class="wizard-footer">
+        <div class="pull-right">
+            <input type='button' class='btn btn-next btn-fill btn-primary btn-wd' name='next' value='Next' />
+
+            <input type='submit' class='btn btn-finish btn-fill btn-primary btn-wd' name='finish' value='Apply' />
+        </div>
+        <div class="pull-left">
+            <input type='button' class='btn btn-previous btn-fill btn-default btn-wd' name='previous' value='Previous' />
+        </div>
+        <div class="clearfix"></div>
+    </div>
+}

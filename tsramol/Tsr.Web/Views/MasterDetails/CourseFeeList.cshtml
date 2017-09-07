@@ -1,0 +1,109 @@
+﻿@model IEnumerable<Tsr.Core.Models.CourseFeeListVM>
+
+@{
+    ViewBag.Title = "CourseFeeList";
+}
+
+<!-- START BREADCRUMB -->
+<ul class="breadcrumb push-down-0">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Course</a></li>
+    <li><a href="#">Fees</a></li>
+    @*<li class="active">Error 404</li>*@
+</ul>
+<!-- END BREADCRUMB -->
+<!-- PAGE CONTENT WRAPPER -->
+<div class="page-content-wrap">
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+
+                <form class="form-horizontal">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Course Fees</h3>
+
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="row" style="padding-bottom:10px">
+                                @*<button class="btn btn-info btn-rounded" data-toggle="modal" data-target="#modal_basic" ng-click="modules = null">Add New</button>*@
+                                @Html.ActionLink("New Course Fees", "CourseFeeCreate", "MasterDetails", null, new { data_modal = "", id = "btnCreate", @class = "btn btn-info btn-rounded" })
+                            </div>
+                            <table id="customers2" class="table datatable">
+                                <thead>
+                                    <tr>
+                                        
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.CourseName)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.CategoryName)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.CourseFee)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.PackageFee)
+                                        </th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.CourseName)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.CategoryName)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.CourseFee)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.PackageFee)
+                                            </td>
+                                            <td>
+                                                @Html.ActionLink("Edit", "CourseFeeEdit", new { id = item.CourseFeeId }, new { data_modal = "" }) |
+
+                                              
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>
+<!-- END PAGE CONTENT WRAPPER -->
+<!-- MODALS -->
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="defModalHead" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/js/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/js/plugins/bootstrap/bootstrap-select.js"></script>
+<script src="~/Scripts/ModalForm.js"></script>
+
+
+

@@ -1,0 +1,48 @@
+﻿@model List<Tsr.Core.Models.EntranceMarksListVM>
+<script src="~/Scripts/js/plugins/datatables/jquery.dataTables.min.js"></script>
+@using (Html.BeginForm("EntranceMarksEntry", "Admission", FormMethod.Post))
+{
+<table id="customers2" class="table datatable">
+    <thead>
+        <tr>
+
+            <th>Application Code</th>
+            <th>Name</th>
+            <th>Marks1</th>
+            <th>Marks2</th>
+            <th>Marks3</th>
+            <th>Marks4</th>
+            @*<th>Action</th>*@
+        </tr>
+    </thead>
+    <tbody>
+
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+            <tr>
+                @Html.Hidden("obj[" + @i + "].ApplicationId", Model[i].ApplicationId)
+                <td>@Html.TextBox("obj[" + @i + "].ApplicationCode", Model[i].ApplicationCode, new { @readonly = "readonly" })</td>
+                <td>@Html.TextBox("obj[" + @i + "].Name", Model[i].Name, new { @readonly = "readonly" })</td>
+                <td>@Html.TextBox("obj[" + @i + "].Marks1", Model[i].Marks1)</td>
+                <td>@Html.TextBox("obj[" + @i + "].Marks2", Model[i].Marks2)</td>
+                <td>@Html.TextBox("obj[" + @i + "].Marks3", Model[i].Marks3)</td>
+                <td>@Html.TextBox("obj[" + @i + "].Marks4", Model[i].Marks4)</td>
+                @*<td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>@Html.EditorFor(modelItem => item.Marks1)</td>
+                <td>@Html.EditorFor(modelItem => item.Marks2)</td>
+                <td>@Html.EditorFor(modelItem => item.Marks3)</td>
+                <td>@Html.EditorFor(modelItem => item.Marks3)</td>*@
+            </tr>
+        }
+
+    </tbody>
+
+</table>
+<div class="col-md-3">
+    <div class="input-group">
+        
+        &nbsp;<input class="btn btn-primary" type="submit" value="Submit" />
+    </div>
+
+</div>
+}

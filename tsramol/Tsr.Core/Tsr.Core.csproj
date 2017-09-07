@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1A55B0C0-26F3-46CE-941E-991FE008FA82}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Tsr.Core</RootNamespace>
+    <AssemblyName>Tsr.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Entities\Application.cs" />
+    <Compile Include="Entities\Batch.cs" />
+    <Compile Include="Entities\CetInterview.cs" />
+    <Compile Include="Entities\CetMark.cs" />
+    <Compile Include="Entities\CetMaster.cs" />
+    <Compile Include="Entities\CetMedical.cs" />
+    <Compile Include="Entities\Course.cs" />
+    <Compile Include="Entities\CourseCategory.cs" />
+    <Compile Include="Entities\CourseDocument.cs" />
+    <Compile Include="Entities\CourseFee.cs" />
+    <Compile Include="Entities\Department.cs" />
+    <Compile Include="Entities\Designation.cs" />
+    <Compile Include="Entities\Document.cs" />
+    <Compile Include="Entities\Employee.cs" />
+    <Compile Include="Entities\FeeReceipt.cs" />
+    <Compile Include="Entities\FeesPattern.cs" />
+    <Compile Include="Entities\Applied.cs" />
+    <Compile Include="Entities\InterviewMaster.cs" />
+    <Compile Include="Entities\MedicalMaster.cs" />
+    <Compile Include="Entities\OnlinePaymentInfo.cs" />
+    <Compile Include="Entities\OrganisationMaster.cs" />
+    <Compile Include="Entities\Package.cs" />
+    <Compile Include="Entities\StudentFeeDetail.cs" />
+    <Compile Include="Models\AddmissionCetCreateVM.cs" />
+    <Compile Include="Models\AddmissionCetListVM.cs" />
+    <Compile Include="Models\AdmissionInterviewListVM.cs" />
+    <Compile Include="Models\AdmissionStudentCetMarks.cs" />
+    <Compile Include="Models\AdmissionViewApplicantsVM.cs" />
+    <Compile Include="Models\ApplicationApplicantsList.cs" />
+    <Compile Include="Models\ApplicationApplicantsSearchVM.cs" />
+    <Compile Include="Models\ApplicationCetVM.cs" />
+    <Compile Include="Models\ApplicationIndexVM.cs" />
+    <Compile Include="Models\ApplicationNonCetVM.cs" />
+    <Compile Include="Models\ApplicationPaymentSuccess.cs" />
+    <Compile Include="Models\ApplicationSummaryVM.cs" />
+    <Compile Include="Models\ApplicationSumPayCetVM.cs" />
+    <Compile Include="Models\ApplicationSumPayNonCetVM.cs" />
+    <Compile Include="Models\BatchCreateVM.cs" />
+    <Compile Include="Models\BatchListVM.cs" />
+    <Compile Include="Models\CourseFeeListVM.cs" />
+    <Compile Include="Models\EmailModel.cs" />
+    <Compile Include="Models\EntranceMarksListVM.cs" />
+    <Compile Include="Models\FeesApplicantList.cs" />
+    <Compile Include="Models\MasterCourseCreateVM.cs" />
+    <Compile Include="Models\MasterCourseDocsSelectVM.cs" />
+    <Compile Include="Models\MasterCourseDocsVM.cs" />
+    <Compile Include="Models\MasterCourseListVM.cs" />
+    <Compile Include="Models\MasterDetpartmentListVM.cs" />
+    <Compile Include="Models\MasterEmployeeListVM.cs" />
+    <Compile Include="Models\MasterPackageCreateVM.cs" />
+    <Compile Include="Models\MastersCourseFeeCreateVM.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

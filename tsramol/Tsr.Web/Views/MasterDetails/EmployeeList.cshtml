@@ -1,0 +1,110 @@
+﻿@model IEnumerable<Tsr.Core.Models.MasterEmployeeListVM>
+
+@{
+    ViewBag.Title = "EmployeeList";
+}
+
+<!-- START BREADCRUMB -->
+<ul class="breadcrumb push-down-0">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Masters</a></li>
+    <li><a href="#">Employee</a></li>
+    @*<li class="active">Error 404</li>*@
+</ul>
+<!-- END BREADCRUMB -->
+<!-- PAGE CONTENT WRAPPER -->
+<div class="page-content-wrap">
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+
+                <form class="form-horizontal">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Employee List</h3>
+
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="row" style="padding-bottom:10px">
+                                @*<button class="btn btn-info btn-rounded" data-toggle="modal" data-target="#modal_basic" ng-click="modules = null">Add New</button>*@
+                                @Html.ActionLink("New Employee", "EmployeeCreate", "MasterDetails", null, new { data_modal = "", id = "btnCreate", @class = "btn btn-info btn-rounded" })
+                            </div>
+                            <table id="customers2" class="table datatable">
+                                <thead>
+                                    <tr>
+                                        <th>Employee Code</th>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>Designation</th>
+                                        <th>Is Active</th>
+                                        <th>Action</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Emp.EmployeeCode)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Emp.FirstName)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Emp.LastName)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Desig.DesignationName)
+                                            </td>
+
+                                            <td>
+                                                @if (item.Emp.IsActive == true)
+                                                {  <text> Yes</text>}
+                                                else
+                                                { <text> No</text> }
+                                            </td>
+                                            <td>
+                                                @Html.ActionLink("Edit", "Edit", new { id = item.Emp.EmployeeId }) |
+                                                @Html.ActionLink("Details", "Details", new { id = item.Emp.EmployeeId }) |
+                                                @if (item.Emp.IsActive == true)
+                                                {  @Html.ActionLink("Deactivate", "Deactivate", new { id = item.Emp.EmployeeId }, new { onclick = "return confirm('Are you sure you wish to make Deactive?');" })}
+                                                else
+                                                {  @Html.ActionLink("Activate", "Activate", new { id = item.Emp.EmployeeId }, new { onclick = "return confirm('Are you sure you wish to make Active?');" })}
+
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>
+<!-- END PAGE CONTENT WRAPPER -->
+<!-- MODALS -->
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="defModalHead" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/js/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/js/plugins/bootstrap/bootstrap-select.js"></script>
+<script src="~/Scripts/ModalForm.js"></script>
+

@@ -1,0 +1,98 @@
+﻿@model IEnumerable<Tsr.Core.Entities.FeesPattern>
+
+@{
+    ViewBag.Title = "Fees Pattern List";
+}
+
+<!-- START BREADCRUMB -->
+<ul class="breadcrumb push-down-0">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Masters</a></li>
+    <li><a href="#">Fees Pattern</a></li>
+    @*<li class="active">Error 404</li>*@
+</ul>
+<!-- END BREADCRUMB -->
+<!-- PAGE CONTENT WRAPPER -->
+<div class="page-content-wrap">
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+
+                <form class="form-horizontal">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Fees Pattern List</h3>
+
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="row" style="padding-bottom:10px">
+                                @*<button class="btn btn-info btn-rounded" data-toggle="modal" data-target="#modal_basic" ng-click="modules = null">Add New</button>*@
+                                @Html.ActionLink("New Fees Pattern", "FeesPatternCreate", "MasterDetails", null, new { data_modal = "", id = "btnCreate", @class = "btn btn-info btn-rounded" })
+                            </div>
+                            <table id="customers2" class="table datatable">
+                                <thead>
+                                    <tr>
+                                        <th>Fees Pattern</th>
+                                        <th>Is Active</th>
+                                        <th>Action</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Name)
+                                            </td>
+
+                                            
+                                            <td>
+                                                @if (item.IsActive == true)
+                                                {  <text> Yes</text>}
+                                                else
+                                                { <text> No</text> }
+                                            </td>
+                                            <td>
+                                                @Html.ActionLink("Edit", "FeesPatternEdit", new { id = item.FeesPatternId }, new { data_modal = "" }) |
+                                               
+                                                @if (item.IsActive == true)
+                                                {  @Html.ActionLink("Deactivate", "FeesPatternDeactive", new { id = item.FeesPatternId , flag = "D"}, new { onclick = "return confirm('Are you sure you wish to make Deactive?');" })}
+                                                else
+                                                {  @Html.ActionLink("Activate", "FeesPatternDeactive", new { id = item.FeesPatternId, flag = "A" }, new { onclick = "return confirm('Are you sure you wish to make Active?');" })}
+
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>
+<!-- END PAGE CONTENT WRAPPER -->
+<!-- MODALS -->
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="defModalHead" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/js/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/js/plugins/bootstrap/bootstrap-select.js"></script>
+<script src="~/Scripts/ModalForm.js"></script>

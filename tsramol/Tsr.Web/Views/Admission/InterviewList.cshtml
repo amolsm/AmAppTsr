@@ -1,0 +1,35 @@
+﻿@model IEnumerable<Tsr.Core.Models.AdmissionInterviewListVM>
+
+<table id="customers2" class="table ">
+    <thead>
+        <tr>
+
+            <th>Application Code</th>
+            <th>Name</th>
+
+            <th>Email</th>
+            <th>Cell</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.ApplicationCode)</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+
+                <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                <td>@Html.DisplayFor(modelItem => item.Cell)</td>
+               
+
+            </tr>
+        }
+
+    </tbody>
+
+</table>
+

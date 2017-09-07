@@ -1,0 +1,110 @@
+﻿@model Tsr.Core.Models.ApplicationSumPayCetVM
+
+@{
+    Layout = "~/Views/Shared/_LayoutApplication.cshtml";
+}
+
+@using (Html.BeginForm("MakePaymentCet", "Application", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.ApplicationId)
+    @Html.HiddenFor(model => model.ApplicationCode)
+    @Html.HiddenFor(model => model.FirstName)
+    @Html.HiddenFor(model => model.LastName)
+    @Html.HiddenFor(model => model.Email)
+    @Html.HiddenFor(model => model.CellNo)
+    @Html.HiddenFor(model => model.CourseName)
+    @Html.HiddenFor(model => model.BatchCode)
+    @Html.HiddenFor(model => model.CourseId)
+    @Html.HiddenFor(model => model.CategoryId)
+    @Html.HiddenFor(model => model.BatchId)
+    @Html.HiddenFor(model => model.key)
+    @Html.HiddenFor(model => model.txnid)
+    @Html.HiddenFor(model => model.hash)
+    @Html.HiddenFor(model => model.amount)
+
+    @Html.HiddenFor(model => model.udf1)
+    @Html.HiddenFor(model => model.udf2)
+    @Html.HiddenFor(model => model.udf3)
+    @Html.HiddenFor(model => model.udf4)
+    @Html.HiddenFor(model => model.udf5)
+
+    <div class="wizard-navigation">
+        <ul>
+
+            <li><a href="#basicDetails" data-toggle="tab">Summary</a></li>
+
+        </ul>
+    </div>
+
+    <div class="tab-content">
+
+        <div class="tab-pane" id="basicDetails">
+            <h4 class="info-text">Please note down your ApplicationID : @Model.ApplicationCode</h4>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="col-sm-11 col-sm-offset-1">
+                        <div class="form-group label-floating" style="font-size:large">
+                            <label class="control-label">Application ID</label>
+                            &nbsp; @Html.DisplayFor(model => model.ApplicationCode)
+                        </div>
+                    </div>
+                    <div class="col-sm-11 col-sm-offset-1">
+                        <div class="form-group label-floating" style="font-size:large">
+                            <label class="control-label">Name</label>
+                            &nbsp; @Html.DisplayFor(model => model.FirstName) &nbsp; @Html.DisplayFor(model => model.LastName)
+                        </div>
+                    </div>
+                    <div class="col-sm-11 col-sm-offset-1">
+                        <div class="form-group label-floating" style="font-size:large">
+                            <label class="control-label">Email</label>
+                            &nbsp; @Html.DisplayFor(model => model.Email)
+                        </div>
+                    </div>
+                    <div class="col-sm-11 col-sm-offset-1">
+                        <div class="form-group label-floating" style="font-size:large">
+                            <label class="control-label">Cell No</label>
+                            &nbsp; @Html.DisplayFor(model => model.CellNo)
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="col-sm-6">
+                    <div class="col-sm-11 ">
+                        <div class="form-group label-floating" style="font-size:large">
+                            <label class="control-label">Batch</label>
+                            &nbsp;@Html.DisplayFor(model => model.BatchCode)
+                        </div>
+                    </div>
+
+                    <div class="col-sm-11 ">
+                        <div class="form-group label-floating" style="font-size:large">
+                            <label class="control-label">Course</label>
+                            &nbsp; @Html.DisplayFor(model => model.CourseName)
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-11 ">
+                        <div class="form-group label-floating" style="font-size:large">
+                            <label class="control-label">Application Fee</label>
+                            &nbsp; @Html.DisplayFor(model => model.amount)
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <div class="wizard-footer">
+        <div class="pull-right">
+
+
+            <input type='submit' class='btn btn-finish btn-fill btn-primary btn-wd' name='finish' value='Make Payment' />
+        </div>
+
+        <div class="clearfix"></div>
+    </div>
+}

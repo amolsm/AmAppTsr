@@ -1,0 +1,13 @@
+﻿@keyframes blink { 
+   50% { background-color: #ffffff; } 
+}
+
+
+ .input-validation-error {
+        border: 1px solid #ff0000 !important;
+         animation-name: blink !important;
+    animation-duration: .5s !important;
+    animation-timing-function: step-end !important;
+    animation-iteration-count: infinite !important;
+    animation-direction: alternate !important;
+    }

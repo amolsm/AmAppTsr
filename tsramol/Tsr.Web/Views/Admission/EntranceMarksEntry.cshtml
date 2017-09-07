@@ -1,0 +1,148 @@
+﻿@model IEnumerable<Tsr.Core.Models.EntranceMarksListVM>
+@{
+    ViewBag.Title = "Entrance Marks Entry";
+}
+
+<!-- START BREADCRUMB -->
+<ul class="breadcrumb push-down-0">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Admission</a></li>
+    <li><a href="#">Entrance</a></li>
+    @*<li class="active">Error 404</li>*@
+</ul>
+<!-- END BREADCRUMB -->
+<!-- PAGE CONTENT WRAPPER -->
+<div class="page-content-wrap">
+    <div>
+        
+        <div class="row">
+            <div class="col-md-12">
+
+                <form class="form-horizontal">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Marks Entry</h3>
+
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="row">
+
+                                <div class="col-md-12">
+
+                                    <div class="form-group">
+
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                @Html.DropDownList("CourseId",
+                                                (IEnumerable<SelectListItem>)ViewBag.Course, "Select Course", new { @class = "form-control", @onchange = "FillBatch()" })
+                                            </div>
+
+                                        </div>
+
+                                        
+
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                @Html.DropDownList("BatchId",
+                   new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "BatchCode"),
+              " ", new { @class = "form-control", @onchange ="FillCet()" })
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                @Html.DropDownList("CetMasterId",
+                   new SelectList(Enumerable.Empty<SelectListItem>(), "CetMasterId", "CetCode"),
+              " ", new { @class = "form-control" })
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <input class="btn btn-primary" type="button" value="Search" onclick="Search()" />
+                                               
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+
+
+                            </div>
+                            
+                            <br /><br /><br />
+                            <div id="dvResult">
+                                @{Html.RenderPartial("EntranceMarksList", Model);}
+
+                            </div>
+                        </div>
+
+                     
+                    </div>
+                </form>
+
+            </div>
+        </div>
+        
+    </div>
+
+
+</div>
+<!-- END PAGE CONTENT WRAPPER -->
+<script>
+    function FillBatch() {
+        //debugger;
+        var CourseId = $('#CourseId').val();
+        $.ajax({
+            url: '/Admission/FillBatch',
+            type: "GET",
+            dataType: "JSON",
+            data: { CourseId: CourseId },
+            success: function (Batches) {
+                $("#BatchId").html(""); // clear before appending new list
+                $("#BatchId").append(
+                        $('<option></option>').val(0).html("Select Batch"));
+                $.each(Batches, function (i, c) {
+                    $("#BatchId").append(
+                        $('<option></option>').val(c.BatchId).html(c.BatchCode));
+                });
+            }
+        });
+    }
+
+    function FillCet() {
+        
+        var BatchId = $('#BatchId').val();
+        $.ajax({
+            url: '/Admission/FillCet',
+            type: "GET",
+            dataType: "JSON",
+            data: { BatchId: BatchId },
+            success: function (Cet) {
+                $("#CetMasterId").html(""); // clear before appending new list
+                $("#CetMasterId").append(
+                        $('<option></option>').val(0).html("Select Cet"));
+                $.each(Cet, function (i, c) {
+                    $("#CetMasterId").append(
+                        $('<option></option>').val(c.CetMasterId).html(c.CetCode));
+                });
+            }
+        });
+    }
+
+  function Search() {
+      var BatchId = $('#BatchId').val();
+      var CetMasterId = $('#CetMasterId').val();
+      $("#dvResult").load('@(Url.Action("GetListForMarksEntry", "Admission",null, Request.Url.Scheme))?BatchId=' + BatchId + '&CetMasterId=' + CetMasterId);
+      //$('#customers2').DataTable();
+  }
+</script>

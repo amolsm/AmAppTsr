@@ -1,0 +1,36 @@
+﻿@model Tsr.Core.Models.ApplicationNonCetVM
+
+@{
+    Layout = "~/Views/Shared/_LayoutApplication.cshtml";
+}
+
+@using (Html.BeginForm("NonCetApplication", "Application", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.CourseId)
+    @Html.HiddenFor(model => model.CategoryId)
+    @Html.HiddenFor(model => model.BatchId)
+
+    <div class="wizard-navigation">
+        <ul>
+
+            <li><a href="#basicDetails" data-toggle="tab">Batch Full</a></li>
+            
+        </ul>
+    </div>
+
+    <div class="tab-content">
+
+        <div class="tab-pane" id="basicDetails">
+            <h4 class="info-text">Course: @Model.CourseName </h4>
+            <h4 class="info-text">Remaining Seats : @ViewBag.remain </h4>
+            <h4 class="info-text">@ViewBag.BatchCode Batch is Full !! Please Try other Batch</h4>
+            
+        </div>
+        
+    </div>
+    <div class="wizard-footer">
+        
+        <div class="clearfix"></div>
+    </div>
+}

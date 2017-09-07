@@ -1,0 +1,912 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using Tsr.Core.Entities;
+using Tsr.Core.Models;
+using Tsr.Infra;
+using Tsr.Web.Models;
+using System.Threading.Tasks;
+using System.Net.Http;
+using System.Configuration;
+using System.Text;
+using System.Web.UI;
+using Tsr.Web.Common;
+using Fluentx.Mvc;
+using System.Security.Cryptography;
+
+namespace Tsr.Web.Controllers
+{
+    public class ApplicationController : Controller
+    {
+        AppContext db = new AppContext();
+        // GET: Application
+        #region Common
+        public ActionResult FillCourse(int CategoryId)
+        {
+            var Courses = db.Courses.Where(c => c.CategoryId == CategoryId && c.IsActive == true);
+            return Json(Courses, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult FillBatch(int CourseId)
+        {
+            var Courses = db.Batches.Where(c => c.CourseId == CourseId && c.IsActive == true && c.OnlineBookingStatus == true);
+            return Json(Courses, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult FillBatchAll(int CourseId)
+        {
+            var Batches = db.Batches.Where(c => c.CourseId == CourseId && c.IsActive == true );
+            return Json(Batches, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult CreateApplicationId(int CategoryId, int CourseId, int BatchId, string FirstName, string MiddleName, string LastName, string Email, string CellNo, DateTime? DateOfBirth)
+        {
+            var Courses = db.Batches.Where(c => c.CourseId == CourseId && c.IsActive == true && c.OnlineBookingStatus == true);
+
+            return Json(Courses, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult FillTerms(int CourseId)
+        {
+            //var Courses = db.Batches.Where(c => c.CourseId == CourseId && c.IsActive == true && c.OnlineBookingStatus == true);
+            var obj = from cd in db.CourseDocuments
+                      join d in db.Documents on cd.DocumentId equals d.DocumentsListId
+                      where cd.CourseId == CourseId
+                      select new { d.DocumentName, d.DocumentsListId};
+                      
+
+            return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+        public ActionResult Index()
+        {
+            ViewBag.Categories = new SelectList(db.CourseCategories.Where(x => x.IsActive == true).ToList(), "CourseCategoryId", "CategoryName");
+
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Index(ApplicationIndexVM obj)
+        {
+            var cc = db.CourseCategories.FirstOrDefault(x=>x.CourseCategoryId == obj.CategoryId);
+            bool isCet = (bool)cc.CetRequired;
+            var c = db.Courses.FirstOrDefault(x => x.CourseId == obj.CourseId);
+            var courseName = c.CourseName;
+
+            ViewBag.Gender = Common.DropdownData.Gender();
+            ViewBag.Meals = Common.DropdownData.Meals();
+            ViewBag.YesNo = Common.DropdownData.YesNo();
+            if (isCet == true)
+            {
+                ApplicationCetVM vm = new ApplicationCetVM {
+                    CourseId = obj.CourseId,
+                    CategoryId = obj.CategoryId,
+                    BatchId = obj.BatchId,
+                    CourseName = courseName
+                };
+
+                ViewBag.ShirtSize = Common.DropdownData.ShirtSize();
+                ViewBag.PantSize = Common.DropdownData.PantSize();
+                ViewBag.ShoeSize = Common.DropdownData.ShoeSize();
+                
+                return View("CetApplication",vm);
+            }
+            else
+            {
+                ApplicationNonCetVM vm = new ApplicationNonCetVM
+                {
+                    CourseId = obj.CourseId,
+                    CategoryId = obj.CategoryId,
+                    BatchId = obj.BatchId,
+                    CourseName = courseName
+                };
+
+                var b = db.Batches.FirstOrDefault(x => x.BatchId == obj.BatchId);
+                int totSeat = (int)b.TotalSeats;
+                int reservSeat = (int)b.ReserveSeats;
+                int booked = (int)b.BookedSeats;
+                var remain = totSeat - (reservSeat + booked);
+                ViewBag.remain = remain;
+                if (remain > 0)
+                {
+                    return View("NonCetApplication", vm);
+                }
+                else
+                {
+                    ViewBag.BatchCode = obj.BatchCode;
+                    return View("NonCetApplicationFull", vm);
+                }
+                
+            }
+                
+        }
+        public ActionResult NonCetApplication()
+        {
+            ViewBag.Gender = DropdownData.Gender();
+            ViewBag.Meals = DropdownData.Meals();
+            ViewBag.YesNo = DropdownData.YesNo();
+            return View();
+        }
+        public ActionResult CetApplication()
+        {
+            ViewBag.Gender = DropdownData.Gender();
+            ViewBag.ShirtSize = DropdownData.ShirtSize();
+            ViewBag.PantSize = DropdownData.PantSize();
+            ViewBag.ShoeSize = DropdownData.ShoeSize();
+            ViewBag.Meals = DropdownData.Meals();
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CetApplication(ApplicationCetVM obj)
+        {
+            if (ModelState.IsValid)
+            {
+                var b = db.Batches.FirstOrDefault(x => x.BatchId == obj.BatchId);
+                var bc = b.BatchCode;
+                var c = db.Courses.FirstOrDefault(x => x.CourseId == obj.CourseId);
+                var cc = c.CourseCode;
+                var n = db.Applications.Count(x=>x.BatchId == obj.BatchId);
+                n = n + 1;
+                Application ap = new Application
+                {
+                    ApplicationCode = cc.ToString() + bc.ToString() + n.ToString().PadLeft(4,'0'),
+                    AnnualIncome = obj.AnnualIncome,
+                    BatchId = obj.BatchId,
+                    Caste = obj.Caste,
+                    CategoryId = obj.CategoryId,
+                    CellNo = obj.CellNo,
+                    Citizenship = obj.Citizenship,
+                    CourseId = obj.CourseId,
+                    DateOfBirth = obj.DateOfBirth,
+                    Email = obj.Email,
+                    FatherEmail = obj.FatherEmail,
+                    FatherOccupation = obj.FatherOccupation,
+                    FirstName = obj.FirstName,
+                    Gender = obj.FirstName,
+                    GradAddress = obj.GradAddress,
+                    GradCity = obj.GradCity,
+                    GradCollegeName = obj.GradCollegeName,
+                    GradPassAttempt = obj.GradPassAttempt,
+                    GradPassingYear = obj.GradPassingYear,
+                    GradPercentage = obj.GradPercentage,
+                    GradPin = obj.GradPin,
+                    GradState = obj.GradState,
+                    GradSubjects = obj.GradSubjects,
+                    GradUniversity = obj.GradUniversity,
+                    GuardianAddress = obj.GuardianAddress,
+                    GuardianCity = obj.GuardianCity,
+                    GuardianContact = obj.GuardianContact,
+                    GuardianEmail = obj.GuardianEmail,
+                    GuardianName = obj.GuardianName,
+                    GuardianPin = obj.GuardianPin,
+                    GuardianRelation = obj.GuardianRelation,
+                    GuardianState = obj.GuardianState,
+                    Height = obj.Height,
+                    IdentificationMark = obj.IdentificationMark,
+                    InterAddress = obj.InterAddress,
+                    InterBoard = obj.InterBoard,
+                    InterChemistry = obj.InterChemistry,
+                    InterCity = obj.InterCity,
+                    InterMath = obj.InterMath,
+                    InterPassingYear = obj.InterPassingYear,
+                    InterPercentage = obj.InterPercentage,
+                    InterPhysics = obj.InterPhysics,
+                    InterPin = obj.InterPin,
+                    InterRollNo = obj.InterRollNo,
+                    InterSchoolName = obj.InterSchoolName,
+                    InterState = obj.InterState,
+                    LastName = obj.LastName,
+                    MiddleName = obj.MiddleName,
+                    MotherName = obj.MotherName,
+                    PantSize = obj.PantSize,
+                    PassportNo = obj.PassportNo,
+                    PermenentAddress = obj.PermenentAddress,
+                    PermenentCity = obj.PermenentCity,
+                    PermenentContactNo = obj.PermenentContactNo,
+                    PermenentPin = obj.PermenentPin,
+                    PermenentState = obj.PermenentState,
+                    PlaceOfBirth = obj.PlaceOfBirth,
+                    PreferredMeal = obj.PreferredMeal,
+                    PresentAddress = obj.PresentAddress,
+                    PresentCity = obj.PresentCity,
+                    PresentContactNo = obj.PresentContactNo,
+                    PresentPin = obj.PresentPin,
+                    PresentState = obj.PresentState,
+                    Religion = obj.Religion,
+                    SchoolAddress = obj.SchoolAddress,
+                    SchoolBoard = obj.SchoolBoard,
+                    SchoolCity = obj.SchoolCity,
+                    SchoolEnglish = obj.SchoolEnglish,
+                    SchoolMath = obj.SchoolMath,
+                    SchoolName = obj.SchoolName,
+                    SchoolPassingYear = obj.SchoolPassingYear,
+                    SchoolPercentage = obj.SchoolPercentage,
+                    SchoolPin = obj.SchoolPin,
+                    SchoolScience = obj.SchoolScience,
+                    SchoolState = obj.SchoolState,
+                    ShirtSize = obj.ShirtSize,
+                    ShoeSize = obj.ShoeSize,
+                    Weight = obj.Weight
+                };
+                db.Applications.Add(ap);
+                await db.SaveChangesAsync();
+
+                var id = ap.ApplicationId;
+                var cf = db.CourseFees.FirstOrDefault(x => x.CourseId == ap.CourseId);
+                //var c = db.Courses.FirstOrDefault(x => x.CourseId == ap.CourseId);
+                var applicationFee = cf.ApplicationFee;
+
+                ApplicationSumPayCetVM apsm = new ApplicationSumPayCetVM
+                {
+                    ApplicationId = ap.ApplicationId,
+                    CategoryId = ap.CategoryId,
+                    CourseId = ap.CourseId,
+                    BatchId = ap.BatchId,
+                    ApplicationCode = ap.ApplicationCode,
+                    amount = applicationFee,
+                    CellNo = ap.CellNo,
+                    Email = ap.Email,
+                    FirstName = ap.FirstName,
+                    LastName = ap.LastName,
+                    CourseName = c.CourseName,
+                    BatchCode = bc,
+                    udf1 = ap.BatchId.ToString(), //udf1 BatchId
+                    udf2 = ap.ApplicationCode, //udf2 ApplicationCode  
+                    udf3 = ap.ApplicationId.ToString() //udf3 ApplicationID              
+                };
+                return View("ApplicationSummaryPre", apsm);
+            }
+            
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> NonCetApplication(ApplicationNonCetVM obj)
+        {
+            if (ModelState.IsValid)
+            {
+                var b = db.Batches.FirstOrDefault(x => x.BatchId == obj.BatchId);
+                var bc = b.BatchCode;
+                var c = db.Courses.FirstOrDefault(x => x.CourseId == obj.CourseId);
+                var cc = c.CourseCode;
+                var n = db.Applications.Count(x => x.BatchId == obj.BatchId);
+                n = n + 1;
+                Application ap = new Application
+                {
+                    ApplicationCode = cc.ToString() + bc.ToString() + n.ToString().PadLeft(4, '0'),
+                    BatchId = obj.BatchId,
+                    CategoryId = obj.CategoryId,
+                    CellNo = obj.CellNo,
+                    CertOfCompetencyNo = obj.CertOfCompetencyNo,
+                    CdcNo = obj.CdcNo,
+                    Citizenship = obj.Citizenship,
+                    CourseId = obj.CourseId,
+                    DateOfBirth = obj.DateOfBirth,
+                    Email = obj.Email,
+                    FirstName = obj.FirstName,
+                    Gender = obj.FirstName,
+                    InDosNo = obj.InDosNo,
+                    LastName = obj.LastName,
+                    MiddleName = obj.MiddleName,
+                    PassportNo = obj.PassportNo,
+                    PlaceOfBirth = obj.PlaceOfBirth,
+                    GradeOfCompetencyNo = obj.GradeOfCompetencyNo,
+                    CategoryOfCandidate = obj.CategoryOfCandidate,
+                    ShippingCompany = obj.ShippingCompany,
+                    RankOfCandidate = obj.RankOfCandidate,
+                    CourseAttendedInTSR = obj.CourseAttendedInTSR,
+                    FPFF_AFF_1995 = obj.FPFF_AFF_1995
+
+                };
+                db.Applications.Add(ap);
+                await db.SaveChangesAsync();
+
+                var id = ap.ApplicationId;
+                var cf = db.CourseFees.FirstOrDefault(x => x.CourseId == ap.CourseId);
+                var actualFee = cf.ActualFee;
+                var minBal = cf.MinBalance;
+                var gstPercent = cf.GstPercentage;
+                decimal taxAmount;
+
+                if (gstPercent > 0)
+                {
+                    taxAmount = ((decimal)actualFee / 100) * (decimal)gstPercent;
+                }
+                else { taxAmount = 0; }
+                decimal amount = 0;
+
+                if (actualFee > minBal && minBal > 1)
+                {
+                    amount = (decimal)minBal + taxAmount;
+                }
+                else {
+                    amount = (decimal)actualFee + taxAmount;
+                }
+
+                var courseName = c.CourseName;
+
+                ApplicationSumPayNonCetVM apsm = new ApplicationSumPayNonCetVM
+                {
+                    ApplicationId = ap.ApplicationId,
+                    CategoryId = ap.CategoryId,
+                    CourseId = ap.CourseId,
+                    BatchId = ap.BatchId,
+                    ApplicationCode = ap.ApplicationCode,
+                    amount = amount,
+                    CellNo = ap.CellNo,
+                    Email = ap.Email,
+                    FirstName = ap.FirstName,
+                    LastName = ap.LastName,
+                    CourseName = courseName,
+                    BatchCode = bc,
+                    CourseFee = actualFee,
+                    TaxAmount = taxAmount,
+                    udf1 = ap.BatchId.ToString(), //udf1 BatchId
+                    udf2 = ap.ApplicationCode, //udf2 ApplicationCode 
+                    udf3 = ap.ApplicationId.ToString() //udf3 ApplicationID              
+                };
+                return View("ApplicationSummary", apsm);
+            }
+
+            ViewBag.Gender = DropdownData.Gender();
+            ViewBag.Meals = DropdownData.Meals();
+            ViewBag.YesNo = DropdownData.YesNo();
+            return View();
+        }
+
+
+
+        #region PayU
+        public string action1 = string.Empty;
+        public string hash1 = string.Empty;
+        public string txnid1 = string.Empty;
+
+        public string Generatehash512(string text)
+        {
+
+            byte[] message = Encoding.UTF8.GetBytes(text);
+
+            UnicodeEncoding UE = new UnicodeEncoding();
+            byte[] hashValue;
+            SHA512Managed hashString = new SHA512Managed();
+            string hex = "";
+            hashValue = hashString.ComputeHash(message);
+            foreach (byte x in hashValue)
+            {
+                hex += String.Format("{0:x2}", x);
+            }
+            return hex;
+            //return hashValue.ToString();
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult MakePaymentNonCet(ApplicationSumPayNonCetVM obj)
+        {
+            
+
+                string[] hashVarsSeq;
+                string hash_string = string.Empty;
+
+
+                if (string.IsNullOrEmpty(obj.txnid)) // generating txnid
+                {
+                    Random rnd = new Random();
+                    string strHash = Generatehash512(rnd.ToString() + DateTime.Now);
+                    obj.txnid = strHash.ToString().Substring(0, 20);
+                    txnid1 = obj.txnid;
+
+                }
+
+            hashVarsSeq = ConfigurationManager.AppSettings["hashSequence"].Split('|'); // spliting hash sequence from config
+            hash_string = "";
+            foreach (string hash_var in hashVarsSeq)
+            {
+                if (hash_var == "key")
+                {
+                    hash_string = hash_string + ConfigurationManager.AppSettings["MERCHANT_KEY"];
+                    hash_string = hash_string + '|';
+                }
+                else if (hash_var == "txnid")
+                {
+                    hash_string = hash_string + txnid1;
+                    hash_string = hash_string + '|';
+                }
+                else if (hash_var == "amount")
+                {
+                    hash_string = hash_string + Convert.ToDecimal(Request.Form[hash_var]).ToString("g29");
+                    hash_string = hash_string + '|';
+                }
+                else if (hash_var == "productinfo")
+                {
+                    hash_string = hash_string + obj.BatchCode.ToString();
+                    hash_string = hash_string + '|';
+                }
+                else
+                {
+
+                    hash_string = hash_string + (Request.Form[hash_var] != null ? Request.Form[hash_var] : "");// isset if else
+                    hash_string = hash_string + '|';
+                }
+            }
+
+            hash_string += ConfigurationManager.AppSettings["SALT"];// appending SALT
+
+            hash1 = Generatehash512(hash_string).ToLower();         //generating hash
+            obj.hash = hash1;
+
+            string mkey = ConfigurationManager.AppSettings["MERCHANT_KEY"];
+
+            if (!string.IsNullOrEmpty(hash1))
+                {
+
+                    Dictionary<string, object> rp = new Dictionary<string, object>();
+                    rp.Add("hash", hash1);
+                    rp.Add("key", mkey);
+                    rp.Add("txnid", obj.txnid);
+                    string amt = Convert.ToDecimal(obj.amount).ToString("g29");
+                    rp.Add("amount", amt);
+                    rp.Add("firstname", obj.FirstName);
+                    
+                    rp.Add("email", obj.Email);
+                    rp.Add("phone", obj.CellNo);
+                    rp.Add("productinfo", obj.BatchCode);
+                    rp.Add("surl", "http://localhost:9071/Application/PaymentSuccess");
+                    rp.Add("furl", "http://localhost:9071/");
+                    rp.Add("lastname", obj.LastName);
+                    rp.Add("curl", obj.curl);
+                    //rp.Add("address1", null);
+                    //rp.Add("address2", null);
+                    //rp.Add("city", null);
+                    //rp.Add("state", null);
+                    //rp.Add("country", null);
+                    //rp.Add("zipcode", null);
+                    rp.Add("udf1", obj.udf1);
+                    rp.Add("udf2", obj.udf2);
+                    rp.Add("udf3", obj.udf3);
+                    rp.Add("udf4", obj.udf4);
+                    rp.Add("udf5", obj.udf5);
+                    //rp.Add("pg", "");
+
+                return this.RedirectAndPost("https://test.payu.in/_payment", rp);
+                    //Or return new RedirectAndPostActionResult("http://TheUrlToPostDataTo", postData);
+                }
+
+                else
+                {
+                    //no hash
+
+                }
+
+            
+
+           
+
+            return View();
+        }
+
+        public ActionResult MakePaymentCet(ApplicationSumPayCetVM obj)
+        {
+
+
+            string[] hashVarsSeq;
+            string hash_string = string.Empty;
+
+
+            if (string.IsNullOrEmpty(obj.txnid)) // generating txnid
+            {
+                Random rnd = new Random();
+                string strHash = Generatehash512(rnd.ToString() + DateTime.Now);
+                obj.txnid = strHash.ToString().Substring(0, 20);
+                txnid1 = obj.txnid;
+
+            }
+
+            hashVarsSeq = ConfigurationManager.AppSettings["hashSequence"].Split('|'); // spliting hash sequence from config
+            hash_string = "";
+            foreach (string hash_var in hashVarsSeq)
+            {
+                if (hash_var == "key")
+                {
+                    hash_string = hash_string + ConfigurationManager.AppSettings["MERCHANT_KEY"];
+                    hash_string = hash_string + '|';
+                }
+                else if (hash_var == "txnid")
+                {
+                    hash_string = hash_string + txnid1;
+                    hash_string = hash_string + '|';
+                }
+                else if (hash_var == "amount")
+                {
+                    hash_string = hash_string + Convert.ToDecimal(Request.Form[hash_var]).ToString("g29");
+                    hash_string = hash_string + '|';
+                }
+                else if (hash_var == "productinfo")
+                {
+                    hash_string = hash_string + obj.BatchCode.ToString();
+                    hash_string = hash_string + '|';
+                }
+                else
+                {
+
+                    hash_string = hash_string + (Request.Form[hash_var] != null ? Request.Form[hash_var] : "");// isset if else
+                    hash_string = hash_string + '|';
+                }
+            }
+
+            hash_string += ConfigurationManager.AppSettings["SALT"];// appending SALT
+
+            hash1 = Generatehash512(hash_string).ToLower();         //generating hash
+            obj.hash = hash1;
+
+            string mkey = ConfigurationManager.AppSettings["MERCHANT_KEY"];
+
+            if (!string.IsNullOrEmpty(hash1))
+            {
+
+                Dictionary<string, object> rp = new Dictionary<string, object>();
+                rp.Add("hash", hash1);
+                rp.Add("key", mkey);
+                rp.Add("txnid", obj.txnid);
+                string amt = Convert.ToDecimal(obj.amount).ToString("g29");
+                rp.Add("amount", amt);
+                rp.Add("firstname", obj.FirstName);
+
+                rp.Add("email", obj.Email);
+                rp.Add("phone", obj.CellNo);
+                rp.Add("productinfo", obj.BatchCode);
+                rp.Add("surl", "http://localhost:9071/Application/PaymentSuccess");
+                rp.Add("furl", "http://localhost:9071/");
+                rp.Add("lastname", obj.LastName);
+                rp.Add("curl", obj.curl);
+                //rp.Add("address1", null);
+                //rp.Add("address2", null);
+                //rp.Add("city", null);
+                //rp.Add("state", null);
+                //rp.Add("country", null);
+                //rp.Add("zipcode", null);
+                rp.Add("udf1", obj.udf1);
+                rp.Add("udf2", obj.udf2);
+                rp.Add("udf3", obj.udf3);
+                rp.Add("udf4", obj.udf4);
+                rp.Add("udf5", obj.udf5);
+                //rp.Add("pg", "");
+
+                return this.RedirectAndPost("https://test.payu.in/_payment", rp);
+                //Or return new RedirectAndPostActionResult("http://TheUrlToPostDataTo", postData);
+            }
+
+            else
+            {
+                //no hash
+
+            }
+
+
+
+
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> PaymentSuccess(ApplicationPaymentSuccess obj)
+        {
+            if (obj.status == "success")
+            {
+                //Course c, Batch b, Caategory cc CourseFee cf 
+                int bid = Convert.ToInt32(obj.udf1);
+                var b = db.Batches.FirstOrDefault(x => x.BatchId == bid);
+                var cid = b.CourseId;
+                var c = db.Courses.FirstOrDefault(x => x.CourseId == cid);
+                var ccId = c.CategoryId;
+                obj.CourseName = c.CourseName;
+                var cc = db.CourseCategories.FirstOrDefault(x => x.CourseCategoryId == ccId);
+                var cf = db.CourseFees.FirstOrDefault(x => x.CourseId == cid);
+
+                OnlinePaymentInfo opi = new OnlinePaymentInfo
+                {
+                    BatchId = bid,
+                    amount = obj.amount,
+                    ApplicationId = Convert.ToInt32(obj.udf3),
+                    bank_ref_num = obj.bank_ref_num,
+                    CategoryId = ccId,
+                    CourseId = cid,
+                    Hash = obj.Hash,
+                    key = obj.key,
+                    mihpayid = obj.mihpayid,
+                    mode = obj.mode,
+                    Productinfo = obj.Productinfo,
+                    status = obj.status,
+                    txnid = obj.txnid,
+                    PaymentDate = DateTime.Now,
+                    udf1 = obj.udf1,//BatchId
+                    udf2 = obj.udf2,//ApplicationCode
+                    udf3 = obj.udf3,//ApplicationId
+                    udf4 = obj.udf4,
+                    udf5 = obj.udf5
+                };
+
+                db.OnlinePaymentInfos.Add(opi);
+                await db.SaveChangesAsync();
+
+                Applied nca = new Applied
+                {
+                    AdmissionStatus = true,
+                    ApplicationId = Convert.ToInt32(obj.udf3),
+                    BatchId = Convert.ToInt32(obj.udf1),
+                    CategoryId = (int)ccId,
+                    CourseId = (int)cid
+                };
+                db.Applied.Add(nca);
+                await db.SaveChangesAsync();
+
+                
+                if (cc.CetRequired == true)
+                {
+                    //Cet
+
+                    //feeReceipt
+                    FeeReceipt fr = new FeeReceipt
+                    {
+                        Amount = Convert.ToDecimal(obj.amount),
+                        ApplicationId = Convert.ToInt32(obj.udf3),
+                        PaymentMode = "Online",
+                        PrintStatus = false,
+                        FeesType = "ApplicationFee"
+                    };
+                    db.FeeReceipts.Add(fr);
+                    await db.SaveChangesAsync();
+
+                    return View("PaymentSuccessNC", obj);
+                }
+                else
+                {
+                    //NonCet
+                    Batch bs = await db.Batches.FindAsync(bid);
+                    bs.BookedSeats = bs.BookedSeats + 1;
+                    await db.SaveChangesAsync();
+
+
+                    //feeReceipt
+                    FeeReceipt fr = new FeeReceipt
+                    {
+                        Amount = Convert.ToDecimal(obj.amount),
+                        ApplicationId = Convert.ToInt32(obj.udf3),
+                        PaymentMode = "Online",
+                        PrintStatus = false,
+                        FeesType = "CourseFee"
+                    };
+                    db.FeeReceipts.Add(fr);
+                    await db.SaveChangesAsync();
+
+                    //Student Payment Details
+                    var totalFee = (decimal)cf.ActualFee + (((decimal)cf.ActualFee / 100) * (decimal)cf.GstPercentage);
+                    StudentFeeDetail sfd = new StudentFeeDetail
+                    {
+                        ApplicationId = Convert.ToInt32(obj.udf3),
+                        TotalFee = totalFee,
+                        FeePaid = Convert.ToDecimal(obj.amount),
+                        FeeBal = totalFee - Convert.ToDecimal(obj.amount),
+                        BatchId = bid
+                    };
+                    db.StudentFeeDetails.Add(sfd);
+                    await db.SaveChangesAsync();
+
+                    EmailModel em = new EmailModel
+                    {
+                        From = "amolmurkutepatil@gmail.com",
+                        FromPass = "kishore@kumar",
+                        To = obj.Email,
+                        Subject = "Your Admission Confirm",
+                        Body = obj.Firstname + " " + obj.Lastname + " " + obj.amount + " " + obj.CourseName 
+                    };
+
+                    var res = await  MessageService.sendEmail(em);
+                    return View("PaymentSuccessNC", obj);
+                }
+
+
+            }
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult MakePaymentNonCet11(ApplicationSumPayNonCetVM obj)
+        {
+            try
+            {
+
+                string[] hashVarsSeq;
+                string hash_string = string.Empty;
+
+
+                if (string.IsNullOrEmpty(obj.txnid)) // generating txnid
+                {
+                    Random rnd = new Random();
+                    string strHash = Generatehash512(rnd.ToString() + DateTime.Now);
+                    obj.txnid = strHash.ToString().Substring(0, 20);
+                    txnid1 = obj.txnid;
+
+                }
+
+                if (string.IsNullOrEmpty(obj.hash)) // generating hash value
+                {
+                    if (
+                        string.IsNullOrEmpty(ConfigurationManager.AppSettings["MERCHANT_KEY"]) ||
+                        string.IsNullOrEmpty(obj.txnid) ||
+                        string.IsNullOrEmpty(obj.amount.ToString()) ||
+                        string.IsNullOrEmpty(obj.FirstName) ||
+                        string.IsNullOrEmpty(obj.Email) ||
+                        string.IsNullOrEmpty(obj.CellNo) ||
+                        string.IsNullOrEmpty(obj.BatchCode)
+                        //string.IsNullOrEmpty(Request.Form["surl"]) ||
+                        //string.IsNullOrEmpty(Request.Form["furl"])
+                        )
+                    {
+                        //error
+
+                        throw new Exception();
+                    }
+
+                    else
+                    {
+
+                        hashVarsSeq = ConfigurationManager.AppSettings["hashSequence"].Split('|'); // spliting hash sequence from config
+                        hash_string = "";
+                        foreach (string hash_var in hashVarsSeq)
+                        {
+                            if (hash_var == "key")
+                            {
+                                hash_string = hash_string + ConfigurationManager.AppSettings["MERCHANT_KEY"];
+                                hash_string = hash_string + '|';
+                            }
+                            else if (hash_var == "txnid")
+                            {
+                                hash_string = hash_string + txnid1;
+                                hash_string = hash_string + '|';
+                            }
+                            else if (hash_var == "amount")
+                            {
+                                hash_string = hash_string + Convert.ToDecimal(Request.Form[hash_var]).ToString("g29");
+                                hash_string = hash_string + '|';
+                            }
+                            else
+                            {
+
+                                hash_string = hash_string + (Request.Form[hash_var] != null ? Request.Form[hash_var] : "");// isset if else
+                                hash_string = hash_string + '|';
+                            }
+                        }
+
+                        hash_string += ConfigurationManager.AppSettings["SALT"];// appending SALT
+
+                        hash1 = Generatehash512(hash_string).ToLower();         //generating hash
+                        obj.hash = hash1;
+                        //action1 = ConfigurationManager.AppSettings["PAYU_BASE_URL"] + "/_payment";// setting URL
+
+                    }
+
+
+                }
+
+                else if (!string.IsNullOrEmpty(obj.hash))
+                {
+                    hash1 = Request.Form["hash"];
+                    //action1 = ConfigurationManager.AppSettings["PAYU_BASE_URL"] + "/_payment";
+
+                }
+
+
+
+
+                if (!string.IsNullOrEmpty(hash1))
+                {
+
+                    Dictionary<string, object> rp = new Dictionary<string, object>();
+                    rp.Add("hash", hash1);
+                    rp.Add("key", "gtKFFx");
+                    rp.Add("txnid", obj.txnid);
+                    string amt = Convert.ToDecimal(obj.amount).ToString("g29");
+                    rp.Add("amount", amt);
+                    rp.Add("firstname", obj.FirstName);
+
+                    rp.Add("email", obj.Email);
+                    rp.Add("phone", obj.CellNo);
+                    rp.Add("productinfo", obj.BatchCode);
+                    rp.Add("surl", "http://localhost:9071/Application/");
+                    rp.Add("furl", "http://localhost:9071/");
+                    rp.Add("lastname", obj.LastName);
+                    //rp.Add("curl", "");
+                    //rp.Add("address1", "");
+                    //rp.Add("address2", "");
+                    //rp.Add("city", "");
+                    //rp.Add("state", "");
+                    //rp.Add("country", "");
+                    //rp.Add("zipcode", "");
+                    //rp.Add("udf1", "");
+                    //rp.Add("udf2", "");
+                    //rp.Add("udf3", "");
+                    //rp.Add("udf4", "");
+                    //rp.Add("udf5", "");
+                    //rp.Add("pg", "");
+
+                    return this.RedirectAndPost("https://test.payu.in/_payment", rp);
+                    //Or return new RedirectAndPostActionResult("http://TheUrlToPostDataTo", postData);
+                }
+
+                else
+                {
+                    //no hash
+
+                }
+
+            }
+
+            catch (Exception ex)
+
+            {
+                Response.Write("<span style='color:red'>" + ex.Message + "</span>");
+
+            }
+
+
+            return View();
+        }
+
+
+        #endregion
+
+
+        
+        public ActionResult ViewApplicants()
+        {
+            //var vm = from a in db.Applications
+            //         join cc in db.CourseCategories on a.CategoryId equals cc.CourseCategoryId
+            //         join c in db.Courses on a.CourseId equals c.CourseId
+            //         join b in db.Batches on a.BatchId equals b.BatchId
+            //         where (b.OnlineBookingStatus == true)
+            //         select new AdmissionViewApplicantsVM
+            //         {
+            //             ApplicantName = a.FirstName.ToString() + " " + a.MiddleName.ToString() + " " + a.LastName.ToString(),
+            //             ApplicationCode = a.ApplicationCode,
+            //             ApplicationId = a.ApplicationId,
+            //             BatchCode = b.BatchCode,
+            //             CategoryName = cc.CategoryName,
+            //             CourseName = c.CourseName
+            //         };
+            ViewBag.Categories = new SelectList(db.CourseCategories.ToList(), "CourseCategoryId", "CategoryName");
+            var obj = new List<ApplicationApplicantsList>();
+
+            return View(obj);
+        }
+
+        [HttpGet]
+        public ActionResult GetApplicantList(int? BatchId)
+        {
+            var list = from ap in db.Applications
+                       join b in db.Batches on ap.BatchId equals b.BatchId
+                       join opi in db.OnlinePaymentInfos on ap.ApplicationId equals opi.ApplicationId 
+                       into opis
+                       from opi in opis.DefaultIfEmpty()
+                       //join apl in db.Applied on ap.ApplicationId equals apl.ApplicationId
+                       where (b.BatchId == BatchId)
+                       select new ApplicationApplicantsList
+                       {
+                           ApplicationCode = ap.ApplicationCode,
+                           ApplicationId = ap.ApplicationId,
+                           BatchName = b.BatchCode,
+                           Name = ap.FirstName + " " + ap.LastName,
+                           PaymentStatus = (opi==null)? "Pending" : "Success",
+                           Email = ap.Email,
+                           Cell = ap.CellNo
+                       };
+
+            
+            return PartialView("ApplicantsList", list.ToList());
+        }
+    }
+}

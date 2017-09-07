@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <!-- META SECTION -->
+    <meta name="viewport" content="width=device-width" />
+    <title>TSRahaman : @ViewBag.Title</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <!-- END META SECTION -->
+
+    <!-- CSS INCLUDE -->
+    <link rel="stylesheet" type="text/css" id="theme" href="~/Content/css/theme-black.css" />
+    <link href="~/Content/css/jquery/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <!-- EOF CSS INCLUDE -->
+
+    <script src="~/Scripts/js/plugins/jquery/jquery.min.js"></script>
+    <script src="~/Scripts/js/plugins/jquery/jquery-ui.min.js"></script>
+    <script src="~/Scripts/js/plugins/bootstrap/bootstrap.min.js"></script>
+    <script src="~/Scripts/js/plugins/bootstrap/bootstrap-datepicker.js"></script>
+    
+</head>
+<body>
+    <!-- START PAGE CONTAINER -->
+    <div class="page-container">
+
+        <!-- START PAGE SIDEBAR -->
+        @Html.Partial("_SidebarAdmin")
+        <!-- END PAGE SIDEBAR -->
+        <!-- PAGE CONTENT -->
+        <div class="page-content">
+
+            <!-- START X-NAVIGATION Headbar -->
+            @Html.Partial("_Headbar")
+            <!-- END X-NAVIGATION Headbar -->
+
+            @RenderBody()
+        </div>
+        <!-- END PAGE CONTENT -->
+    </div>
+    <!-- END PAGE CONTAINER -->
+    <!-- MESSAGE BOX-->
+    @Html.Partial("_logoff")
+    <!-- END MESSAGE BOX-->
+    <!-- START PRELOADS -->
+    <audio id="audio-alert" src="~/audio/alert.mp3" preload="auto"></audio>
+    <audio id="audio-fail" src="~/audio/fail.mp3" preload="auto"></audio>
+    <!-- END PRELOADS -->
+    <!-- START SCRIPTS -->
+    
+    <!-- START THIS PAGE PLUGINS-->
+
+    <script src="~/Scripts/js/plugins/icheck/icheck.min.js"></script>
+    <script src="~/Scripts/js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
+   
+    <!-- END THIS PAGE PLUGINS-->
+    <!-- START TEMPLATE -->
+    <script src="~/Scripts/js/plugins.js"></script>
+    <script src="~/Scripts/js/actions.js"></script>
+   
+    <!-- END TEMPLATE -->
+    <!-- END SCRIPTS -->
+    @RenderSection("Scripts", required:false)
+
+  
+</body>
+</html>

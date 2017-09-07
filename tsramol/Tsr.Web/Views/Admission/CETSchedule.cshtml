@@ -1,0 +1,128 @@
+﻿@model IEnumerable<Tsr.Core.Models.AddmissionCetListVM>
+
+@{
+    ViewBag.Title = "Cet Schedule List";
+}
+
+<!-- START BREADCRUMB -->
+<ul class="breadcrumb push-down-0">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Addmission</a></li>
+    <li><a href="#">Cet Entrance Schedule</a></li>
+    @*<li class="active">Error 404</li>*@
+</ul>
+<!-- END BREADCRUMB -->
+<!-- PAGE CONTENT WRAPPER -->
+<div class="page-content-wrap">
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+
+                <form class="form-horizontal">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Cet Schedule List</h3>
+
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="row" style="padding-bottom:10px">
+                                @*<button class="btn btn-info btn-rounded" data-toggle="modal" data-target="#modal_basic" ng-click="modules = null">Add New</button>*@
+                                @Html.ActionLink("New Cet Entrance", "CetCreate", "Admission", null, new { data_modal = "", id = "btnCreate", @class = "btn btn-info btn-rounded" })
+                            </div>
+                            <table id="customers2" class="table datatable">
+                                <thead>
+                                    <tr>
+
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.CetCode)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.CourseCode)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.CourseName)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.BatchCode)
+                                        </th>
+                                        <th>@Html.DisplayNameFor(model => model.StartDate) </th>
+                                        <th>@Html.DisplayNameFor(model => model.CetDate) </th>
+                                        <th>@Html.DisplayNameFor(model => model.CetTime) </th>
+                                        <th>@Html.DisplayNameFor(model => model.Venue) </th>
+                                        <th>@Html.DisplayNameFor(model => model.IsActive) </th>
+                                       
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.CetCode)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.CourseCode)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.CourseName)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.BatchCode)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.StartDate)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.CetDate)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.CetTime)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Venue)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.IsActive)
+                                            </td>
+                                            <td>
+                                                @Html.ActionLink("Edit", "CetEdit", new { id = item.CetId }, new { data_modal = "" }) |
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>
+<!-- END PAGE CONTENT WRAPPER -->
+<!-- MODALS -->
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="defModalHead" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/js/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/js/plugins/bootstrap/bootstrap-select.js"></script>
+<script src="~/Scripts/ModalForm.js"></script>
+
+
+

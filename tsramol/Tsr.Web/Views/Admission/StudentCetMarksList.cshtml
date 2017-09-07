@@ -1,0 +1,38 @@
+﻿
+@model IEnumerable<Tsr.Core.Models.AdmissionStudentCetMarks>
+
+<table id="customers2" class="table datatable">
+    <thead>
+        <tr>
+
+            <th>Application Code</th>
+            <th>Name</th>
+            <th>Marks1</th>
+            <th>Marks2</th>
+            <th>Marks3</th>
+            <th>Marks4</th>
+            <th>Total</th>
+            @*<th>Action</th>*@
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.ApplicationCode)</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+
+                <td>@Html.DisplayFor(modelItem => item.Marks1)</td>
+                <td>@Html.DisplayFor(modelItem => item.Marks2)</td>
+                <td>@Html.DisplayFor(modelItem => item.Marks3)</td>
+                <td>@Html.DisplayFor(modelItem => item.Marks4)</td>
+                <td>@Html.DisplayFor(modelItem => item.Total)</td>
+            </tr>
+        }
+
+    </tbody>
+
+</table>
