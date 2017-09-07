@@ -1,0 +1,69 @@
+﻿
+@model List<Tsr.Core.Models.AdmissionMedicalListVM>
+@using (Html.BeginForm("MedicalTest", "Admission", FormMethod.Post))
+{
+    <table id="customers2" class="table ">
+        <thead>
+            <tr>
+
+                <th>Application Code</th>
+                <th>Name</th>
+
+                <th>Email</th>
+                <th>Cell</th>
+                <th>Select</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Count(); i++)
+            {
+                <tr>
+                    @Html.Hidden("obj[" + @i + "].ApplicationId", Model[i].ApplicationId)
+                    <td>
+                        @Html.Hidden("obj[" + @i + "].ApplicationCode", Model[i].ApplicationCode)
+                        @Model[i].ApplicationCode
+                    </td>
+                    <td>
+                        @Html.Hidden("obj[" + @i + "].Name", Model[i].Name)
+                        @Model[i].Name
+                    </td>
+                    <td>
+                        @Html.Hidden("obj[" + @i + "].Email", Model[i].Email)
+                        @Model[i].Email
+                    </td>
+                    <td>
+                        @Html.Hidden("obj[" + @i + "].Cell", Model[i].Cell)
+                        @Model[i].Cell
+                    </td>
+                    <td>
+                        @Html.CheckBox("obj[" + @i + "].Select", Model[i].Select)
+                    </td>
+
+                </tr>
+            }
+
+
+
+        </tbody>
+
+    </table>
+    if (ViewBag.Flag == "1")
+    {
+        <div class="col-md-3">
+            <div class="input-group">
+                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                @Html.DropDownList("MedicalMasterId", (IEnumerable<SelectListItem>)ViewBag.MedicalMaster, "Select Medical", new { @class = "form-control" })
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+            <div class="input-group">
+                <input class="btn btn-primary" type="submit" value="Mark for Medical" />
+
+            </div>
+
+        </div>
+
+    }
+}

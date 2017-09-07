@@ -872,12 +872,17 @@
     <Content Include="Views\Admission\TopStudentsList.cshtml" />
     <Content Include="Views\Admission\Interview.cshtml" />
     <Content Include="Views\Admission\InterviewList.cshtml" />
+<<<<<<< HEAD
     <Content Include="Views\Report\ApplicationForm.cshtml" />
     <Content Include="Views\Fees\ViewPaymentDetails.cshtml" />
     <Content Include="Views\Shared\_PdfLayoutForCertificate.cshtml" />
     <Content Include="Views\Certification\CertificateDesignList.cshtml" />
     <Content Include="Views\Report\GetAdmissionApplicantList.cshtml" />
     <Content Include="Views\Report\GetApplicationApplicantList.cshtml" />
+=======
+    <Content Include="Views\Admission\MedicalTest.cshtml" />
+    <Content Include="Views\Admission\MedicalList.cshtml" />
+>>>>>>> origin/master
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

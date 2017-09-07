@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Tsr.Core.Models
-{ 
-    public class AdmissionInterviewListVM
+{
+    public class AdmissionMedicalListVM
     {
         public int ApplicationId { get; set; }
         public string ApplicationCode { get; set; }
