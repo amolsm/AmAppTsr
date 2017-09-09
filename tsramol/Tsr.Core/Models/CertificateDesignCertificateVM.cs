@@ -10,28 +10,25 @@ namespace Tsr.Core.Models
     public class CertificateDesignCertificateVM
 
     {
-        public int CD_Id { get; set; }
+        public int CertificateDesignId { get; set; }
+        [DataType(DataType.MultilineText)]
+        public string LineOfCertificate { get; set; }
 
-
-        public string TopicBeforeCourseTitle { get; set; }
-        [Required]
         [Display(Name = "Course")]
         public int CourseId { get; set; }
-
-
-        public string CourseTitle { get; set; }
-
-        public string Topic1 { get; set; }
-
-        public string Topic2 { get; set; }
-
-        public string Topic3 { get; set; }
-
+        [Display(Name = "Course Title")]
+        public string CourseName { get; set; }
+        [DataType(DataType.MultilineText)]
+        public string Paragraph1 { get; set; }
+        [DataType(DataType.MultilineText)]
+        public string Paragraph2 { get; set; }
+        [DataType(DataType.MultilineText)]
+        public string Paragraph3 { get; set; }
+        [DataType(DataType.MultilineText)]
         public string Topic4 { get; set; }
 
-        [Required]
-        [Display(Name = "Course In Charge")]
-        public string CourseIncharge { get; set; }
+
+       
 
 
         [Display(Name = "Principal")]
@@ -41,7 +38,7 @@ namespace Tsr.Core.Models
     }
     public class CertificateDesignList : CertificateDesignCertificateVM
     {
-        public string CourseName { get; set; }
+        public string CourseNameTitle { get; set; }
         public string PrincipalName { get; set; }
         public DateTime? CreatedDate { get; set; }
     }

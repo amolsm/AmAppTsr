@@ -1,0 +1,97 @@
+﻿@model Tsr.Core.Models.CertificateDesignCertificateVM
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 class="modal-title" id="myModalLabel">New Certificate Design</h4>
+</div>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="modal-body">
+        <div class="form-horizontal">
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+          
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.CourseId, htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="col-md-8">
+                    @Html.DropDownListFor(model => model.CourseId,
+                        (IEnumerable<SelectListItem>)ViewBag.Course, " ", new { @class = "form-control"})
+                    @Html.ValidationMessageFor(model => model.CourseId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.PrincipalId, htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="col-md-8">
+                   @Html.DropDownListFor(model => model.PrincipalId,
+                        (IEnumerable<SelectListItem>)ViewBag.Principal, " ", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PrincipalId, "", new { @class = "text-danger" })
+              </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.CourseName, htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="col-md-8">
+                    @Html.TextBoxFor(model => model.CourseName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.CourseName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.LineOfCertificate, htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.LineOfCertificate, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.LineOfCertificate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Paragraph1, htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.Paragraph1, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Paragraph1, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                    @Html.LabelFor(model => model.Paragraph2, htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.Paragraph2, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Paragraph2, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Paragraph3, htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.Paragraph3, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Paragraph3, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Topic4, htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.Topic4, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Topic4, "", new { @class = "text-danger" })
+                </div>
+            </div>
+           
+
+
+
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal">Cancel</button>
+        <input class="btn btn-primary" type="submit" value="Save" />
+    </div>
+}
+
+<script src="~/Scripts/js/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/js/plugins/bootstrap/bootstrap-select.js"></script>
+<script src="~/Scripts/ModalForm.js"></script>

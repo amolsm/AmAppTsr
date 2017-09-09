@@ -52,8 +52,8 @@
       <HintPath>..\packages\Fluentx.Mvc.1.0.4\lib\Fluentx.Mvc.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="itextsharp, Version=5.5.11.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>..\packages\iTextSharp.5.5.11\lib\itextsharp.dll</HintPath>
+    <Reference Include="itextsharp, Version=5.5.12.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.12\lib\itextsharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.0.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -209,7 +209,9 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Common\AmountInWords.cs" />
     <Compile Include="Common\DropdownData.cs" />
+    <Compile Include="Common\ImageHelper.cs" />
     <Compile Include="Common\MessageService.cs" />
+    <Compile Include="Common\Others.cs" />
     <Compile Include="Common\RemotePost.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdmissionController.cs" />
@@ -232,6 +234,7 @@
   <ItemGroup>
     <Content Include="Common\CSS\Certificate.css" />
     <Content Include="Common\CSS\FeeReciept.css" />
+    <Content Include="Common\Img\border.png" />
     <Content Include="Common\Scripts\Commondropdownjs.js" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
@@ -880,10 +883,16 @@
     <Content Include="Views\Certification\CertificateDesignList.cshtml" />
     <Content Include="Views\Admission\MedicalList.cshtml" />
     <Content Include="Views\Admission\MedicalTest.cshtml" />
+    <Content Include="Views\Certification\DesignCreate.cshtml" />
+    <Content Include="Views\Certification\DesignEdit.cshtml" />
+    <Content Include="Views\Certification\PrincipalSignImage.cshtml" />
+    <Content Include="Views\Certification\Certificate.cshtml" />
+    <Content Include="Views\Certification\_CertificateList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="audio\" />
+    <Folder Include="Uploads\Photo\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

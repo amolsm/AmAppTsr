@@ -1,0 +1,116 @@
+﻿@model IEnumerable<Tsr.Core.Models.CertificationCertificateVM>
+@{
+    ViewBag.Title = "Certificates";
+
+}
+
+
+@foreach (var item in Model)
+{
+    <table style="width:100%; height:920px; padding:20px;border-collapse:separate;border-style: solid;border-width: 26px;-moz-border-image: url('../Img/border.png') 26 repeat;-webkit-border-image: url('../Img/border.png') 26 repeat;-o-border-image: url('../Img/border.png') 26 repeat;border-image: url('../Img/border.png') 26 fill repeat;" border="0" ;="" cellspacing="0">
+
+        <thead>
+
+            <tr>
+                <td colspan="1" rowspan="1">
+                    <img src="/Img/avatar.png" style="width:100px;height:120px;" />
+                </td>
+                <td colspan="14" rowspan="2" style="text-align:center">
+                    <div style="text-align:center">
+                        <span style="font-family:Arial;font-size:14px; font-weight:bold">SIR  MOHAMED  YUSUF  SEAMEN  WELFARE  FOUNDATION</span><br /><br />
+                        Nhava,Panvel Taluka Dist. Raigad-410206,Maharashtra<br />
+                        Tel : 022-27212800/900 Fax: 0222272112495<br />
+                        Email ID: tsrahman@tsrahaman.org<br />
+                        www.tsrahaman.org<br />
+                        INDOS No.009<br />
+                    </div>
+                    <span style="font-family:'Old English Text MT';font-size:40px; font-weight:bold">Training Ship Rahaman</span>
+                    <br />
+
+                    <br />
+                    <h4 style="text-align:right">Certificate No.   0330590012017</h4>
+                </td>
+            </tr>
+
+            <tr></tr>
+        </thead>
+        <tbody>
+
+            <tr>
+                <th colspan="15">THIS IS TO CERTIFY THAT</th>
+            </tr>
+            <tr>
+                <td style="border-bottom: 1px solid black;" class="tg-db0a" colspan="15">@item.ApplicantName</td>
+            </tr>
+            <tr>
+                <td colspan="1">Date of Birth</td>
+                <td style="border-bottom: 1px solid black;" colspan="5">@item.DateofBirth</td>
+                <td align="center" colspan="5">Holder of C.D.C .No.</td>
+                <td style="border-bottom: 1px solid black;" colspan="4">C.D.C.No.@item.CDCNo</td>
+            </tr>
+            <tr>
+                <td colspan="3">Passport No.</td>
+                <td style="border-bottom: 1px solid black;" class="tg-032e" colspan="3">99999999999</td>
+                <td colspan="9">Certificate of Competency,(if any)</td>
+
+            </tr>
+            <tr>
+                <td colspan="1">Grade:</td>
+                <td style="border-bottom: 1px solid black;" colspan="5">A</td>
+                <td colspan="1">No.</td>
+                <td style="border-bottom: 1px solid black;" colspan="7">9999999999999</td>
+                <td colspan="1">Indian National Database</td>
+            </tr>
+            <tr>
+                <td colspan="5">of Seafarers(INDoS No.)</td>
+                <td style="border-bottom: 1px solid black;" colspan="10">17HL3650</td>
+            </tr>
+            <tr>
+                <td colspan="15">has successfully completed a training course for Certificate of Profeciency In </td>
+            </tr>
+            <tr>
+                <td colspan="15"></td>
+            </tr>
+            <tr>
+                <td colspan="15"></td>
+            </tr>
+            <tr>
+                <td colspan="2">held from </td>
+                <td style="border-bottom: 1px solid black;" colspan="5">29-08-2017</td>
+                <td align="center">to</td>
+                <td style="border-bottom: 1px solid black;" colspan="7">29-08-2018</td>
+            </tr>
+            <tr>
+                <td colspan="15"></td>
+            </tr>
+            <tr>
+                <td colspan="8">Signature of Candidate:______________________</td>
+
+                <td align="center" colspan="7">_____________________________<br />Course Incharge<br />(Dr.Hemant Mehata)</td>
+
+            </tr>
+            <tr>
+                <td colspan="3">Date of Issue:</td>
+                <td style="border-bottom: 1px solid black;width: 5px;" colspan="6">05-07-2017</td>
+                <td colspan="7"></td>
+            </tr>
+            <tr>
+                <td colspan="15">Date of Expiry: UNLIMITED</td>
+
+            </tr>
+            <tr>
+                <td colspan="8">
+                    <div style="width:125px;height:135px;border:1px solid #000;text-align: center;">Photograph</div>
+                </td>
+                <td align="center" colspan="7">Principal<br />(Capt.(Dr.) Ashutosh Apandkar)<br /><br /><img src="/Img/DNV LOGO.jpg" style="width:50px;height:100px;" /></td>
+
+            </tr>
+
+
+        </tbody>
+        <tfoot>
+
+        </tfoot>
+
+    </table>
+}

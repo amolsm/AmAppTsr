@@ -19,6 +19,7 @@ using System.IO;
 using iTextSharp.text.pdf;
 using iTextSharp.text;
 
+
 namespace Tsr.Web.Controllers
 {
     public class ApplicationController : Controller
@@ -38,7 +39,11 @@ namespace Tsr.Web.Controllers
         }
         public ActionResult FillBatchAll(int CourseId)
         {
-            var Batches = db.Batches.Where(c => c.CourseId == CourseId && c.IsActive == true );
+
+            var Batches = db.Batches.Where(c => c.CourseId == CourseId && c.IsActive == true).ToList();
+        
+           
+
             return Json(Batches, JsonRequestBehavior.AllowGet);
         }
         public ActionResult CreateApplicationId(int CategoryId, int CourseId, int BatchId, string FirstName, string MiddleName, string LastName, string Email, string CellNo, DateTime? DateOfBirth)

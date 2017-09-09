@@ -101,5 +101,16 @@ namespace Tsr.Web.Common
             }, "Value", "Text");
         }
 
+        public class BatchDropdownlist
+        {
+            public int BatchId { get; set; }
+            public string BatchCode { get; set; }
+        }
+
+    }
+    public class BatchDropdownlist
+    {
+        public int BatchId { get; set; }
+        public string BatchCode { get; set; }
     }
 }
