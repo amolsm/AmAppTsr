@@ -130,8 +130,9 @@
               $("#BatchId").append(
                       $('<option></option>').val("").html(""));
               $.each(Courses, function (i, c) {
+                  //var date = new DateTime(DateTime.parse(c.StartDate));
                   $("#BatchId").append(
-                      $('<option></option>').val(c.BatchId).html(c.BatchCode));
+                      $('<option></option>').val(c.BatchId).html(c.Name));
               });
           }
       });

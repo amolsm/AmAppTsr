@@ -880,6 +880,7 @@
     <Content Include="Views\Certification\CertificateDesignList.cshtml" />
     <Content Include="Views\Admission\MedicalList.cshtml" />
     <Content Include="Views\Admission\MedicalTest.cshtml" />
+    <Content Include="Views\MasterDetails\BatchListGet.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

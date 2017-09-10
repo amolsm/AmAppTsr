@@ -82,6 +82,7 @@
     <Compile Include="Models\ApplicationSumPayCetVM.cs" />
     <Compile Include="Models\ApplicationSumPayNonCetVM.cs" />
     <Compile Include="Models\BatchCreateVM.cs" />
+    <Compile Include="Models\BatchDropdown.cs" />
     <Compile Include="Models\BatchListVM.cs" />
     <Compile Include="Models\CertificateDesignCertificateVM.cs" />
     <Compile Include="Models\CourseFeeListVM.cs" />

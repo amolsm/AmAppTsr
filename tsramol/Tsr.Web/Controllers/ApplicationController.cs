@@ -19,6 +19,7 @@ using System.IO;
 using iTextSharp.text.pdf;
 using iTextSharp.text;
 
+
 namespace Tsr.Web.Controllers
 {
     public class ApplicationController : Controller
@@ -28,12 +29,17 @@ namespace Tsr.Web.Controllers
         #region Common
         public ActionResult FillCourse(int CategoryId)
         {
-            var Courses = db.Courses.Where(c => c.CategoryId == CategoryId && c.IsActive == true);
+            var Courses = db.Courses
+                .Where(c => c.CategoryId == CategoryId && c.IsActive == true);
             return Json(Courses, JsonRequestBehavior.AllowGet);
         }
         public ActionResult FillBatch(int CourseId)
         {
-            var Courses = db.Batches.Where(c => c.CourseId == CourseId && c.IsActive == true && c.OnlineBookingStatus == true);
+            var C = db.Batches
+                .Where(c => c.CourseId == CourseId && c.IsActive == true && c.OnlineBookingStatus == true)
+                .Select(x => new { BatchId = x.BatchId, Name = x.StartDate});
+
+            var Courses = C.ToList().Select(x => new BatchDropdown {BatchId = x.BatchId, Name = Convert.ToDateTime(x.Name).ToString("dd-MM-yyyy") });
             return Json(Courses, JsonRequestBehavior.AllowGet);
         }
         public ActionResult FillBatchAll(int CourseId)

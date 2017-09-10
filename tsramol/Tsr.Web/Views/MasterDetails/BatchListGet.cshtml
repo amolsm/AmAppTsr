@@ -1,0 +1,61 @@
+﻿@model IEnumerable<Tsr.Core.Models.BatchListVM>
+
+<table id="customers2" class="table ">
+    <thead>
+        <tr>
+
+            <th>
+                @Html.DisplayNameFor(model => model.BatchCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CourseName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndDate)
+            </th>
+            <th>@Html.DisplayNameFor(model => model.IsActive) </th>
+            <th>@Html.DisplayNameFor(model => model.OnlineBookingStatus) </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.BatchCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CourseName)
+                </td>
+                <td>
+                    @*@Html.DisplayFor(modelItem => Convert.ToDateTime(item.StartDate).ToString("dd-MM-yyyy"))*@
+                    @Convert.ToDateTime(item.StartDate).ToString("dd-MM-yyyy")
+                </td>
+                <td>
+                    @*@Html.DisplayFor(modelItem => item.EndDate)*@
+                    @Convert.ToDateTime(item.EndDate).ToString("dd-MM-yyyy")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsActive)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OnlineBookingStatus)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "FeesPatternEdit", new { id = item.CourseId }, new { data_modal = "" }) |
+
+
+                </td>
+            </tr>
+        }
+
+    </tbody>
+
+</table>
+

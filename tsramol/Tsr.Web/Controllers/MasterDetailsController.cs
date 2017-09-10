@@ -786,12 +786,36 @@ namespace Tsr.Web.Controllers
         #endregion
 
         #region Batches
-        public async Task<ActionResult> BatchList()
+        public ActionResult BatchList()
+        {
+            //var obj = from c in db.Courses
+            //          join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
+            //          join b in db.Batches on c.CourseId equals b.CourseId
+            //          where c.IsActive == true
+            //          select new BatchListVM
+            //          {
+            //              CourseId = c.CourseId,
+            //              CourseName = c.CourseName,
+            //              BatchId = b.BatchId,
+            //              BatchCode = b.BatchCode,
+            //              StartDate = b.StartDate,
+            //              EndDate = b.EndDate,
+            //              CategoryName = cc.CategoryName,
+            //              IsActive = b.IsActive,
+            //              ReserveSeats = b.ReserveSeats,
+            //              OnlineBookingStatus = b.OnlineBookingStatus,
+
+            //          };
+            ViewBag.Category = new SelectList(db.CourseCategories.ToList(), "CourseCategoryId", "CategoryName");
+            var obj = new List<BatchListVM>();
+            return View( obj);
+        }
+        public ActionResult BatchListGet(int? CourseId)
         {
             var obj = from c in db.Courses
                       join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
                       join b in db.Batches on c.CourseId equals b.CourseId
-                      where c.IsActive == true
+                      where c.IsActive == true && c.CourseId == CourseId
                       select new BatchListVM
                       {
                           CourseId = c.CourseId,
@@ -804,12 +828,17 @@ namespace Tsr.Web.Controllers
                           IsActive = b.IsActive,
                           ReserveSeats = b.ReserveSeats,
                           OnlineBookingStatus = b.OnlineBookingStatus,
-                          
                       };
+                      //}).AsEnumerable().Select(x=> new BatchListVM
+                      //      {
+                      //          BatchCode = x.BatchCode, BatchId = x.BatchId, CategoryName=x.CategoryName,
+                      //          CourseId = x.CourseId, CourseName = x.CourseName, EndDate = x.EndDate,
+                      //          IsActive = x.IsActive, OnlineBookingStatus = x.OnlineBookingStatus,
+                      //          ReserveSeats = x.ReserveSeats, StartDate = x.StartDate
+                      //      });
 
-            return View(await obj.ToListAsync());
+            return PartialView("BatchListGet", obj.ToList());
         }
-
         public ActionResult BatchCreate()
         {
             ViewBag.Categories = new SelectList(db.CourseCategories.Where(x => x.IsActive == true).ToList(), "CourseCategoryId", "CategoryName");
