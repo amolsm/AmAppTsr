@@ -1,5 +1,4 @@
-﻿
-@model IEnumerable<Tsr.Core.Models.CertificateDesignList>
+﻿@model IEnumerable<Tsr.Core.Models.CertificateDesignList>
 @{
     ViewBag.Title = "Certificate DesignList";
 }
@@ -40,19 +39,22 @@
                                             Course Title
                                         </th>
                                         <th>
-                                            Course Incharge
+                                            LineOfCertificate
                                         </th>
                                         <th>
-                                            Topic 1
+                                            Paragraph1
                                         </th>
                                         <th>
-                                            Topic 2
+                                            Paragraph2
                                         </th>
                                         <th>
-                                            Topic 3
+                                            Paragraph3
                                         </th>
                                         <th>
                                             Topic 4
+                                        </th>
+                                        <th>
+                                          Principal Name
                                         </th>
                                         <th>Action</th>
                                     </tr>
@@ -67,25 +69,29 @@
                                                 @Html.DisplayFor(modelItem => item.CourseName)
                                             </td>
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.CourseTitle)
+                                                @Html.DisplayFor(modelItem => item.CourseNameTitle)
                                             </td>
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.CourseIncharge)
+                                                @Html.DisplayFor(modelItem => item.LineOfCertificate)
+                                            </td>
+                                          
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Paragraph1)
                                             </td>
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.Topic1)
+                                                @Html.DisplayFor(modelItem => item.Paragraph2)
                                             </td>
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.Topic2)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Topic3)
+                                                @Html.DisplayFor(modelItem => item.Paragraph3)
                                             </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Topic4)
                                             </td>
                                             <td>
-                                                @Html.ActionLink("Edit", "DesignEdit", new { id = item.CD_Id }, new { data_modal = "" }) |
+                                                @Html.DisplayFor(modelItem => item.PrincipalName)
+                                            </td>
+                                            <td>
+                                                @Html.ActionLink("Edit", "DesignEdit", new { id = item.CertificateDesignId }, new { data_modal = "" }) |
 
 
                                             </td>

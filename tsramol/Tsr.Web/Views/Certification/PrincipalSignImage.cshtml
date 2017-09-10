@@ -1,0 +1,149 @@
+﻿@model Tsr.Core.Models.CertificatePrincipalVM
+@using Tsr.Web.Common
+@{
+    ViewBag.Title = "PrincipalSignImage";
+
+}
+<!-- START BREADCRUMB -->
+<ul class="breadcrumb push-down-0">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Certificate Design</a></li>
+    <li><a href="#">Design Form</a></li>
+    @*<li class="active">Error 404</li>*@
+</ul>
+<!-- END BREADCRUMB -->
+<!-- PAGE CONTENT WRAPPER -->
+<div class="page-content-wrap">
+    <div>
+        
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="form-horizontal">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Principal Sign</h3>
+
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="row">
+
+                               @using (Html.BeginForm("PrincipalSignImage", "Certification", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                               {
+                                @Html.AntiForgeryToken()
+                                @Html.HiddenFor(model => model.PrincipalId)
+
+                                <div class="form-horizontal">
+
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.PricipalName, htmlAttributes: new { @class = "control-label col-md-3" })
+                                        <div class="col-md-8">
+                                            @Html.TextBoxFor(model => model.PricipalName, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.PricipalName, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.SignatureImgUrl, htmlAttributes: new { @class = "control-label col-md-3" })
+                                        <div class="col-md-8">
+                                            <div> 
+                                               
+                                            <img id="user_img" height="100" width="100" style="border:solid" />
+                                             </div>
+                                            <div>
+                                                <input type="file" title="search image" id="file" name="file" onchange="show(this)" />
+                                            </div>
+                                        </div>
+
+                                       
+                                        @Html.ValidationMessageFor(model => model.SignatureImgUrl, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.HiddenFor(model => model.SignatureImgUrl)
+                                        <div class="col-md-9 pull-right">
+                                            <input class="btn btn-primary" type="submit" name="submit" />
+                                            </div>
+                                        </div>
+                                </div>
+                               }
+                            </div>
+                            <div class="panel">
+                                <div>
+                                    <h3 class="panel-title">Principal Sign List</h3>
+
+
+                                    <table id="customers2" class="table datatable">
+                                        <thead>
+                                            <tr>
+
+                                                <th>
+                                                    Principal Name
+                                                </th>
+                                                <th>
+                                                    Signature
+                                                </th>
+
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            @foreach (var item in Model._principalList)
+                                        {
+                                                <tr>
+
+
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.PricipalName)
+                                                    </td>
+                                                    <td>
+
+                                                        @Html.Image(item.SignatureImgUrl, "No Signature Available", "100", "100")
+
+                                                    </td>
+                                                    <td>
+                                                        @Html.ActionLink("Edit", "PrincipalSignEdit", new { id = item.PrincipalId })
+                                                    </td>
+                                                </tr>
+                                        }
+
+                                        </tbody>
+
+                                    </table>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>
+    </div>
+<!-- END PAGE CONTENT WRAPPER -->
+<script type="text/javascript">
+
+   function show(input) {
+    if (input.files && input.files[0]) {
+        var filerdr = new FileReader();
+        filerdr.onload = function (e) {
+          $('#user_img').attr('src', e.target.result);
+        }
+        filerdr.readAsDataURL(input.files[0]);
+    }
+      
+
+   }
+   
+</script>  
+
+<script src="~/Scripts/js/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/js/plugins/bootstrap/bootstrap-select.js"></script>
+<script src="~/Scripts/ModalForm.js"></script>

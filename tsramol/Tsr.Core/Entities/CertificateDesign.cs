@@ -27,7 +27,7 @@ namespace Tsr.Core.Entities
         public string Topic4 { get; set; }
 
 
-        public int PricipalId { get; set; }
+        public int PrincipalId { get; set; }
 
         private DateTime? createdDate;
         [Required]
