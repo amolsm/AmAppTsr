@@ -160,6 +160,7 @@ namespace Tsr.Web.Controllers
             return PartialView("DesignEdit", obj);
         }
         #endregion
+
         #region PrincipalSignature
         public ActionResult PrincipalSignImage()
         {
@@ -236,32 +237,68 @@ namespace Tsr.Web.Controllers
             return View("PrincipalSignImage", obj);
         }
 
-        public ActionResult Certificate()
-        {
-            ViewBag.Categories = new SelectList(db.CourseCategories.Where(x => x.IsActive == true).ToList(), "CourseCategoryId", "CategoryName");
-           
-
-            return View();
-        }
 
 
         #endregion
-        public async Task<ActionResult> CertificateList()
+        #region Certificate
+        [HttpGet]
+        public ActionResult Certificate()
         {
-            string Applicant = string.Empty;
-            var certificatelist = from a in db.Applications
-                                  join b in db.Applied on a.ApplicationId equals b.ApplicationId
-                                  where b.AdmissionStatus == true
-                                  select new CertificationCertificateVM
-                                  {
+            ViewBag.Categories = new SelectList(db.CourseCategories.Where(x => x.IsActive == true).ToList(), "CourseCategoryId", "CategoryName");
 
-                                     
-                                      ApplicantName = a.FirstName == null ? "" : a.FirstName + "" + a.MiddleName == null ? "" : a.MiddleName + "" + a.LastName == null ? "" : a.LastName,
-                                      DateofBirth =a.DateOfBirth.ToString(),
-                                      CDCNo=a.CdcNo
-                                  };
-            return PartialView(await certificatelist.ToListAsync());
+            var CertifcateList = from a in db.Applications
+                                 join b in db.Applied on a.ApplicationId equals b.ApplicationId
+                                 join c in db.CertificateDesigns on a.CourseId equals c.CourseId
+                                 join p in db.Principals on c.PrincipalId equals p.PrincipalId
+                                 where b.AdmissionStatus == true && a.CategoryId == 2 && a.CourseId ==1 && a.BatchId == 1
+                                 select new CertificationCertificateVM.Certificate
+                                 {
+                                     CertificateNo = "0330590012017",
+                                     ApplicantName = a.FirstName + "" + a.MiddleName == null ? "" : a.MiddleName + "" + a.LastName == null ? "" : a.LastName,
+                                     CDCNo = a.CdcNo,
+                                     PassportNo = a.PassportNo
+                                    
+
+                                 };
+
+            CertificationCertificateVM ccvm = new CertificationCertificateVM();
+            ccvm._CertificateList = CertifcateList.ToList();
+            return View(ccvm);
         }
+
+        [HttpPost]
+        public ActionResult Certificate(CertificationCertificateVM obj)
+        {
+            if (ModelState.IsValid)
+            {
+
+
+                var CertifcateList = from a in db.Applications
+                                     join b in db.Applied on a.ApplicationId equals b.ApplicationId
+                                     join c in db.CertificateDesigns on a.CourseId equals c.CourseId
+                                     join p in db.Principals on c.PrincipalId equals p.PrincipalId
+                                     where b.AdmissionStatus == true && a.CategoryId == obj.CategoryId && a.CourseId == obj.CourseId && a.BatchId == obj.BatchId
+                                     select new CertificationCertificateVM.Certificate
+                                     {
+                                         CertificateNo= "0330590012017",
+                                         ApplicantName =a.FirstName+""+a.MiddleName==null?"":a.MiddleName+""+a.LastName==null?"":a.LastName,
+                                         CDCNo=a.CdcNo,
+                                         PassportNo=a.PassportNo
+
+
+                                     };
+
+                CertificationCertificateVM ccvm = new CertificationCertificateVM();
+                ccvm._CertificateList = CertifcateList.ToList();
+                ViewBag.Categories = new SelectList(db.CourseCategories.Where(x => x.IsActive == true).ToList(), "CourseCategoryId", "CategoryName");
+
+                return View(ccvm);
+            }
+            ViewBag.Categories = new SelectList(db.CourseCategories.Where(x => x.IsActive == true).ToList(), "CourseCategoryId", "CategoryName");
+
+            return View(obj);
+        }
+        #endregion
 
     }
 }

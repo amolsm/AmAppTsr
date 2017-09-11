@@ -1,0 +1,15 @@
+﻿.table-bordered {
+border-collapse:separate;
+border-style: solid;
+border-width: 26px;
+-moz-border-image: url('../img/border.png') 26 repeat;
+-webkit-border-image: url('../img/border.png') 26 repeat;
+-o-border-image: url('../img/border.png') 26 repeat;
+border-image: url('../img/border.png') 26 fill repeat;
+}
+
+    
+.table th,td {
+    border: transparent solid 1px !important;
+  
+}

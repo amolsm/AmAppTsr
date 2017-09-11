@@ -244,15 +244,13 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Common\CSS\Certificate.css" />
-    <Content Include="Common\CSS\FeeReciept.css" />
-    <Content Include="Common\Img\border.png" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\css\animate\animate.css" />
     <Content Include="Content\css\animate\animate.min.css" />
     <Content Include="Content\css\blueimp\blueimp-gallery.min.css" />
     <Content Include="Content\css\bootstrap\bootstrap.min.css" />
+    <Content Include="Content\css\Certificate.css" />
     <Content Include="Content\css\codemirror\codemirror.css" />
     <Content Include="Content\css\codemirror\theme\3024-day.css" />
     <Content Include="Content\css\codemirror\theme\3024-night.css" />
@@ -285,6 +283,7 @@
     <Content Include="Content\css\codemirror\theme\xq-dark.css" />
     <Content Include="Content\css\codemirror\theme\xq-light.css" />
     <Content Include="Content\css\dropzone\dropzone.css" />
+    <Content Include="Content\css\FeeReciept.css" />
     <Content Include="Content\css\fontawesome\font-awesome.min.css" />
     <Content Include="Content\css\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\css\fonts\glyphicons-halflings-regular.svg" />
@@ -300,6 +299,7 @@
     <Content Include="Content\css\theme-default.css" />
     <Content Include="Content\css\theme-white.css" />
     <Content Include="Content\img\bg.png" />
+    <Content Include="Content\img\border.png" />
     <Content Include="Content\wiz\assets\css\b.css" />
     <Content Include="Content\wiz\assets\css\bootstrap.min.css" />
     <Content Include="Content\wiz\assets\css\demo.css" />
@@ -362,6 +362,7 @@
     <Content Include="Content\wiz\assets\scss\gsdk-bootstrap-wizard\_wizard-card.scss" />
     <None Include="Properties\PublishProfiles\am.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\commonjs\commondropdown.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />

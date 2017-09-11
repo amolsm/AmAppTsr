@@ -1,0 +1,15 @@
+﻿
+	td.hide_right {
+	border-right-style:hidden;
+	}
+	td.hide_left {
+	border-left-style:hidden;
+	}
+	td.hide_top_left_right {
+	border-right-style:hidden;
+	border-left-style:hidden;
+	border-top-style:hidden;
+	}
+		td.hide_all {
+	 border-style:hidden;
+	}

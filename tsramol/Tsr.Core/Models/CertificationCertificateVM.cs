@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Tsr.Core.Models
 {
-     
+
     public class CertificationCertificateVM
     {
         [Required]
@@ -17,14 +17,34 @@ namespace Tsr.Core.Models
         [Required]
         public int BatchId { get; set; }
 
-        public string ApplicantName { get; set; }
+        public List<Certificate> _CertificateList   { get; set; }
+    
+    
+        public class Certificate
+        {
+            public string CertificateNo { get; set; }
+            public string ApplicantName { get; set; }
 
-        public string DateofBirth { get; set; }
+            public string DateofBirth { get; set; }
 
-        public string CDCNo { get; set; }
+            public string CDCNo { get; set; }
 
-        
+            public string PassportNo { get; set; }
 
+            public string LineOfCertificate { get; set; }
+
+            public string CourseName { get; set; }
+
+            public string Paragraph1 { get; set; }
+            public string Paragraph2 { get; set; }
+            public string Paragraph3 { get; set; }
+
+            public string Topic4 { get; set; }
+
+            public string PrincipalName { get; set; }
+        }
 
     }
+
+  
 }
