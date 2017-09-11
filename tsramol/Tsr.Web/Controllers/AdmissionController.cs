@@ -17,18 +17,23 @@ namespace Tsr.Web.Controllers
         
         public JsonResult FillBatch(int? CourseId)
         {
-            var Batches = db.Batches.Where(c => c.CourseId == CourseId && c.IsActive == true && c.OnlineBookingStatus == true);
+            var C = db.Batches
+                .Where(c => c.CourseId == CourseId && c.IsActive == true && c.OnlineBookingStatus == true)
+                .Select(x => new { BatchId = x.BatchId, Name = x.StartDate });
+
+            var Batches = C.ToList().Select(x => new BatchDropdown { BatchId = x.BatchId, BatchCode = Convert.ToDateTime(x.Name).ToString("dd-MM-yyyy") });
             return Json(Batches, JsonRequestBehavior.AllowGet);
         }
         public JsonResult FillBatchForCet(int? CourseId)
         {
             //var Batches = db.Batches.Where(c => c.CourseId == CourseId && c.IsActive == true && c.OnlineBookingStatus == true);
-            var Batches = from b in db.Batches
+            var C = from b in db.Batches
                           join ct in db.CetMasters on b.BatchId equals ct.BatchId
                           into cts
                           from ct in cts.DefaultIfEmpty()
                           where (ct == null && b.CourseId == CourseId && b.IsActive == true)
-                          select new { b.BatchId, b.BatchCode};
+                          select new { BatchId =  b.BatchId, Name = b.StartDate };
+            var Batches = C.ToList().Select(x => new BatchDropdown { BatchId = x.BatchId, BatchCode = Convert.ToDateTime(x.Name).ToString("dd-MM-yyyy") });
             return Json(Batches, JsonRequestBehavior.AllowGet);
         }
 
@@ -469,6 +474,33 @@ namespace Tsr.Web.Controllers
             return View(obj);
             
         }
+
+        [HttpPost]
+        public async Task<ActionResult> MedicalTest(List<AdmissionMedicalListVM> obj)
+        {
+            if (obj != null)
+            {
+                foreach (var item in obj)
+                {
+                    if (item.Select == true)
+                    {
+                        //var ap = await db.Applications.FindAsync(item.ApplicationId);
+
+                        Applied apl = db.Applied.FirstOrDefault(x=>x.ApplicationId == item.ApplicationId);
+                        apl.AdmissionStatus = true;                        
+                    }
+                }
+                await db.SaveChangesAsync();
+            }
+            var a = from c in db.Courses
+                    join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
+                    where (c.IsActive == true && cc.CetRequired == true)
+                    select new { c.CourseId, c.CourseName };
+            ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
+
+            var l = new List<AdmissionMedicalListVM>();
+            return View(l);
+        }
         [HttpGet]
         public ActionResult GetListForMedical(int? BatchId)
         {
@@ -489,6 +521,11 @@ namespace Tsr.Web.Controllers
                            };
                 ViewBag.Flag = "1";
                 ViewBag.MedicalMaster = new SelectList(db.MedicalMasters.ToList(), "MedicalMasterId", "MedicalCode");
+                //batchDetails
+                //var bt = db.Batches.Find(BatchId);
+                //ViewBag.TotalSeats = bt.TotalSeats;
+                //ViewBag.Reserved = bt.ReserveSeats;
+                //ViewBag.Booked = bt.BookedSeats; 
                 return PartialView("MedicalList", list.ToList());
             }
             var obj = new List<AdmissionMedicalListVM>();
@@ -496,12 +533,47 @@ namespace Tsr.Web.Controllers
         }
         #endregion
 
-        #region FinalMerit
-        public ActionResult FinalList()
+        #region ConfirmAdmissionList
+        public ActionResult ConfirmAdmissions()
         {
-            return View();
+            var a = from c in db.Courses
+                    join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
+                    where (c.IsActive == true && cc.CetRequired == true)
+                    select new { c.CourseId, c.CourseName };
+            ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
+
+            var obj = new List<AdmissionConfirmListVM>();
+            return View(obj);
         }
 
+        public ActionResult GetListConfirmedStudents(int? BatchId)
+        {
+            if (BatchId != null)
+            {
+                var list = from mt in db.Applied
+                           join ap in db.Applications on mt.ApplicationId equals ap.ApplicationId
+                           join b in db.Batches on mt.BatchId equals b.BatchId
+                           where (mt.BatchId == BatchId && mt.AdmissionStatus == true)
+                           select new AdmissionConfirmListVM
+                           {
+                               ApplicationId = ap.ApplicationId,
+                               ApplicationCode = ap.ApplicationCode,
+                               Cell = ap.CellNo,
+                               Email = ap.Email,
+                               Name = ap.FirstName + " " + ap.LastName
+                           };
+                ViewBag.Flag = "1";
+                
+                //batchDetails
+                //var bt = db.Batches.Find(BatchId);
+                //ViewBag.TotalSeats = bt.TotalSeats;
+                //ViewBag.Reserved = bt.ReserveSeats;
+                //ViewBag.Booked = bt.BookedSeats; 
+                return PartialView("ConfirmAdmissionsList", list.ToList());
+            }
+            var obj = new List<AdmissionConfirmListVM>();
+            return PartialView("ConfirmAdmissionsList", obj.ToList());
+        }
         #endregion
 
         #region RejectedList

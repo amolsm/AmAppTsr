@@ -8,6 +8,7 @@ namespace Tsr.Core.Models
 {
     public class BatchDropdown
     {
+        public string BatchCode { get; set; }
         public int BatchId { get; set; }
         public string Name { get; set; }
     }

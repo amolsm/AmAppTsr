@@ -28,7 +28,7 @@
                 @Html.LabelFor(model => model.CategoryId, htmlAttributes: new { @class = "control-label col-md-3" })
                 <div class="col-md-8">
                     @Html.DropDownListFor(model => model.CategoryId,
-                        (IEnumerable<SelectListItem>)ViewBag.Categories, " ", new { @class = "form-control", @onchange = "FillCourse()" } )
+                        (IEnumerable<SelectListItem>)ViewBag.Categories, " ", new { @class = "form-control catID", @onchange = "FillCourse()" } )
                     @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -112,6 +112,7 @@
  <script>
   function FillCourse() {
       var CategoryId = $('#CategoryId').val();
+      //debugger;
     $.ajax({
         url: '/MasterDetails/FillCourse',
         type: "GET",
@@ -119,6 +120,8 @@
         data: { CategoryId: CategoryId },
         success: function (Courses) {
             $("#CourseId").html(""); // clear before appending new list
+            $("#CourseId").append(
+                   $('<option></option>').val(0).html("Select Course"));
             $.each(Courses, function (i, c) {
                 $("#CourseId").append(
                     $('<option></option>').val(c.CourseId).html(c.CourseName));

@@ -8,6 +8,16 @@ namespace Tsr.Web.Common
 {
     public class DropdownData
     {
+        public static SelectList CourseType()
+        {
+            return
+                new SelectList(new List<SelectListItem>
+            {
+                new SelectListItem { Value = "False", Text= "Single Course"},
+                new SelectListItem {Value = "True", Text="Package Courses" }
+
+            }, "Value", "Text");
+        }
         public static SelectList YesNo()
         {
             return

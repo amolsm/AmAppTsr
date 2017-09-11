@@ -36,8 +36,8 @@
                                 <div class="col-md-3">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        @Html.DropDownList("CategoryId",
-                                                (IEnumerable<SelectListItem>)ViewBag.Category, "Select Category", new { @class = "form-control", @onchange = "FillCourse()" })
+                                        @Html.DropDownList("CategoryId1",
+                                                (IEnumerable<SelectListItem>)ViewBag.Category, "Select Category", new { @class = "form-control", @onchange = "FillCourse1()" })
                                     </div>
 
                                 </div>
@@ -45,7 +45,7 @@
                                 <div class="col-md-3">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        @Html.DropDownList("CourseId",
+                                        @Html.DropDownList("CourseId1",
                    new SelectList(Enumerable.Empty<SelectListItem>(), "CourseId", "CourseName"),
               " ", new { @class = "form-control"})
                                     </div>
@@ -93,19 +93,19 @@
 <script src="~/Scripts/js/plugins/bootstrap/bootstrap-select.js"></script>
 <script src="~/Scripts/ModalForm.js"></script>
 <script>
-    function FillCourse() {
-        var CategoryId = $('#CategoryId').val();
+    function FillCourse1() {
+        var CategoryId = $('#CategoryId1').val();
         $.ajax({
             url: '/MasterDetails/FillCourse',
             type: "GET",
             dataType: "JSON",
             data: { CategoryId: CategoryId },
             success: function (Courses) {
-                $("#CourseId").html(""); // clear before appending new list
-                $("#CourseId").append(
+                $("#CourseId1").html(""); // clear before appending new list
+                $("#CourseId1").append(
                         $('<option></option>').val("").html("Select Course"));
                 $.each(Courses, function (i, c) {
-                    $("#CourseId").append(
+                    $("#CourseId1").append(
                         $('<option></option>').val(c.CourseId).html(c.CourseName));
                 });
             }
@@ -113,7 +113,7 @@
     }
 
     function Search() {
-        var CourseId = $('#CourseId').val();
+        var CourseId = $('#CourseId1').val();
 
         $("#dvResult").load('@(Url.Action("BatchListGet", "MasterDetails",null, Request.Url.Scheme))?CourseId=' + CourseId);
         //$('#customers2').DataTable();

@@ -33,6 +33,24 @@ namespace Tsr.Web.Controllers
                 .Where(c => c.CategoryId == CategoryId && c.IsActive == true);
             return Json(Courses, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult FillCourseAppl(int CategoryId)
+        {
+            var C = db.Courses
+                .Where(c => c.CategoryId == CategoryId && c.IsActive == true);
+            var cat = db.CourseCategories.Find(CategoryId);
+            
+            if (cat.CetRequired == true)
+            {
+              var  Courses = new { One = "True", Two = C };
+                return Json(Courses, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var Courses = new { One = "False", Two = C };
+                return Json(Courses, JsonRequestBehavior.AllowGet);
+            }
+            
+        }
         public ActionResult FillBatch(int CourseId)
         {
             var C = db.Batches
@@ -40,16 +58,32 @@ namespace Tsr.Web.Controllers
                 .Select(x => new { BatchId = x.BatchId, Name = x.StartDate});
 
             var Courses = C.ToList().Select(x => new BatchDropdown {BatchId = x.BatchId, Name = Convert.ToDateTime(x.Name).ToString("dd-MM-yyyy") });
+            ViewBag.Flag = "Test22";
             return Json(Courses, JsonRequestBehavior.AllowGet);
         }
         public ActionResult FillBatchAll(int CourseId)
         {
+            var C = db.Batches
+                .Where(c => c.CourseId == CourseId && c.IsActive == true)
+                .Select(x => new { BatchId = x.BatchId, Name = x.StartDate });
 
-            var Batches = db.Batches.Where(c => c.CourseId == CourseId && c.IsActive == true).ToList();
-        
-           
+            var Batches = C.ToList().Select(x => new BatchDropdown { BatchId = x.BatchId, Name = Convert.ToDateTime(x.Name).ToString("dd-MM-yyyy") });
 
             return Json(Batches, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult IsPackage(bool IsPackage)
+        {
+            if (IsPackage == true)
+            {
+                var Packages = db.packages.Where(x => x.IsActive == true).ToList();
+                return Json(Packages, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                string Packages = "Single";
+                return Json(Packages, JsonRequestBehavior.AllowGet);
+            }
+            
         }
         public ActionResult CreateApplicationId(int CategoryId, int CourseId, int BatchId, string FirstName, string MiddleName, string LastName, string Email, string CellNo, DateTime? DateOfBirth)
         {
@@ -72,7 +106,7 @@ namespace Tsr.Web.Controllers
         public ActionResult Index()
         {
             ViewBag.Categories = new SelectList(db.CourseCategories.Where(x => x.IsActive == true).ToList(), "CourseCategoryId", "CategoryName");
-
+            ViewBag.IsPackage = DropdownData.CourseType();
             return View();
         }
         [HttpPost]
@@ -645,21 +679,24 @@ namespace Tsr.Web.Controllers
                 db.OnlinePaymentInfos.Add(opi);
                 await db.SaveChangesAsync();
 
-                Applied nca = new Applied
-                {
-                    AdmissionStatus = true,
-                    ApplicationId = Convert.ToInt32(obj.udf3),
-                    BatchId = Convert.ToInt32(obj.udf1),
-                    CategoryId = (int)ccId,
-                    CourseId = (int)cid
-                };
-                db.Applied.Add(nca);
-                await db.SaveChangesAsync();
+                
 
                 
                 if (cc.CetRequired == true)
                 {
                     //Cet
+
+                    //Applied
+                    Applied nca = new Applied
+                    {
+                        AdmissionStatus = false,
+                        ApplicationId = Convert.ToInt32(obj.udf3),
+                        BatchId = Convert.ToInt32(obj.udf1),
+                        CategoryId = (int)ccId,
+                        CourseId = (int)cid
+                    };
+                    db.Applied.Add(nca);
+                    await db.SaveChangesAsync();
 
                     //feeReceipt
                     FeeReceipt fr = new FeeReceipt
@@ -682,6 +719,17 @@ namespace Tsr.Web.Controllers
                     bs.BookedSeats = bs.BookedSeats + 1;
                     await db.SaveChangesAsync();
 
+                    //Applied
+                    Applied nca = new Applied
+                    {
+                        AdmissionStatus = true,
+                        ApplicationId = Convert.ToInt32(obj.udf3),
+                        BatchId = Convert.ToInt32(obj.udf1),
+                        CategoryId = (int)ccId,
+                        CourseId = (int)cid
+                    };
+                    db.Applied.Add(nca);
+                    await db.SaveChangesAsync();
 
                     //feeReceipt
                     FeeReceipt fr = new FeeReceipt

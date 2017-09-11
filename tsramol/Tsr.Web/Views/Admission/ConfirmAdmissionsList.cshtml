@@ -1,6 +1,7 @@
 ﻿
-@model List<Tsr.Core.Models.AdmissionMedicalListVM>
-@using (Html.BeginForm("MedicalTest", "Admission", FormMethod.Post))
+
+@model List<Tsr.Core.Models.AdmissionConfirmListVM>
+@using (Html.BeginForm("ConfirmAdmissions", "Admission", FormMethod.Post))
 {
     <table id="customers2" class="table ">
         <thead>
@@ -11,7 +12,7 @@
 
                 <th>Email</th>
                 <th>Cell</th>
-                <th>Select</th>
+                @*<th>Select</th>*@
             </tr>
         </thead>
         <tbody>
@@ -35,9 +36,9 @@
                         @Html.Hidden("obj[" + @i + "].Cell", Model[i].Cell)
                         @Model[i].Cell
                     </td>
-                    <td>
+                    @*<td>
                         @Html.CheckBox("obj[" + @i + "].Select", Model[i].Select)
-                    </td>
+                    </td>*@
 
                 </tr>
             }
@@ -47,9 +48,9 @@
         </tbody>
 
     </table>
-    if (ViewBag.Flag == "1")
+    @*if (ViewBag.Flag == "1")
     {
-       
+
 
         <div class="col-md-3">
             <div class="input-group">
@@ -59,5 +60,5 @@
 
         </div>
 
-    }
+    }*@
 }

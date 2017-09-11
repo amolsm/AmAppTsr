@@ -458,8 +458,84 @@ namespace Tsr.Web.Controllers
             return PartialView("PackageCreate", vm);
         }
 
-       
+        public async Task<ActionResult> PackageEdit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var obj = await db.packages.FindAsync(id);
 
+            if (obj == null)
+            {
+                return HttpNotFound();
+            }
+            return PartialView("PackageEdit", obj);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> PackageEdit(Package obj)
+        {
+            if (ModelState.IsValid)
+            {
+                obj.ModifiedBy = 1;
+                obj.ModifiedDate = DateTime.Now;
+
+                db.Entry(obj).State = EntityState.Modified;
+                try
+                {
+                    await db.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+                    string s = e.ToString();
+                }
+                return Json(new { success = true });
+            }
+            return PartialView("PackageEdit", obj);
+        }
+
+        public ActionResult PackageCourses(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var obj = (from pc in db.PackageCourses
+                       join c in db.Courses on pc.CourseId equals c.CourseId
+                       where (pc.PackageId == id)
+                       select pc.CourseId).ToArray();
+
+            var crs = from c1 in db.Courses
+                      join cc1 in db.CourseCategories on c1.CategoryId equals cc1.CourseCategoryId
+                      where (cc1.CetRequired == false)
+                      select new { c1.CourseId, c1.CourseName};
+
+            ViewBag.Courses = new MultiSelectList(crs, "CourseId", "CourseName", obj);
+            ViewBag.PackageId = id;
+
+            return PartialView("PackageCourses");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> PackageCourses(IEnumerable<int> CourseId, string id)
+        {
+            int PackageId = Convert.ToInt32(id);
+
+            db.PackageCourses.RemoveRange(db.PackageCourses.Where(x => x.PackageId == PackageId));
+            await db.SaveChangesAsync();
+
+            foreach (var item in CourseId)
+            {
+                var obj = new PackageCourse { PackageId = PackageId, CourseId = item };
+                db.PackageCourses.Add(obj);
+                await db.SaveChangesAsync();
+            }
+            //return PartialView("CourseDocuments");
+            return Json(new { success = true });
+        }
         #endregion
 
         #region Course

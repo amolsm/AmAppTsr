@@ -30,23 +30,40 @@
                      , (IEnumerable<SelectListItem>)ViewBag.Categories, " ", new { @class = "form-control", @onchange = "FillCourse()" })
                 </div>
             </div>
-
-            <div class="col-sm-6 col-sm-offset-3">
-                <div class="form-group label-floating">
-                    <label class="control-label">Course </label>
-                    @Html.DropDownListFor(model => model.CourseId,
+            <div id="IsPackageDiv">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Course Type</label>
+                        @Html.DropDownList("IsPackage", (IEnumerable<SelectListItem>)ViewBag.IsPackage, " ", new { @class = "form-control", @onchange = "IsPackageFunc()" })
+                    </div>
+                </div>
+            </div>
+            <div id="SingleCourseDiv">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Course </label>
+                        @Html.DropDownListFor(model => model.CourseId,
                                          new SelectList(Enumerable.Empty<SelectListItem>(), "CourseId", "CourseName"), " ", new { @class = "form-control", @onchange = "FillBatch()" })
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-sm-6 col-sm-offset-3">
-                <div class="form-group label-floating">
-                    <label class="control-label">Batch </label>
-                    @Html.DropDownListFor(model => model.BatchId,
+                <div class="col-sm-6 col-sm-offset-3">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Batch </label>
+                        @Html.DropDownListFor(model => model.BatchId,
                                          new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "BatchName"), " ", new { @class = "form-control" })
+                    </div>
                 </div>
             </div>
-
+            <div id="PackageCourseDiv">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Package </label>
+                        @Html.DropDownListFor(model => model.PackageId,
+                                         new SelectList(Enumerable.Empty<SelectListItem>(), "PackageId", "PackageName"), " ", new { @class = "form-control", @onchange = "FillPackageDiv()" })
+                    </div>
+                </div>
+            </div>
 
         </div>
     </div>

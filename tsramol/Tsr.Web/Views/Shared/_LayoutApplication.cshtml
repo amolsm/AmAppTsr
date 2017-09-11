@@ -98,19 +98,39 @@
 <script src="~/Content/wiz/assets/js/jquery.validate.min.js" type="text/javascript"></script>
 <script src="~/Content/wiz/assets/js/material-bootstrap-wizard.js" type="text/javascript"></script>
 <script src="~/Scripts/js/plugins/bootstrap/bootstrap-datepicker.js"></script>
+
 <script>
+    $(document).ready(function () {
+        $("#IsPackageDiv").hide();
+        $("#SingleCourseDiv").hide();
+        $("#PackageCourseDiv").hide();
+    });
   function FillCourse() {
       var CategoryId = $('#CategoryId').val();
     $.ajax({
-        url: '/Application/FillCourse',
+        url: '/Application/FillCourseAppl',
         type: "GET",
         dataType: "JSON",
         data: { CategoryId: CategoryId },
         success: function (Courses) {
+            
+            if (Courses.One == "True")
+            {
+               
+                $("#IsPackageDiv").hide();
+                $("#SingleCourseDiv").show();
+                $("#PackageCourseDiv").hide();
+            }
+            if (Courses.One == "False") {
+               
+                $("#IsPackageDiv").show();
+                $("#PackageCourseDiv").hide();
+                $("#SingleCourseDiv").hide();
+            }
             $("#CourseId").html(""); // clear before appending new list
             $("#CourseId").append(
                     $('<option></option>').val("").html(""));
-            $.each(Courses, function (i, c) {
+            $.each(Courses.Two, function (i, c) {
                 $("#CourseId").append(
                     $('<option></option>').val(c.CourseId).html(c.CourseName));
             });
@@ -137,7 +157,35 @@
           }
       });
   }
+  function IsPackageFunc() {
+      var IsPackage = $('#IsPackage').val();
+      $.ajax({
+          url: '/Application/IsPackage',
+          type: "GET",
+          dataType: "JSON",
+          data: { IsPackage: IsPackage },
+          success: function (Packages) {
+              debugger;
+              if (Packages == "Single")
+              {
+                  $("#PackageCourseDiv").hide();
+                  $("#SingleCourseDiv").show();
+              }
+              else {
+                  $("#PackageCourseDiv").show();
+                  $("#SingleCourseDiv").hide();
+                  $("#PackageId").html(""); // clear before appending new list
+                  $("#PackageId").append(
+                          $('<option></option>').val("").html(""));
+                  $.each(Packages, function (i, c) {
 
+                      $("#PackageId").append(
+                          $('<option></option>').val(c.PackageId).html(c.PackageName));
+                  });
+              }
+          }
+      });
+  }
   function CreateApplicationId() {
       var CourseId = $('#CourseId').val();
       var CategoryId = $('#CategoryId').val();
@@ -163,8 +211,7 @@
           }
       });
   }
-</script>
-<script>
+
     $(function () { // will trigger when the document is ready
         $('.datepicker').datepicker(); //Initialise any date pickers
     });

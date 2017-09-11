@@ -12,6 +12,7 @@ namespace Tsr.Core.Models
         public int Id { get; set; }
         public string AppId { get; set; }
         public int CategoryId { get; set; }
+        public int PackageId { get; set; }
         public int CourseId { get; set; }
         public int BatchId { get; set; }
         public string BatchCode { get; set; }
