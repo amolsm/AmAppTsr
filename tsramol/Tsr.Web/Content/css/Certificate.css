@@ -8,8 +8,3 @@ border-width: 26px;
 border-image: url('../img/border.png') 26 fill repeat;
 }
 
-    
-.table th,td {
-    border: transparent solid 1px !important;
-  
-}

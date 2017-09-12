@@ -245,24 +245,9 @@ namespace Tsr.Web.Controllers
         public ActionResult Certificate()
         {
             ViewBag.Categories = new SelectList(db.CourseCategories.Where(x => x.IsActive == true).ToList(), "CourseCategoryId", "CategoryName");
-
-            var CertifcateList = from a in db.Applications
-                                 join b in db.Applied on a.ApplicationId equals b.ApplicationId
-                                 join c in db.CertificateDesigns on a.CourseId equals c.CourseId
-                                 join p in db.Principals on c.PrincipalId equals p.PrincipalId
-                                 where b.AdmissionStatus == true && a.CategoryId == 2 && a.CourseId ==1 && a.BatchId == 1
-                                 select new CertificationCertificateVM.Certificate
-                                 {
-                                     CertificateNo = "0330590012017",
-                                     ApplicantName = a.FirstName + "" + a.MiddleName == null ? "" : a.MiddleName + "" + a.LastName == null ? "" : a.LastName,
-                                     CDCNo = a.CdcNo,
-                                     PassportNo = a.PassportNo
-                                    
-
-                                 };
-
             CertificationCertificateVM ccvm = new CertificationCertificateVM();
-            ccvm._CertificateList = CertifcateList.ToList();
+            var obj = new List<CertificationCertificateVM.Certificate>();
+            ccvm._CertificateList = obj.ToList();
             return View(ccvm);
         }
 
@@ -277,16 +262,34 @@ namespace Tsr.Web.Controllers
                                      join b in db.Applied on a.ApplicationId equals b.ApplicationId
                                      join c in db.CertificateDesigns on a.CourseId equals c.CourseId
                                      join p in db.Principals on c.PrincipalId equals p.PrincipalId
+                                     join batch in db.Batches on a.BatchId equals batch.BatchId
+                                     join e in db.Employees on batch.CoordinatorId equals e.EmployeeId
                                      where b.AdmissionStatus == true && a.CategoryId == obj.CategoryId && a.CourseId == obj.CourseId && a.BatchId == obj.BatchId
                                      select new CertificationCertificateVM.Certificate
                                      {
-                                         CertificateNo= "0330590012017",
-                                         ApplicantName =a.FirstName+""+a.MiddleName==null?"":a.MiddleName+""+a.LastName==null?"":a.LastName,
-                                         CDCNo=a.CdcNo,
-                                         PassportNo=a.PassportNo
+                                         CertificateNo = "0330590012017",
+                                         ApplicantName = a.FirstName == null ? "" : a.FirstName + "" + a.MiddleName == null ? "" : a.MiddleName + "" + a.LastName == null ? "" : a.LastName,
+                                         CDCNo = a.CdcNo,
+                                         DateofBirth = a.DateOfBirth,
+                                         PassportNo = a.PassportNo,
+                                         Grade = a.GradPercentage.ToString(),
+                                         Number = "213",
+                                         Indosno = a.InDosNo.ToString(),
+                                         LineOfCertificate = c.LineOfCertificate,
+                                         CourseName = c.CourseName,
+                                         StartDate = batch.StartDate,
+                                         EndDate = batch.EndDate,
+                                         Paragraph1 = c.Paragraph1,
+                                         Paragraph2 = c.Paragraph2,
+                                         Paragraph3 = c.Paragraph3,
+                                         CourseInCharge = e.FirstName == null ? "" : e.FirstName + "" + e.MiddleName == null ? "" : e.MiddleName + "" + e.LastName == null ? "" : e.LastName,
+                                         DateofExpiry = c.Topic4 == null ? "" : c.Topic4,
+                                         DateOfIssue = DateTime.Now,
+                                         PrincipalName=p.PricipalName,
+                                         PrincipalSign=p.SignatureImgUrl
+                                        
 
-
-                                     };
+                              };
 
                 CertificationCertificateVM ccvm = new CertificationCertificateVM();
                 ccvm._CertificateList = CertifcateList.ToList();

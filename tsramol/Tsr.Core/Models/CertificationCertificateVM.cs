@@ -25,23 +25,49 @@ namespace Tsr.Core.Models
             public string CertificateNo { get; set; }
             public string ApplicantName { get; set; }
 
-            public string DateofBirth { get; set; }
+            public DateTime? DateofBirth { get; set; }
 
             public string CDCNo { get; set; }
 
             public string PassportNo { get; set; }
 
+            public string Grade { get; set; }
+
+            public string Number { get; set; }
+
+            public string Indosno { get; set; }
+
             public string LineOfCertificate { get; set; }
 
             public string CourseName { get; set; }
 
+            public DateTime? StartDate { get; set; }
+
+            public DateTime? EndDate { get; set; }
             public string Paragraph1 { get; set; }
             public string Paragraph2 { get; set; }
             public string Paragraph3 { get; set; }
 
-            public string Topic4 { get; set; }
+            public string CourseInCharge { get; set; }
+
+            public DateTime? DateOfIssue { get; set; }
+
+            public string DateofExpiry { get; set; }
 
             public string PrincipalName { get; set; }
+
+            public string PrincipalSign { get; set; }
+
+
+
+
+
+
+
+
+
+
+
         }
 
     }
