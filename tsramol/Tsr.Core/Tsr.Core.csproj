@@ -90,6 +90,7 @@
     <Compile Include="Models\CertificateDesignCertificateVM.cs" />
     <Compile Include="Models\CertificatePrincipalVM.cs" />
     <Compile Include="Models\CertificationCertificateVM.cs" />
+    <Compile Include="Models\CheckListVM.cs" />
     <Compile Include="Models\CourseFeeListVM.cs" />
     <Compile Include="Models\EmailModel.cs" />
     <Compile Include="Models\EntranceMarksListVM.cs" />

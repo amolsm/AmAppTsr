@@ -1,0 +1,66 @@
+﻿
+@model IEnumerable<Tsr.Core.Models.CheckListVM>
+<table id="customers2" class="table datatable">
+    <thead>
+        <tr>
+
+            <th>Sr.No</th>
+            <th>Student Id</th>
+
+            <th>Name</th>
+            <th>DOB</th>
+            <th>Cdcno</th>
+            <th>Passport No</th>
+            <th>Rank</th>
+
+            <th>Grade</th>
+            <th>Indos No</th>
+            <th>Sign</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{int count = 0;}
+
+        @foreach (var item in Model)
+        {
+            count++;
+            var dob = Convert.ToDateTime(item.DOB).ToString("dd-MM-yyyy");
+
+            <tr>
+                <td>@Html.DisplayFor(modelItem => count)</td>
+                <td>@Html.DisplayFor(modelItem => item.StudentId)</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>@Html.DisplayFor(modelItem => dob)</td>
+                <td>@Html.DisplayFor(modelItem => item.Cdcno)</td>
+                <td>@Html.DisplayFor(modelItem => item.PassportNo)</td>
+                <td>@Html.DisplayFor(modelItem => item.Rank)</td>
+                <td>@Html.DisplayFor(modelItem => item.Grade)</td>
+                <td>@Html.DisplayFor(modelItem => item.IndosNo)</td>
+                <td></td>
+                <td> @Html.ActionLink("Edit", "CheckListEditModal", new { id = item.ApplicationId }, new { data_modal = "" }) |</td>
+
+            </tr>
+        }
+
+    </tbody>
+
+</table>
+
+<!-- MODALS -->
+
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="defModalHead" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/js/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/js/plugins/bootstrap/bootstrap-select.js"></script>
+<script src="~/Scripts/ModalForm.js"></script>
+
+

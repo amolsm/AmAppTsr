@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Tsr.Core.Models.CheckListVM>
+<table id="customers2" class="table datatable">
+    <thead>
+        <tr>
+
+            <th>Sr.No</th>
+            <th>Student Id</th>
+
+            <th>Name</th>
+            <th>DOB</th>
+            <th>Cdcno</th>
+            <th>Passport No</th>
+            <th>Rank</th>
+
+            <th>Grade</th>
+            <th>Indos No</th>
+            <th>Sign</th>
+            @*<th>Action</th>*@
+        </tr>
+    </thead>
+    <tbody>
+        @{int count = 0;}
+        @foreach (var item in Model)
+        {
+            count++;
+            <tr>
+                <td>@Html.DisplayFor(modelItem => count)</td>
+                <td>@Html.DisplayFor(modelItem => item.StudentId)</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+
+                <td>@Html.DisplayFor(modelItem => item.DOB)</td>
+                <td>@Html.DisplayFor(modelItem => item.Cdcno)</td>
+                <td>@Html.DisplayFor(modelItem => item.PassportNo)</td>
+                <td>@Html.DisplayFor(modelItem => item.Rank)</td>
+                <td>@Html.DisplayFor(modelItem => item.Grade)</td>
+                <td>@Html.DisplayFor(modelItem => item.IndosNo)</td>
+                <td></td>
+            </tr>
+        }
+
+    </tbody>
+
+</table>
+
+

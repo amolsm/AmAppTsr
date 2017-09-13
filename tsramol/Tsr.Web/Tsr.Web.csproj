@@ -906,6 +906,11 @@
     <Content Include="Views\MasterDetails\PackageEdit.cshtml" />
     <Content Include="Views\MasterDetails\PackageCourses.cshtml" />
     <Content Include="Views\Application\IndexPackageBatches.cshtml" />
+    <Content Include="Views\Certification\_ApplicantsList.cshtml" />
+    <Content Include="Views\Certification\_ApplicantsListEdit.cshtml" />
+    <Content Include="Views\Certification\CheckListEditModal.cshtml" />
+    <Content Include="Views\Certification\CheckListEdit.cshtml" />
+    <Content Include="Views\Certification\Checklist.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
