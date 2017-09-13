@@ -13,7 +13,9 @@ namespace Tsr.Core.Entities
         public int? CategoryId { get; set; }
         public int? CourseId { get; set; }
         public int? BatchId { get; set; }
-        
+
+        public bool? IsPackage { get; set; } //For PackageCourses
+        public int? PackageId { get; set; } //For PackageCourse
 
         public string FirstName { get; set; }
         public string MiddleName { get; set; }

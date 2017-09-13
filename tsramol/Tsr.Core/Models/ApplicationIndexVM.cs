@@ -16,6 +16,17 @@ namespace Tsr.Core.Models
         public int CourseId { get; set; }
         public int BatchId { get; set; }
         public string BatchCode { get; set; }
+        public List<PackageCourseBatches> PackageBatchId { get; set; }
         
+    }
+
+    public class PackageCourseBatches
+    {
+        public int PackageId { get; set; }
+        public int CourseId { get; set; }
+        public string CourseName { get; set; }
+        public int BatchId { get; set; }
+        public int RemainingSeats { get; set; }
+        public IEnumerable<BatchDropdown> BatchDropdowns { get; set; }
     }
 }

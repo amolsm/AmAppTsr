@@ -31,7 +31,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/09/2015 20:24:40</publishTime>
     </File>
     <File Include="bin/itextsharp.dll">
-      <publishTime>09/07/2017 14:52:56</publishTime>
+      <publishTime>09/07/2017 14:35:55</publishTime>
     </File>
     <File Include="bin/itextsharp.xmlworker.dll">
       <publishTime>09/07/2017 14:35:55</publishTime>
@@ -141,8 +141,17 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="bin/roslyn/VBCSCompiler.exe.config">
       <publishTime>06/18/2015 20:19:46</publishTime>
     </File>
+    <File Include="bin/System.Net.Http.Formatting.dll">
+      <publishTime>01/28/2015 04:02:42</publishTime>
+    </File>
     <File Include="bin/System.Web.Helpers.dll">
       <publishTime>01/28/2015 04:04:30</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.dll">
+      <publishTime>01/28/2015 04:02:54</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.WebHost.dll">
+      <publishTime>01/28/2015 04:03:46</publishTime>
     </File>
     <File Include="bin/System.Web.Mvc.dll">
       <publishTime>01/28/2015 04:02:18</publishTime>
@@ -163,16 +172,16 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/28/2015 04:04:30</publishTime>
     </File>
     <File Include="bin/Tsr.Core.dll">
-      <publishTime>09/07/2017 15:58:29</publishTime>
+      <publishTime>09/12/2017 11:24:41</publishTime>
     </File>
     <File Include="bin/Tsr.Infra.dll">
-      <publishTime>09/07/2017 15:58:29</publishTime>
+      <publishTime>09/12/2017 11:24:45</publishTime>
     </File>
     <File Include="bin/Tsr.ToPdf.dll">
-      <publishTime>09/07/2017 15:58:29</publishTime>
+      <publishTime>09/12/2017 11:24:41</publishTime>
     </File>
     <File Include="bin/Tsr.Web.dll">
-      <publishTime>09/07/2017 15:58:40</publishTime>
+      <publishTime>09/12/2017 11:25:01</publishTime>
     </File>
     <File Include="bin/WebGrease.dll">
       <publishTime>09/10/2013 17:28:38</publishTime>
@@ -182,6 +191,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     </File>
     <File Include="Common/CSS/FeeReciept.css">
       <publishTime>09/07/2017 14:35:54</publishTime>
+    </File>
+    <File Include="Common/Img/border.png">
+      <publishTime>09/10/2017 11:24:53</publishTime>
     </File>
     <File Include="Common/Scripts/Commondropdownjs.js">
       <publishTime>09/07/2017 14:35:54</publishTime>
@@ -520,7 +532,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/07/2017 14:35:54</publishTime>
     </File>
     <File Include="packages.config">
-      <publishTime>09/07/2017 14:52:56</publishTime>
+      <publishTime>09/10/2017 11:51:56</publishTime>
     </File>
     <File Include="Scripts/bootstrap.js">
       <publishTime>07/12/2017 09:23:27</publishTime>
@@ -1816,7 +1828,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/26/2017 11:16:29</publishTime>
     </File>
     <File Include="Scripts/_references.js">
-      <publishTime>09/07/2017 14:35:54</publishTime>
+      <publishTime>09/10/2017 12:23:20</publishTime>
     </File>
     <File Include="Views/Account/ConfirmEmail.cshtml">
       <publishTime>07/12/2017 09:23:34</publishTime>
@@ -1866,6 +1878,12 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Views/Admission/CETSchedule.cshtml">
       <publishTime>08/21/2017 10:19:11</publishTime>
     </File>
+    <File Include="Views/Admission/ConfirmAdmissions.cshtml">
+      <publishTime>09/10/2017 13:34:04</publishTime>
+    </File>
+    <File Include="Views/Admission/ConfirmAdmissionsList.cshtml">
+      <publishTime>09/10/2017 19:54:13</publishTime>
+    </File>
     <File Include="Views/Admission/EntranceMarksEntry.cshtml">
       <publishTime>09/06/2017 10:45:39</publishTime>
     </File>
@@ -1882,7 +1900,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/07/2017 11:49:53</publishTime>
     </File>
     <File Include="Views/Admission/MedicalList.cshtml">
-      <publishTime>09/07/2017 12:02:21</publishTime>
+      <publishTime>09/10/2017 11:34:52</publishTime>
     </File>
     <File Include="Views/Admission/MedicalTest.cshtml">
       <publishTime>09/07/2017 12:03:02</publishTime>
@@ -1900,7 +1918,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/29/2017 22:54:30</publishTime>
     </File>
     <File Include="Views/Admission/ViewApplied.cshtml">
-      <publishTime>09/07/2017 14:35:54</publishTime>
+      <publishTime>09/10/2017 12:38:16</publishTime>
     </File>
     <File Include="Views/Application/ApplicantsList.cshtml">
       <publishTime>08/29/2017 22:52:02</publishTime>
@@ -1915,10 +1933,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/11/2017 22:24:57</publishTime>
     </File>
     <File Include="Views/Application/Index.cshtml">
-      <publishTime>08/08/2017 09:23:43</publishTime>
+      <publishTime>09/12/2017 10:49:49</publishTime>
     </File>
     <File Include="Views/Application/Index1.cshtml">
-      <publishTime>07/26/2017 23:19:08</publishTime>
+      <publishTime>09/10/2017 21:05:59</publishTime>
+    </File>
+    <File Include="Views/Application/IndexPackageBatches.cshtml">
+      <publishTime>09/12/2017 11:04:31</publishTime>
     </File>
     <File Include="Views/Application/NonCetApplication.cshtml">
       <publishTime>08/20/2017 11:36:42</publishTime>
@@ -1930,10 +1951,25 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/26/2017 09:39:32</publishTime>
     </File>
     <File Include="Views/Application/ViewApplicants.cshtml">
-      <publishTime>09/07/2017 14:35:54</publishTime>
+      <publishTime>09/10/2017 12:20:08</publishTime>
+    </File>
+    <File Include="Views/Certification/Certificate.cshtml">
+      <publishTime>09/10/2017 11:24:53</publishTime>
     </File>
     <File Include="Views/Certification/CertificateDesignList.cshtml">
-      <publishTime>09/07/2017 14:35:54</publishTime>
+      <publishTime>09/10/2017 11:24:53</publishTime>
+    </File>
+    <File Include="Views/Certification/DesignCreate.cshtml">
+      <publishTime>09/10/2017 11:24:53</publishTime>
+    </File>
+    <File Include="Views/Certification/DesignEdit.cshtml">
+      <publishTime>09/10/2017 11:24:53</publishTime>
+    </File>
+    <File Include="Views/Certification/PrincipalSignImage.cshtml">
+      <publishTime>09/10/2017 11:24:53</publishTime>
+    </File>
+    <File Include="Views/Certification/_CertificateList.cshtml">
+      <publishTime>09/10/2017 11:24:53</publishTime>
     </File>
     <File Include="Views/Fees/ApplicantsList.cshtml">
       <publishTime>08/30/2017 21:04:28</publishTime>
@@ -1972,10 +2008,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/12/2017 09:23:34</publishTime>
     </File>
     <File Include="Views/MasterDetails/BatchCreate.cshtml">
-      <publishTime>08/10/2017 17:10:20</publishTime>
+      <publishTime>09/10/2017 12:08:38</publishTime>
     </File>
     <File Include="Views/MasterDetails/BatchList.cshtml">
-      <publishTime>07/26/2017 20:23:12</publishTime>
+      <publishTime>09/10/2017 12:07:08</publishTime>
+    </File>
+    <File Include="Views/MasterDetails/BatchListGet.cshtml">
+      <publishTime>09/10/2017 11:24:48</publishTime>
     </File>
     <File Include="Views/MasterDetails/CourseCategoryCreate.cshtml">
       <publishTime>07/21/2017 09:02:07</publishTime>
@@ -2055,14 +2094,20 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Views/MasterDetails/OrganisationList.cshtml">
       <publishTime>07/21/2017 12:05:17</publishTime>
     </File>
+    <File Include="Views/MasterDetails/PackageCourses.cshtml">
+      <publishTime>09/10/2017 20:48:05</publishTime>
+    </File>
     <File Include="Views/MasterDetails/PackageCreate.cshtml">
       <publishTime>07/17/2017 12:23:58</publishTime>
     </File>
+    <File Include="Views/MasterDetails/PackageEdit.cshtml">
+      <publishTime>09/10/2017 20:20:41</publishTime>
+    </File>
     <File Include="Views/MasterDetails/PackageList.cshtml">
-      <publishTime>07/17/2017 11:47:09</publishTime>
+      <publishTime>09/10/2017 20:48:05</publishTime>
     </File>
     <File Include="Views/Report/ApplicationForm.cshtml">
-      <publishTime>09/07/2017 14:35:54</publishTime>
+      <publishTime>09/10/2017 12:24:00</publishTime>
     </File>
     <File Include="Views/Report/GetAdmissionApplicantList.cshtml">
       <publishTime>09/07/2017 14:35:54</publishTime>
@@ -2080,7 +2125,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/26/2017 20:22:31</publishTime>
     </File>
     <File Include="Views/Shared/_LayoutApplication.cshtml">
-      <publishTime>08/08/2017 09:23:45</publishTime>
+      <publishTime>09/12/2017 11:05:11</publishTime>
     </File>
     <File Include="Views/Shared/_logoff.cshtml">
       <publishTime>07/12/2017 09:50:10</publishTime>
@@ -2089,7 +2134,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/07/2017 14:35:54</publishTime>
     </File>
     <File Include="Views/Shared/_SidebarAdmin.cshtml">
-      <publishTime>09/07/2017 14:35:54</publishTime>
+      <publishTime>09/10/2017 13:24:15</publishTime>
     </File>
     <File Include="Views/Web.config">
       <publishTime>07/12/2017 09:23:24</publishTime>
@@ -2098,7 +2143,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/12/2017 09:23:24</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>09/07/2017 15:58:42</publishTime>
+      <publishTime>09/12/2017 11:25:04</publishTime>
     </File>
   </ItemGroup>
 </Project>

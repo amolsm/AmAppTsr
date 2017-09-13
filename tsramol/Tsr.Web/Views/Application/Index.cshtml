@@ -60,11 +60,14 @@
                     <div class="form-group label-floating">
                         <label class="control-label">Package </label>
                         @Html.DropDownListFor(model => model.PackageId,
-                                         new SelectList(Enumerable.Empty<SelectListItem>(), "PackageId", "PackageName"), " ", new { @class = "form-control", @onchange = "FillPackageDiv()" })
+                                         new SelectList(Enumerable.Empty<SelectListItem>(), "PackageId", "PackageName"), " ", new { @class = "form-control", @onchange = "FillPackageBatches()" })
                     </div>
                 </div>
             </div>
+            <div id="PackageBatches">
 
+                @{Html.RenderPartial("IndexPackageBatches", Model);}
+            </div>
         </div>
     </div>
     <div class="tab-pane" id="terms">

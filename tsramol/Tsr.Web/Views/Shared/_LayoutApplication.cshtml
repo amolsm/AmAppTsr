@@ -104,6 +104,7 @@
         $("#IsPackageDiv").hide();
         $("#SingleCourseDiv").hide();
         $("#PackageCourseDiv").hide();
+        $("#PackageBatches").hide();
     });
   function FillCourse() {
       var CategoryId = $('#CategoryId').val();
@@ -113,19 +114,20 @@
         dataType: "JSON",
         data: { CategoryId: CategoryId },
         success: function (Courses) {
-            
+
             if (Courses.One == "True")
             {
-               
                 $("#IsPackageDiv").hide();
                 $("#SingleCourseDiv").show();
                 $("#PackageCourseDiv").hide();
+                $("#PackageBatches").hide();
             }
             if (Courses.One == "False") {
-               
+
                 $("#IsPackageDiv").show();
                 $("#PackageCourseDiv").hide();
                 $("#SingleCourseDiv").hide();
+                $("#PackageBatches").hide();
             }
             $("#CourseId").html(""); // clear before appending new list
             $("#CourseId").append(
@@ -170,10 +172,12 @@
               {
                   $("#PackageCourseDiv").hide();
                   $("#SingleCourseDiv").show();
+                  $("#PackageBatches").hide();
               }
               else {
                   $("#PackageCourseDiv").show();
                   $("#SingleCourseDiv").hide();
+                  $("#PackageBatches").hide();
                   $("#PackageId").html(""); // clear before appending new list
                   $("#PackageId").append(
                           $('<option></option>').val("").html(""));
@@ -185,6 +189,14 @@
               }
           }
       });
+  }
+  function FillPackageBatches()
+  {
+
+      var CategoryId = $('#CategoryId').val();
+      var PackageId = $('#PackageId').val();
+      $("#PackageBatches").show();
+      $("#PackageBatches").load('@(Url.Action("FillPackageBatches", "Application",null, Request.Url.Scheme))?PackageId=' + PackageId + '&CategoryId=' + CategoryId);
   }
   function CreateApplicationId() {
       var CourseId = $('#CourseId').val();

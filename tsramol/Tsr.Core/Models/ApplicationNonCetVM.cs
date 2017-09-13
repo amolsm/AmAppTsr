@@ -8,11 +8,13 @@ namespace Tsr.Core.Models
 {
     public class ApplicationNonCetVM
     {
+        public List<PackageCourseBatches> PackageBatchId { get; set; } //only for Packages
+        public int? PackageId { get; set; } //for Packages
         public int? Id { get; set; }
-        public int CourseId { get; set; }
+        public int? CourseId { get; set; }
         public string CourseName { get; set; }
-        public int CategoryId { get; set; }
-        public int BatchId { get; set; }
+        public int? CategoryId { get; set; }
+        public int? BatchId { get; set; }
         public string ApplicationCode { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }

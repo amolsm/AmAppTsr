@@ -85,6 +85,7 @@ namespace Tsr.Web.Controllers
             }
             
         }
+       
         public ActionResult CreateApplicationId(int CategoryId, int CourseId, int BatchId, string FirstName, string MiddleName, string LastName, string Email, string CellNo, DateTime? DateOfBirth)
         {
             var Courses = db.Batches.Where(c => c.CourseId == CourseId && c.IsActive == true && c.OnlineBookingStatus == true);
@@ -107,63 +108,122 @@ namespace Tsr.Web.Controllers
         {
             ViewBag.Categories = new SelectList(db.CourseCategories.Where(x => x.IsActive == true).ToList(), "CourseCategoryId", "CategoryName");
             ViewBag.IsPackage = DropdownData.CourseType();
-            return View();
+            ApplicationIndexVM vm = new ApplicationIndexVM();
+            return View(vm);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Index(ApplicationIndexVM obj)
         {
-            var cc = db.CourseCategories.FirstOrDefault(x=>x.CourseCategoryId == obj.CategoryId);
-            bool isCet = (bool)cc.CetRequired;
-            var c = db.Courses.FirstOrDefault(x => x.CourseId == obj.CourseId);
-            var courseName = c.CourseName;
-
-            ViewBag.Gender = Common.DropdownData.Gender();
-            ViewBag.Meals = Common.DropdownData.Meals();
-            ViewBag.YesNo = Common.DropdownData.YesNo();
-            if (isCet == true)
+            if (obj.PackageId == 0)
             {
-                ApplicationCetVM vm = new ApplicationCetVM {
-                    CourseId = obj.CourseId,
-                    CategoryId = obj.CategoryId,
-                    BatchId = obj.BatchId,
-                    CourseName = courseName
-                };
+                ViewBag.InfoFlag = "NonPackage"; //for info flag
 
-                ViewBag.ShirtSize = Common.DropdownData.ShirtSize();
-                ViewBag.PantSize = Common.DropdownData.PantSize();
-                ViewBag.ShoeSize = Common.DropdownData.ShoeSize();
-                
-                return View("CetApplication",vm);
-            }
-            else
-            {
-                ApplicationNonCetVM vm = new ApplicationNonCetVM
-                {
-                    CourseId = obj.CourseId,
-                    CategoryId = obj.CategoryId,
-                    BatchId = obj.BatchId,
-                    CourseName = courseName
-                };
+                var cc = db.CourseCategories.FirstOrDefault(x => x.CourseCategoryId == obj.CategoryId);
+                bool isCet = (bool)cc.CetRequired;
+                var c = db.Courses.FirstOrDefault(x => x.CourseId == obj.CourseId);
+                var courseName = c.CourseName;
 
-                var b = db.Batches.FirstOrDefault(x => x.BatchId == obj.BatchId);
-                int totSeat = (int)b.TotalSeats;
-                int reservSeat = (int)b.ReserveSeats;
-                int booked = (int)b.BookedSeats;
-                var remain = totSeat - (reservSeat + booked);
-                ViewBag.remain = remain;
-                if (remain > 0)
+                ViewBag.Gender = Common.DropdownData.Gender();
+                ViewBag.Meals = Common.DropdownData.Meals();
+                ViewBag.YesNo = Common.DropdownData.YesNo();
+                if (isCet == true)
                 {
-                    return View("NonCetApplication", vm);
+                    ApplicationCetVM vm = new ApplicationCetVM
+                    {
+                        CourseId = obj.CourseId,
+                        CategoryId = obj.CategoryId,
+                        BatchId = obj.BatchId,
+                        CourseName = courseName
+                    };
+
+                    ViewBag.ShirtSize = Common.DropdownData.ShirtSize();
+                    ViewBag.PantSize = Common.DropdownData.PantSize();
+                    ViewBag.ShoeSize = Common.DropdownData.ShoeSize();
+
+                    return View("CetApplication", vm);
                 }
                 else
                 {
-                    ViewBag.BatchCode = obj.BatchCode;
-                    return View("NonCetApplicationFull", vm);
+                    ApplicationNonCetVM vm = new ApplicationNonCetVM
+                    {
+                        CourseId = obj.CourseId,
+                        CategoryId = obj.CategoryId,
+                        BatchId = obj.BatchId,
+                        CourseName = courseName
+                    };
+
+                    var b = db.Batches.FirstOrDefault(x => x.BatchId == obj.BatchId);
+                    int totSeat = (int)b.TotalSeats;
+                    int reservSeat = (int)b.ReserveSeats;
+                    int booked = (int)b.BookedSeats;
+                    var remain = totSeat - (reservSeat + booked);
+                    ViewBag.remain = remain;
+                    if (remain > 0)
+                    {
+                        return View("NonCetApplication", vm);
+                    }
+                    else
+                    {
+                        ViewBag.BatchCode = obj.BatchCode;
+                        return View("NonCetApplicationFull", vm);
+                    }
+
                 }
-                
+            }
+            else
+            {
+                //For Package Course
+                ApplicationNonCetVM vm = new ApplicationNonCetVM
+                {
+                    PackageId = obj.PackageId,
+                    PackageBatchId = obj.PackageBatchId.ToList().Select(x => new PackageCourseBatches {
+                        BatchId = x.BatchId,
+                        CourseId = (int)db.Batches.FirstOrDefault(y => y.BatchId == x.BatchId).CourseId,
+                        CourseName = db.Courses.FirstOrDefault(y => y.CourseId == db.Batches.FirstOrDefault(z => z.BatchId == x.BatchId).CourseId).CourseName,
+                        RemainingSeats = ((int)db.Batches.FirstOrDefault(y => y.BatchId == x.BatchId).TotalSeats) - ((int)db.Batches.FirstOrDefault(y => y.BatchId == x.BatchId).ReserveSeats) - ((int)db.Batches.FirstOrDefault(y => y.BatchId == x.BatchId).BookedSeats)
+                    }).ToList()
+                };
+                ViewBag.Gender = Common.DropdownData.Gender();
+                ViewBag.Meals = Common.DropdownData.Meals();
+                ViewBag.YesNo = Common.DropdownData.YesNo();
+                ViewBag.InfoFlag = "Package";
+                return View("NonCetApplication", vm);
             }
                 
+        }
+        public ActionResult FillPackageBatches(int PackageId, int CategoryId)
+        {
+            var PackageBatches = from pc in db.PackageCourses
+                                 join c in db.Courses on pc.CourseId equals c.CourseId
+                                 where pc.PackageId == PackageId
+                                 select new PackageCourseBatches
+                                 {
+                                     CourseId = c.CourseId,
+                                     CourseName = c.CourseName,
+                                     PackageId = pc.PackageId,
+                                     BatchDropdowns = (db.Batches
+                                         .Where(x => x.CourseId == c.CourseId && x.IsActive == true && x.OnlineBookingStatus == true)
+                                         .Select(x => new BatchDropdown { BatchId = x.BatchId, Name = x.StartDate.ToString() }))
+                                         //.ToList()
+                                         //.Select(p => new BatchDropdown { BatchId = p.BatchId, Name = Convert.ToDateTime(p.Name).ToString("dd-MM-yyyy") })
+                                 };
+
+            //var Courses = C.ToList().Select(x => new BatchDropdown { BatchId = x.BatchId, Name = Convert.ToDateTime(x.Name).ToString("dd-MM-yyyy") });
+            var pb = PackageBatches.ToList().Select(x => new PackageCourseBatches
+            {
+                BatchDropdowns = x.BatchDropdowns.ToList().Select(y=>new BatchDropdown { BatchId = y.BatchId, Name = Convert.ToDateTime(y.Name).ToString("dd-MM-yyyy") }),
+                CourseId = x.CourseId,
+                CourseName = x.CourseName,
+                PackageId = x.PackageId
+            });
+            ApplicationIndexVM vm = new ApplicationIndexVM
+            {
+                CategoryId = CategoryId,
+                PackageBatchId = pb.ToList(),
+                PackageId = PackageId
+            };
+            return PartialView("IndexPackageBatches", vm);
         }
         public ActionResult NonCetApplication()
         {
@@ -313,89 +373,178 @@ namespace Tsr.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var b = db.Batches.FirstOrDefault(x => x.BatchId == obj.BatchId);
-                var bc = b.BatchCode;
-                var c = db.Courses.FirstOrDefault(x => x.CourseId == obj.CourseId);
-                var cc = c.CourseCode;
-                var n = db.Applications.Count(x => x.BatchId == obj.BatchId);
-                n = n + 1;
-                Application ap = new Application
+                if (obj.PackageId == 0)
                 {
-                    ApplicationCode = cc.ToString() + bc.ToString() + n.ToString().PadLeft(4, '0'),
-                    BatchId = obj.BatchId,
-                    CategoryId = obj.CategoryId,
-                    CellNo = obj.CellNo,
-                    CertOfCompetencyNo = obj.CertOfCompetencyNo,
-                    CdcNo = obj.CdcNo,
-                    Citizenship = obj.Citizenship,
-                    CourseId = obj.CourseId,
-                    DateOfBirth = obj.DateOfBirth,
-                    Email = obj.Email,
-                    FirstName = obj.FirstName,
-                    Gender = obj.FirstName,
-                    InDosNo = obj.InDosNo,
-                    LastName = obj.LastName,
-                    MiddleName = obj.MiddleName,
-                    PassportNo = obj.PassportNo,
-                    PlaceOfBirth = obj.PlaceOfBirth,
-                    GradeOfCompetencyNo = obj.GradeOfCompetencyNo,
-                    CategoryOfCandidate = obj.CategoryOfCandidate,
-                    ShippingCompany = obj.ShippingCompany,
-                    RankOfCandidate = obj.RankOfCandidate,
-                    CourseAttendedInTSR = obj.CourseAttendedInTSR,
-                    FPFF_AFF_1995 = obj.FPFF_AFF_1995
+                    var b = db.Batches.FirstOrDefault(x => x.BatchId == obj.BatchId);
+                    var bc = b.BatchCode;
+                    var c = db.Courses.FirstOrDefault(x => x.CourseId == obj.CourseId);
+                    var cc = c.CourseCode;
+                    var n = db.Applications.Count(x => x.BatchId == obj.BatchId);
+                    n = n + 1;
+                    Application ap = new Application
+                    {
+                        ApplicationCode = cc.ToString() + bc.ToString() + n.ToString().PadLeft(4, '0'),
+                        BatchId = obj.BatchId,
+                        CategoryId = obj.CategoryId,
+                        CellNo = obj.CellNo,
+                        CertOfCompetencyNo = obj.CertOfCompetencyNo,
+                        CdcNo = obj.CdcNo,
+                        Citizenship = obj.Citizenship,
+                        CourseId = obj.CourseId,
+                        DateOfBirth = obj.DateOfBirth,
+                        Email = obj.Email,
+                        FirstName = obj.FirstName,
+                        Gender = obj.FirstName,
+                        InDosNo = obj.InDosNo,
+                        LastName = obj.LastName,
+                        MiddleName = obj.MiddleName,
+                        PassportNo = obj.PassportNo,
+                        PlaceOfBirth = obj.PlaceOfBirth,
+                        GradeOfCompetencyNo = obj.GradeOfCompetencyNo,
+                        CategoryOfCandidate = obj.CategoryOfCandidate,
+                        ShippingCompany = obj.ShippingCompany,
+                        RankOfCandidate = obj.RankOfCandidate,
+                        CourseAttendedInTSR = obj.CourseAttendedInTSR,
+                        FPFF_AFF_1995 = obj.FPFF_AFF_1995
 
-                };
-                db.Applications.Add(ap);
-                await db.SaveChangesAsync();
+                    };
+                    db.Applications.Add(ap);
+                    await db.SaveChangesAsync();
 
-                var id = ap.ApplicationId;
-                var cf = db.CourseFees.FirstOrDefault(x => x.CourseId == ap.CourseId);
-                var actualFee = cf.ActualFee;
-                var minBal = cf.MinBalance;
-                var gstPercent = cf.GstPercentage;
-                decimal taxAmount;
+                    var id = ap.ApplicationId;
+                    var cf = db.CourseFees.FirstOrDefault(x => x.CourseId == ap.CourseId);
+                    var actualFee = cf.ActualFee;
+                    var minBal = cf.MinBalance;
+                    var gstPercent = cf.GstPercentage;
+                    decimal taxAmount;
 
-                if (gstPercent > 0)
-                {
-                    taxAmount = ((decimal)actualFee / 100) * (decimal)gstPercent;
+                    if (gstPercent > 0)
+                    {
+                        taxAmount = ((decimal)actualFee / 100) * (decimal)gstPercent;
+                    }
+                    else { taxAmount = 0; }
+                    decimal amount = 0;
+
+                    if (actualFee > minBal && minBal > 1)
+                    {
+                        amount = (decimal)minBal + taxAmount;
+                    }
+                    else
+                    {
+                        amount = (decimal)actualFee;
+                    }
+
+                    var courseName = c.CourseName;
+
+                    ApplicationSumPayNonCetVM apsm = new ApplicationSumPayNonCetVM
+                    {
+                        ApplicationId = ap.ApplicationId,
+                        CategoryId = ap.CategoryId,
+                        CourseId = ap.CourseId,
+                        BatchId = ap.BatchId,
+                        ApplicationCode = ap.ApplicationCode,
+                        amount = amount,
+                        CellNo = ap.CellNo,
+                        Email = ap.Email,
+                        FirstName = ap.FirstName,
+                        LastName = ap.LastName,
+                        CourseName = courseName,
+                        BatchCode = bc,
+                        CourseFee = actualFee,
+                        TaxAmount = taxAmount,
+                        udf1 = ap.BatchId.ToString(), //udf1 BatchId
+                        udf2 = ap.ApplicationCode, //udf2 ApplicationCode 
+                        udf3 = ap.ApplicationId.ToString() //udf3 ApplicationID              
+                    };
+                    return View("ApplicationSummary", apsm);
                 }
-                else { taxAmount = 0; }
-                decimal amount = 0;
-
-                if (actualFee > minBal && minBal > 1)
+                else
                 {
-                    amount = (decimal)minBal + taxAmount;
-                }
-                else {
-                    amount = (decimal)actualFee + taxAmount;
-                }
+                    //Package
+                    var bid = obj.PackageBatchId.FirstOrDefault().BatchId;
+                    var b = db.Batches.FirstOrDefault(x => x.BatchId == bid);
+                    var bc = b.BatchCode;
+                    var c = db.Courses.FirstOrDefault(x => x.CourseId == b.CourseId);
+                    var cc = c.CourseCode;
+                    var n = db.Applications.Count(x => x.BatchId == obj.BatchId);
+                    n = n + 1;
+                    Application ap = new Application
+                    {
+                        IsPackage = true, //For Package
+                        PackageId = obj.PackageId, //For Package
+                        ApplicationCode = cc.ToString() + bc.ToString() + n.ToString().PadLeft(4, '0'),
+                        BatchId = obj.BatchId,
+                        CategoryId = obj.CategoryId,
+                        CellNo = obj.CellNo,
+                        CertOfCompetencyNo = obj.CertOfCompetencyNo,
+                        CdcNo = obj.CdcNo,
+                        Citizenship = obj.Citizenship,
+                        CourseId = obj.CourseId,
+                        DateOfBirth = obj.DateOfBirth,
+                        Email = obj.Email,
+                        FirstName = obj.FirstName,
+                        Gender = obj.FirstName,
+                        InDosNo = obj.InDosNo,
+                        LastName = obj.LastName,
+                        MiddleName = obj.MiddleName,
+                        PassportNo = obj.PassportNo,
+                        PlaceOfBirth = obj.PlaceOfBirth,
+                        GradeOfCompetencyNo = obj.GradeOfCompetencyNo,
+                        CategoryOfCandidate = obj.CategoryOfCandidate,
+                        ShippingCompany = obj.ShippingCompany,
+                        RankOfCandidate = obj.RankOfCandidate,
+                        CourseAttendedInTSR = obj.CourseAttendedInTSR,
+                        FPFF_AFF_1995 = obj.FPFF_AFF_1995
 
-                var courseName = c.CourseName;
+                    };
+                    db.Applications.Add(ap);
+                    await db.SaveChangesAsync();
 
-                ApplicationSumPayNonCetVM apsm = new ApplicationSumPayNonCetVM
-                {
-                    ApplicationId = ap.ApplicationId,
-                    CategoryId = ap.CategoryId,
-                    CourseId = ap.CourseId,
-                    BatchId = ap.BatchId,
-                    ApplicationCode = ap.ApplicationCode,
-                    amount = amount,
-                    CellNo = ap.CellNo,
-                    Email = ap.Email,
-                    FirstName = ap.FirstName,
-                    LastName = ap.LastName,
-                    CourseName = courseName,
-                    BatchCode = bc,
-                    CourseFee = actualFee,
-                    TaxAmount = taxAmount,
-                    udf1 = ap.BatchId.ToString(), //udf1 BatchId
-                    udf2 = ap.ApplicationCode, //udf2 ApplicationCode 
-                    udf3 = ap.ApplicationId.ToString() //udf3 ApplicationID              
-                };
-                return View("ApplicationSummary", apsm);
+                    var a1 = obj.PackageBatchId.ToList().Select(x => new {PackageId=x.PackageId, CourseId = x.CourseId, BatchId = x.BatchId, PackageFee = db.CourseFees.FirstOrDefault(y=>y.CourseId == x.CourseId).PackageFee, GstPercentage = db.CourseFees.FirstOrDefault(y => y.CourseId == x.CourseId).GstPercentage, MinBal = db.CourseFees.FirstOrDefault(y => y.CourseId == x.CourseId).MinBalance });
+                    decimal fee = 0, taxamount = 0, minBalance = 0;
+                    foreach (var item in a1)
+                    {
+                        if (item.GstPercentage == 0)
+                        {
+                            fee = fee + (decimal)item.PackageFee;
+                            if (item.MinBal == 0)
+                                minBalance = minBalance + (decimal)item.PackageFee;
+                            else
+                                minBalance = minBalance + (decimal)item.MinBal;
+                        }
+                        else
+                        {
+                            fee = fee + (decimal)item.PackageFee + (((decimal)item.PackageFee / 100)* (decimal) item.GstPercentage);
+                            taxamount = taxamount + (((decimal)item.PackageFee / 100) * (decimal)item.GstPercentage);
+                            if (item.MinBal == 0)
+                                minBalance = minBalance + (decimal)item.PackageFee + (((decimal)item.PackageFee / 100) * (decimal)item.GstPercentage);
+                            else
+                                minBalance = minBalance + (decimal)item.MinBal;
+                        }
+                    }
+                    ApplicationSumPayNonCetVM apsm = new ApplicationSumPayNonCetVM
+                    {
+                        ApplicationId = ap.ApplicationId,
+                        CategoryId = ap.CategoryId,
+                        CourseId = ap.CourseId,
+                        BatchId = ap.BatchId,
+                        ApplicationCode = ap.ApplicationCode,
+                        amount = minBalance, //package Fee Min Balance
+                        CellNo = ap.CellNo,
+                        Email = ap.Email,
+                        FirstName = ap.FirstName,
+                        LastName = ap.LastName,
+                        CourseName = db.packages.FirstOrDefault(x=>x.PackageId == ap.PackageId).PackageName, //PackageName
+                        BatchCode = bc,
+                        CourseFee = fee, //packageFee
+                        TaxAmount = taxamount,
+                        udf1 = ap.BatchId.ToString(), //udf1 BatchId
+                        udf2 = ap.ApplicationCode, //udf2 ApplicationCode 
+                        udf3 = ap.ApplicationId.ToString() //udf3 ApplicationID              
+                    };
+                    return View("ApplicationSummary", apsm);
+                }
             }
-
             ViewBag.Gender = DropdownData.Gender();
             ViewBag.Meals = DropdownData.Meals();
             ViewBag.YesNo = DropdownData.YesNo();

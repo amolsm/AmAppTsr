@@ -1,0 +1,23 @@
+﻿@model Tsr.Core.Models.ApplicationIndexVM
+    @if (Model.PackageBatchId != null)
+    {
+        for (int i = 0; i < Model.PackageBatchId.Count(); i++)
+        {
+            <div class="col-sm-5 col-sm-offset-1 ">
+                <div class="form-group label-floating">
+                    <label class="control-label">CourseName</label>
+                   <input type="text" class="form-control" readonly value=@Model.PackageBatchId[i].CourseName>
+
+                </div>
+            </div>
+            <div class="col-sm-5">
+                <div class="form-group label-floating">
+                    <label class="control-label">Batch </label>
+                    @*@Html.DropDownList("obj[" + @i + "].ApplicationCode", Model.PackageBatchId[i].BatchId)*@
+                    @Html.DropDownList("PackageBatchId[" + @i + "].BatchId", new SelectList((Model.PackageBatchId[i].BatchDropdowns), "BatchId", "Name"), " ", new { @class = "form-control" })
+
+                </div>
+            </div>
+        }
+       
+    }

@@ -905,6 +905,7 @@
     <Content Include="Views\Admission\ConfirmAdmissionsList.cshtml" />
     <Content Include="Views\MasterDetails\PackageEdit.cshtml" />
     <Content Include="Views\MasterDetails\PackageCourses.cshtml" />
+    <Content Include="Views\Application\IndexPackageBatches.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

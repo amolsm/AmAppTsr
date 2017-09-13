@@ -10,7 +10,17 @@
     @Html.HiddenFor(model => model.CourseId)
     @Html.HiddenFor(model => model.CategoryId)
     @Html.HiddenFor(model => model.BatchId)
-
+    @Html.HiddenFor(model=>model.PackageId)
+    if(Model.PackageBatchId != null)
+    { 
+    for (int i = 0; i < Model.PackageBatchId.Count(); i++)
+    {
+        @Html.HiddenFor(model => Model.PackageBatchId[i].BatchId)
+        @Html.HiddenFor(model => Model.PackageBatchId[i].CourseId)
+        @*@Html.HiddenFor(model => Model.PackageBatchId[i].BatchId)
+        @Html.HiddenFor(model => Model.PackageBatchId[i].BatchId)*@
+        }
+    }
 <div class="wizard-navigation">
     <ul>
         
@@ -22,8 +32,18 @@
 <div class="tab-content">
     
     <div class="tab-pane" id="basicDetails">
+        @if (ViewBag.InfoFlag == "NonPackage")
+        { 
         <h4 class="info-text">Course: @Model.CourseName </h4>
         <h4 class="info-text">Remaining Seats : @ViewBag.remain </h4>
+        }
+        @if (ViewBag.InfoFlag == "Package")
+        {
+            foreach (var item in Model.PackageBatchId)
+            {
+                <h4 class="info-text">Course: @item.CourseName &nbsp; Remaining Seats: @item.RemainingSeats</h4>
+            }
+        }
         <div class="row">
             <div class="col-sm-5 col-sm-offset-1">
                 <div class="form-group label-floating">
