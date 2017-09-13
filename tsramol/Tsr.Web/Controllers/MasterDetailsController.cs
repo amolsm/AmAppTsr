@@ -1060,5 +1060,133 @@ namespace Tsr.Web.Controllers
 
 
         #endregion
+
+        #region Medical
+        public async Task<ActionResult> MedicalList()
+        {
+            ViewBag.Batches = new SelectList(db.Batches.ToList(), "BatchId", "BatchCode");
+            return View(await db.MedicalMasters.ToListAsync());
+        }
+
+        public ActionResult MedicalCreate()
+        {
+            ViewBag.Batches = new SelectList(db.Batches.ToList(), "BatchId", "BatchCode");
+            return PartialView("MedicalCreate");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> MedicalCreate(MedicalMaster obj)
+        {
+            if (ModelState.IsValid)
+            {
+                db.MedicalMasters.Add(obj);
+                await db.SaveChangesAsync();
+                return Json(new { success = true });
+            }
+
+            return PartialView("MedicalCreate", obj);
+        }
+
+        public async Task<ActionResult> MedicalEdit(int? id)
+        {
+            ViewBag.Batches = new SelectList(db.Batches.ToList(), "BatchId", "BatchCode");
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            MedicalMaster obj = await db.MedicalMasters.FindAsync(id);
+            if (obj == null)
+            {
+                return HttpNotFound();
+            }
+            return PartialView("MedicalEdit", obj);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> MedicalEdit(MedicalMaster obj)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(obj).State = EntityState.Modified;
+                try
+                {
+                    await db.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+                    string s = e.ToString();
+                }
+                return Json(new { success = true });
+            }
+            return PartialView("MedicalEdit", obj);
+        }
+
+
+
+        #endregion
+
+        #region Interview
+        public async Task<ActionResult> InterviewList()
+        {
+            ViewBag.Batches = new SelectList(db.Batches.ToList(), "BatchId", "BatchCode");
+            return View(await db.InterviewMasters.ToListAsync());
+        }
+
+        public ActionResult InterviewCreate()
+        {
+            ViewBag.Batches = new SelectList(db.Batches.ToList(), "BatchId", "BatchCode");
+            return PartialView("InterviewCreate");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> InterviewCreate(InterviewMaster obj)
+        {
+            if (ModelState.IsValid)
+            {
+                db.InterviewMasters.Add(obj);
+                await db.SaveChangesAsync();
+                return Json(new { success = true });
+            }
+
+            return PartialView("InterviewCreate", obj);
+        }
+
+        public async Task<ActionResult> InterviewEdit(int? id)
+        {
+            ViewBag.Batches = new SelectList(db.Batches.ToList(), "BatchId", "BatchCode");
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            InterviewMaster obj = await db.InterviewMasters.FindAsync(id);
+            if (obj == null)
+            {
+                return HttpNotFound();
+            }
+            return PartialView("InterviewEdit", obj);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> InterviewEdit(InterviewMaster obj)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(obj).State = EntityState.Modified;
+                try
+                {
+                    await db.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+                    string s = e.ToString();
+                }
+                return Json(new { success = true });
+            }
+            return PartialView("InterviewEdit", obj);
+        }
+
+
+
+        #endregion
     }
 }

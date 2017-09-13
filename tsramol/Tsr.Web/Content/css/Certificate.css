@@ -1,10 +1,39 @@
-﻿.table-bordered {
-border-collapse:separate;
-border-style: solid;
-border-width: 26px;
--moz-border-image: url('../img/border.png') 26 repeat;
--webkit-border-image: url('../img/border.png') 26 repeat;
--o-border-image: url('../img/border.png') 26 repeat;
-border-image: url('../img/border.png') 26 fill repeat;
+﻿html, body {
+        color: #2f323a;
 }
+.mytable {
+      border-collapse: collapse;
+      width: 100%;
+      background-color: white;
+    }
+    .mytable-head {
+      border: 1px solid black;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    .mytable-head td {
+      border: 1px solid black;
+    }
+    .mytable-body {
+      border: 1px solid black;
+      border-top: 0;
+      margin-top: 0;
+      padding-top: 0;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    .mytable-body td {
+      border: 1px solid black;
+      border-top: 0;
+    }
+    .mytable-footer {
+      border: 1px solid black;
+      border-top: 0;
+      margin-top: 0;
+      padding-top: 0;
+    }
+    .mytable-footer td {
+      border: 1px solid black;
+      border-top: 0;
+    }
 

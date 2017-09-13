@@ -1,0 +1,87 @@
+﻿@model Tsr.Core.Entities.MedicalMaster
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 class="modal-title" id="myModalLabel">Edit Medical Category</h4>
+</div>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    //var MedicalDate = Convert.ToDateTime(Model.MedicalDate).ToString("dd-MM-yyyy");
+    <div class="modal-body">
+
+        <div class="form-horizontal">
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.MedicalMasterId)
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.MedicalCode, htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.MedicalCode, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.MedicalCode, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.BatchId, htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="col-md-8">
+                    @Html.DropDownList("BatchId",
+                                         (IEnumerable<SelectListItem>)ViewBag.Batches, "Select Batch", new { @class = "form-control" })
+                        @*@Html.EditorFor(model => model.BatchId, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.BatchId, "", new { @class = "text-danger" })*@
+                    </div>
+                </div>
+          
+            <div class="form-group">
+                @Html.LabelFor(model => model.MedicalDate, htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="col-md-8">
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.MedicalDate, new { htmlAttributes = new { @Value = Convert.ToDateTime(Model.MedicalDate).ToString("yyyy/MM/dd"), @class = "form-control", @type = "Date" } })                         
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.MedicalFees, htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="col-md-8">
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.MedicalFees, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.MedicalFees, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal">Cancel</button>
+        <input class="btn btn-primary" type="submit" value="Save" />
+    </div>
+}
+<script>
+function FillBatch() {
+    var CourseId = $('#CourseId').val();
+    $.ajax({
+        url: '/Application/FillBatchAll',
+        type: "GET",
+        dataType: "JSON",
+        data: { CourseId: CourseId },
+        success: function (Batches) {
+            $("#BatchId").html(""); // clear before appending new list
+            $("#BatchId").append(
+                    $('<option></option>').val("").html(""));
+            $.each(Batches, function (i, c) {
+                $("#BatchId").append(
+                    $('<option></option>').val(c.BatchId).html(c.Name));
+            });
+        }
+    });
+}
+</script>  
+<script type="text/javascript">
+    $(function () { // will trigger when the document is ready
+        $('.datepicker').datepicker(); //Initialise any date pickers
+    });
+</script>

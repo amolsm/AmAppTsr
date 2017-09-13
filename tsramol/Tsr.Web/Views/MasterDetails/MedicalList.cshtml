@@ -1,0 +1,100 @@
+﻿@model IEnumerable<Tsr.Core.Entities.MedicalMaster>
+@{
+    ViewBag.Title = "MedicalList";
+ }
+
+<!-- START BREADCRUMB -->
+<ul class="breadcrumb push-down-0">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Masters</a></li>
+    <li><a href="#">Medical</a></li>
+    @*<li class="active">Error 404</li>*@
+</ul>
+<!-- END BREADCRUMB -->
+<!-- PAGE CONTENT WRAPPER -->
+<div class="page-content-wrap">
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+
+                <form class="form-horizontal">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Medical List</h3>
+
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="row" style="padding-bottom:10px">
+                                @*<button class="btn btn-info btn-rounded" data-toggle="modal" data-target="#modal_basic" ng-click="modules = null">Add New</button>*@
+                                @Html.ActionLink("New Medical List", "MedicalCreate", "MasterDetails", null, new { data_modal = "", id = "btnCreate", @class = "btn btn-info btn-rounded" })
+                            </div>
+                            <table id="customers2" class="table datatable">
+                                <thead>
+                                    <tr>
+                                        <th>Medical Code</th>
+                                        <th>Batch Name</th>
+                                        <th>Medical Date</th>
+                                        <th>Medical Fees</th>
+                                        <th>Action</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in Model)
+                                    {
+                                        var date = Convert.ToDateTime(item.MedicalDate).ToString("dd-MM-yyyy");
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.MedicalCode)
+                                            </td>
+
+                                            <td>
+                                           
+                                                @Html.DisplayFor(modelItem => item.BatchId)
+                                            </td>
+                                            <td>
+                                               @Html.DisplayFor(modelItem => date)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.MedicalFees)
+                                            </td>
+                                            <td>
+                                                @Html.ActionLink("Edit", "MedicalEdit", new { id = item.MedicalMasterId }, new { data_modal = "" }) |
+
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>
+<!-- END PAGE CONTENT WRAPPER -->
+<!-- MODALS -->
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="defModalHead" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/js/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/js/plugins/bootstrap/bootstrap-select.js"></script>
+<script src="~/Scripts/ModalForm.js"></script>
+
+

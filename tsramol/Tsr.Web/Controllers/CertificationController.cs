@@ -282,7 +282,7 @@ namespace Tsr.Web.Controllers
                             Batchfrom = b.StartDate,
                             Batchto = b.EndDate,
                             StudentId = ap.ApplicationId,
-                            Name = ap.FirstName + " " + ap.LastName,
+                            Name = ap.FirstName==null?" ":ap.FirstName + " "+ap.MiddleName==null?" ":ap.MiddleName+ " " + ap.LastName==null?" ":ap.LastName,
                             DOB = ap.DateOfBirth,
                             Cdcno = ap.CdcNo,
                             PassportNo = ap.PassportNo,
@@ -323,36 +323,22 @@ namespace Tsr.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> CheckListEditModal(CheckListVM obj)
         {
+          
             if (ModelState.IsValid)
             {
-               
-                //var c = db.Applications.Where(m => m.ApplicationId == obj.ApplicationId).FirstOrDefault();
-                Application b = new Application
-                {
-                    ApplicationId=obj.ApplicationId,
-                    //ApplicationCode=c.ApplicationCode,
-                    //CategoryId=c.CategoryId,
-                    //CourseId=c.CourseId,
-                    //BatchId=c.BatchId,
-                    FirstName=obj.FirstName,
-                    MiddleName=obj.MiddleName,
-                    LastName=obj.LastName,
-                    //MotherName=c.MotherName,
-                    DateOfBirth = obj.DOB,
-                    //PlaceOfBirth=c.PlaceOfBirth,
-                    //Gender=c.Gender,
-                    //Citizenship=c.Citizenship,
-                    //Caste=c.Caste,
-                    CdcNo = obj.Cdcno,
-                    PassportNo = obj.PassportNo,
-                    RankOfCandidate = obj.Rank,
-                    GradeOfCompetencyNo = obj.Grade,
-                    InDosNo = obj.IndosNo
-
-                };
-               
-                //db.Entry(b).State = EntityState.Modified;
+                
+                Application c = db.Applications.First(i=>i.ApplicationId==obj.ApplicationId);
+                c.FirstName = obj.FirstName;
+                c.MiddleName = obj.MiddleName;
+                c.LastName = obj.LastName;
+                c.DateOfBirth = obj.DOB;
+                c.CdcNo = obj.Cdcno;
+                c.PassportNo = obj.PassportNo;
+                c.RankOfCandidate = obj.Rank;
+                c.GradeOfCompetencyNo = obj.Grade;
+                c.InDosNo = obj.IndosNo;
                 await db.SaveChangesAsync();
+            
                 return Json(new { success = true });
             }
 
@@ -639,5 +625,6 @@ namespace Tsr.Web.Controllers
         }
         #endregion
 
+        
     }
 }

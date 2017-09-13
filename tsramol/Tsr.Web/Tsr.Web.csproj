@@ -911,6 +911,12 @@
     <Content Include="Views\Certification\CheckListEditModal.cshtml" />
     <Content Include="Views\Certification\CheckListEdit.cshtml" />
     <Content Include="Views\Certification\Checklist.cshtml" />
+    <Content Include="Views\MasterDetails\InterviewCreate.cshtml" />
+    <Content Include="Views\MasterDetails\InterviewEdit.cshtml" />
+    <Content Include="Views\MasterDetails\InterviewList.cshtml" />
+    <Content Include="Views\MasterDetails\MedicalCreate.cshtml" />
+    <Content Include="Views\MasterDetails\MedicalEdit.cshtml" />
+    <Content Include="Views\MasterDetails\MedicalList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
