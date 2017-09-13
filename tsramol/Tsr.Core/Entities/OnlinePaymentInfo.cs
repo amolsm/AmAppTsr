@@ -13,6 +13,8 @@ namespace Tsr.Core.Entities
         public int? BatchId { get; set; }
         public int? CourseId { get; set; }
         public int? CategoryId { get; set; }
+        public int? PackageId { get; set; }
+        public bool? IsPackage { get; set; }
 
         public string mihpayid { get; set; }
         public string mode { get; set; }

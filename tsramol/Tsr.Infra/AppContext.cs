@@ -40,6 +40,6 @@ namespace Tsr.Infra
 
         public DbSet<Principal> Principals { get; set; }
         public DbSet<PackageCourse> PackageCourses { get; set; }
-
+        public DbSet<ApplicationPackageDetail> ApplicationPackageDetails { get; set; }
     }
 }

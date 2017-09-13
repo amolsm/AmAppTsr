@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\Application.cs" />
+    <Compile Include="Entities\ApplicationPackageDetail.cs" />
     <Compile Include="Entities\Batch.cs" />
     <Compile Include="Entities\CertificateDesign.cs" />
     <Compile Include="Entities\CetInterview.cs" />

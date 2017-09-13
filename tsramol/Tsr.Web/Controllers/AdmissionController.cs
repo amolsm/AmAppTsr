@@ -188,11 +188,12 @@ namespace Tsr.Web.Controllers
 
         public ActionResult ViewApplicants()
         {
-            var vm = from a in db.Applications
-                     join cc in db.CourseCategories on a.CategoryId equals cc.CourseCategoryId
-                     join c in db.Courses on a.CourseId equals c.CourseId
-                     join b in db.Batches on a.BatchId equals b.BatchId
-                     where (b.OnlineBookingStatus == true)
+            var vm = from ap in db.Applied
+                     join a in db.Applications on ap.ApplicationId equals a.ApplicationId
+                     join cc in db.CourseCategories on ap.CategoryId equals cc.CourseCategoryId
+                     join c in db.Courses on ap.CourseId equals c.CourseId
+                     join b in db.Batches on ap.BatchId equals b.BatchId
+                     //where (ap.AdmissionStatus == true)
                      select new AdmissionViewApplicantsVM
                      {
                          ApplicantName = a.FirstName.ToString() + " " + a.MiddleName.ToString() + " " + a.LastName.ToString(),
@@ -216,20 +217,21 @@ namespace Tsr.Web.Controllers
         [HttpGet]
         public ActionResult GetApplicantList(int? BatchId)
         {
-            var list = from ap in db.Applications
+            var list = from ap in db.Applied
+                       join a in db.Applications on ap.ApplicationId equals a.ApplicationId
                        join b in db.Batches on ap.BatchId equals b.BatchId
                        //join opi in db.OnlinePaymentInfos on ap.ApplicationId equals opi.ApplicationId
 
                        where (b.BatchId == BatchId)
                        select new ApplicationApplicantsList
                        {
-                           ApplicationCode = ap.ApplicationCode,
+                           ApplicationCode = a.ApplicationCode,
                            ApplicationId = ap.ApplicationId,
                            BatchName = b.BatchCode,
-                           Name = ap.FirstName + " " + ap.LastName,
+                           Name = a.FirstName + " " + a.LastName,
                            //PaidAmount = opi.amount,
-                           Email = ap.Email,
-                           Cell = ap.CellNo
+                           Email = a.Email,
+                           Cell = a.CellNo
                        };
 
 

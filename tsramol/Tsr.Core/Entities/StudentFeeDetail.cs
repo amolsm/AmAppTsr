@@ -10,6 +10,7 @@ namespace Tsr.Core.Entities
     {
         public int StudentFeeDetailId { get; set; }
         public int? ApplicationId { get; set; }
+        public int? PackageId { get; set; }
         public int? BatchId { get; set; }
         public decimal? TotalFee { get; set; }
         public decimal? FeePaid { get; set; }
