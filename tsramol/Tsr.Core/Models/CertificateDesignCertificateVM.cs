@@ -33,6 +33,8 @@ namespace Tsr.Core.Models
 
         [Display(Name = "Principal")]
         public int PrincipalId { get; set; }
+        [Display(Name = "CertificateFormat")]
+        public int CertificateFormatId { get; set; }
 
 
     }
@@ -40,6 +42,8 @@ namespace Tsr.Core.Models
     {
         public string CourseNameTitle { get; set; }
         public string PrincipalName { get; set; }
+
+        public string CertificateFormat { get; set; }
         public DateTime? CreatedDate { get; set; }
     }
 }

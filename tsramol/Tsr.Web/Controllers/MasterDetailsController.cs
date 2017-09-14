@@ -1188,5 +1188,69 @@ namespace Tsr.Web.Controllers
 
 
         #endregion
+
+        #region CertificateFormate
+        public async Task<ActionResult> CertificateFormatList()
+        {
+           
+            return View(await db.CertificateFormats.ToListAsync());
+        }
+
+        public ActionResult CertificateFormatCreate()
+        {
+           
+            return PartialView("CertificateFormatCreate");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CertificateFormatCreate(CertificateFormat obj)
+        {
+            if (ModelState.IsValid)
+            {
+                db.CertificateFormats.Add(obj);
+                await db.SaveChangesAsync();
+                return Json(new { success = true });
+            }
+
+            return PartialView("CertificateFormatCreate", obj);
+        }
+
+        public async Task<ActionResult> CertificateFormatEdit(int? id)
+        {
+           
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            CertificateFormat obj = await db.CertificateFormats.FindAsync(id);
+            if (obj == null)
+            {
+                return HttpNotFound();
+            }
+            return PartialView("CertificateFormatEdit", obj);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CertificateFormatEdit(CertificateFormat obj)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(obj).State = EntityState.Modified;
+                try
+                {
+                    await db.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+                    string s = e.ToString();
+                }
+                return Json(new { success = true });
+            }
+            return PartialView("CertificateFormatEdit", obj);
+        }
+
+
+
+        #endregion
     }
 }

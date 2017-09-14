@@ -360,6 +360,9 @@ namespace Tsr.Web.Controllers
         {
             var obj = from cd in db.CertificateDesigns
                       join c in db.Courses on cd.CourseId equals c.CourseId
+                      join f in db.CertificateFormats on cd.CertificateFormatId equals f.CertificateFormatId
+                      into tmpMappc
+                      from mappingsc in tmpMappc.DefaultIfEmpty()
                       join p in db.Principals on cd.PrincipalId equals p.PrincipalId into tmpMapp
                       from mappings in tmpMapp.DefaultIfEmpty()
                       select new CertificateDesignList
@@ -373,6 +376,7 @@ namespace Tsr.Web.Controllers
                           Paragraph3 = cd.Paragraph3,
                           Topic4 = cd.Topic4,
                           PrincipalName = mappings.PricipalName,
+                          CertificateFormat= mappingsc.FormatName,
                           CreatedDate = cd.CreatedDate
 
                       };
@@ -390,6 +394,12 @@ namespace Tsr.Web.Controllers
                     Text = p.PricipalName,
                     Value = p.PrincipalId.ToString()
                 });
+            ViewBag.CertificateFormat = db.CertificateFormats.ToList()
+              .Select(p => new SelectListItem
+              {
+                  Text = p.FormatName,
+                  Value = p.CertificateFormatId.ToString()
+              });
 
             return PartialView("DesignCreate");
         }
@@ -411,7 +421,8 @@ namespace Tsr.Web.Controllers
                     Paragraph1=obj.Paragraph1,
                     Paragraph2=obj.Paragraph2,
                     Paragraph3=obj.Paragraph3,
-                    Topic4=obj.Topic4
+                    Topic4=obj.Topic4,
+                    CertificateFormatId=obj.CertificateFormatId
 
                 
                 };
@@ -430,6 +441,12 @@ namespace Tsr.Web.Controllers
                     Text = p.PricipalName,
                     Value = p.PrincipalId.ToString()
                 });
+            ViewBag.CertificateFormat = db.CertificateFormats.ToList()
+            .Select(p => new SelectListItem
+            {
+                Text = p.FormatName,
+                Value = p.CertificateFormatId.ToString()
+            });
             return PartialView("DesignCreate", obj);
         }
 
@@ -452,6 +469,7 @@ namespace Tsr.Web.Controllers
 
             ViewBag.Course = new SelectList(db.Courses.Where(x => x.IsActive == true).ToList(), "CourseId", "CourseName");
             ViewBag.Principal=new SelectList(db.Principals.ToList(),"PrincipalId","PricipalName");
+            ViewBag.CertificateFormat = new SelectList(db.CertificateFormats.ToList(), "CertificateFormatId", "FormatName");
 
             return PartialView("DesignEdit", vm);
         }
@@ -472,7 +490,8 @@ namespace Tsr.Web.Controllers
                     Paragraph2 = obj.Paragraph2,
                     Paragraph3 = obj.Paragraph3,
                     Topic4 = obj.Topic4,
-                    CreatedDate= DateTime.UtcNow
+                    CreatedDate= DateTime.UtcNow,
+                    CertificateFormatId=obj.CertificateFormatId
                 };
                 
                 db.Entry(cf).State = EntityState.Modified;
@@ -570,6 +589,7 @@ namespace Tsr.Web.Controllers
             CertificationCertificateVM ccvm = new CertificationCertificateVM();
             var obj = new List<CertificationCertificateVM.Certificate>();
             ccvm._CertificateList = obj.ToList();
+            ccvm.PerformAction = null;
             return View(ccvm);
         }
 
@@ -613,7 +633,10 @@ namespace Tsr.Web.Controllers
 
                               };
 
+                var certificateformatid = db.CertificateDesigns.Where(m => m.CourseId == obj.CourseId).Select(m => m.CertificateFormatId).FirstOrDefault();
+                var performaction = db.CertificateFormats.Where(m => m.CertificateFormatId == certificateformatid).Select(m => m.ActionName).FirstOrDefault();
                 CertificationCertificateVM ccvm = new CertificationCertificateVM();
+                ccvm.PerformAction = performaction;
                 ccvm._CertificateList = CertifcateList.ToList();
                 ViewBag.Categories = new SelectList(db.CourseCategories.Where(x => x.IsActive == true).ToList(), "CourseCategoryId", "CategoryName");
 

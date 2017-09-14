@@ -16,6 +16,8 @@ namespace Tsr.Core.Models
         public int CourseId { get; set; }
         [Required]
         public int BatchId { get; set; }
+       
+        public string PerformAction { get; set; }
 
         public List<Certificate> _CertificateList   { get; set; }
     
@@ -55,6 +57,8 @@ namespace Tsr.Core.Models
             public string DateofExpiry { get; set; }
 
             public string PrincipalName { get; set; }
+
+           
 
             public string PrincipalSign { get; set; }
 
