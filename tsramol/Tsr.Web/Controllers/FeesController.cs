@@ -103,6 +103,7 @@ namespace Tsr.Web.Controllers
 
         }
 
+        #region Scrutinee
         public ActionResult Scrutinee()
         {
             var obj = new List<FeesScrutineeListVM>();
@@ -129,10 +130,11 @@ namespace Tsr.Web.Controllers
                     ApplicationCode = ap.ApplicationCode,
                     PaymentStatus = ps,
                     MakePaymentFlag = mpf,
-                    BatchName = Convert.ToDateTime(db.Batches.Find(ap.BatchId).StartDate).ToString("dd-MM-yyyy"), 
+                    BatchName = Convert.ToDateTime(db.Batches.Find(ap.BatchId).StartDate).ToString("dd-MM-yyyy"),
                     CourseName = db.Courses.Find(ap.CourseId).CourseName,
                     Cell = ap.CellNo,
-                    Email = ap.Email
+                    Email = ap.Email,
+                    Name = ap.FirstName + " " + ap.MiddleName + " " + ap.LastName
                 };
                 obj.Add(vm);
             }
@@ -159,9 +161,9 @@ namespace Tsr.Web.Controllers
             }
             else
             {
+                vm.FeesType = "CourseFee";
                 if (cf.GstPercentage > 0)
-                {
-                    vm.FeesType = "CourseFee";
+                {                    
                     vm.totalFee = cf.ActualFee + ((cf.ActualFee / 100) * (decimal)cf.GstPercentage);
                     if (cf.MinBalance > 0)
                         vm.Amount = cf.MinBalance;
@@ -273,8 +275,17 @@ namespace Tsr.Web.Controllers
 
                     var res = await MessageService.sendEmail(em);
                 }
+
+                //return RedirectToAction("Scrutinee");
+                return Json(new { success = true });
             }
             return View();
         }
+
+        public ActionResult ScrutineePrintReceipt(int? id)
+        {
+            return View();
+        }
+        #endregion
     }
 }

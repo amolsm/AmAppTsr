@@ -94,7 +94,7 @@ namespace Tsr.Web.Controllers
                     CetTime = obj.CetTime,
                     CourseId = obj.CourseId,
                     IsActive = obj.IsActive,
-                    StartDate = obj.StartDate,
+                    //StartDate = obj.StartDate,
                     Venue = obj.Venue
                 };
 

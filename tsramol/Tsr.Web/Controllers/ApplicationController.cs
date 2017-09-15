@@ -1222,10 +1222,12 @@ namespace Tsr.Web.Controllers
         {
             var list = from ap in db.Applications
                        join b in db.Batches on ap.BatchId equals b.BatchId
-                       join opi in db.OnlinePaymentInfos on ap.ApplicationId equals opi.ApplicationId 
-                       into opis
-                       from opi in opis.DefaultIfEmpty()
-                       //join apl in db.Applied on ap.ApplicationId equals apl.ApplicationId
+                       //join opi in db.OnlinePaymentInfos on ap.ApplicationId equals opi.ApplicationId 
+                       //into opis
+                       //from opi in opis.DefaultIfEmpty()
+                       join apl in db.Applied on ap.ApplicationId equals apl.ApplicationId
+                       into apllj
+                       from apl in apllj.DefaultIfEmpty()
                        where (b.BatchId == BatchId)
                        select new ApplicationApplicantsList
                        {
@@ -1233,7 +1235,7 @@ namespace Tsr.Web.Controllers
                            ApplicationId = ap.ApplicationId,
                            BatchName = b.BatchCode,
                            Name = ap.FirstName + " " + ap.LastName,
-                           PaymentStatus = (opi==null)? "Pending" : "Success",
+                           PaymentStatus = (apl == null)? "Pending" : "Success",
                            Email = ap.Email,
                            Cell = ap.CellNo
                        };

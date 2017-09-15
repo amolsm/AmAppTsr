@@ -8,7 +8,7 @@
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
     <h4 class="modal-title" id="myModalLabel">Scrutinee Make Payment</h4>
 </div>
-@using (Html.BeginForm())
+@using (Html.BeginForm("ScrutineeMakePayment","Fees",FormMethod.Post))
 {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(model=>model.ApplicationId)
