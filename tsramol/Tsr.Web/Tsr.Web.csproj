@@ -917,6 +917,10 @@
     <Content Include="Views\MasterDetails\MedicalCreate.cshtml" />
     <Content Include="Views\MasterDetails\MedicalEdit.cshtml" />
     <Content Include="Views\MasterDetails\MedicalList.cshtml" />
+    <Content Include="Views\MasterDetails\BatchEdit.cshtml" />
+    <Content Include="Views\Fees\Scrutinee.cshtml" />
+    <Content Include="Views\Fees\ScrutineeList.cshtml" />
+    <Content Include="Views\Fees\ScrutineeMakePayment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -87,6 +87,7 @@
     <Compile Include="Models\ApplicationSumPayNonCetVM.cs" />
     <Compile Include="Models\BatchCreateVM.cs" />
     <Compile Include="Models\BatchDropdown.cs" />
+    <Compile Include="Models\BatchEditVM.cs" />
     <Compile Include="Models\BatchListVM.cs" />
     <Compile Include="Models\CertificateDesignCertificateVM.cs" />
     <Compile Include="Models\CertificatePrincipalVM.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="Models\EmailModel.cs" />
     <Compile Include="Models\EntranceMarksListVM.cs" />
     <Compile Include="Models\FeesApplicantList.cs" />
+    <Compile Include="Models\FeesScrutineeListVM.cs" />
     <Compile Include="Models\FeesViewPaymentDetailsVM.cs" />
     <Compile Include="Models\MasterCourseCreateVM.cs" />
     <Compile Include="Models\MasterCourseDocsSelectVM.cs" />
@@ -106,6 +108,7 @@
     <Compile Include="Models\MasterPackageCreateVM.cs" />
     <Compile Include="Models\MastersCourseFeeCreateVM.cs" />
     <Compile Include="Models\ReportApplicationVM.cs" />
+    <Compile Include="Models\ScrutineeMakePaymentVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

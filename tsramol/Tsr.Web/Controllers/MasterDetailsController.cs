@@ -864,24 +864,7 @@ namespace Tsr.Web.Controllers
         #region Batches
         public ActionResult BatchList()
         {
-            //var obj = from c in db.Courses
-            //          join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
-            //          join b in db.Batches on c.CourseId equals b.CourseId
-            //          where c.IsActive == true
-            //          select new BatchListVM
-            //          {
-            //              CourseId = c.CourseId,
-            //              CourseName = c.CourseName,
-            //              BatchId = b.BatchId,
-            //              BatchCode = b.BatchCode,
-            //              StartDate = b.StartDate,
-            //              EndDate = b.EndDate,
-            //              CategoryName = cc.CategoryName,
-            //              IsActive = b.IsActive,
-            //              ReserveSeats = b.ReserveSeats,
-            //              OnlineBookingStatus = b.OnlineBookingStatus,
-
-            //          };
+            
             ViewBag.Category = new SelectList(db.CourseCategories.ToList(), "CourseCategoryId", "CategoryName");
             var obj = new List<BatchListVM>();
             return View( obj);
@@ -971,6 +954,62 @@ namespace Tsr.Web.Controllers
                 });
 
             return PartialView("BatchCreate", obj);
+        }
+
+        public async Task<ActionResult> BatchEdit(int? id)
+        {
+            Batch obj = await db.Batches.FindAsync(id);
+            var vm = new BatchEditVM
+            {
+                CourseId = obj.CourseId,
+                CategoryId = obj.CategoryId,
+                BatchCode = obj.BatchCode,
+                BatchId = obj.BatchId,
+                CoordinatorId = obj.CoordinatorId,
+                EndDate = obj.EndDate,
+                OnlineBookingStatus = obj.OnlineBookingStatus,
+                ReserveSeats = obj.ReserveSeats,
+                StartDate = obj.StartDate,
+                IsActive = obj.IsActive,
+                CreatedBy = obj.CreatedBy,
+                CreatedDate = obj.CreatedDate,
+                CategoryName = db.CourseCategories.Find(obj.CategoryId).CategoryName,
+                CourseName = db.Courses.Find(obj.CourseId).CourseName
+
+            };
+
+            ViewBag.Categories = new SelectList(db.CourseCategories.Where(x => x.IsActive == true).ToList(), "CourseCategoryId", "CategoryName");
+            
+            ViewBag.Coordinator = db.Employees.Where(x => x.IsActive == true)
+                .Select(p => new SelectListItem
+                {
+                    Text = p.FirstName + " " + p.LastName,
+                    Value = p.EmployeeId.ToString()
+                });
+            return PartialView("BatchEdit", vm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> BatchEdit(BatchEditVM obj)
+        {
+            if (ModelState.IsValid)
+            {
+                Batch b = await db.Batches.FindAsync(obj.BatchId);
+                b.BatchCode = obj.BatchCode;
+                b.CoordinatorId = obj.CoordinatorId;
+                b.StartDate = obj.StartDate;
+                b.EndDate = obj.EndDate;
+                b.IsActive = obj.IsActive;
+                b.OnlineBookingStatus = obj.OnlineBookingStatus;
+                b.ModifiedBy = 1;
+                b.ModifiedDate = DateTime.Now;
+
+                db.Entry(b).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+                return Json(new { success = true });
+            }
+            return PartialView("BatchEdit", obj);
         }
         #endregion
 

@@ -43,9 +43,7 @@
                 <li><a href="@Url.Action("DepartmentList", "MasterDetails")"><span class="fa fa-dot-circle-o"></span> Departments</a></li>
                 <li><a href="@Url.Action("DesignationList", "MasterDetails")"><span class="fa fa-dot-circle-o"></span> Designations</a></li>
                 <li><a href="@Url.Action("FeesPatternList", "MasterDetails")"><span class="fa fa-dot-circle-o"></span> Fees Pattern</a></li>
-                <li><a href="@Url.Action("InterviewList", "MasterDetails")"><span class="fa fa-dot-circle-o"></span> Interview</a></li>
-                <li><a href="@Url.Action("MedicalList", "MasterDetails")"><span class="fa fa-dot-circle-o"></span> Medical</a></li>
-
+                
 
                  @*<li class="xn-openable">
                     <a href="#"><span class="fa fa-clock-o"></span> Address</a>
@@ -78,8 +76,8 @@
             <ul>
 
                 <li><a href="@Url.Action("FeeReciept", "Fees")"><span class="fa fa-circle-o"></span> Reciepts</a></li>
-                @*<li><a href="@Url.Action("ViewApplicants", "Application")"><span class="fa fa-dot-circle-o"></span>Applicants</a></li>
-                <li><a href="@Url.Action("NonCetApplication", "Application")"><span class="fa fa-dot-circle-o"></span> Non-CET Dev</a></li>
+               <li><a href="@Url.Action("Scrutinee", "Fees")"><span class="fa fa-dot-circle-o"></span>Scrutinee</a></li>
+                @* <li><a href="@Url.Action("NonCetApplication", "Application")"><span class="fa fa-dot-circle-o"></span> Non-CET Dev</a></li>
                 <li><a href="@Url.Action("CetApplication", "Application")"><span class="fa fa-dot-circle-o"></span> CET Dev</a></li>*@
 
 
@@ -106,6 +104,9 @@
             <ul>
 
                 <li><a href="@Url.Action("CetSchedule", "Admission")"><span class="fa fa-circle-o"></span> Cet Schedule</a></li>
+                <li><a href="@Url.Action("InterviewList", "MasterDetails")"><span class="fa fa-dot-circle-o"></span> Interview Schedule</a></li>
+                <li><a href="@Url.Action("MedicalList", "MasterDetails")"><span class="fa fa-dot-circle-o"></span> Medical Schedule</a></li>
+
                 <li><a href="@Url.Action("ViewApplied", "Admission")"><span class="fa fa-dot-circle-o"></span>Applied Students</a></li>
                 <li><a href="@Url.Action("HallTickets", "Admission")"><span class="fa fa-dot-circle-o"></span> Hall Tickets</a></li>
                 <li><a href="@Url.Action("EntranceMarksEntry", "Admission")"><span class="fa fa-dot-circle-o"></span> Entrance Marks Entry</a></li>

@@ -150,7 +150,8 @@ namespace Tsr.Web.Controllers
                         CourseId = obj.CourseId,
                         CategoryId = obj.CategoryId,
                         BatchId = obj.BatchId,
-                        CourseName = courseName
+                        CourseName = courseName,
+                        PackageId = 0
                     };
 
                     var b = db.Batches.FirstOrDefault(x => x.BatchId == obj.BatchId);
@@ -374,7 +375,7 @@ namespace Tsr.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (obj.PackageId == 0)
+                if (obj.PackageId == 0 || obj.PackageId == null)
                 {
                     var b = db.Batches.FirstOrDefault(x => x.BatchId == obj.BatchId);
                     var bc = b.BatchCode;

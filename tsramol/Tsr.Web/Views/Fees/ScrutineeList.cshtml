@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Tsr.Core.Models.FeesScrutineeListVM>
+
+<table id="customers2" class="table ">
+    <thead>
+        <tr>
+
+            <th>Application Code</th>
+            <th>Course</th>
+            <th>Batch</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Cell</th>
+            <th>PaymentStatus</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.ApplicationCode)</td>
+                <td>@Html.DisplayFor(modelItem => item.CourseName)</td>
+                <td>@Html.DisplayFor(modelItem => item.BatchName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                <td>@Html.DisplayFor(modelItem => item.Cell)</td>
+                <td>@Html.DisplayFor(modelItem => item.PaymentStatus)</td>
+                <td>
+                    @if (item.MakePaymentFlag == true)
+                {
+                    @Html.ActionLink("Make Payment", "ScrutineeMakePayment", new { id = item.ApplicationId }, new { data_modal = "" })
+                }
+            </td>
+            </tr>
+        }
+
+    </tbody>
+
+</table>
+
+<!-- MODALS -->
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="defModalHead" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/js/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/js/plugins/bootstrap/bootstrap-select.js"></script>
+<script src="~/Scripts/ModalForm.js"></script>
