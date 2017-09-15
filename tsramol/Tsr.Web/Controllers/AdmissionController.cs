@@ -1,5 +1,8 @@
-﻿using System;
+﻿using iTextSharp.text;
+using iTextSharp.text.pdf;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -149,13 +152,13 @@ namespace Tsr.Web.Controllers
             //          where (cs.IsActive == true)
             //          select 
 
-            var a = from c in db.Courses
-                    join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
-                    where (c.IsActive == true && cc.CetRequired == true)
-                    select new { c.CourseId, c.CourseName };
-            ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
-
-            var obj = new List<ApplicationApplicantsList>();
+            //var a = from c in db.Courses
+            //        join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
+            //        where (c.IsActive == true && cc.CetRequired == true)
+            //        select new { c.CourseId, c.CourseName };
+            //ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
+            ViewBag.Course = new SelectList(db.Courses.ToList(), "CourseId", "CourseName");
+            var obj = new List<HallTicketListVM>();
             return View(obj);
         }
         public ActionResult GetApplicantForHalltickets(int? CetMasterId)
@@ -168,7 +171,7 @@ namespace Tsr.Web.Controllers
                        join opi in db.OnlinePaymentInfos on ap.ApplicationId equals opi.ApplicationId
 
                        where (b.BatchId == BatchId)
-                       select new ApplicationApplicantsList
+                       select new HallTicketListVM
                        {
                            ApplicationCode = ap.ApplicationCode,
                            ApplicationId = ap.ApplicationId,
@@ -180,9 +183,301 @@ namespace Tsr.Web.Controllers
                        };
 
 
-            return PartialView("ApplicantsList", list.ToList());
+            return PartialView("_HallticketApplicant", list.ToList());
         }
+        public ActionResult Export(int id)
+        {
+
+            var list = (from ap in db.Applications.AsEnumerable()
+                        join b in db.Batches on ap.BatchId equals b.BatchId
+                        join cr in db.Courses on ap.CourseId equals cr.CourseId
+                        join op in db.OnlinePaymentInfos on ap.ApplicationId equals op.ApplicationId
+                        join cm in db.CetMasters on cr.CourseId equals cm.CourseId
+                        where (cm.CetMasterId == id)
+                        select new HallTicketListVM
+                        {
+                            CetMasterId = cm.CetMasterId,
+                            ApplicationCode = ap.ApplicationCode,
+                            ApplicationId = ap.ApplicationId,
+                            CourseName = cr.CourseName,
+                            BatchName = b.BatchCode,
+                            CetDate = cm.CetDate,
+                            CetTime = cm.CetTime,
+                            Name = ap.FirstName + " " + ap.MiddleName + " " + ap.LastName,
+                            Fathername = ap.MiddleName,
+                            Mothername = ap.MotherName
+                        });
+
+
+            using (MemoryStream stream = new System.IO.MemoryStream())
+            {
+
+                iTextSharp.text.Document pdfDoc = new iTextSharp.text.Document(PageSize.A4, 36, 72, 108, 180);
+                PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
+
+                pdfDoc.Open();
+                pdfDoc.AddTitle("Hall Ticket");
+                PdfContentByte cb = writer.DirectContent;
+
+
+                int count = 0;
+                foreach (var app in list)
+                {
+                    //var filename = app.ApplicationCode + ".pdf";
+                    //var output = new FileStream(Path.Combine("c:\\myPDF\\", filename), FileMode.Create);
+                    //var writer1 = PdfWriter.GetInstance(pdfDoc, output);
+
+                    count++;
+
+                    cb.Stroke();
+                    iTextSharp.text.Font f = FontFactory.GetFont("Verdana", 50, iTextSharp.text.Font.BOLD, BaseColor.BLACK);
+                    BaseFont bf_verdanabold = f.GetCalculatedBaseFont(false);
+                    iTextSharp.text.Font f1 = FontFactory.GetFont("Verdana", 50, BaseColor.BLACK);
+                    BaseFont bf_verdana = f1.GetCalculatedBaseFont(false);
+                    iTextSharp.text.Font f2 = FontFactory.GetFont("Arial", 50, iTextSharp.text.Font.BOLD, BaseColor.BLACK);
+                    BaseFont bf_arialbold = f2.GetCalculatedBaseFont(false);
+                    iTextSharp.text.Font f3 = FontFactory.GetFont("Arial", 50, iTextSharp.text.Font.NORMAL, BaseColor.BLACK);
+                    BaseFont bf_arial3 = f3.GetCalculatedBaseFont(false);
+
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdanabold, 13);
+                    cb.ShowTextAligned(Element.ALIGN_CENTER, "SIR MOHAMED YUSUF SEAMEN WELFARE FOUNDATION", 300f, 785f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 11.5f);
+                    cb.ShowTextAligned(Element.ALIGN_CENTER, "TRAINING SHIP RAHAMAN", 310f, 760f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdanabold, 10);
+                    cb.ShowTextAligned(Element.ALIGN_CENTER, "ENTRANCE EXAM October 2017", 313f, 730f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10);
+                    cb.ShowTextAligned(Element.ALIGN_CENTER, "EXAM ADMIT CARD", 320f, 710f, 0);
+                    cb.EndText();
+
+
+                    cb.Rectangle(36f, 480f, 410f, 200f);//Main box
+                    cb.Stroke();
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Course Applied", 38f, 660f, 0);
+
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Date of Exam", 185f, 660f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Day", 300f, 660f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Time", 380f, 660f, 0);
+                    cb.EndText();
+
+                    cb.SetLineWidth(1.0f);
+                    cb.SetColorStroke(BaseColor.BLACK);
+                    cb.MoveTo(36f, 655f);
+                    cb.LineTo(447f, 655f);
+                    cb.Stroke();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_arial3, 11.5f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.CourseName == null ? "" : app.CourseName, 38f, 637f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_arial3, 11.5f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.CetDate == null ? "" : Convert.ToDateTime(app.CetDate).ToString("dd-MM-yyyy"), 185f, 637f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_arial3, 11.5f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, /*app.CourseName == null ? "" : app.CourseName*/ "Saturday", 300f, 637f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_arial3, 11.5f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.CetTime == null ? "" : Convert.ToString(app.CetTime), 380f, 637f, 0);
+                    cb.EndText();
+
+                    cb.SetLineWidth(1.0f);
+                    cb.SetColorStroke(BaseColor.BLACK);
+                    cb.MoveTo(36f, 625f);
+                    cb.LineTo(447f, 625f);
+                    cb.Stroke();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Name of Examination Centre", 38f, 605f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 7.5f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "T. S. Rahaman, Nhava Tal, Panvel, Dist Raigad", 185f, 605f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 7.5f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Maharashtra 410206", 185f, 590f, 0);
+                    cb.EndText();
+
+                    cb.SetLineWidth(1.0f);
+                    cb.SetColorStroke(BaseColor.BLACK);
+                    cb.MoveTo(36f, 585f);
+                    cb.LineTo(447f, 585f);
+                    cb.Stroke();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Name of Candidate", 38f, 565f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 8.5f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.Name == null ? "" : app.Name, 185f, 565f, 0);
+                    cb.EndText();
+
+                    cb.SetLineWidth(1.0f);
+                    cb.SetColorStroke(BaseColor.BLACK);
+                    cb.MoveTo(36f, 560f);
+                    cb.LineTo(447f, 560f);
+                    cb.Stroke();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Father's Name", 38f, 540f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 8.5f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.Fathername == null ? "" : app.Fathername, 185f, 540f, 0);
+                    cb.EndText();
+
+                    cb.SetLineWidth(1.0f);
+                    cb.SetColorStroke(BaseColor.BLACK);
+                    cb.MoveTo(36f, 530f);
+                    cb.LineTo(447f, 530f);
+                    cb.Stroke();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Mother's Name", 38f, 510f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 8.5f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.Mothername == null ? "" : app.Mothername, 185f, 510f, 0);
+                    cb.EndText();
+
+                    cb.Rectangle(460f, 640f, 106f, 40f);//Hallticket box
+                    cb.Stroke();
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_arialbold, 9f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Hall Ticket No", 485f, 665f, 0);
+                    cb.EndText();
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_arialbold, 9f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.ApplicationCode == null ? "" : app.ApplicationCode, 460f, 650f, 0);
+                    cb.EndText();
+
+                    cb.Rectangle(460f, 510f, 106f, 120f);//Picture box
+                    cb.Stroke();
+
+
+                    cb.Rectangle(36f, 370f, 160f, 70f);// candidate signature box
+                    cb.Stroke();
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Candidates's Signature", 38f, 380f, 0);
+                    cb.EndText();
+
+
+                    cb.Rectangle(210f, 370f, 180f, 70f);//Hall Invigilator Singnature box
+                    cb.Stroke();
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Hall Invigilator Singnature with date", 215f, 380f, 0);
+                    cb.EndText();
+
+                    cb.Rectangle(405f, 370f, 160f, 70f);//Principle's Signature box
+                    cb.Stroke();
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Principle's Signature", 410f, 380f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdanabold, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Admission to Pre-Sea Course is subject to qualifying in entrance exam October 2017 and the", 38f, 350f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdanabold, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "eligiility Criteria as Per DG Shipping norms", 38f, 335f, 0);
+                    cb.EndText();
+
+                    cb.SetLineWidth(1.0f);                // Vertical line 
+                    cb.SetColorStroke(BaseColor.BLACK);
+                    cb.MoveTo(180f, 680f);
+                    cb.LineTo(180f, 480f);
+                    cb.Stroke();
+
+                    cb.SetLineWidth(1.0f);                // Vertical line 
+                    cb.SetColorStroke(BaseColor.BLACK);
+                    cb.MoveTo(295f, 680f);
+                    cb.LineTo(295f, 625f);
+                    cb.Stroke();
+
+                    cb.SetLineWidth(1.0f);                // Vertical line 
+                    cb.SetColorStroke(BaseColor.BLACK);
+                    cb.MoveTo(375f, 680f);
+                    cb.LineTo(375f, 625f);
+                    cb.Stroke();
+
+                    string imageURL = Server.MapPath("~/Img/avatar.png"); // Image 460f, 510f, 106f, 120f
+                    iTextSharp.text.Image png = iTextSharp.text.Image.GetInstance(imageURL);
+                    png.ScaleToFit(100f, 105f);
+                    png.SpacingBefore = 1f;
+                    png.SpacingAfter = 1f;
+                    png.Alignment = Element.ALIGN_LEFT;
+                    png.SetAbsolutePosition(465f, 515f);
+                    pdfDoc.Add(png);
+
+                    string imageURL1 = Server.MapPath("~/Img/signature.PNG"); // Image 
+                    iTextSharp.text.Image png1 = iTextSharp.text.Image.GetInstance(imageURL1);
+                    png1.ScaleToFit(135f, 50f);
+                    png1.SpacingBefore = 1f;
+                    png1.SpacingAfter = 1f;
+                    png1.Alignment = Element.ALIGN_LEFT;
+                    png1.SetAbsolutePosition(410f, 390f);
+                    pdfDoc.Add(png1);
+
+                    pdfDoc.NewPage();
+                }
+
+                pdfDoc.Close();
+
+
+                return File(stream.ToArray(), "application/pdf");
+            }
+
+
+
+
+        }
+
         #endregion
+
 
         #region AppliedList
 

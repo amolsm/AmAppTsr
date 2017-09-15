@@ -1,6 +1,10 @@
 ﻿@model Tsr.Core.Models.CertificationCertificateVM
 @using Tsr.Web.Common
-
+<style>
+    html, tbody {
+        font-family: Calibri;
+    }
+</style>
  @foreach (var c in Model._CertificateList)
  {
 
@@ -51,14 +55,16 @@
         <tr>
             <td colspan="2">Date of Birth</td>
             <td style="border-bottom: 1px solid black;" colspan="3">
-                @(c.DateofBirth == null ? "" : @Convert.ToDateTime(c.DateofBirth).ToString("dd-MM-yyyy"))
-            </td>
+                <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold">@(c.DateofBirth == null ? "" : @Convert.ToDateTime(c.DateofBirth).ToString("dd-MM-yyyy"))</span>
+</td>
             <td align="center" colspan="6">Holder of C.D.C .No.</td>
-            <td style="border-bottom: 1px solid black;" colspan="5">@(c.CDCNo == null ? "" : c.CDCNo)</td>
+            <td style="border-bottom: 1px solid black;" colspan="5">
+                <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold">@(c.CDCNo == null ? "" : c.CDCNo)</span></td>
         </tr>
         <tr>
             <td colspan="2">Passport No.</td>
-            <td style="border-bottom: 1px solid black;" colspan="3">@(c.PassportNo == null ? "" : c.PassportNo)</td>
+            <td style="border-bottom: 1px solid black;" colspan="3">
+                <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold">@(c.PassportNo == null ? "" : c.PassportNo)</span></td>
             <td colspan="10">Certificate of Competency,(if any)</td>
 
         </tr>
@@ -66,14 +72,17 @@
         <tr>
 
             <td colspan="1">Grade:</td>
-            <td style="border-bottom: 1px solid black;" colspan="6">@(c.Grade == null ? "" : c.Grade)</td>
+            <td style="border-bottom: 1px solid black;" colspan="6">
+                <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold">@(c.Grade == null ? "" : c.Grade)</span></td>
             <td colspan="1">No.</td>
-            <td style="border-bottom: 1px solid black;" colspan="3">@(c.Number == null ? "" : c.Number)</td>
+            <td style="border-bottom: 1px solid black;" colspan="3">
+                <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold">@(c.Number == null ? "" : c.Number)</span></td>
             <td colspan="4">Indian National Database</td>
         </tr>
         <tr>
             <td colspan="3">of Seafarers(INDoS No.)</td>
-            <td style="border-bottom: 1px solid black;" colspan="12">@(c.Indosno == null ? "" : c.Indosno)</td>
+            <td style="border-bottom: 1px solid black;" colspan="12">
+                <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold">@(c.Indosno == null ? "" : c.Indosno)</span></td>
         </tr>
         <tr>
             <td colspan="15">@(c.LineOfCertificate == null ? "" : c.LineOfCertificate)</td>
@@ -84,9 +93,11 @@
 
         <tr>
             <td colspan="2">held from </td>
-            <td style="border-bottom: 1px solid black;" colspan="5">@(c.StartDate == null ? "" : @Convert.ToDateTime(c.StartDate).ToString("dd-MM-yyyy"))</td>
+            <td style="border-bottom: 1px solid black;" colspan="5">
+                <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold">@(c.StartDate == null ? "" : @Convert.ToDateTime(c.StartDate).ToString("dd-MM-yyyy"))</span></td>
             <td align="center">to</td>
-            <td style="border-bottom: 1px solid black;" colspan="7">@(c.EndDate == null ? "" : @Convert.ToDateTime(c.EndDate).ToString("dd-MM-yyyy"))</td>
+            <td style="border-bottom: 1px solid black;" colspan="7">
+                <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold">@(c.EndDate == null ? "" : @Convert.ToDateTime(c.EndDate).ToString("dd-MM-yyyy"))</span></td>
         </tr>
         <tr>
             <td colspan="15"><p>@(c.Paragraph1 == null ? "" : c.Paragraph1)</p></td>
@@ -106,8 +117,8 @@
         <tr>
             <td colspan="2">Date of Issue: </td>
             <td colspan="5" style="border-bottom: 1px solid black;">
-                @(c.DateOfIssue == null ? "" : Convert.ToDateTime(c.DateOfIssue).ToString("dd-MM-yyyy"))
-            </td>
+                <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"> @(c.DateOfIssue == null ? "" : Convert.ToDateTime(c.DateOfIssue).ToString("dd-MM-yyyy"))</span>
+</td>
             <td rowspan="2" colspan="10" style="text-align:center">
 
                 @Html.Image(c.PrincipalSign, "No Signature Available", "80", "100")

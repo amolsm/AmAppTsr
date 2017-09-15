@@ -12,6 +12,7 @@ namespace Tsr.Core.Models
         public int FeeReceiptId { get; set; }
         public string FeeReceiptNo { get; set; }
         public int? ApplicationId { get; set; }
+        public string ApplicationCode { get; set; }
         public decimal? Amount { get; set; }
         public string PaymentMode { get; set; }
         public string FeesType { get; set; }
@@ -26,6 +27,8 @@ namespace Tsr.Core.Models
         public int StudentId { get; set; }
         public decimal? FeePaid { get; set; }
         public decimal? FeeBal { get; set; }
+        public DateTime? BatchStartDate { get; set; }
+        public DateTime? PaymentDate { get; set; }
 
         public string AmountInRs { get; set; }
     }

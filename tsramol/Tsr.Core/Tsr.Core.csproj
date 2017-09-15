@@ -100,6 +100,7 @@
     <Compile Include="Models\FeesApplicantList.cs" />
     <Compile Include="Models\FeesScrutineeListVM.cs" />
     <Compile Include="Models\FeesViewPaymentDetailsVM.cs" />
+    <Compile Include="Models\HallTicketListVM.cs" />
     <Compile Include="Models\MasterCourseCreateVM.cs" />
     <Compile Include="Models\MasterCourseDocsSelectVM.cs" />
     <Compile Include="Models\MasterCourseDocsVM.cs" />

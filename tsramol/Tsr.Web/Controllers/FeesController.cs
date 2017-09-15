@@ -73,35 +73,84 @@ namespace Tsr.Web.Controllers
         [HttpGet]
         public ActionResult ViewPaymentDetails(int? Id)
         {
+            if (Id != null)
+            {
 
 
-            var list = (from ap in db.Applications.AsEnumerable()
-                        join b in db.Batches on ap.BatchId equals b.BatchId
-                        join fr in db.FeeReceipts on ap.ApplicationId equals fr.ApplicationId
-                        join sd in db.StudentFeeDetails on ap.ApplicationId equals sd.ApplicationId
-                        join cr in db.Courses on ap.CourseId equals cr.CourseId
-                        where (ap.ApplicationId == Id)
-                        select new FeesViewPaymentDetailsVM
-                        {
-                            FeeReceiptNo = fr.FeeReceiptNo,
-                            PaymentMode = fr.PaymentMode,
-                            FeesType = fr.FeesType,
-                            ReceiptDate = fr.ReceiptDate,
-                            Name = ap.FirstName + " " + ap.LastName,
-                            Course = cr.CourseCode,
-                            Batch = b.BatchCode,
-                            StudentId = ap.ApplicationId,
-                            ApplicationId = ap.ApplicationId,
-                            FeePaid = sd.FeePaid,
-                            FeeBal = sd.FeeBal,
-                            AmountInRs = Common.AmountInWords.ConvertNumbertoWords(Convert.ToInt64(sd.FeePaid))
+                var list = (from ap in db.Applications.AsEnumerable()
+                            join b in db.Batches on ap.BatchId equals b.BatchId
+                            join fr in db.FeeReceipts on ap.ApplicationId equals fr.ApplicationId
+                            join sd in db.StudentFeeDetails on ap.ApplicationId equals sd.ApplicationId
+                            join cr in db.Courses on ap.CourseId equals cr.CourseId
+                            join op in db.OnlinePaymentInfos on ap.ApplicationId equals op.ApplicationId
 
+                            where (ap.ApplicationId == Id)
+                            select new FeesViewPaymentDetailsVM
+                            {
+                                FeeReceiptNo = fr.FeeReceiptNo,
+                                PaymentMode = fr.PaymentMode,
+                                FeesType = fr.FeesType,
+                                ReceiptDate = fr.ReceiptDate,
+                                Name = ap.FirstName + " " + ap.LastName,
+                                Course = cr.CourseName,
+                                Batch = b.BatchCode,
+                                StudentId = ap.ApplicationId,
+                                ApplicationId = ap.ApplicationId,
+                                ApplicationCode = ap.ApplicationCode,
+                                FeePaid = sd.FeePaid,
+                                FeeBal = sd.FeeBal,
+                                AmountInRs = Common.AmountInWords.ConvertNumbertoWords(Convert.ToInt64(sd.FeePaid)),
+                                BatchStartDate = b.StartDate,
+                                PaymentDate = op.PaymentDate
 
-                        }).ToList();
+                            }).ToList();
 
-            return new PdfActionResult(list);
-
+                return new PdfActionResult(list);
+            }
+            return View("FeeReciept");
         }
+
+
+        [HttpGet]
+        public ActionResult ViewAllPaymentDetails(int? Id)
+        {
+            if (Id != null)
+            {
+
+
+                var list = (from ap in db.Applications.AsEnumerable()
+                            join b in db.Batches on ap.BatchId equals b.BatchId
+                            join fr in db.FeeReceipts on ap.ApplicationId equals fr.ApplicationId
+                            join sd in db.StudentFeeDetails on ap.ApplicationId equals sd.ApplicationId
+                            join cr in db.Courses on ap.CourseId equals cr.CourseId
+                            join op in db.OnlinePaymentInfos on ap.ApplicationId equals op.ApplicationId
+
+                            where (ap.BatchId == Id)
+                            select new FeesViewPaymentDetailsVM
+                            {
+                                FeeReceiptNo = fr.FeeReceiptNo,
+                                PaymentMode = fr.PaymentMode,
+                                FeesType = fr.FeesType,
+                                ReceiptDate = fr.ReceiptDate,
+                                Name = ap.FirstName + " " + ap.LastName,
+                                Course = cr.CourseName,
+                                Batch = b.BatchCode,
+                                StudentId = ap.ApplicationId,
+                                ApplicationId = ap.ApplicationId,
+                                ApplicationCode = ap.ApplicationCode,
+                                FeePaid = sd.FeePaid,
+                                FeeBal = sd.FeeBal,
+                                AmountInRs = Common.AmountInWords.ConvertNumbertoWords(Convert.ToInt64(sd.FeePaid)),
+                                BatchStartDate = b.StartDate,
+                                PaymentDate = op.PaymentDate
+
+                            }).ToList();
+
+                return new PdfActionResult(list);
+            }
+            return View("FeeReciept");
+        }
+
 
         #region Scrutinee
         public ActionResult Scrutinee()

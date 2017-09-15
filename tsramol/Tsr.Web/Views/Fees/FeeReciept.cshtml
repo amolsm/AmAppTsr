@@ -54,7 +54,7 @@
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                                 @Html.DropDownList("BatchId",
-                   new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "BatchCode"),
+                   new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "Name"),
               " ", new { @class = "form-control" })
                                             </div>
 
@@ -63,6 +63,10 @@
                                         <div class="col-md-3">
                                             <div class="input-group">
                                                 <input class="btn btn-primary" type="button" value="Search" onclick="Search()" />
+
+
+                                                &nbsp;&nbsp;&nbsp;<input class="btn btn-primary" type="button" value="View In Pdf" onclick="location.href='@Url.Action("ViewAllPaymentDetails", "Fees")?id=' + document.getElementById('BatchId').value" />
+                                                
                                             </div>
 
                                         </div>
@@ -127,7 +131,7 @@
 
               $.each(Batches, function (i, c) {
                   $("#BatchId").append(
-                      $('<option></option>').val(c.BatchId).html(c.BatchCode));
+                      $('<option></option>').val(c.BatchId).html(c.Name));
               });
           }
       });

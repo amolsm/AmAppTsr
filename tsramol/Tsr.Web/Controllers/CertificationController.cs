@@ -610,7 +610,7 @@ namespace Tsr.Web.Controllers
                                      select new CertificationCertificateVM.Certificate
                                      {
                                          CertificateNo = "0330590012017",
-                                         ApplicantName = a.FirstName == null ? "" : a.FirstName + "" + a.MiddleName == null ? "" : a.MiddleName + "" + a.LastName == null ? "" : a.LastName,
+                                         ApplicantName = a.FirstName + " " + a.MiddleName+ " " + a.LastName,
                                          CDCNo = a.CdcNo,
                                          DateofBirth = a.DateOfBirth,
                                          PassportNo = a.PassportNo,

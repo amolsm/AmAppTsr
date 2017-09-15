@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Tsr.Core.Models.ApplicationApplicantsList>
+﻿@model IEnumerable<Tsr.Core.Models.HallTicketListVM>
 @{
     ViewBag.Title = "HallTickets";
 }
@@ -31,12 +31,12 @@
 
                                     <div class="form-group">
 
-                                        
+
 
                                         <div class="col-md-3">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                @Html.DropDownList("CourseId",(IEnumerable<SelectListItem>)ViewBag.Course," ", new { @class = "form-control", @onchange = "FillBatch()" })
+                                                @Html.DropDownList("CourseId", (IEnumerable<SelectListItem>)ViewBag.Course, " ", new { @class = "form-control", @onchange = "FillBatch()" })
                                             </div>
 
                                         </div>
@@ -45,7 +45,7 @@
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                                 @Html.DropDownList("BatchId",
-                   new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "BatchCode")," ", new { @class = "form-control", @onchange = "FillCet()" })
+                   new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "BatchCode"), " ", new { @class = "form-control", @onchange = "FillCet()" })
                                             </div>
 
                                         </div>
@@ -62,6 +62,8 @@
                                         <div class="col-md-3">
                                             <div class="input-group">
                                                 <input class="btn btn-primary" type="button" value="Search" onclick="Search()" />
+                                                @*&nbsp;&nbsp;&nbsp;&nbsp;<input class="btn btn-primary" type="button" value="Save All" onclick="location.href='@Url.Action("Export", "Admission")?id=' + document.getElementById('ApplicationId').value"   />*@
+                                                &nbsp;&nbsp;&nbsp;<input class="btn btn-primary" type="button" value="View Pdf" onclick="location.href='@Url.Action("Export", "Admission")?id=' + document.getElementById('CetMasterId').value" />
                                             </div>
 
                                         </div>
@@ -74,7 +76,7 @@
 
                             </div>
                             <div id="dvResult">
-                                @{Html.RenderPartial("ApplicantsList", Model);}
+                                @{Html.RenderPartial("_HallticketApplicant", Model);}
                                 <script src="~/Scripts/js/plugins/datatables/jquery.dataTables.min.js"></script>
                             </div>
                         </div>
@@ -91,7 +93,7 @@
 </div>
 <!-- END PAGE CONTENT WRAPPER -->
 <script>
- 
+
   function FillBatch() {
       var CourseId = $('#CourseId').val();
       $.ajax({
