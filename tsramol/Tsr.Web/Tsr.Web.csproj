@@ -917,10 +917,18 @@
     <Content Include="Views\MasterDetails\MedicalCreate.cshtml" />
     <Content Include="Views\MasterDetails\MedicalEdit.cshtml" />
     <Content Include="Views\MasterDetails\MedicalList.cshtml" />
+
     <Content Include="Views\MasterDetails\BatchEdit.cshtml" />
     <Content Include="Views\Fees\Scrutinee.cshtml" />
     <Content Include="Views\Fees\ScrutineeList.cshtml" />
     <Content Include="Views\Fees\ScrutineeMakePayment.cshtml" />
+
+    <Content Include="Views\MasterDetails\CertificateFormatList.cshtml" />
+    <Content Include="Views\MasterDetails\CertificateFormatCreate.cshtml" />
+    <Content Include="Views\MasterDetails\CertificateFormatEdit.cshtml" />
+    <Content Include="Views\Certification\_CertificateFormat1.cshtml" />
+    <Content Include="Views\Certification\_CertificateFormat2.cshtml" />
+
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -46,6 +46,7 @@
     <Compile Include="Entities\ApplicationPackageDetail.cs" />
     <Compile Include="Entities\Batch.cs" />
     <Compile Include="Entities\CertificateDesign.cs" />
+    <Compile Include="Entities\CertificateFormat.cs" />
     <Compile Include="Entities\CetInterview.cs" />
     <Compile Include="Entities\CetMark.cs" />
     <Compile Include="Entities\CetMaster.cs" />

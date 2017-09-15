@@ -1,0 +1,128 @@
+﻿@model Tsr.Core.Models.CertificationCertificateVM
+@using Tsr.Web.Common
+<style>
+    html, tbody {
+        font-family:Calibri
+    }
+</style>
+@foreach (var c in Model._CertificateList)
+{
+
+    <table style="width:100%; height:100%; padding:20px;border-collapse:separate;border-style: solid;border-width: 27px;-moz-border-image: url('../Img/border.png') 27 round;-webkit-border-image: url('../Img/border.png') 27 round;-o-border-image: url('../Img/border.png') 27 round;border-image: url('../Img/border.png') 27 fill round;page-break-inside:avoid" cellspacing="0">
+
+        <thead>
+            <tr>
+                <td colspan="15">
+
+                    <div style="text-align:center">
+                        <span style="font-family:'Times New Roman';font-size:20px; font-weight:bold">SIR  MOHAMED  YUSUF  SEAMEN  WELFARE  FOUNDATION</span>
+
+                        <div style="width:100%;">
+                            <div style="width:85%;float:right">
+                                Nhava,Panvel Taluka Dist. Raigad-410206,Maharashtra<br />
+
+                                Tel :(9122) 27212800 Fax: 27212096/24950270<br />
+                                email: tsrahman@tsrahaman.org<br />
+                              
+                                <span style="font-family:'Old English Text MT';font-size:40px; font-weight:bold">Training Ship Rahaman</span>
+                            </div>
+                            <div style="width:150px;height:160px;text-align:left;margin-right:15%">
+                                <img src="~/Img/avatar.png" style="width:140px;height:150px;position:absolute" />
+                            </div>
+
+
+                        </div>
+                    </div>
+                </td>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="text-align:center" colspan="15"><span style="font-family:Calibri;font-size:30px; font-weight:bold">@(c.CourseName == null ? "" : c.CourseName)</span></td>
+               
+
+            </tr>
+
+            <tr>
+                <td colspan="15">THIS IS TO CERTIFY THAT</td>
+             </tr>
+            <tr style="border-bottom:1px solid black">
+                <td style="border-bottom: 1px solid black;" colspan="15">
+                    <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"> @(c.ApplicantName == null ? "" : c.ApplicantName)</span>
+                </td>
+
+            </tr>
+            <tr>
+                <td colspan="2">Date of Birth</td>
+                <td style="border-bottom: 1px solid black;" colspan="3">
+                    @(c.DateofBirth == null ? "" : @Convert.ToDateTime(c.DateofBirth).ToString("dd-MM-yyyy"))
+                </td>
+                <td  colspan="6">Holder of C.D.C .No.</td>
+                <td style="border-bottom: 1px solid black;" colspan="5">@(c.CDCNo == null ? "" : c.CDCNo)</td>
+            </tr>
+            <tr>
+                <td colspan="2">Passport No.</td>
+                <td style="border-bottom: 1px solid black;" colspan="2">@(c.PassportNo == null ? "" : c.PassportNo)</td>
+                <td colspan="8">Indian National Database(INDOs No.)</td>
+                <td colspan="3" style="border-bottom: 1px solid black;">@(c.Indosno==null?"":c.Indosno)</td>
+
+            </tr>
+
+         
+
+         
+            <tr>
+                <td colspan="15"><p>has successfully completed a <b>@(c.LineOfCertificate == null ? "" : c.LineOfCertificate)</b>@(c.Paragraph1 == null ? "" : c.Paragraph1)</p></td>
+            </tr>
+            <tr>
+                <td colspan="15"><p>@(c.Paragraph2 == null ? "" : c.Paragraph2)</p></td>
+            </tr>
+            <tr>
+                <td colspan="15"><p>@(c.Paragraph3 == null ? "" : c.Paragraph3)</p></td>
+            </tr>
+            <tr>
+                <td colspan="9">The course commenced on</td>
+                <td style="border-bottom: 1px solid black;" colspan="2">@(c.StartDate == null ? "" : @Convert.ToDateTime(c.StartDate).ToString("dd-MM-yyyy"))</td>
+                <td colspan="2" style="text-align:center">and completed on</td>
+                <td style="border-bottom: 1px solid black;" colspan="2">@(c.EndDate == null ? "" : @Convert.ToDateTime(c.EndDate).ToString("dd-MM-yyyy"))</td>
+               
+            </tr>
+            <tr><td colspan="15">at Training Ship "Rahaman"</td></tr>
+            <tr>
+                <td colspan="10">Signature of Candidate:_______________</td>
+
+                <td  colspan="5">Course Incharge__________________<br>(@(c.CourseInCharge == null ? "" : c.CourseInCharge))</td>
+
+            </tr>
+            <tr>
+                <td colspan="15">Issued at Mumbai</td>
+          </tr>
+            <tr>
+                <td colspan="10">This_________day of ___________</td>
+                <td colspan="4">
+                    Principal___________________<br />(@(c.PrincipalName == null ? "" : c.PrincipalName))
+                </td>
+               
+            </tr>
+           
+            <tr>
+                <td colspan="8">
+                    <div style="width:125px;height:135px;border:1px solid #000;text-align: center;">Photograph</div>
+                </td>
+
+                <td align="right" colspan="7">
+
+               
+                    <img src="~/Img/DNV LOGO.jpg" style="width:50px;height:80px;" />
+
+                </td>
+
+            </tr>
+
+
+        </tbody>
+
+
+    </table>
+}

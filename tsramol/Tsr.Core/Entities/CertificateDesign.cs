@@ -29,6 +29,8 @@ namespace Tsr.Core.Entities
 
         public int PrincipalId { get; set; }
 
+        public int CertificateFormatId { get; set; }
+
         private DateTime? createdDate;
         [Required]
         [DataType(DataType.DateTime)]
