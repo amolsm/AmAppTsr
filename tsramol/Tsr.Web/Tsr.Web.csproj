@@ -931,6 +931,8 @@
     <Content Include="Views\Certification\_RefresherTraining.cshtml" />
     <Content Include="Views\Certification\_CertificateFormat3.cshtml" />
     <Content Include="Views\Admission\_HallticketApplicant.cshtml" />
+    <Content Include="Views\Certification\_CertificateFormatMedicalAid.cshtml" />
+    <Content Include="Views\Certification\_CertificateFormatGPRating.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
