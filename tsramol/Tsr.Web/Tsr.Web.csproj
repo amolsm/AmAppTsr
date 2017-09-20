@@ -936,6 +936,8 @@
     <Content Include="Views\Certification\_CertificateDRLeoGME.cshtml" />
     <Content Include="Views\Certification\_CertificateFormatMaritimeCatering.cshtml" />
     <Content Include="Views\Certification\_CertificateFormatWorkshopskills.cshtml" />
+    <Content Include="Views\Certification\_CertificateFormatCadetcourse.cshtml" />
+    <Content Include="Views\Certification\_CertificateFormatGPTraining.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

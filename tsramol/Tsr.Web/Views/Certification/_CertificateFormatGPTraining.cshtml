@@ -1,10 +1,11 @@
 ﻿
+
 @model Tsr.Core.Models.CertificationCertificateVM
 @using Tsr.Web.Common
 <style>
     html, tbody {
         font-family: Calibri;
-        font-size: medium;
+        font-size: small;
     }
 
     input {
@@ -35,7 +36,7 @@
                                 www.tsrahaman.org<br />
                                 INDOS No.009<br />
                                 <span style="font-family:'Old English Text MT';font-size:40px; font-weight:bold">Training Ship Rahaman</span><br />
-                                
+                                <span style="font-family:Calibri;font-size:25px; font-weight:bold">DR.LEO BARNES PRE-SEA ACADEMY</span>
                             </div>
                             <div style="width:150px;height:160px;text-align:left;margin-right:15%">
                                 <img src="~/Img/avatar.png" style="width:140px;height:150px;position:absolute" />
@@ -54,7 +55,7 @@
             </tr>
             <tr>
                 <td style="text-align:center" colspan="15">
-                    <span style="font-family:'Yu Gothic';font-size:30px;font-style:normal; font-weight:bold">@(c.CourseName == null ? "" : c.CourseName)</span>
+                    <span style="font-family:Calibri;font-size:22px;font-style:italic; font-weight:bold">@(c.CourseName == null ? "" : c.CourseName)</span>
                 </td>
             </tr>
             <tr>
@@ -68,63 +69,76 @@
 
             </tr>
             <tr>
-                <td colspan="4">
+                <td colspan="2">
 
-                  Date of Birth
-                
-                    <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"><input type="text" style="width:100px" value="@(c.DateofBirth == null ? "" :Convert.ToDateTime(c.DateofBirth).ToString("dd-MM-yyyy"))" /></span>
+                    Roll No
+                </td>
+                <td colspan="2">
+                    <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"><input type="text" style="width:100px" value="@(c.CDCNo == null ? "" : c.CDCNo)" /></span>
 
                 </td>
-                <td colspan="12">
-                   Passport No.
-              
-                    <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"><input type="text" style="width:200px" value="@(c.PassportNo == null ? "" : c.PassportNo)" /> </span>
+                <td colspan="8">
+                    Date of Birth
+                </td>
+                <td colspan="3">
+                    <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"><input type="text" style="width:100%" value="@(c.DateofBirth == null ? "" : @Convert.ToDateTime(c.DateofBirth).ToString("dd-MM-yyyy"))" /> </span>
                 </td>
             </tr>
             <tr>
-                <td colspan="15">
+                <td colspan="11">
                     Indian National Database(INDoS No.)
 
-               
-                    <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"> <input type="text" style="width:200px" value="@(c.Indosno == null ? "" : c.Indosno)" /></span>
                 </td>
-                </tr>
-            <tr>
-                 <td colspan="15">
-                    has successfully Completed a training cource in <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold">WORKSHOP SKILLS</span>
+                <td colspan="2">
+                    <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"> <input type="text" style="width:100px" value="@(c.Indosno == null ? "" : c.Indosno)" /></span>
+                </td>
+                <td colspan="2">
+                    has attended
 
 
                 </td>
 
             </tr>
 
-        
+            <tr>
+                <td colspan="15"> a 25 weeks Pre Sea Training course for Rating forming part of the Navigational and</td>
+
+            </tr>
+
+
+
 
             <tr>
                 <td colspan="15">
-                    held from <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"><input type="text" style="width:150px" value="@(c.StartDate == null ? "" : @Convert.ToDateTime(c.StartDate).ToString("dd-MM-yyyy"))" /></span> to
+                    Engineering watch from <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"><input type="text" style="width:150px" value="@(c.StartDate == null ? "" : @Convert.ToDateTime(c.StartDate).ToString("dd-MM-yyyy"))" /></span> to
                     <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"><input type="text" style="width:150px" value="@(c.EndDate == null ? "" : @Convert.ToDateTime(c.EndDate).ToString("dd-MM-yyyy"))" /></span>
                     at Training Ship "Rahaman"
                 </td>
             </tr>
-          
+            <tr>
+                <td colspan="15">The Course consists of basic and professional training as elaborated below:</td>
+            </tr>
 
             <tr>
-                <td colspan="15"><p>@(c.LineOfCertificate == null ? "" : c.LineOfCertificate)</p></td>
+                <td colspan="15"><p><b>Part A</b>&nbsp;&nbsp;<span style="font-size:x-small"> @(c.LineOfCertificate == null ? "" : c.LineOfCertificate)</span></p></td>
             </tr>
             <tr>
-                <td colspan="15"><p>@(c.Paragraph1 == null ? "" : c.Paragraph1)</p></td>
+                <td colspan="15"><p><b>Part B</b>&nbsp;&nbsp;<span style="font-size:x-small">@(c.Paragraph1 == null ? "" : c.Paragraph1)</span></p></td>
             </tr>
             <tr>
-                <td colspan="15"><p>@(c.Paragraph2 == null ? "" : c.Paragraph2)</p></td>
+                <td colspan="15"><p><b>Part C</b>&nbsp;&nbsp;<span style="font-size:x-small">@(c.Paragraph2 == null ? "" : c.Paragraph2)</span></p></td>
             </tr>
             <tr>
-                <td colspan="15"><p>@(c.Paragraph3 == null ? "" : c.Paragraph3)</p></td>
+                <td colspan="15"><p><b>Part D</b>&nbsp;&nbsp;<span style="font-size:x-small">  @(c.Paragraph3 == null ? "" : c.Paragraph3)</span></p></td>
             </tr>
-           
-           
             <tr>
-                <td colspan="9">Signature of Candidate:<input style="width:100px" type="text" /></td>
+                <td colspan="15"><p><b>Part E</b>&nbsp;&nbsp;<span style="font-size:x-small">  @(c.DateofExpiry == null ? "" : c.DateofExpiry)</span></p></td>
+            </tr>
+            <tr>
+                <td colspan="15">This Certificate is issued under the authority of the Directorate General of Shipping, Ministry of Shipping, Govt. of India.</td>
+            </tr>
+            <tr>
+                <td colspan="9">Signature of Rating:<input style="width:100px" type="text" /></td>
 
                 <td align="center" colspan="6"><input type="text" /><br>Course Incharge<br>(@(c.CourseInCharge == null ? "" : c.CourseInCharge))</td>
 
@@ -137,12 +151,13 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="3">
+                <td colspan="2">
                     Date of Issue:
-                
+                </td>
+                <td colspan="2">
                     <input type="text" style="width:100px" value="@(c.DateOfIssue == null ? "" : Convert.ToDateTime(c.DateOfIssue).ToString("dd-MM-yyyy"))" />
                 </td>
-                <td style="text-align:center" colspan="10">
+                <td style="text-align:center" colspan="9">
                     Principal <br />(@(c.PrincipalName == null ? "" : c.PrincipalName))
                 </td>
                 <td colspan="2" style="text-align:center">
@@ -172,6 +187,5 @@
 
     </table>
 }
-
 
 
