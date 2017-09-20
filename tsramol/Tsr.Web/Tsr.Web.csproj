@@ -938,6 +938,7 @@
     <Content Include="Views\Certification\_CertificateFormatWorkshopskills.cshtml" />
     <Content Include="Views\Certification\_CertificateFormatCadetcourse.cshtml" />
     <Content Include="Views\Certification\_CertificateFormatGPTraining.cshtml" />
+    <Content Include="Views\Certification\_CertificateFormatGOC.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

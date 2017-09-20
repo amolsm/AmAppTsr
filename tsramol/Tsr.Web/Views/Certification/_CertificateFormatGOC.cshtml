@@ -1,0 +1,142 @@
+﻿@model Tsr.Core.Models.CertificationCertificateVM
+@using Tsr.Web.Common
+<style>
+    html, tbody {
+        font-family: 'Times New Roman';
+        font-size: small;
+    }
+
+    input {
+        border: 0;
+        border-bottom: solid 1px #000;
+        outline: none;
+        width: 100%;
+    }
+</style>
+@foreach (var c in Model._CertificateList)
+{
+
+    <table style="width:100%; height:100%; padding:20px;border-collapse:separate;border-style: solid;border-width: 27px;-moz-border-image: url('../Img/border.png') 27 round;-webkit-border-image: url('../Img/border.png') 27 round;-o-border-image: url('../Img/border.png') 27 round;border-image: url('../Img/border.png') 27 fill round;page-break-inside:avoid" cellspacing="0">
+
+        <thead>
+            <tr>
+                <td colspan="15" style="text-align:right">
+                    MCA Approval Certificate No.002420
+                    <div style="text-align:center">
+                       <div style="width:100%;">
+                            <div style="width:85%;float:right">
+                                <span style="font-family:'Old English Text MT';font-size:40px; font-weight:bold">Training Ship Rahaman</span><br />
+                                <span style="font-family:'Times New Roman';font-size:10px; font-weight:bold">
+                                    SIR  MOHAMED  YUSUF  SEAMEN  WELFARE  FOUNDATION, Nhava,<br />
+                                    Panvel Taluka Dist. Raigad,Maharashtra- 410206<br />
+                                    Tel : (91-22) 27212800 / 27212834 Fax: (91-22) 27212201/27212096<br />
+
+                                </span>
+
+
+                            </div>
+                            <div style="width:150px;height:160px;text-align:left;margin-right:15%">
+                                <img src="~/Img/avatar.png" style="width:140px;height:150px;position:absolute" />
+                            </div>
+
+                        </div>
+                    </div>
+                </td>
+
+            </tr>
+
+        </thead>
+        <tbody>
+            <tr>
+                <td style="text-align:center" colspan="15">
+                    <span style="font-family:'Times New Roman';font-size:30px;font-style:italic; font-weight:bold">@(c.CourseName == null ? "" : c.CourseName)</span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="15" style="text-align:right;font-weight:bold;font-family:Calibri;font-size:large">Certificate No. 0610510012016</td>
+            </tr>
+            <tr>
+                <td colspan="7">Course Start</td>
+                <td colspan="8">Course End</td>
+
+            </tr>
+
+            <tr>
+                <td colspan="15">THIS IS TO CERTIFY THAT</td>
+
+            </tr>
+            <tr>
+                <td colspan="7">Date of Birth</td>
+                <td colspan="8">CDC/Passport No.</td>
+
+            </tr>
+
+
+            <tr>
+                <td colspan="15"><p>@(c.LineOfCertificate == null ? "" : c.LineOfCertificate)</p></td>
+
+            </tr>
+            <tr>
+                <td colspan="15">@(c.Paragraph1 == null ? "" : c.Paragraph1)</td>
+
+            </tr>
+            <tr>
+                <td colspan="15"><p>@(c.Paragraph2 == null ? "" : c.Paragraph2)</p></td>
+
+            </tr>
+            <tr>
+                <td colspan="15"><p>@(c.Paragraph3 == null ? "" : c.Paragraph3)</p></td>
+
+            </tr>
+
+
+
+
+            <tr>
+                <td colspan="15">
+                    <span style="font-family:Calibri;font-style:italic"><u><b>THIS IS NOT A CERTIFICATE OF COMPETENCY</b></u></span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="7">
+
+                    <input type="text" style="width:150px" />
+                    <br />
+                    Signature of ECC Co-ordinator
+                </td>
+                <td colspan="8" style="text-align:center">
+
+                    Issuing Authority
+                    <br />
+                    Stamp and Date
+                </td>
+            </tr>
+
+
+            <tr>
+                <td colspan="7">
+                    <input type="text" style="width:150px" />
+                    <br />
+                    Signature of holder
+                </td>
+
+                <td align="left" colspan="8">
+
+
+                    <img src="~/Img/DNV LOGO.jpg" style="width:50px;height:80px;" />
+
+                </td>
+
+            </tr>
+
+
+
+
+
+        </tbody>
+
+
+    </table>
+}
+
+

@@ -25,6 +25,7 @@
                 <td colspan="15">
 
                     <div style="text-align:center">
+
                         <span style="font-family:'Times New Roman';font-size:20px; font-weight:bold">SIR  MOHAMED  YUSUF  SEAMEN  WELFARE  FOUNDATION</span>
 
                         <div style="width:100%;">
@@ -101,7 +102,7 @@
             </tr>
 
             <tr>
-                <td colspan="15"> a 25 weeks Pre Sea Training course for Rating forming part of the Navigational and</td>
+                <td colspan="15">@(c.LineOfCertificate==null?"":c.LineOfCertificate)</td>
 
             </tr>
 
@@ -110,35 +111,23 @@
 
             <tr>
                 <td colspan="15">
-                    Engineering watch from <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"><input type="text" style="width:150px" value="@(c.StartDate == null ? "" : @Convert.ToDateTime(c.StartDate).ToString("dd-MM-yyyy"))" /></span> to
+                   @(c.Paragraph1 == null ? "" : c.Paragraph1) <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"><input type="text" style="width:150px" value="@(c.StartDate == null ? "" : @Convert.ToDateTime(c.StartDate).ToString("dd-MM-yyyy"))" /></span> to
                     <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"><input type="text" style="width:150px" value="@(c.EndDate == null ? "" : @Convert.ToDateTime(c.EndDate).ToString("dd-MM-yyyy"))" /></span>
                     at Training Ship "Rahaman"
                 </td>
             </tr>
-            <tr>
-                <td colspan="15">The Course consists of basic and professional training as elaborated below:</td>
-            </tr>
+           
 
+         
             <tr>
-                <td colspan="15"><p><b>Part A</b>&nbsp;&nbsp;<span style="font-size:x-small"> @(c.LineOfCertificate == null ? "" : c.LineOfCertificate)</span></p></td>
+                <td colspan="15"><p>@(c.Paragraph2 == null ? "" : c.Paragraph2)</p></td>
             </tr>
             <tr>
-                <td colspan="15"><p><b>Part B</b>&nbsp;&nbsp;<span style="font-size:x-small">@(c.Paragraph1 == null ? "" : c.Paragraph1)</span></p></td>
+                <td colspan="15"><p>@(c.Paragraph3 == null ? "" : c.Paragraph3)</p></td>
             </tr>
+            
             <tr>
-                <td colspan="15"><p><b>Part C</b>&nbsp;&nbsp;<span style="font-size:x-small">@(c.Paragraph2 == null ? "" : c.Paragraph2)</span></p></td>
-            </tr>
-            <tr>
-                <td colspan="15"><p><b>Part D</b>&nbsp;&nbsp;<span style="font-size:x-small">  @(c.Paragraph3 == null ? "" : c.Paragraph3)</span></p></td>
-            </tr>
-            <tr>
-                <td colspan="15"><p><b>Part E</b>&nbsp;&nbsp;<span style="font-size:x-small">  @(c.DateofExpiry == null ? "" : c.DateofExpiry)</span></p></td>
-            </tr>
-            <tr>
-                <td colspan="15">This Certificate is issued under the authority of the Directorate General of Shipping, Ministry of Shipping, Govt. of India.</td>
-            </tr>
-            <tr>
-                <td colspan="9">Signature of Rating:<input style="width:100px" type="text" /></td>
+                <td colspan="9">Signature of Candidate:<input style="width:100px" type="text" /></td>
 
                 <td align="center" colspan="6"><input type="text" /><br>Course Incharge<br>(@(c.CourseInCharge == null ? "" : c.CourseInCharge))</td>
 
