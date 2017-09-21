@@ -212,7 +212,76 @@ namespace Tsr.Web.Controllers
             return PartialView("EmployeeCreate", obj);
         }
 
-        
+        public async Task<ActionResult> EmployeeEdit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Employee em = await db.Employees.FindAsync(id);
+            if (em == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.Designations = new SelectList(db.Designations.ToList(), "DesignationId", "DesignationName");
+            return PartialView("EmployeeEdit", em);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EmployeeEdit(Employee obj)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(obj).State = EntityState.Modified;
+                try
+                {
+                    await db.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+                    string s = e.ToString();
+                }
+                return Json(new { success = true });
+            }
+            return PartialView("EmployeeEdit", obj);
+        }
+
+        public async Task<ActionResult> EmployeeDeactive(int? id, string flag = null)
+        {
+
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Employee fp = await db.Employees.FindAsync(id);
+
+            if (fp == null)
+            {
+                return HttpNotFound();
+            }
+            if (flag == "D")
+                fp.IsActive = false;
+            if (flag == "A")
+                fp.IsActive = true;
+
+            db.SaveChanges();
+            return RedirectToAction("EmployeeList");
+        }
+
+        public async Task<ActionResult> EmployeeDetails(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Employee em = await db.Employees.FindAsync(id);
+            if (em == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.Designations = new SelectList(db.Designations.ToList(), "DesignationId", "DesignationName");
+            return PartialView("EmployeeDetails", em);
+        }
 
         #endregion
 
@@ -260,7 +329,66 @@ namespace Tsr.Web.Controllers
             return PartialView("DepartmentCreate", obj);
         }
 
-      
+        public async Task<ActionResult> DepartmentEdit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Department obj = await db.Departments.FindAsync(id);
+            if (obj == null)
+            {
+                return HttpNotFound();
+            }
+            var emp = db.Employees
+                           .Where(x => x.IsActive == true)
+                           .ToList()
+                           .Select(x => new { EmployeeId = x.EmployeeId, EmployeeName = string.Format("{0} {1}", x.FirstName, x.LastName) });
+            ViewBag.Employees = new SelectList(emp, "EmployeeId", "EmployeeName");
+            return PartialView("DepartmentEdit", obj);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DepartmentEdit(Department obj)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(obj).State = EntityState.Modified;
+                try
+                {
+                    await db.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+                    string s = e.ToString();
+                }
+                return Json(new { success = true });
+            }
+            return PartialView("DepartmentEdit", obj);
+        }
+
+        public async Task<ActionResult> DepartmentDeactive(int? id, string flag = null)
+        {
+
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Department obj = await db.Departments.FindAsync(id);
+
+            if (obj == null)
+            {
+                return HttpNotFound();
+            }
+            if (flag == "D")
+                obj.IsActive = false;
+            if (flag == "A")
+                obj.IsActive = true;
+
+            db.SaveChanges();
+            return RedirectToAction("DepartmentList");
+        }
+
 
         #endregion
 
@@ -293,54 +421,61 @@ namespace Tsr.Web.Controllers
             return PartialView("DesignationCreate", obj);
         }
 
-        //public async Task<ActionResult> BrandEdit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Brand brand = await db.brands.FindAsync(id);
-        //    if (brand == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return PartialView("_BrandEdit", brand);
-        //}
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> BrandEdit([Bind(Include = "BrandId,BrandName,TinNo,Description,IsActive")] Brand brand)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.Entry(brand).State = EntityState.Modified;
-        //        try
-        //        {
-        //            await db.SaveChangesAsync();
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            string s = e.ToString();
-        //        }
-        //        return Json(new { success = true });
-        //    }
-        //    return PartialView("_BrandEdit", brand);
-        //}
-        //public ActionResult BrandDeactive(bool confirm, int? id)
-        //{
-        //    //System.Windows.Forms.MessageBox.Show("Test");
-        //    if (id == null)
-        //    {
-        //        // return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Brand brand = db.brands.Find(id);
-        //    if (brand == null)
-        //    {
-        //        //return HttpNotFound();
-        //    }
-        //    brand.IsActive = false;
-        //    db.SaveChanges();
-        //    return RedirectToAction("BrandList");
-        //}
+        public async Task<ActionResult> DesignationEdit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Designation obj = await db.Designations.FindAsync(id);
+            if (obj == null)
+            {
+                return HttpNotFound();
+            }
+            
+            return PartialView("DesignationEdit", obj);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DesignationEdit(Designation obj)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(obj).State = EntityState.Modified;
+                try
+                {
+                    await db.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+                    string s = e.ToString();
+                }
+                return Json(new { success = true });
+            }
+            return PartialView("DesignationEdit", obj);
+        }
+
+        public async Task<ActionResult> DesignationDeactive(int? id, string flag = null)
+        {
+
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Designation obj = await db.Designations.FindAsync(id);
+
+            if (obj == null)
+            {
+                return HttpNotFound();
+            }
+            if (flag == "D")
+                obj.IsActive = false;
+            if (flag == "A")
+                obj.IsActive = true;
+
+            db.SaveChanges();
+            return RedirectToAction("DesignationList");
+        }
 
         #endregion
 

@@ -14,7 +14,7 @@ namespace Tsr.Core.Entities
         [Key]
         public int OrganisationId { get; set; }
 
-        [StringLength(50)]
+        [StringLength(250)]
         public string Name { get; set; }
 
         [StringLength(250)]

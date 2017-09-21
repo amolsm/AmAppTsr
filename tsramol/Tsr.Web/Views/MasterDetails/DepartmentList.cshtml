@@ -69,12 +69,12 @@
                                                 { <text> No</text> }
                                             </td>
                                             <td>
-                                                @Html.ActionLink("Edit", "Edit", new { id = item.DepartmentId }) |
-                                                @Html.ActionLink("Details", "Details", new { id = item.DepartmentId }) |
+                                                @Html.ActionLink("Edit", "DepartmentEdit", new { id = item.DepartmentId }, new { data_modal = "" }) |
+                                               
                                                 @if (item.IsActive == true)
-                                                {  @Html.ActionLink("Deactivate", "Deactivate", new { id = item.DepartmentId }, new { onclick = "return confirm('Are you sure you wish to make Deactive?');" })}
+                                                {  @Html.ActionLink("Deactivate", "DepartmentDeactive", new { id = item.DepartmentId, flag = "D" }, new { onclick = "return confirm('Are you sure you wish to make Deactive?');" })}
                                                 else
-                                                {  @Html.ActionLink("Activate", "Activate", new { id = item.DepartmentId }, new { onclick = "return confirm('Are you sure you wish to make Active?');" })}
+                                                {  @Html.ActionLink("Activate", "DepartmentDeactive", new { id = item.DepartmentId, flag = "A" }, new { onclick = "return confirm('Are you sure you wish to make Active?');" })}
 
                                             </td>
                                         </tr>
