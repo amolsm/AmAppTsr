@@ -2,8 +2,10 @@
 using iTextSharp.text.pdf;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -29,14 +31,14 @@ namespace Tsr.Web.Controllers
         }
         public JsonResult FillBatchForCet(int? CourseId)
         {
-            //var Batches = db.Batches.Where(c => c.CourseId == CourseId && c.IsActive == true && c.OnlineBookingStatus == true);
-            var C = from b in db.Batches
-                          join ct in db.CetMasters on b.BatchId equals ct.BatchId
-                          into cts
-                          from ct in cts.DefaultIfEmpty()
-                          where (ct == null && b.CourseId == CourseId && b.IsActive == true)
-                          select new { BatchId =  b.BatchId, Name = b.StartDate };
-            var Batches = C.ToList().Select(x => new BatchDropdown { BatchId = x.BatchId, BatchCode = Convert.ToDateTime(x.Name).ToString("dd-MM-yyyy") });
+            var Batches = db.Batches.Where(c => c.CourseId == CourseId && c.IsActive == true);
+            //var C = from b in db.Batches
+            //              join ct in db.CetMasters on b.BatchId equals ct.BatchId
+            //              into cts
+            //              from ct in cts.DefaultIfEmpty()
+            //              where (ct == null && b.CourseId == CourseId && b.IsActive == true)
+            //              select new { BatchId =  b.BatchId, Name = b.StartDate };
+            //var Batches = C.ToList().Select(x => new BatchDropdown { BatchId = x.BatchId, BatchCode = Convert.ToDateTime(x.Name).ToString("dd-MM-yyyy") });
             return Json(Batches, JsonRequestBehavior.AllowGet);
         }
 
@@ -81,7 +83,11 @@ namespace Tsr.Web.Controllers
                     where (c.IsActive == true && cc.CetRequired == true)
                     select new { c.CourseId, c.CourseName };
             ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
-            return PartialView("CetCreate");
+            var count = db.CetMasters.Count() + 1;
+            var obj = new AddmissionCetCreateVM {
+                CetCode = count.ToString().PadLeft(4, '0')
+                        };
+            return PartialView("CetCreate",obj);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -142,6 +148,69 @@ namespace Tsr.Web.Controllers
             ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
             return PartialView("CetCreate", obj);
         }
+
+        public async Task<ActionResult> CetEdit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            CetMaster fp = await db.CetMasters.FindAsync(id);
+            if (fp == null)
+            {
+                return HttpNotFound();
+            }
+            AddmissionCetCreateVM vm = new AddmissionCetCreateVM
+            {
+                BatchId =fp.BatchId,
+                CetCode = fp.CetCode,
+                CetDate = fp.CetDate,
+                CetId = fp.CetMasterId,
+                CetTime = fp.CetTime,
+                CourseId = fp.CourseId,
+                IsActive = fp.IsActive,
+                Venue = fp.Venue
+            };
+            var a = from c in db.Courses
+                    join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
+                    where (c.IsActive == true && cc.CetRequired == true)
+                    select new { c.CourseId, c.CourseName };
+            ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
+            var b = db.Batches.Where(x => x.CourseId == fp.CourseId).ToList();
+            ViewBag.Batches = new SelectList(b, "BatchId", "BatchCode");
+            return PartialView("CetEdit", vm);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CetEdit(AddmissionCetCreateVM obj)
+        {
+            if (ModelState.IsValid)
+            {
+                CetMaster cm = new CetMaster
+                {
+                    BatchId = obj.BatchId,
+                    CetCode = obj.CetCode,
+                    CetDate = obj.CetDate,
+                    CetTime = obj.CetTime,
+                    CourseId = obj.CourseId,
+                    IsActive = obj.IsActive,
+                    CetMasterId = (int)obj.CetId,
+                    Venue = obj.Venue
+                };
+
+                db.Entry(cm).State = EntityState.Modified;
+                try
+                {
+                    await db.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+                    string s = e.ToString();
+                }
+                return Json(new { success = true });
+            }
+            return PartialView("CetEdit", obj);
+        }
         #endregion
 
         #region Halltickets
@@ -152,12 +221,12 @@ namespace Tsr.Web.Controllers
             //          where (cs.IsActive == true)
             //          select 
 
-            //var a = from c in db.Courses
-            //        join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
-            //        where (c.IsActive == true && cc.CetRequired == true)
-            //        select new { c.CourseId, c.CourseName };
-            //ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
-            ViewBag.Course = new SelectList(db.Courses.ToList(), "CourseId", "CourseName");
+            var a = from c in db.Courses
+                    join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
+                    where (c.IsActive == true && cc.CetRequired == true)
+                    select new { c.CourseId, c.CourseName };
+            ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
+            //ViewBag.Course = new SelectList(db.Courses.ToList(), "CourseId", "CourseName");
             var obj = new List<HallTicketListVM>();
             return View(obj);
         }
@@ -179,7 +248,8 @@ namespace Tsr.Web.Controllers
                            Name = ap.FirstName + " " + ap.LastName,
                            PaidAmount = opi.amount,
                            Email = ap.Email,
-                           Cell = ap.CellNo
+                           Cell = ap.CellNo,
+                           Select = false
                        };
 
 
@@ -467,7 +537,7 @@ namespace Tsr.Web.Controllers
 
                 pdfDoc.Close();
 
-
+                
                 return File(stream.ToArray(), "application/pdf");
             }
 

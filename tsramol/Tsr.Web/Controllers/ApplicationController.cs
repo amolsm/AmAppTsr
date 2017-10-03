@@ -18,7 +18,8 @@ using System.Security.Cryptography;
 using System.IO;
 using iTextSharp.text.pdf;
 using iTextSharp.text;
-
+using System.Data.Entity.Core.Objects;
+using System.Data.Entity;
 
 namespace Tsr.Web.Controllers
 {
@@ -54,7 +55,7 @@ namespace Tsr.Web.Controllers
         public ActionResult FillBatch(int CourseId)
         {
             var C = db.Batches
-                .Where(c => c.CourseId == CourseId && c.IsActive == true && c.OnlineBookingStatus == true)
+                .Where(c => c.CourseId == CourseId && c.IsActive == true && c.OnlineBookingStatus == true && c.StartDate > DbFunctions.AddDays(DateTime.Now, 1))
                 .Select(x => new { BatchId = x.BatchId, Name = x.StartDate});
 
             var Courses = C.ToList().Select(x => new BatchDropdown {BatchId = x.BatchId, Name = Convert.ToDateTime(x.Name).ToString("dd-MM-yyyy") });
@@ -85,7 +86,7 @@ namespace Tsr.Web.Controllers
             }
             
         }
-       
+        
         public ActionResult CreateApplicationId(int CategoryId, int CourseId, int BatchId, string FirstName, string MiddleName, string LastName, string Email, string CellNo, DateTime? DateOfBirth)
         {
             var Courses = db.Batches.Where(c => c.CourseId == CourseId && c.IsActive == true && c.OnlineBookingStatus == true);
@@ -102,6 +103,25 @@ namespace Tsr.Web.Controllers
                       
 
             return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult checkAge(int CourseId, string DateOfBirth)
+        {
+            bool res;
+            var c = db.Courses.Find(CourseId);
+            var dob = Convert.ToDateTime(DateOfBirth);
+            var age = DateTime.Now.Year - dob.Year;
+            if (c.MinAge == 0 && c.MaxAge == 0)
+            {
+                res = true;
+            }
+            else if(c.MinAge<= age && c.MaxAge>= age)
+            {
+                res = true;
+            }
+            else { res = false; }
+            
+            return Json(res, JsonRequestBehavior.AllowGet);
         }
         #endregion
         public ActionResult Index()
@@ -204,7 +224,7 @@ namespace Tsr.Web.Controllers
                                      CourseName = c.CourseName,
                                      PackageId = pc.PackageId,
                                      BatchDropdowns = (db.Batches
-                                         .Where(x => x.CourseId == c.CourseId && x.IsActive == true && x.OnlineBookingStatus == true)
+                                         .Where(x => x.CourseId == c.CourseId && x.IsActive == true && x.OnlineBookingStatus == true && x.StartDate > DbFunctions.AddDays(DateTime.Now,1))
                                          .Select(x => new BatchDropdown { BatchId = x.BatchId, Name = x.StartDate.ToString() }))
                                          //.ToList()
                                          //.Select(p => new BatchDropdown { BatchId = p.BatchId, Name = Convert.ToDateTime(p.Name).ToString("dd-MM-yyyy") })
@@ -408,7 +428,12 @@ namespace Tsr.Web.Controllers
                         ShippingCompany = obj.ShippingCompany,
                         RankOfCandidate = obj.RankOfCandidate,
                         CourseAttendedInTSR = obj.CourseAttendedInTSR,
-                        FPFF_AFF_1995 = obj.FPFF_AFF_1995
+                        FPFF_AFF_1995 = obj.FPFF_AFF_1995,
+                        PermenentAddress = obj.PermenentAddress,
+                        PermenentCity = obj.PermenentCity,
+                        PermenentContactNo = obj.PermenentContactNo,
+                        PermenentPin = obj.PermenentPin,
+                        PermenentState = obj.PermenentState
 
                     };
                     db.Applications.Add(ap);

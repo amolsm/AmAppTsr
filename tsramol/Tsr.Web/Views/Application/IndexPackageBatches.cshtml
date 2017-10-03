@@ -5,8 +5,8 @@
         {
             <div class="col-sm-5 col-sm-offset-1 ">
                 <div class="form-group label-floating">
-                    <label class="control-label">CourseName</label>
-                   <input type="text" class="form-control" readonly value=@Model.PackageBatchId[i].CourseName>
+                    <label class="control-label" style="font-size:15px">@Model.PackageBatchId[i].CourseName</label>
+                   @*<input type="text" class="form-control" readonly value=@Model.PackageBatchId[i].CourseName>*@
 
                 </div>
             </div>
@@ -14,7 +14,7 @@
                 <div class="form-group label-floating">
                     <label class="control-label">Batch </label>
                     @*@Html.DropDownList("obj[" + @i + "].ApplicationCode", Model.PackageBatchId[i].BatchId)*@
-                    @Html.DropDownList("PackageBatchId[" + @i + "].BatchId", new SelectList((Model.PackageBatchId[i].BatchDropdowns), "BatchId", "Name"), " ", new { @class = "form-control" })
+                    @Html.DropDownList("PackageBatchId[" + @i + "].BatchId", new SelectList((Model.PackageBatchId[i].BatchDropdowns), "BatchId", "Name"), " ", new { @class = "form-control", @required = "true" })
 
                 </div>
             </div>

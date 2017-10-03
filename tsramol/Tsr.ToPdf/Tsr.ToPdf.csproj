@@ -79,6 +79,7 @@
   <ItemGroup>
     <Compile Include="PdfActionResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SavePdfAsync.cs" />
     <Compile Include="TsrRazorToPdf.cs" />
     <Compile Include="TsrRazorToPdfExtensions.cs" />
   </ItemGroup>

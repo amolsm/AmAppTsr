@@ -7,6 +7,7 @@ transparent = true;
 
 $(document).ready(function () {
 
+   
     $.material.init();
 
     /*  Activate the tooltips      */
@@ -52,10 +53,21 @@ $(document).ready(function () {
             Gender: {
                 required: true
             },
-            CdcNo: {
+            IsPackage: {
+                required: true
+            },
+            PackageId: {
+                required: true
+            },
+            PackageBatchId: {
+                required: true
+            },
+            PreferredMeal: {
+                required: true
+            },
+            DateOfBirth: {
                 required: true
             }
-            
         },
 
         errorPlacement: function (error, element) {

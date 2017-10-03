@@ -37,6 +37,11 @@ namespace Tsr.Core.Models
         public bool? CourseAttendedInTSR { get; set; }
         
         public string FPFF_AFF_1995 { get; set; } //for refresher only
+        public string PermenentAddress { get; set; }
+        public string PermenentCity { get; set; }
+        public string PermenentState { get; set; }
+        public string PermenentPin { get; set; }
+        public string PermenentContactNo { get; set; }
 
     }
 }

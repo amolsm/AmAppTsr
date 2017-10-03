@@ -12,12 +12,13 @@ namespace Tsr.Core.Entities
     public partial class Course
     {
         public int CourseId { get; set; }
-
+        //[Index(IsUnique = true)]
         [StringLength(50)]
         public string CourseCode { get; set; }
 
         [StringLength(150)]
         [Required]
+        //[Index(IsUnique = true)]
         public string CourseName { get; set; }
 
         public int? CategoryId { get; set; }
@@ -53,6 +54,6 @@ namespace Tsr.Core.Entities
         public int? ModifiedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }
 
-        
+        public string ShortName { get; set; }
     }
 }

@@ -23,6 +23,7 @@ namespace Tsr.Core.Models
         public string Fathername { get; set; }
         public string Mothername { get; set; }
         public int CetMasterId { get; set; }
+        public bool Select { get; set; }
     }
 
 }

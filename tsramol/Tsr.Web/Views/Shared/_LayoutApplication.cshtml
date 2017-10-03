@@ -60,7 +60,7 @@
                                     </div>
                                     <div class="col-sm-9">
                                         <div class="wizard-header">
-                                            <h5>Sir Mohammad Yusuf Seamen Welfare Foundation</h5>
+                                            <h5>SIR MOHAMMAD YUSUF SEAMEN WELFARE FOUNDATION</h5>
                                             <h3 class="wizard-title">Training Ship Rahaman</h3>
                                             <h6>At Post Nhava, Tal. Panvel, Dist. Raigad, Maharashtra - 410206</h6>
                                         </div>
@@ -190,6 +190,29 @@
           }
       });
   }
+  function checkAge() {
+      debugger;
+      var CourseId = $('#CourseId').val();
+      var DateOfBirth = $('#DateOfBirth').val();
+      $.ajax({
+          url: '/Application/checkAge',
+          type: "GET",
+          dataType: "JSON",
+          data: { CourseId: CourseId, DateOfBirth: DateOfBirth },
+          success: function (res) {
+              debugger;
+              if (res == true)
+              {
+                  alert('Age is valid');
+              }
+              else
+              {
+                  alert('Age is NOT valid');
+                  $('#DateOfBirth').val("");
+              }
+          }
+      });
+  }
   function FillPackageBatches()
   {
 
@@ -256,4 +279,4 @@
 
         });</script>
 </html>
-</html>
+

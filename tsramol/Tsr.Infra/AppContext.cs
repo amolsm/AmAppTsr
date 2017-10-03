@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure.Annotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,6 +45,18 @@ namespace Tsr.Infra
         
         public DbSet<CertificateFormat> CertificateFormats { get; set; }
         public DbSet<ApplicationPackageDetail> ApplicationPackageDetails { get; set; }
-        
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            //modelBuilder.Entity<Course>()
+            //            .Property(t => t.CourseCode)
+            //            .HasColumnAnnotation("Index1",
+            //            new IndexAnnotation(new IndexAttribute("Course_CourseCode") { IsUnique = true }));
+            //modelBuilder.Entity<Course>()
+            //            .Property(t => t.CourseCode)
+            //            .HasColumnAnnotation("Index2",
+            //            new IndexAnnotation(new IndexAttribute("Course_CourseName") { IsUnique = true }));
+        }
+
     }
 }

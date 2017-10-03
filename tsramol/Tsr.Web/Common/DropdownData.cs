@@ -8,6 +8,18 @@ namespace Tsr.Web.Common
 {
     public class DropdownData
     {
+        public static SelectList CourseUnits()
+        {
+            return
+                new SelectList(new List<SelectListItem>
+            {
+               new SelectListItem { Value = "Days", Text= "Days"},
+                new SelectListItem {Value = "Weeks", Text="Weeks" },
+                new SelectListItem {Value = "Months", Text="Months" },
+                new SelectListItem {Value = "Year" , Text = "Years"}
+
+            }, "Value", "Text");
+        }
         public static SelectList CourseType()
         {
             return

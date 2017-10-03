@@ -18,7 +18,7 @@ namespace Tsr.Core.Models
         [StringLength(150)]
         [Required]
         public string CourseName { get; set; }
-
+        public string ShortName { get; set; }
         [Required]
         public int? CategoryId { get; set; }
         [Required]

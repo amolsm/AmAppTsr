@@ -34,7 +34,7 @@
                                 <thead>
                                     <tr>
                                         <th>Document Name</th>
-                                        <th>Type</th>
+                                        
                                         <th>Is Active</th>
                                         <th>Action</th>
 
@@ -48,9 +48,7 @@
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.DocumentName)
                                             </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.DocumentType)
-                                            </td>
+                                            
 
                                             <td>
                                                 @if (item.IsActive == true)

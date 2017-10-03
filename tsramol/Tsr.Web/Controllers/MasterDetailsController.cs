@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using Tsr.Core.Entities;
 using Tsr.Core.Models;
 using Tsr.Infra;
+using Tsr.Web.Common;
 
 namespace Tsr.Web.Controllers
 {
@@ -195,7 +196,7 @@ namespace Tsr.Web.Controllers
         public ActionResult EmployeeCreate()
         {
             ViewBag.Designations = new SelectList(db.Designations.ToList(),"DesignationId", "DesignationName");
-
+            ViewBag.Organisations = new SelectList(db.Organisations.ToList(), "OrganisationId", "Name");
             return PartialView("EmployeeCreate");
         }
         [HttpPost]
@@ -209,6 +210,7 @@ namespace Tsr.Web.Controllers
                 return Json(new { success = true });
             }
             ViewBag.Designations = new SelectList(db.Designations.ToList(), "DesignationId", "DesignationName");
+            ViewBag.Organisations = new SelectList(db.Organisations.ToList(), "OrganisationId", "Name");
             return PartialView("EmployeeCreate", obj);
         }
 
@@ -224,6 +226,7 @@ namespace Tsr.Web.Controllers
                 return HttpNotFound();
             }
             ViewBag.Designations = new SelectList(db.Designations.ToList(), "DesignationId", "DesignationName");
+            ViewBag.Organisations = new SelectList(db.Organisations.ToList(), "OrganisationId", "Name");
             return PartialView("EmployeeEdit", em);
         }
         [HttpPost]
@@ -280,6 +283,7 @@ namespace Tsr.Web.Controllers
                 return HttpNotFound();
             }
             ViewBag.Designations = new SelectList(db.Designations.ToList(), "DesignationId", "DesignationName");
+            ViewBag.Organisations = new SelectList(db.Organisations.ToList(), "OrganisationId", "Name");
             return PartialView("EmployeeDetails", em);
         }
 
@@ -564,7 +568,20 @@ namespace Tsr.Web.Controllers
         #region Package
         public async Task<ActionResult> PackageList()
         {
-            return View(await db.packages.ToListAsync());
+            var p = await db.packages.ToListAsync();
+            //var list = new List<MasterPackageListVM>();
+
+            //foreach (var item in p)
+            //{
+            //    db.PackageCourses.Where(x=>x.PackageId == item.PackageId).s
+            //    list.Add( new MasterPackageListVM {
+            //        IsActive = (bool)item.IsActive,
+            //        PackageId = item.PackageId,
+            //        PackageName = item.PackageName,
+            //        Courses = db.PackageCourses.
+            //    });
+            //}
+            return View(p);
         }
 
         public ActionResult PackageCreate()
@@ -698,15 +715,11 @@ namespace Tsr.Web.Controllers
         public ActionResult CourseCreate()
         {
             ViewBag.Categories = new SelectList(db.CourseCategories.ToList(), "CourseCategoryId", "CategoryName");
-            ViewBag.Unit = new SelectList(new List<SelectListItem>
-            {
-                new SelectListItem { Value = "Days", Text= "Days"},
-                new SelectListItem {Value = "Weeks", Text="Weeks" },
-                new SelectListItem {Value = "Months", Text="Months" },
-                new SelectListItem {Value = "Year" , Text = "Years"}
-            },"Value","Text");
+            ViewBag.Unit = DropdownData.CourseUnits();
 
-            return PartialView("CourseCreate");
+            var obj = new MasterCourseCreateVM { CourseCode = db.Courses.Count().ToString().PadLeft(3, '0') };
+            
+            return PartialView("CourseCreate",obj);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -714,25 +727,46 @@ namespace Tsr.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                Course c = new Course { 
-                    CategoryId = obj.CategoryId, 
-                        CourseCode=obj.CourseCode,
-                    CourseName = obj.CourseName, 
+                //try
+                //{
+                    Course c = new Course
+                    {
+                        CategoryId = obj.CategoryId,
+                        CourseCode = obj.CourseCode,
+                        CourseName = obj.CourseName,
                         Duration = obj.Duration,
-                    IsActive = obj.IsActive,
-                    MaxAge = obj.MaxAge,
-                    MinAge = obj.MinAge,
+                        IsActive = obj.IsActive,
+                        MaxAge = obj.MaxAge,
+                        MinAge = obj.MinAge,
                         TotalSeats = obj.TotalSeats,
-                    Unit = obj.Unit};
+                        Unit = obj.Unit,
+                        ShortName = obj.ShortName
+                    };
 
-                c.CreatedBy = 1;
-                c.CreatedDate = DateTime.Now;
-                c.ModifiedBy = 1;
-                c.ModifiedDate = DateTime.Now;
-                db.Courses.Add(c);
+                    c.CreatedBy = 1;
+                    c.CreatedDate = DateTime.Now;
+                    c.ModifiedBy = 1;
+                    c.ModifiedDate = DateTime.Now;
+                    db.Courses.Add(c);
 
-                await db.SaveChangesAsync();
-                return Json(new { success = true });
+                    await db.SaveChangesAsync();
+                    return Json(new { success = true });
+               // }
+                //catch (System.Data.Entity.Validation.DbEntityValidationException ex)
+                //{
+                //    var error = ex.EntityValidationErrors.First().ValidationErrors.First();
+                //    this.ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                //    ViewBag.Categories = new SelectList(db.CourseCategories.ToList(), "CourseCategoryId", "CategoryName");
+                //    ViewBag.Unit = new SelectList(new List<SelectListItem>
+                //        {
+                //            new SelectListItem { Value = "Days", Text= "Days"},
+                //            new SelectListItem {Value = "Weeks", Text="Weeks" },
+                //            new SelectListItem {Value = "Months", Text="Months" },
+                //            new SelectListItem {Value = "Year" , Text = "Years"}
+                //        }, "Value", "Text");
+
+                //    return PartialView("CourseCreate", obj);
+                //}
             }
 
             ViewBag.Categories = new SelectList(db.CourseCategories.ToList(), "CourseCategoryId", "CategoryName");
@@ -752,7 +786,7 @@ namespace Tsr.Web.Controllers
             Course obj = await db.Courses.FindAsync(id);
             var vm = new MasterCourseCreateVM {
                 CourseId = obj.CourseId,
-                
+                ShortName = obj.ShortName,
                 CategoryId = obj.CategoryId,
                 
                 CourseCode = obj.CourseCode,
@@ -771,13 +805,7 @@ namespace Tsr.Web.Controllers
             };
 
             ViewBag.Categories = new SelectList(db.CourseCategories.ToList(), "CourseCategoryId", "CategoryName");
-            ViewBag.Unit = new SelectList(new List<SelectListItem>
-            {
-                new SelectListItem { Value = "Days", Text= "Days"},
-                new SelectListItem {Value = "Weeks", Text="Weeks" },
-                new SelectListItem {Value = "Months", Text="Months" },
-                new SelectListItem {Value = "Year" , Text = "Years"}
-            }, "Value", "Text");
+            ViewBag.Units = DropdownData.CourseUnits();
 
             return PartialView("CourseEdit", vm);
         }
@@ -790,7 +818,7 @@ namespace Tsr.Web.Controllers
             {
                 Course c = new Course {
                     CourseId = obj.CourseId,
-                    //ApplicationFee = obj.ApplicationFee,
+                    ShortName = obj.ShortName,
                     CategoryId = obj.CategoryId,
                     //Convention = obj.Convention,
                     //Coordinator = obj.Coordinator,
@@ -1299,17 +1327,27 @@ namespace Tsr.Web.Controllers
 
         #endregion
 
-        #region Interview
+        #region InterviewMaster
         public async Task<ActionResult> InterviewList()
-        {
-            ViewBag.Batches = new SelectList(db.Batches.ToList(), "BatchId", "BatchCode");
+        {           
+
             return View(await db.InterviewMasters.ToListAsync());
         }
 
         public ActionResult InterviewCreate()
         {
-            ViewBag.Batches = new SelectList(db.Batches.ToList(), "BatchId", "BatchCode");
-            return PartialView("InterviewCreate");
+            ViewBag.Batches = new SelectList(db.Batches.ToList(), "BatchId", "StartDate");
+            var a = from c in db.Courses
+                    join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
+                    where (c.IsActive == true && cc.CetRequired == true)
+                    select new { c.CourseId, c.CourseName };
+            ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
+            var count = db.InterviewMasters.Count() + 1;
+            InterviewMaster im = new InterviewMaster
+            {
+                InterviewCode = count.ToString().PadLeft(4, '0')
+            };
+            return PartialView("InterviewCreate",im);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -1321,13 +1359,18 @@ namespace Tsr.Web.Controllers
                 await db.SaveChangesAsync();
                 return Json(new { success = true });
             }
-
+            ViewBag.Batches = new SelectList(db.Batches.ToList(), "BatchId", "StartDate");
+            var a = from c in db.Courses
+                    join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
+                    where (c.IsActive == true && cc.CetRequired == true)
+                    select new { c.CourseId, c.CourseName };
+            ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
             return PartialView("InterviewCreate", obj);
         }
 
         public async Task<ActionResult> InterviewEdit(int? id)
         {
-            ViewBag.Batches = new SelectList(db.Batches.ToList(), "BatchId", "BatchCode");
+            
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -1337,6 +1380,12 @@ namespace Tsr.Web.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.Batches = new SelectList(db.Batches.ToList(), "BatchId", "StartDate");
+            var a = from c in db.Courses
+                    join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
+                    where (c.IsActive == true && cc.CetRequired == true)
+                    select new { c.CourseId, c.CourseName };
+            ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
             return PartialView("InterviewEdit", obj);
         }
         [HttpPost]

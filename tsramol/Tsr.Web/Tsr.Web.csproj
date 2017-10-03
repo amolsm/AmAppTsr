@@ -44,6 +44,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DotNetZip, Version=1.10.1.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetZip.1.10.1\lib\net20\DotNetZip.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Fluentx, Version=2.0.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Fluentx.2.0.4\lib\Fluentx.dll</HintPath>
       <Private>True</Private>
@@ -933,19 +937,17 @@
     <Content Include="Views\Admission\_HallticketApplicant.cshtml" />
     <Content Include="Views\Certification\_CertificateFormatMedicalAid.cshtml" />
     <Content Include="Views\Certification\_CertificateFormatGPRating.cshtml" />
-<<<<<<< HEAD
     <Content Include="Views\MasterDetails\EmployeeEdit.cshtml" />
     <Content Include="Views\MasterDetails\EmployeeDetails.cshtml" />
     <Content Include="Views\MasterDetails\DepartmentEdit.cshtml" />
     <Content Include="Views\MasterDetails\DesignationEdit.cshtml" />
-=======
     <Content Include="Views\Certification\_CertificateDRLeoGME.cshtml" />
     <Content Include="Views\Certification\_CertificateFormatMaritimeCatering.cshtml" />
     <Content Include="Views\Certification\_CertificateFormatWorkshopskills.cshtml" />
     <Content Include="Views\Certification\_CertificateFormatCadetcourse.cshtml" />
     <Content Include="Views\Certification\_CertificateFormatGPTraining.cshtml" />
     <Content Include="Views\Certification\_CertificateFormatGOC.cshtml" />
->>>>>>> origin/master
+    <Content Include="Views\Admission\CetEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
