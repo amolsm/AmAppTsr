@@ -2,6 +2,7 @@
 
 <script src="~/Scripts/jquery.validate.min.js"></script>
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/js/plugins/bootstrap/bootstrap-select.js"></script>
 
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -28,7 +29,7 @@
                 @Html.LabelFor(model => model.CourseId, htmlAttributes: new { @class = "control-label col-md-3" })
                 <div class="col-md-8">
                     @Html.DropDownListFor(model => model.CourseId,
-                        (IEnumerable<SelectListItem>)ViewBag.Course, " ", new { @class = "form-control", @onchange = "FillBatch()" })
+                        (IEnumerable<SelectListItem>)ViewBag.Course, " ", new { @class = "form-control", @onchange = "FillBatchs()" })
                     @Html.ValidationMessageFor(model => model.CourseId, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -86,7 +87,7 @@
 }
 
 <script>
-    function FillBatch() {
+    function FillBatchs() {
         debugger;
         var CourseId = $('#CourseId').val();
     $.ajax({

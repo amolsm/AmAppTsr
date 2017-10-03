@@ -31,15 +31,12 @@ namespace Tsr.Web.Controllers
         }
         public JsonResult FillBatchForCet(int? CourseId)
         {
-            var Batches = db.Batches.Where(c => c.CourseId == CourseId && c.IsActive == true);
-            //var C = from b in db.Batches
-            //              join ct in db.CetMasters on b.BatchId equals ct.BatchId
-            //              into cts
-            //              from ct in cts.DefaultIfEmpty()
-            //              where (ct == null && b.CourseId == CourseId && b.IsActive == true)
-            //              select new { BatchId =  b.BatchId, Name = b.StartDate };
-            //var Batches = C.ToList().Select(x => new BatchDropdown { BatchId = x.BatchId, BatchCode = Convert.ToDateTime(x.Name).ToString("dd-MM-yyyy") });
-            return Json(Batches, JsonRequestBehavior.AllowGet);
+            var C = db.Batches
+                .Where(c => c.CourseId == CourseId && c.IsActive == true && c.OnlineBookingStatus == true)
+                .Select(x => new { BatchId = x.BatchId, Name = x.StartDate });
+
+            var Batches = C.ToList().Select(x => new BatchDropdown { BatchId = x.BatchId, BatchCode = Convert.ToDateTime(x.Name).ToString("dd-MM-yyyy") });
+            return Json(Batches, JsonRequestBehavior.AllowGet); 
         }
 
         public JsonResult FillCet(int? BatchId)
@@ -57,10 +54,23 @@ namespace Tsr.Web.Controllers
         #region CET
         public ActionResult CETSchedule()
         {
+            var a = from c in db.Courses
+                    join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
+                    where (c.IsActive == true && cc.CetRequired == true)
+                    select new { c.CourseId, c.CourseName };
+            ViewBag.Courses = new SelectList(a.ToList(), "CourseId", "CourseName");
+           
+            var obj = new List<AddmissionCetListVM>();
+            return View(obj.ToList());
+        }
+
+        [HttpGet]
+        public ActionResult GetCetScheduleList(int? BatchId)
+        {
             var vm = from cm in db.CetMasters
                      join c in db.Courses on cm.CourseId equals c.CourseId
                      join b in db.Batches on cm.BatchId equals b.BatchId
-                     where (b.IsActive == true && b.OnlineBookingStatus == true)
+                     where (b.IsActive == true && b.OnlineBookingStatus == true && b.BatchId==BatchId)
                      select new AddmissionCetListVM
                      {
                          BatchCode = b.BatchCode,
@@ -74,7 +84,14 @@ namespace Tsr.Web.Controllers
                          StartDate = b.StartDate,
                          Venue = cm.Venue
                      };
-            return View(vm.ToList());
+            if (vm.ToList().Count == 0)
+            {
+                var obj = new List<AddmissionCetListVM>();
+                return PartialView("_CetScheduleList", obj.ToList()); }
+            else { return PartialView("_CetScheduleList", vm.ToList()); }
+
+
+           
         }
         public ActionResult CetCreate()
         {
@@ -164,7 +181,7 @@ namespace Tsr.Web.Controllers
             {
                 BatchId =fp.BatchId,
                 CetCode = fp.CetCode,
-                CetDate = fp.CetDate,
+                CetDates = Convert.ToDateTime(fp.CetDate).ToString("yyyy-MM-dd"),
                 CetId = fp.CetMasterId,
                 CetTime = fp.CetTime,
                 CourseId = fp.CourseId,
@@ -176,8 +193,12 @@ namespace Tsr.Web.Controllers
                     where (c.IsActive == true && cc.CetRequired == true)
                     select new { c.CourseId, c.CourseName };
             ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
-            var b = db.Batches.Where(x => x.CourseId == fp.CourseId).ToList();
-            ViewBag.Batches = new SelectList(b, "BatchId", "BatchCode");
+            var b = db.Batches.Where(x => x.CourseId == fp.CourseId)
+                    .Select(x => new { BatchId = x.BatchId, Name = x.StartDate });
+
+            var Batches = b.ToList().Select(x => new BatchDropdown { BatchId = x.BatchId, BatchCode = Convert.ToDateTime(x.Name).ToString("dd-MM-yyyy") });
+
+            ViewBag.Batches = new SelectList(Batches, "BatchId", "BatchCode");
             return PartialView("CetEdit", vm);
         }
         [HttpPost]
@@ -190,7 +211,7 @@ namespace Tsr.Web.Controllers
                 {
                     BatchId = obj.BatchId,
                     CetCode = obj.CetCode,
-                    CetDate = obj.CetDate,
+                    CetDate = Convert.ToDateTime(obj.CetDates),
                     CetTime = obj.CetTime,
                     CourseId = obj.CourseId,
                     IsActive = obj.IsActive,
@@ -948,6 +969,153 @@ namespace Tsr.Web.Controllers
         {
             return View();
         }
+
+        #endregion
+
+        #region Interview Schedule
+
+        public ActionResult InterviewSchedule()
+        {
+            var a = from c in db.Courses
+                    join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
+                    where (c.IsActive == true && cc.CetRequired == true)
+                    select new { c.CourseId, c.CourseName };
+            ViewBag.Courses = new SelectList(a.ToList(), "CourseId", "CourseName");
+            var schedulelist = new List<AdmissionInterviewScheduleVM>();
+            return View(schedulelist.ToList());
+        }
+        [HttpGet]
+        public ActionResult GetInterviewScheduleList(int? BatchId)
+        {
+            var schedulelist = from i in db.InterviewMasters.Where(x => x.BatchId == BatchId)
+                               select new AdmissionInterviewScheduleVM
+                               {
+                                   InterviewMasterId = i.InterviewMasterId,
+                                   InterviewCode=i.InterviewCode,
+                                   BatchId=i.BatchId,
+                                   CourseId=i.CourseId,
+                                   InterviewDate=i.InterviewDate,
+                                   InterviewTime=i.InterviewTime,
+                                   Venue=i.Venue
+
+                               };
+
+          return PartialView("_InterviewScheduleList",schedulelist.ToList());
+        }
+      
+
+        public ActionResult InterviewScheduleCreate()
+        {
+            ViewBag.Batches = new SelectList(db.Batches.ToList(), "BatchId", "StartDate");
+            var a = from c in db.Courses
+                    join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
+                    where (c.IsActive == true && cc.CetRequired == true)
+                    select new { c.CourseId, c.CourseName };
+            ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
+            var count = db.InterviewMasters.Count() + 1;
+            AdmissionInterviewScheduleVM im = new AdmissionInterviewScheduleVM
+            {
+
+                InterviewCode = count.ToString().PadLeft(4, '0'),
+             
+            };
+            return PartialView("InterviewScheduleCreate", im);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> InterviewScheduleCreate(AdmissionInterviewScheduleVM obj)
+        {
+            if (ModelState.IsValid)
+            {
+                InterviewMaster i = new InterviewMaster
+                {
+                    InterviewCode = obj.InterviewCode,
+                    BatchId = obj.BatchId,
+                    CourseId = obj.CourseId,
+                    InterviewDate = obj.InterviewDate,
+                    InterviewTime = obj.InterviewTime,
+                    Venue = obj.Venue
+                };
+                db.InterviewMasters.Add(i);
+                await db.SaveChangesAsync();
+                return Json(new { success = true });
+            }
+            ViewBag.Batches = new SelectList(db.Batches.ToList(), "BatchId", "StartDate");
+            var a = from c in db.Courses
+                    join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
+                    where (c.IsActive == true && cc.CetRequired == true)
+                    select new { c.CourseId, c.CourseName };
+            ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
+            return PartialView("InterviewScheduleCreate", obj);
+        }
+
+        public async Task<ActionResult> InterviewScheduleEdit(int? id)
+        {
+
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            InterviewMaster obj = await db.InterviewMasters.FindAsync(id);
+            if (obj == null)
+            {
+                return HttpNotFound();
+            }
+
+            AdmissionInterviewScheduleVM vm = new AdmissionInterviewScheduleVM
+            {
+                InterviewMasterId = obj.InterviewMasterId,
+                InterviewCode = obj.InterviewCode,
+                BatchId = obj.BatchId,
+                CourseId = obj.CourseId,
+                InterviewDate = obj.InterviewDate,
+                InterviewTime = obj.InterviewTime,
+                Venue = obj.Venue
+            };
+            var b = db.Batches.Where(x => x.CourseId == obj.CourseId)
+                   .Select(x => new { BatchId = x.BatchId, Name = x.StartDate });
+
+            var Batches = b.ToList().Select(x => new BatchDropdown { BatchId = x.BatchId, BatchCode = Convert.ToDateTime(x.Name).ToString("dd-MM-yyyy") });
+
+            ViewBag.Batches = new SelectList(Batches, "BatchId", "BatchCode");
+            var a = from c in db.Courses
+                    join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
+                    where (c.IsActive == true && cc.CetRequired == true)
+                    select new { c.CourseId, c.CourseName };
+            ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
+            return PartialView("InterviewScheduleEdit", vm);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> InterviewScheduleEdit(AdmissionInterviewScheduleVM obj)
+        {
+            if (ModelState.IsValid)
+            {
+                InterviewMaster i = new InterviewMaster
+                {
+                    InterviewMasterId = obj.InterviewMasterId,
+                    InterviewCode = obj.InterviewCode,
+                    BatchId = obj.BatchId,
+                    CourseId = obj.CourseId,
+                    InterviewDate = obj.InterviewDate,
+                    InterviewTime = obj.InterviewTime,
+                    Venue = obj.Venue
+                };
+                db.Entry(i).State = EntityState.Modified;
+                try
+                {
+                    await db.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+                    string s = e.ToString();
+                }
+                return Json(new { success = true });
+            }
+            return PartialView("InterviewScheduleEdit", obj);
+        }
+
+
 
         #endregion
     }

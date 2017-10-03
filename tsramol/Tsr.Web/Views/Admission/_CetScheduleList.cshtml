@@ -1,0 +1,71 @@
+﻿@model IEnumerable<Tsr.Core.Models.AddmissionCetListVM>
+
+<table id="customers2" class="table datatable">
+    <thead>
+        <tr>
+
+            <th>
+                @Html.DisplayNameFor(model => model.CetCode)
+            </th>
+            
+            <th>
+                @Html.DisplayNameFor(model => model.CourseName)
+            </th>
+           
+            <th>@Html.DisplayName("Batch Start Date") </th>
+            <th>@Html.DisplayNameFor(model => model.CetDate) </th>
+            <th>@Html.DisplayNameFor(model => model.CetTime) </th>
+            <th>@Html.DisplayNameFor(model => model.Venue) </th>
+            <th>@Html.DisplayNameFor(model => model.IsActive) </th>
+
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.CetCode)
+                </td>
+               
+                <td>
+                    @Html.DisplayFor(modelItem => item.CourseName)
+                </td>
+               
+                <td>
+                    @if (item.StartDate == null)
+                    { <text>@item.StartDate</text>}
+                    else
+                   {<text>@Convert.ToDateTime(item.StartDate).ToString("dd-MM-yyyy")</text> }
+                  </td>
+                <td>
+                    @if (item.CetDate == null)
+                    {<text>@item.CetDate</text>}
+                    else
+                    {<text>@Convert.ToDateTime(item.CetDate).ToString("dd-MM-yyyy")</text>}
+                   
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CetTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Venue)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsActive)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "CetEdit", new { id = item.CetId }, new { data_modal = "" }) |
+                </td>
+            </tr>
+        }
+
+    </tbody>
+
+</table>
+
+<script src="~/Scripts/js/plugins/bootstrap/bootstrap-select.js"></script>
+<script src="~/Scripts/ModalForm.js"></script>

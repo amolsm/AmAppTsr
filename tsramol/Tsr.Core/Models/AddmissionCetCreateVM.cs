@@ -25,5 +25,7 @@ namespace Tsr.Core.Models
         public TimeSpan? CetTime { get; set; }
         public string Venue { get; set; }
         public bool? IsActive { get; set; }
+        [Display(Name = "CET Date")]
+        public string CetDates { get; set; }
     }
 }

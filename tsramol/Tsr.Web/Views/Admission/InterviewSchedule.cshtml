@@ -1,14 +1,14 @@
-﻿@model IEnumerable<Tsr.Core.Models.AddmissionCetListVM>
-
+﻿
+@model IEnumerable<Tsr.Core.Models.AdmissionInterviewScheduleVM>
 @{
-    ViewBag.Title = "Cet Schedule List";
+    ViewBag.Title = "InterviewList";
 }
 
 <!-- START BREADCRUMB -->
 <ul class="breadcrumb push-down-0">
     <li><a href="#">Home</a></li>
-    <li><a href="#">Addmission</a></li>
-    <li><a href="#">Cet Entrance Schedule</a></li>
+    <li><a href="#">Masters</a></li>
+    <li><a href="#">Interview</a></li>
     @*<li class="active">Error 404</li>*@
 </ul>
 <!-- END BREADCRUMB -->
@@ -18,30 +18,31 @@
         <div class="row">
             <div class="col-md-12">
 
-                <div class="form-horizontal">
+                <form class="form-horizontal">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Cet Schedule List</h3>
+                            <h3 class="panel-title">Interview List</h3>
 
                         </div>
 
                         <div class="panel-body">
                             <div class="row" style="padding-bottom:10px">
-                              @Html.ActionLink("New Cet Entrance", "CetCreate", "Admission", null, new { data_modal = "", id = "btnCreate", @class = "btn btn-info btn-rounded" })
+                                @*<button class="btn btn-info btn-rounded" data-toggle="modal" data-target="#modal_basic" ng-click="modules = null">Add New</button>*@
+                                @Html.ActionLink("New Interview List", "InterviewScheduleCreate", "Admission", null, new { data_modal = "", id = "btnCreate", @class = "btn btn-info btn-rounded" })
                             </div>
-                         
+
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group pull-right">
 
-                                    
+
 
                                         <div class="col-md-3">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span>Course</span></span>
                                                 @Html.DropDownList("CourseIds",
                                          (IEnumerable<SelectListItem>)ViewBag.Courses, "Select Course", new { @class = "form-control", @onchange = "FillBatch()" })
-                                         </div>
+                                            </div>
 
                                         </div>
 
@@ -49,7 +50,7 @@
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span>Batch</span></span>
                                                 @Html.DropDownList("BatchIds",
-            new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "BatchCode")," ", new { @class = "form-control" })
+            new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "BatchCode"), " ", new { @class = "form-control" })
                                             </div>
 
                                         </div>
@@ -62,15 +63,15 @@
                                         </div>
 
                                     </div>
-                                    </div>
                                 </div>
+                            </div>
                             <div id="dvResult">
-                                @{Html.RenderPartial("_CetScheduleList", Model);}
+                                @{Html.RenderPartial("_InterviewScheduleList", Model);}
                                 <script src="~/Scripts/js/plugins/datatables/jquery.dataTables.min.js"></script>
                             </div>
                         </div>
                     </div>
-                </div>
+                </form>
 
             </div>
         </div>
@@ -90,18 +91,18 @@
     </div>
 </div>
 
-
+<script src="~/Scripts/js/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="~/Scripts/js/plugins/bootstrap/bootstrap-select.js"></script>
 <script src="~/Scripts/ModalForm.js"></script>
 <script>
 function Search() {
       var BatchId = $('#BatchIds').val();
 
-      $("#dvResult").load('@(Url.Action("GetCetScheduleList", "Admission", null, Request.Url.Scheme))?BatchId=' + BatchId);
-   
+      $("#dvResult").load('@(Url.Action("GetInterviewScheduleList", "Admission", null, Request.Url.Scheme))?BatchId=' + BatchId);
+
 }
     function FillBatch() {
-       
+
         var CourseId = $("#CourseIds").val();
         $.ajax({
             url: '/Admission/FillBatchForCet',
@@ -118,9 +119,4 @@ function Search() {
         });
     }
 </script>
-
- 
-
-
-
 

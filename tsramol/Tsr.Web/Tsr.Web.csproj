@@ -948,6 +948,11 @@
     <Content Include="Views\Certification\_CertificateFormatGPTraining.cshtml" />
     <Content Include="Views\Certification\_CertificateFormatGOC.cshtml" />
     <Content Include="Views\Admission\CetEdit.cshtml" />
+    <Content Include="Views\Admission\_CetScheduleList.cshtml" />
+    <Content Include="Views\Admission\InterviewScheduleCreate.cshtml" />
+    <Content Include="Views\Admission\InterviewScheduleEdit.cshtml" />
+    <Content Include="Views\Admission\InterviewSchedule.cshtml" />
+    <Content Include="Views\Admission\_InterviewScheduleList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

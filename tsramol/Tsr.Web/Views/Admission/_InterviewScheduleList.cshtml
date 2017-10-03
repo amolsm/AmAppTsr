@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Tsr.Core.Models.AdmissionInterviewScheduleVM>
+<table id="customers2" class="table datatable">
+    <thead>
+        <tr>
+            <th>Interview Code</th>
+            <th>Batch Id</th>
+            <th>Interview Date</th>
+            <th>Interview Time</th>
+            <th>Venue</th>
+            <th>Action</th>
+
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            var date = Convert.ToDateTime(item.InterviewDate).ToString("dd-MM-yyyy");
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InterviewCode)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.BatchId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InterviewTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Venue)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "InterviewScheduleEdit", new { id = item.InterviewMasterId }, new { data_modal = "" }) |
+
+                </td>
+            </tr>
+        }
+
+    </tbody>
+
+</table>
+
+<script src="~/Scripts/js/plugins/bootstrap/bootstrap-select.js"></script>
+<script src="~/Scripts/ModalForm.js"></script>

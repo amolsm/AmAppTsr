@@ -18,5 +18,7 @@ namespace Tsr.Core.Models
         public TimeSpan? CetTime { get; set; }
         public string Venue { get; set; }
         public bool? IsActive { get; set; }
+
+        public int CourseId { get; set; }
     }
 }
