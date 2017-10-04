@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Mvc;
+
 
 namespace Tsr.Core.Models
 {
@@ -13,10 +15,12 @@ namespace Tsr.Core.Models
 
         [StringLength(50)]
         [Required]
+        [Remote("IsCourseCodeExists", "MasterDetails", ErrorMessage = "Course Code already Exist")]
         public string CourseCode { get; set; }
 
         [StringLength(150)]
         [Required]
+        [Remote("IsCourseNameExists", "MasterDetails", ErrorMessage = "Course Name already Exist")]
         public string CourseName { get; set; }
         public string ShortName { get; set; }
         [Required]
@@ -52,4 +56,8 @@ namespace Tsr.Core.Models
         public int? CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }
     }
+   
+   
+
+    
 }

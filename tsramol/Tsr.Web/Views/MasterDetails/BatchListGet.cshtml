@@ -11,6 +11,12 @@
                 @Html.DisplayNameFor(model => model.CourseName)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Coordinator)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReserveSeats)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.StartDate)
             </th>
             <th>
@@ -34,6 +40,12 @@
                     @Html.DisplayFor(modelItem => item.CourseName)
                 </td>
                 <td>
+                    @Html.DisplayFor(modelItem => item.Coordinator)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReserveSeats)
+                </td>
+                <td>
                     @*@Html.DisplayFor(modelItem => Convert.ToDateTime(item.StartDate).ToString("dd-MM-yyyy"))*@
                     @Convert.ToDateTime(item.StartDate).ToString("dd-MM-yyyy")
                 </td>
@@ -48,7 +60,7 @@
                     @Html.DisplayFor(modelItem => item.OnlineBookingStatus)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "BatchEdit", new { id = item.CourseId }, new { data_modal = "" }) |
+                    @Html.ActionLink("Edit", "BatchEdit", new { id = item.BatchId }, new { data_modal = "" }) |
 
 
                 </td>

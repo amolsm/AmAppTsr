@@ -1037,6 +1037,7 @@ namespace Tsr.Web.Controllers
             var obj = from c in db.Courses
                       join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
                       join b in db.Batches on c.CourseId equals b.CourseId
+                      join e in db.Employees on b.CoordinatorId equals e.EmployeeId
                       where c.IsActive == true && c.CourseId == CourseId
                       select new BatchListVM
                       {
@@ -1050,6 +1051,8 @@ namespace Tsr.Web.Controllers
                           IsActive = b.IsActive,
                           ReserveSeats = b.ReserveSeats,
                           OnlineBookingStatus = b.OnlineBookingStatus,
+                          Coordinator=e.FirstName+""+e.LastName
+                          
                       };
                       //}).AsEnumerable().Select(x=> new BatchListVM
                       //      {
@@ -1071,8 +1074,13 @@ namespace Tsr.Web.Controllers
                     Text = p.FirstName + " " + p.LastName,
                     Value = p.EmployeeId.ToString()
                 });
-
-            return PartialView("BatchCreate");
+            var count = db.Batches.Count() + 1;
+            BatchCreateVM bc = new BatchCreateVM
+            {
+                BatchCode= count.ToString().PadLeft(4, '0')
+            };
+           
+           return PartialView("BatchCreate",bc);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -1094,7 +1102,8 @@ namespace Tsr.Web.Controllers
                     ReserveSeats = obj.ReserveSeats,
                     StartDate = obj.StartDate,
                     TotalSeats = totSeat,
-                    BookedSeats = 0
+                    BookedSeats = 0,
+                    Remark=obj.Remark
                 };
 
                 b.CreatedBy = 1;
@@ -1137,7 +1146,8 @@ namespace Tsr.Web.Controllers
                 CreatedBy = obj.CreatedBy,
                 CreatedDate = obj.CreatedDate,
                 CategoryName = db.CourseCategories.Find(obj.CategoryId).CategoryName,
-                CourseName = db.Courses.Find(obj.CourseId).CourseName
+                CourseName = db.Courses.Find(obj.CourseId).CourseName,
+                Remark=obj.Remark
 
             };
 
@@ -1167,7 +1177,7 @@ namespace Tsr.Web.Controllers
                 b.OnlineBookingStatus = obj.OnlineBookingStatus;
                 b.ModifiedBy = 1;
                 b.ModifiedDate = DateTime.Now;
-
+                b.Remark = obj.Remark;
                 db.Entry(b).State = EntityState.Modified;
                 await db.SaveChangesAsync();
                 return Json(new { success = true });
@@ -1474,6 +1484,20 @@ namespace Tsr.Web.Controllers
 
 
 
+        #endregion
+
+
+        #region UniqueIdentifier
+        public JsonResult IsCourseNameExists(string CourseName)
+        {
+            //check if any of the UserName matches the UserName specified in the Parameter using the ANY extension method.  
+            return Json(!db.Courses.Any(x => x.CourseName == CourseName), JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult IsCourseCodeExists(string CourseCode)
+        {
+            //check if any of the UserName matches the UserName specified in the Parameter using the ANY extension method.  
+            return Json(!db.Courses.Any(x => x.CourseCode == CourseCode), JsonRequestBehavior.AllowGet);
+        }
         #endregion
     }
 }

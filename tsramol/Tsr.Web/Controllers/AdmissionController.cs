@@ -988,13 +988,17 @@ namespace Tsr.Web.Controllers
         public ActionResult GetInterviewScheduleList(int? BatchId)
         {
             var schedulelist = from i in db.InterviewMasters.Where(x => x.BatchId == BatchId)
+                               join b in db.Batches on i.BatchId equals b.BatchId
+                               join c in db.Courses on i.CourseId equals c.CourseId
                                select new AdmissionInterviewScheduleVM
                                {
                                    InterviewMasterId = i.InterviewMasterId,
                                    InterviewCode=i.InterviewCode,
                                    BatchId=i.BatchId,
                                    CourseId=i.CourseId,
-                                   InterviewDate=i.InterviewDate,
+                                   Batch = b.StartDate.ToString(),
+                                   Course = c.CourseName,
+                                   InterviewDate =i.InterviewDate,
                                    InterviewTime=i.InterviewTime,
                                    Venue=i.Venue
 
@@ -1068,7 +1072,7 @@ namespace Tsr.Web.Controllers
                 InterviewCode = obj.InterviewCode,
                 BatchId = obj.BatchId,
                 CourseId = obj.CourseId,
-                InterviewDate = obj.InterviewDate,
+                InterviewDates = Convert.ToDateTime(obj.InterviewDate).ToString("yyyy-MM-dd"),
                 InterviewTime = obj.InterviewTime,
                 Venue = obj.Venue
             };
@@ -1097,7 +1101,7 @@ namespace Tsr.Web.Controllers
                     InterviewCode = obj.InterviewCode,
                     BatchId = obj.BatchId,
                     CourseId = obj.CourseId,
-                    InterviewDate = obj.InterviewDate,
+                    InterviewDate = Convert.ToDateTime(obj.InterviewDates),
                     InterviewTime = obj.InterviewTime,
                     Venue = obj.Venue
                 };
@@ -1118,5 +1122,139 @@ namespace Tsr.Web.Controllers
 
 
         #endregion
+
+        #region Medical Schedule
+
+        public ActionResult MedicalSchedule()
+        {
+            ViewBag.Courses = new SelectList(db.Courses.ToList(), "CourseId", "CourseName");
+            var schedulelist = new List<AdmissionMedicalScheduleVM>();
+            return View(schedulelist.ToList());
+        }
+        [HttpGet]
+        public ActionResult GetMedicalScheduleList(int? BatchId)
+        {
+            var schedulelist = from i in db.MedicalMasters.Where(x => x.BatchId == BatchId)
+                               join c in db.Courses on i.CourseId equals c.CourseId
+                               join b in db.Batches on i.BatchId equals b.BatchId
+                               select new AdmissionMedicalScheduleVM
+                               {
+                                   MedicalMasterId=i.MedicalMasterId,
+                                   MedicalCode=i.MedicalCode,
+                                   Batch=b.StartDate.ToString(),
+                                   Course=c.CourseName,
+                                   CourseId=i.CourseId,
+                                   MedicalDate=i.MedicalDate,
+                                   MedicalFees=i.MedicalFees
+
+
+                               };
+
+            return PartialView("_MedicalScheduleList", schedulelist.ToList());
+        }
+
+        public ActionResult MedicalScheduleCreate()
+        {
+            ViewBag.Batches = new SelectList(db.Batches.ToList(), "BatchId", "StartDate");
+            ViewBag.Course = new SelectList(db.Courses.ToList(), "CourseId", "CourseName");
+            var count = db.MedicalMasters.Count() + 1;
+            AdmissionMedicalScheduleVM im = new AdmissionMedicalScheduleVM
+            {
+
+                MedicalCode = count.ToString().PadLeft(4, '0'),
+
+            };
+            return PartialView("MedicalScheduleCreate", im);
+          
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> MedicalScheduleCreate(AdmissionMedicalScheduleVM obj)
+        {
+            if (ModelState.IsValid)
+            {
+                MedicalMaster m = new MedicalMaster
+                {
+                
+                    MedicalCode = obj.MedicalCode,
+                    BatchId = obj.BatchId,
+                    CourseId = obj.CourseId,
+                    MedicalDate = obj.MedicalDate,
+                    MedicalFees = obj.MedicalFees
+
+                };
+                db.MedicalMasters.Add(m);
+                await db.SaveChangesAsync();
+                return Json(new { success = true });
+               
+            }
+
+            return PartialView("MedicalScheduleCreate", obj);
+        }
+
+        public async Task<ActionResult> MedicalScheduleEdit(int? id)
+        {
+           
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            MedicalMaster obj = await db.MedicalMasters.FindAsync(id);
+            if (obj == null)
+            {
+                return HttpNotFound();
+            }
+            AdmissionMedicalScheduleVM vm = new AdmissionMedicalScheduleVM
+            {
+                MedicalMasterId=obj.MedicalMasterId,
+                MedicalCode = obj.MedicalCode,
+                BatchId = obj.BatchId,
+                CourseId = obj.CourseId,
+                MedicalDates = Convert.ToDateTime(obj.MedicalDate).ToString("yyyy-MM-dd"),
+                MedicalFees = obj.MedicalFees
+
+              
+            };
+            var b = db.Batches.Where(x => x.CourseId == obj.CourseId)
+               .Select(x => new { BatchId = x.BatchId, Name = x.StartDate });
+
+            var Batches = b.ToList().Select(x => new BatchDropdown { BatchId = x.BatchId, BatchCode = Convert.ToDateTime(x.Name).ToString("dd-MM-yyyy") });
+
+            ViewBag.Batches = new SelectList(Batches, "BatchId", "BatchCode");
+            ViewBag.Course = new SelectList(db.Courses.ToList(), "CourseId", "CourseName");
+            return PartialView("MedicalScheduleEdit", vm);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> MedicalScheduleEdit(AdmissionMedicalScheduleVM obj)
+        {
+            if (ModelState.IsValid)
+            {
+                MedicalMaster m = new MedicalMaster
+                {
+                    MedicalMasterId = obj.MedicalMasterId,
+                    MedicalCode = obj.MedicalCode,
+                    BatchId = obj.BatchId,
+                    CourseId = obj.CourseId,
+                    MedicalDate = Convert.ToDateTime(obj.MedicalDates),
+                    MedicalFees = obj.MedicalFees
+
+                };
+                db.Entry(m).State = EntityState.Modified;
+                try
+                {
+                    await db.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+                    string s = e.ToString();
+                }
+                return Json(new { success = true });
+            }
+            return PartialView("MedicalScheduleEdit", obj);
+        }
+        #endregion
+
     }
+
 }

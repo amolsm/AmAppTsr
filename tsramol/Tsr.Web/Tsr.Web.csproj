@@ -953,6 +953,10 @@
     <Content Include="Views\Admission\InterviewScheduleEdit.cshtml" />
     <Content Include="Views\Admission\InterviewSchedule.cshtml" />
     <Content Include="Views\Admission\_InterviewScheduleList.cshtml" />
+    <Content Include="Views\Admission\MedicalSchedule.cshtml" />
+    <Content Include="Views\Admission\_MedicalScheduleList.cshtml" />
+    <Content Include="Views\Admission\MedicalScheduleCreate.cshtml" />
+    <Content Include="Views\Admission\MedicalScheduleEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -28,7 +28,7 @@
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                 @Html.EditorFor(model => model.CourseCode, new { htmlAttributes = new { @class = "form-control" } })
                             </div>
-
+                            @Html.ValidationMessageFor(model => model.CourseCode, "", new { @class = "text-danger" })
                         </div>
                     </div>
 
@@ -40,7 +40,7 @@
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                 @Html.EditorFor(model => model.CourseName, new { htmlAttributes = new { @class = "form-control" } })
                             </div>
-
+                            @Html.ValidationMessageFor(model => model.CourseName, "", new { @class = "text-danger" })
                         </div>
                     </div>
 

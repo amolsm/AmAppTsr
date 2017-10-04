@@ -1,0 +1,116 @@
+﻿@model IEnumerable<Tsr.Core.Models.AdmissionMedicalScheduleVM>
+@{
+    ViewBag.Title = "MedicalSchedule";
+}
+
+<!-- START BREADCRUMB -->
+<ul class="breadcrumb push-down-0">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Masters</a></li>
+    <li><a href="#">Medical</a></li>
+    @*<li class="active">Error 404</li>*@
+</ul>
+<!-- END BREADCRUMB -->
+<!-- PAGE CONTENT WRAPPER -->
+<div class="page-content-wrap">
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+
+                <form class="form-horizontal">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Medical List</h3>
+
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="row" style="padding-bottom:10px">
+                                @*<button class="btn btn-info btn-rounded" data-toggle="modal" data-target="#modal_basic" ng-click="modules = null">Add New</button>*@
+                                @Html.ActionLink("New Medical List", "MedicalScheduleCreate", "Admission", null, new { data_modal = "", id = "btnCreate", @class = "btn btn-info btn-rounded" })
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group pull-right">
+
+
+
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><span>Course</span></span>
+                                                @Html.DropDownList("CourseIds",
+                                         (IEnumerable<SelectListItem>)ViewBag.Courses, "Select Course", new { @class = "form-control", @onchange = "FillBatch()" })
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><span>Batch</span></span>
+                                                @Html.DropDownList("BatchIds",
+            new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "BatchCode"), " ", new { @class = "form-control" })
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <input class="btn btn-primary" type="button" value="Search" onclick="Search()" />
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="dvResult">
+                                @{Html.RenderPartial("_MedicalScheduleList", Model);}
+                                <script src="~/Scripts/js/plugins/datatables/jquery.dataTables.min.js"></script>
+                            </div>
+                            </div>
+                        </div>
+                    </form>
+            </div>
+        </div>
+    </div>
+    </div>
+<!-- END PAGE CONTENT WRAPPER -->
+<!-- MODALS -->
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="defModalHead" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/Scripts/js/plugins/bootstrap/bootstrap-select.js"></script>
+<script src="~/Scripts/ModalForm.js"></script>
+<script>
+function Search() {
+      var BatchId = $('#BatchIds').val();
+
+      $("#dvResult").load('@(Url.Action("GetMedicalScheduleList", "Admission", null, Request.Url.Scheme))?BatchId=' + BatchId);
+
+}
+    function FillBatch() {
+
+        var CourseId = $("#CourseIds").val();
+        $.ajax({
+            url: '/Admission/FillBatch',
+            type: "GET",
+            dataType: "JSON",
+            data: { CourseId: CourseId },
+            success: function (Batches) {
+                $("#BatchIds").html(""); // clear before appending new list
+                $.each(Batches, function (i, c) {
+                    $("#BatchIds").append(
+                        $('<option></option>').val(c.BatchId).html(c.BatchCode));
+                });
+            }
+        });
+    }
+</script>
+

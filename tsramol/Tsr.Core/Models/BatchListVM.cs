@@ -22,5 +22,9 @@ namespace Tsr.Core.Models
 
         public bool? IsActive { get; set; }
         public bool? OnlineBookingStatus { get; set; }
+
+        public string Remark { get; set; }
+
+        public string Coordinator { get; set; }
     }
 }

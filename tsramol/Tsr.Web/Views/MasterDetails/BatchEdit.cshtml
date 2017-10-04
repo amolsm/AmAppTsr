@@ -46,7 +46,9 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-3" })
                 <div class="col-md-8">
-                    @Html.TextBoxFor(model => model.StartDate, new { @class = "form-control", @type = "Date" })
+                    
+                    @Html.TextBoxFor(model => model.StartDate,new { @Value = Convert.ToDateTime(Model.StartDate).ToString("yyyy-MM-dd"), @class = "form-control", @type = "Date" })
+                    
                     @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -54,7 +56,8 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-3" })
                 <div class="col-md-8">
-                    @Html.TextBoxFor(model => model.EndDate, new { @class = "form-control", @type = "Date" })
+                    @Html.TextBoxFor(model => model.EndDate, new { @Value = Convert.ToDateTime(Model.EndDate).ToString("yyyy-MM-dd"), @class = "form-control", @type = "Date" })
+                   
                     @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -91,6 +94,13 @@
                 <div class="col-md-8">
                     @Html.EditorFor(model => model.OnlineBookingStatus, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.OnlineBookingStatus, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Remark, htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.Remark, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
                 </div>
             </div>
 

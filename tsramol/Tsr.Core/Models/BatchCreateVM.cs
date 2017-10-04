@@ -47,5 +47,7 @@ namespace Tsr.Core.Models
         public int? ModifiedBy { get; set; }
         public DateTime? CreatedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
+        [DataType(DataType.MultilineText)]
+        public string Remark { get; set; }
     }
 }

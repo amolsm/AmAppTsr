@@ -1,13 +1,13 @@
-﻿@model IEnumerable<Tsr.Core.Models.AdmissionInterviewScheduleVM>
+﻿@model IEnumerable<Tsr.Core.Models.AdmissionMedicalScheduleVM>
 <table id="customers2" class="table datatable">
     <thead>
         <tr>
-            <th>Interview Code</th>
+            <th>Medical Code</th>
             <th>Course</th>
             <th>Batch</th>
-            <th>Interview Date</th>
-            <th>Interview Time</th>
-            <th>Venue</th>
+            
+            <th>Medical Date</th>
+            <th>Medical Fees</th>
             <th>Action</th>
 
         </tr>
@@ -16,12 +16,15 @@
 
         @foreach (var item in Model)
         {
-            var date = Convert.ToDateTime(item.InterviewDate).ToString("dd-MM-yyyy");
+            var date = Convert.ToDateTime(item.MedicalDate).ToString("dd-MM-yyyy");
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.InterviewCode)
+                    @Html.DisplayFor(modelItem => item.MedicalCode)
                 </td>
+
+            
                 <td>
+
                     @Html.DisplayFor(modelItem => item.Course)
                 </td>
                 <td>
@@ -29,18 +32,16 @@
                     { <text>@item.Batch</text>}
                     else
                     {<text>@Convert.ToDateTime(item.Batch).ToString("dd-MM-yyyy")</text> }
+                   
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => date)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.InterviewTime)
+                    @Html.DisplayFor(modelItem => item.MedicalFees)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Venue)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "InterviewScheduleEdit", new { id = item.InterviewMasterId }, new { data_modal = "" }) |
+                    @Html.ActionLink("Edit", "MedicalScheduleEdit", new { id = item.MedicalMasterId }, new { data_modal = "" }) |
 
                 </td>
             </tr>
@@ -49,6 +50,6 @@
     </tbody>
 
 </table>
-
 <script src="~/Scripts/js/plugins/bootstrap/bootstrap-select.js"></script>
 <script src="~/Scripts/ModalForm.js"></script>
+

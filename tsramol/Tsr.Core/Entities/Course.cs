@@ -5,10 +5,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tsr.Core.Models;
 
 namespace Tsr.Core.Entities
 {
     [Table("Course")]
+   
     public partial class Course
     {
         public int CourseId { get; set; }
