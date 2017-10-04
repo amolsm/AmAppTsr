@@ -63,7 +63,12 @@
                     @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
                 </div>
             </div>
-            
+            <div class="col-sm-5 col-sm-offset-1">
+                <div class="form-group label-floating">
+                    <label class="control-label">Full Name as per Passport/Marksheet</label>
+                    @Html.EditorFor(model => model.FullName, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+            </div>
             <div class="col-sm-5 col-sm-offset-1">
                 <div class="form-group label-floating">
                     <label class="control-label">Email</label>

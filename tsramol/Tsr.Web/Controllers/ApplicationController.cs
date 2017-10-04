@@ -315,6 +315,7 @@ namespace Tsr.Web.Controllers
                     InterChemistry = obj.InterChemistry,
                     InterCity = obj.InterCity,
                     InterMath = obj.InterMath,
+                    InterEnglish = obj.InterEnglish,
                     InterPassingYear = obj.InterPassingYear,
                     InterPercentage = obj.InterPercentage,
                     InterPhysics = obj.InterPhysics,
@@ -353,7 +354,9 @@ namespace Tsr.Web.Controllers
                     SchoolState = obj.SchoolState,
                     ShirtSize = obj.ShirtSize,
                     ShoeSize = obj.ShoeSize,
-                    Weight = obj.Weight
+                    Weight = obj.Weight,
+                    FullName = obj.FullName,
+                    FatherFullName = obj.FatherFullName
                 };
                 db.Applications.Add(ap);
                 await db.SaveChangesAsync();
@@ -433,8 +436,8 @@ namespace Tsr.Web.Controllers
                         PermenentCity = obj.PermenentCity,
                         PermenentContactNo = obj.PermenentContactNo,
                         PermenentPin = obj.PermenentPin,
-                        PermenentState = obj.PermenentState
-
+                        PermenentState = obj.PermenentState,
+                        FullName = obj.FullName
                     };
                     db.Applications.Add(ap);
                     await db.SaveChangesAsync();
@@ -524,8 +527,8 @@ namespace Tsr.Web.Controllers
                         ShippingCompany = obj.ShippingCompany,
                         RankOfCandidate = obj.RankOfCandidate,
                         CourseAttendedInTSR = obj.CourseAttendedInTSR,
-                        FPFF_AFF_1995 = obj.FPFF_AFF_1995
-
+                        FPFF_AFF_1995 = obj.FPFF_AFF_1995,
+                        FullName = obj.FullName
                     };
                     db.Applications.Add(ap);
                     await db.SaveChangesAsync();
@@ -883,7 +886,7 @@ namespace Tsr.Web.Controllers
 
 
 
-
+                    Batch bs = await db.Batches.FindAsync(bid);
                     if (cc.CetRequired == true)
                     {
                         //Cet
@@ -912,12 +915,23 @@ namespace Tsr.Web.Controllers
                         db.FeeReceipts.Add(fr);
                         await db.SaveChangesAsync();
 
+                        EmailModel em = new EmailModel
+                        {
+                            From = ConfigurationManager.AppSettings["admsmail"],
+                            FromPass = ConfigurationManager.AppSettings["admsps"],
+                            To = obj.Email,
+                            Subject = "Course Registration with TSR",
+                            Body = "Dear " + obj.Firstname + " " + obj.Lastname + ", with the reference to your Enrolment ID " + obj.udf2 + " This is to confirm that your Application has been reached for " + obj.CourseName + " starting BATCH on " + Convert.ToDateTime(bs.StartDate).ToString("dd-MM-yyyy") + "  Thanking you T.S.Rahaman"
+                        };
+
+                        var res = await MessageService.sendEmail(em);
+
                         return View("PaymentSuccessNC", obj);
                     }
                     else
                     {
                         //NonCet
-                        Batch bs = await db.Batches.FindAsync(bid);
+                        
                         bs.BookedSeats = bs.BookedSeats + 1;
                         await db.SaveChangesAsync();
 
@@ -963,8 +977,8 @@ namespace Tsr.Web.Controllers
                             From = ConfigurationManager.AppSettings["admsmail"],
                             FromPass = ConfigurationManager.AppSettings["admsps"],
                             To = obj.Email,
-                            Subject = "Your Admission Confirm",
-                            Body = obj.Firstname + " " + obj.Lastname + " " + obj.amount + " " + obj.CourseName
+                            Subject = "Course Registration with TSR",
+                            Body = "Dear " + obj.Firstname + " " + obj.Lastname + ", with the reference to your Enrolment ID " + obj.udf2 + " This is to confirm that your seat has been confirmed for " + obj.CourseName + " starting BATCH on " + Convert.ToDateTime(bs.StartDate).ToString("dd-MM-yyyy") + "  Thanking you T.S.Rahaman"
                         };
 
                         var res = await MessageService.sendEmail(em);

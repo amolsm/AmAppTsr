@@ -20,6 +20,7 @@ namespace Tsr.Core.Entities
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
+        public string FullName { get; set; }
         public string MotherName { get; set; }
         public DateTime? DateOfBirth { get; set; }
         public string PlaceOfBirth { get; set; }
@@ -31,6 +32,7 @@ namespace Tsr.Core.Entities
         public float? Weight { get; set; }
         public string Email { get; set; }
         public string CellNo { get; set; }
+        public string FatherFullName { get; set; }
         public string FatherOccupation { get; set; }
         public string AnnualIncome { get; set; }
         public string IdentificationMark { get; set; }
@@ -80,6 +82,7 @@ namespace Tsr.Core.Entities
         public float? InterMath { get; set; }
         public float? InterPhysics { get; set; }
         public float? InterChemistry { get; set; }
+        public float? InterEnglish { get; set; }
         public string InterRollNo { get; set; }
         public string GradCollegeName { get; set; }
         public string GradUniversity { get; set; }

@@ -36,19 +36,25 @@
                         @Html.EditorFor(model => model.MiddleName, new { htmlAttributes = new { @class = "form-control" } })
                     </div>
                 </div>
-                <div class="col-sm-5 col-sm-offset-1">
-                    <div class="form-group label-floating">
-                        <label class="control-label">Mother Name</label>
-                        @Html.EditorFor(model => model.MotherName, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-                </div>
+                
                 <div class="col-sm-5 col-sm-offset-1">
                     <div class="form-group label-floating">
                         <label class="control-label">Last Name</label>
                         @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
                     </div>
                 </div>
-
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Full Name as per Passport/Marksheet</label>
+                        @Html.EditorFor(model => model.FullName, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Mother Name</label>
+                        @Html.EditorFor(model => model.MotherName, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
                 <div class="col-sm-5 col-sm-offset-1">
                     <div class="form-group label-floating">
                         <label class="control-label">Email</label>
@@ -64,7 +70,7 @@
                 <div class="col-sm-5 col-sm-offset-1">
                     <div class="form-group label-floating is-focused">
                         <label class="control-label">Date Of Birth</label>
-                        @Html.TextBoxFor(model => model.DateOfBirth, new { @class = "form-control", @type = "Date" })
+                        @Html.TextBoxFor(model => model.DateOfBirth, new { @class = "form-control", @type = "Date", @onfocusout = "checkAge()" })
                     </div>
                 </div>
                 <div class="col-sm-5 col-sm-offset-1">
@@ -109,17 +115,22 @@
                 <h4 class="info-text"> Drop us a small description. </h4>
                 <div class="col-sm-5 col-sm-offset-1">
                     <div class="form-group label-floating">
-                        <label class="control-label">Height</label>
-                        @Html.EditorFor(model => model.Height, new { htmlAttributes = new { @class = "form-control" } })
+                        <label class="control-label">Height in Centimeters</label>
+                        @Html.EditorFor(model => model.Height, new { htmlAttributes = new { @class = "form-control" } }) 
                     </div>
                 </div>
                 <div class="col-sm-5 col-sm-offset-1">
                     <div class="form-group label-floating">
-                        <label class="control-label">Weight</label>
-                        @Html.EditorFor(model => model.Weight, new { htmlAttributes = new { @class = "form-control" } })
+                        <label class="control-label">Weight in Kg</label>
+                        @Html.EditorFor(model => model.Weight, new { htmlAttributes = new { @class = "form-control" } }) Kg
                     </div>
                 </div>
-                
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Father full name</label>
+                        @Html.EditorFor(model => model.FatherFullName, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
 
                 <div class="col-sm-5 col-sm-offset-1">
                     <div class="form-group label-floating">
@@ -171,6 +182,7 @@
                 </div>
             </div>
         </div>
+
         <div class="tab-pane" id="description">
             <div class="row">
                 <h4 class="info-text"> Drop us a small description. </h4>
@@ -219,7 +231,7 @@
 
                     <div class="panel panel-default">
                         <div class="panel-body">
-                            <h6>Present Address </h6>
+                            <h6>Present Address </h6> <input type="checkbox" id="chkPresentAddr" onclick="chkPresent()" /> Same as above
                             <div class="col-sm-5 col-sm-offset-1">
                                 <div class="form-group label-floating">
                                     <label class="control-label">Address</label>
@@ -256,7 +268,7 @@
 
                     <div class="panel panel-default">
                         <div class="panel-body">
-                            <h6>Local Guardian Informatioin</h6>
+                            <h6>Local Guardian Informatioin</h6> <input type="checkbox" id="chkGuardianAddr" onclick="chkGuardian()" /> Same as above
                             <div class="col-sm-5 col-sm-offset-1">
                                 <div class="form-group label-floating">
                                     <label class="control-label">Guardian Name</label>
@@ -461,6 +473,13 @@
                                 <div class="form-group label-floating">
                                     <label class="control-label">Mathematics Marks</label>
                                     @Html.TextBoxFor(model => model.InterMath, new { @class = "form-control" })
+                                </div>
+                            </div>
+
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">English Marks</label>
+                                    @Html.TextBoxFor(model => model.InterEnglish, new { @class = "form-control" })
                                 </div>
                             </div>
 

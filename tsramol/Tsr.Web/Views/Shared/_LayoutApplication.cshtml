@@ -213,6 +213,24 @@
           }
       });
   }
+  function chkPresent()
+  {
+      if($('#chkPresentAddr').is(':checked'))
+      {
+          //alert('checked');
+          var PermenentAddress = $('#PermenentAddress').val();
+          var PermenentCity = $('#PermenentCity').val();
+          var PermenentState = $('#PermenentState').val();
+          var PermenentPin = $('#PermenentPin').val();
+          var PermenentContactNo = $('#PermenentContactNo').val();
+
+          $('#PresentAddress').val(PermenentAddress);
+          $('#PresentCity').val(PermenentCity);
+          $('#PresentState').val(PermenentState);
+          $('#PresentPin').val(PermenentPin);
+          $('#PresentContactNo').val(PermenentContactNo);
+      }
+  }
   function FillPackageBatches()
   {
 
