@@ -8,7 +8,7 @@
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
     <h4 class="modal-title" id="myModalLabel">New Cet Schedule </h4>
 </div>
-@using (Html.BeginForm())
+@using (Html.BeginForm("CetCreate", "Admission", FormMethod.Post, new { enctype = "multipart/form-data"}))
 {
     @Html.AntiForgeryToken()
     <div class="modal-body">
@@ -75,10 +75,19 @@
                     @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
                 </div>
             </div>
+          
+            <div class="form-group">
+                @Html.LabelFor(model => model.FileUpload, htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="col-md-8">
+                    @Html.TextBoxFor(m => m.FileUpload, new { type = "file", @onchange = "CheckValidation()" })
+                    
+                    @Html.ValidationMessageFor(m => m.FileUpload, string.Empty, new { id = "validationTxt", @class = "text-danger" })
+                </div>
+            </div>
+                
 
 
-
-        </div>
+            </div>
     </div>
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal">Cancel</button>
@@ -103,6 +112,75 @@
             });
         }
     });
-  }
+    }
+    function CheckValidation()
+    {
+        var file = getNameFromPath($('#FileUpload').val());
+        if (file != null) {
+            var extension = file.substr((file.lastIndexOf('.') + 1));
+            switch (extension) {
+                case 'doc':
+                case 'docx':
+
+                    flag = true;
+                    break;
+                default:
+                    flag = false;
+            }
+        }
+        if (flag == false) {
+            $("#validationTxt").text("You can upload only doc,docx extension file");
+            $("#FileUpload").html("")
+            return false;
+        }
+        else {
+            var size = GetFileSize(file);
+            if (size > 3) {
+                $("#validationTxt").text("You can upload file up to 1 MB");
+                $("#FileUpload").html("")
+            }
+            else {
+                $("#validationTxt").text("");
+            }
+        }
+    }
+    function GetFileSize(fileid) {
+        try {
+            var fileSize = 0;
+            //for IE
+            if ($.browser.msie) {
+                //before making an object of ActiveXObject,
+                //please make sure ActiveX is enabled in your IE browser
+                var objFSO = new ActiveXObject("Scripting.FileSystemObject"); var filePath = $("#" + fileid)[0].value;
+                var objFile = objFSO.getFile(filePath);
+                var fileSize = objFile.size; //size in kb
+                fileSize = fileSize / 1048576; //size in mb
+            }
+                //for FF, Safari, Opeara and Others
+            else {
+                fileSize = $("#" + fileid)[0].files[0].size //size in kb
+                fileSize = fileSize / 1048576; //size in mb
+            }
+
+            return fileSize;
+        }
+        catch (e) {
+            alert("Error is :" + e);
+        }
+    }
+
+    //get file path from client system
+    function getNameFromPath(strFilepath) {
+        var objRE = new RegExp(/([^\/\\]+)$/);
+        var strName = objRE.exec(strFilepath);
+
+        if (strName == null) {
+            return null;
+        }
+        else {
+            return strName[0];
+        }
+    }
 </script>
+
 

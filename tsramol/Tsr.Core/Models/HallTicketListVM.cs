@@ -24,6 +24,8 @@ namespace Tsr.Core.Models
         public string Mothername { get; set; }
         public int CetMasterId { get; set; }
         public bool Select { get; set; }
+
+        public int BatchId { get; set; }
     }
 
 }

@@ -1,5 +1,7 @@
-﻿@model IEnumerable<Tsr.Core.Models.HallTicketListVM>
-
+﻿@model List<Tsr.Core.Models.HallTicketListVM>
+<script src="~/Scripts/js/plugins/datatables/jquery.dataTables.min.js"></script>
+@using (Html.BeginForm("HallTickets", "Admission", FormMethod.Post))
+{
 <table id="customers2" class="table datatable">
     <thead>
         <tr>
@@ -15,21 +17,41 @@
     </thead>
     <tbody>
 
-        @foreach (var item in Model)
-        {
+      @for (int i = 0; i < Model.Count(); i++)
+      {
             <tr>
 
-
-                <td>@Html.DisplayFor(modelItem => item.ApplicationCode)</td>
-                <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                <td>@Html.DisplayFor(modelItem => item.Email)</td>
-                <td>@Html.DisplayFor(modelItem => item.Cell)</td>
+             
+                <td>@Html.DisplayFor(modelItem => Model[i].ApplicationCode)</td>
+                <td>@Html.DisplayFor(modelItem => Model[i].Name)</td>
+                <td>@Html.DisplayFor(modelItem => Model[i].Email)</td>
+                <td>@Html.DisplayFor(modelItem => Model[i].Cell)</td>
                
-                <td>@Html.EditorFor(modelItem=>item.Select)</td>
+                <td>@Html.EditorFor(modelItem => Model[i].Select)</td>
+                 @Html.HiddenFor(modelItem => Model[i].BatchId)
+                @Html.HiddenFor(modelItem => Model[i].ApplicationId)
             </tr>
         }
 
     </tbody>
 
 </table>
+    if (ViewBag.Flag == "1")
+    {
+<div class="col-md-3">
+    <div class="input-group">
+        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+        @Html.DropDownList("CetMasterId", (IEnumerable<SelectListItem>)ViewBag.CetMaster, "Select Cet", new { @class = "form-control" })
+    </div>
 
+</div>
+
+<div class="col-md-3">
+    <div class="input-group">
+        <input class="btn btn-primary" type="submit" value="Publish Halticket" />
+
+    </div>
+
+</div>
+    }
+}

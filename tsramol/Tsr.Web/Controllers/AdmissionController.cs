@@ -41,9 +41,14 @@ namespace Tsr.Web.Controllers
 
         public JsonResult FillCet(int? BatchId)
         {
-            var Cet = db.CetMasters.Where(b => b.BatchId == BatchId && b.IsActive == true);
+            var C = db.CetMasters
+             .Where(x => (x.BatchId == BatchId && x.IsActive==true))
+             .Select(x => new { CetMasterId = x.CetMasterId, Name = x.CetDate });
+            var Cet = C.ToList().Select(x => new CetDropdown { CetMasterId = x.CetMasterId, CetCode = Convert.ToDateTime(x.Name).ToString("dd-MM-yyyy") });
             return Json(Cet, JsonRequestBehavior.AllowGet);
         }
+
+      
         #endregion
         public ActionResult Index()
         {
@@ -112,6 +117,11 @@ namespace Tsr.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                var extension = Path.GetExtension(obj.FileUpload.FileName);
+                var path = Path.Combine(Server.MapPath("~/Uploads/CetFile/"));
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+                obj.FileUpload.SaveAs(path + obj.CetCode + extension);
                 CetMaster cm = new CetMaster
                 {
                     BatchId = obj.BatchId,
@@ -121,6 +131,7 @@ namespace Tsr.Web.Controllers
                     CourseId = obj.CourseId,
                     IsActive = obj.IsActive,
                     //StartDate = obj.StartDate,
+                    FilePath= path + obj.CetCode + extension,
                     Venue = obj.Venue
                 };
 
@@ -155,7 +166,7 @@ namespace Tsr.Web.Controllers
                 //          }).ToList();
                 //db.CetMarks.AddRange(sm);
                 //await db.SaveChangesAsync();
-
+               
                 return Json(new { success = true });
             }
             var a = from c in db.Courses
@@ -257,7 +268,10 @@ namespace Tsr.Web.Controllers
 
             var list = from ap in db.Applications
                        join b in db.Batches on ap.BatchId equals b.BatchId
+                       join cr in db.Courses on ap.CourseId equals cr.CourseId
                        join appl in db.Applied on ap.ApplicationId equals appl.ApplicationId
+                       join op in db.OnlinePaymentInfos on ap.ApplicationId equals op.ApplicationId
+                       join cm in db.CetMasters on cr.CourseId equals cm.CourseId
                        where (b.BatchId == BatchId)
                        select new HallTicketListVM
                        {
@@ -265,16 +279,28 @@ namespace Tsr.Web.Controllers
                            ApplicationId = ap.ApplicationId,
                            BatchName = b.BatchCode,
                            Name = ap.FirstName + " " + ap.LastName,
+                           BatchId=b.BatchId,
+                          
                            //PaidAmount = opi.amount,
                            Email = ap.Email,
                            Cell = ap.CellNo,
                            Select = false
                        };
-
-
+            var ci = db.CetMasters.FirstOrDefault(x => x.BatchId == BatchId);
+            if (ci != null)
+            {
+                ViewBag.Flag = "1";
+            }
+            else
+            { ViewBag.Flag = "0"; }
+             var C = db.CetMasters
+            .Where(x => (x.BatchId == BatchId && x.IsActive == true))
+            .Select(x => new { CetMasterId = x.CetMasterId, Name = x.CetDate });
+            var Cet = C.ToList().Select(x => new CetDropdown { CetMasterId = x.CetMasterId, CetCode = Convert.ToDateTime(x.Name).ToString("dd-MM-yyyy") });
+            ViewBag.CetMaster = new SelectList(Cet.ToList(), "CetMasterId", "CetCode");
             return PartialView("_HallticketApplicant", list.ToList());
         }
-        public ActionResult Export(int id)
+        public ActionResult Export(int? id)
         {
 
             var list = (from ap in db.Applications.AsEnumerable()
@@ -312,6 +338,7 @@ namespace Tsr.Web.Controllers
                 int count = 0;
                 foreach (var app in list)
                 {
+                   
                     //var filename = app.ApplicationCode + ".pdf";
                     //var output = new FileStream(Path.Combine("c:\\myPDF\\", filename), FileMode.Create);
                     //var writer1 = PdfWriter.GetInstance(pdfDoc, output);
@@ -350,133 +377,139 @@ namespace Tsr.Web.Controllers
                     cb.EndText();
 
 
-                    cb.Rectangle(36f, 480f, 410f, 200f);//Main box
+                    cb.Rectangle(36f, 450f, 410f, 250f);//Main box
                     cb.Stroke();
+                    //cb.BeginText();
+                    //cb.SetFontAndSize(bf_verdana, 10f);
+                    //cb.ShowTextAligned(Element.ALIGN_LEFT, "Course Applied", 38f, 630f, 0);
+
+                    //cb.EndText();
+
                     cb.BeginText();
                     cb.SetFontAndSize(bf_verdana, 10f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Course Applied", 38f, 660f, 0);
-
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Date of Exam", 38f, 650f, 0);
                     cb.EndText();
 
                     cb.BeginText();
                     cb.SetFontAndSize(bf_verdana, 10f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Date of Exam", 185f, 660f, 0);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Day", 185f, 650f, 0);
                     cb.EndText();
 
                     cb.BeginText();
                     cb.SetFontAndSize(bf_verdana, 10f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Day", 300f, 660f, 0);
-                    cb.EndText();
-
-                    cb.BeginText();
-                    cb.SetFontAndSize(bf_verdana, 10f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Time", 380f, 660f, 0);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Time", 380f, 650f, 0);
                     cb.EndText();
 
                     cb.SetLineWidth(1.0f);
                     cb.SetColorStroke(BaseColor.BLACK);
-                    cb.MoveTo(36f, 655f);
-                    cb.LineTo(447f, 655f);
+                    cb.MoveTo(36f, 640f);
+                    cb.LineTo(447f, 640f);
+                    cb.Stroke();
+                    // first horigentle line
+                    cb.SetLineWidth(1.0f);
+                    cb.SetColorStroke(BaseColor.BLACK);
+                    cb.MoveTo(36f, 670f);
+                    cb.LineTo(447f, 670f);
                     cb.Stroke();
 
                     cb.BeginText();
-                    cb.SetFontAndSize(bf_arial3, 11.5f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.CourseName == null ? "" : app.CourseName, 38f, 637f, 0);
+                    cb.SetFontAndSize(bf_arial3, 8f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT,app.CourseName == null ? "Course Applied : " : "Course Applied : " + app.CourseName, 38f, 675f, 0);
                     cb.EndText();
 
                     cb.BeginText();
-                    cb.SetFontAndSize(bf_arial3, 11.5f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.CetDate == null ? "" : Convert.ToDateTime(app.CetDate).ToString("dd-MM-yyyy"), 185f, 637f, 0);
+                    cb.SetFontAndSize(bf_arial3, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.CetDate == null ? "" : Convert.ToDateTime(app.CetDate).ToString("dd-MM-yyyy"), 38f, 620f, 0);
                     cb.EndText();
 
                     cb.BeginText();
-                    cb.SetFontAndSize(bf_arial3, 11.5f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, /*app.CourseName == null ? "" : app.CourseName*/ "Saturday", 300f, 637f, 0);
+                    cb.SetFontAndSize(bf_arial3, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, /*app.CourseName == null ? "" : app.CourseName*/ "Saturday", 185f, 620f, 0);
                     cb.EndText();
 
                     cb.BeginText();
-                    cb.SetFontAndSize(bf_arial3, 11.5f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.CetTime == null ? "" : Convert.ToString(app.CetTime), 380f, 637f, 0);
+                    cb.SetFontAndSize(bf_arial3, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.CetTime == null ? "" : Convert.ToString(app.CetTime), 380f, 620f, 0);
                     cb.EndText();
 
                     cb.SetLineWidth(1.0f);
                     cb.SetColorStroke(BaseColor.BLACK);
-                    cb.MoveTo(36f, 625f);
-                    cb.LineTo(447f, 625f);
+                    cb.MoveTo(36f, 610f);
+                    cb.LineTo(447f, 610f);
                     cb.Stroke();
 
                     cb.BeginText();
                     cb.SetFontAndSize(bf_verdana, 10f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Name of Examination Centre", 38f, 605f, 0);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Name of Examination Centre", 38f, 585f, 0);
                     cb.EndText();
 
                     cb.BeginText();
                     cb.SetFontAndSize(bf_verdana, 7.5f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, "T. S. Rahaman, Nhava Tal, Panvel, Dist Raigad", 185f, 605f, 0);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "T. S. Rahaman, Nhava Tal, Panvel, Dist Raigad", 185f, 595f, 0);
                     cb.EndText();
 
                     cb.BeginText();
                     cb.SetFontAndSize(bf_verdana, 7.5f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Maharashtra 410206", 185f, 590f, 0);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Maharashtra 410206", 185f, 585f, 0);
                     cb.EndText();
 
                     cb.SetLineWidth(1.0f);
                     cb.SetColorStroke(BaseColor.BLACK);
-                    cb.MoveTo(36f, 585f);
-                    cb.LineTo(447f, 585f);
+                    cb.MoveTo(36f, 570f);
+                    cb.LineTo(447f, 570f);
                     cb.Stroke();
 
                     cb.BeginText();
                     cb.SetFontAndSize(bf_verdana, 10f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Name of Candidate", 38f, 565f, 0);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Name of Candidate", 38f, 550f, 0);
                     cb.EndText();
 
                     cb.BeginText();
                     cb.SetFontAndSize(bf_verdana, 8.5f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.Name == null ? "" : app.Name, 185f, 565f, 0);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.Name == null ? "" : app.Name, 185f, 550f, 0);
                     cb.EndText();
 
                     cb.SetLineWidth(1.0f);
                     cb.SetColorStroke(BaseColor.BLACK);
-                    cb.MoveTo(36f, 560f);
-                    cb.LineTo(447f, 560f);
+                    cb.MoveTo(36f, 540f);
+                    cb.LineTo(447f, 540f);
                     cb.Stroke();
 
                     cb.BeginText();
                     cb.SetFontAndSize(bf_verdana, 10f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Father's Name", 38f, 540f, 0);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Father's Name", 38f, 525f, 0);
                     cb.EndText();
 
                     cb.BeginText();
                     cb.SetFontAndSize(bf_verdana, 8.5f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.Fathername == null ? "" : app.Fathername, 185f, 540f, 0);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.Fathername == null ? "" : app.Fathername, 185f, 525f, 0);
                     cb.EndText();
 
                     cb.SetLineWidth(1.0f);
                     cb.SetColorStroke(BaseColor.BLACK);
-                    cb.MoveTo(36f, 530f);
-                    cb.LineTo(447f, 530f);
+                    cb.MoveTo(36f, 510f);
+                    cb.LineTo(447f, 510f);
                     cb.Stroke();
 
                     cb.BeginText();
                     cb.SetFontAndSize(bf_verdana, 10f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Mother's Name", 38f, 510f, 0);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Mother's Name", 38f, 490f, 0);
                     cb.EndText();
 
                     cb.BeginText();
                     cb.SetFontAndSize(bf_verdana, 8.5f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.Mothername == null ? "" : app.Mothername, 185f, 510f, 0);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.Mothername == null ? "" : app.Mothername, 185f, 490f, 0);
                     cb.EndText();
 
-                    cb.Rectangle(460f, 640f, 106f, 40f);//Hallticket box
+                    cb.Rectangle(460f, 640f, 106f, 60f);//Hallticket box
                     cb.Stroke();
                     cb.BeginText();
                     cb.SetFontAndSize(bf_arialbold, 9f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Hall Ticket No", 485f, 665f, 0);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Hall Ticket No", 465f, 675f, 0);
                     cb.EndText();
                     cb.BeginText();
                     cb.SetFontAndSize(bf_arialbold, 9f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.ApplicationCode == null ? "" : app.ApplicationCode, 460f, 650f, 0);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.ApplicationCode == null ? "" : app.ApplicationCode, 465f, 650f, 0);
                     cb.EndText();
 
                     cb.Rectangle(460f, 510f, 106f, 120f);//Picture box
@@ -517,20 +550,20 @@ namespace Tsr.Web.Controllers
 
                     cb.SetLineWidth(1.0f);                // Vertical line 
                     cb.SetColorStroke(BaseColor.BLACK);
-                    cb.MoveTo(180f, 680f);
-                    cb.LineTo(180f, 480f);
+                    cb.MoveTo(180f, 670f);
+                    cb.LineTo(180f, 450f);
                     cb.Stroke();
+
+                    //cb.SetLineWidth(1.0f);                // Vertical line 
+                    //cb.SetColorStroke(BaseColor.BLACK);
+                    //cb.MoveTo(295f, 670f);
+                    //cb.LineTo(295f, 610f);
+                    //cb.Stroke();
 
                     cb.SetLineWidth(1.0f);                // Vertical line 
                     cb.SetColorStroke(BaseColor.BLACK);
-                    cb.MoveTo(295f, 680f);
-                    cb.LineTo(295f, 625f);
-                    cb.Stroke();
-
-                    cb.SetLineWidth(1.0f);                // Vertical line 
-                    cb.SetColorStroke(BaseColor.BLACK);
-                    cb.MoveTo(375f, 680f);
-                    cb.LineTo(375f, 625f);
+                    cb.MoveTo(375f, 670f);
+                    cb.LineTo(375f, 610f);
                     cb.Stroke();
 
                     string imageURL = Server.MapPath("~/Img/avatar.png"); // Image 460f, 510f, 106f, 120f
@@ -556,13 +589,65 @@ namespace Tsr.Web.Controllers
 
                 pdfDoc.Close();
 
-                
+            
+              
+                //write to file
+              
                 return File(stream.ToArray(), "application/pdf");
+                
             }
 
 
 
 
+        }
+        [HttpPost]
+        public async Task<ActionResult> HallTickets(List<HallTicketListVM> ht, int? CetMasterId)
+        {
+            //FileContentResult file= Export(98);
+            if (ht != null && CetMasterId != null)
+            {
+                foreach (var item in ht)
+                {
+                    if (item.Select == true)
+                    {
+                        CetMark c = new CetMark
+                        {
+                            CetMasterId = Convert.ToInt32(CetMasterId),
+                            BatchId = item.BatchId,
+                            ApplicationId = Convert.ToInt32(item.ApplicationId),
+                            Marks1 = 0,
+                            Marks2 = 0,
+                            Marks3 = 0,
+                            Marks4 = 0,
+                            Total = 0,
+                            SelectStatus = item.Select
+
+
+                        };
+                        db.CetMarks.Add(c);
+                    }
+
+                }
+
+                await db.SaveChangesAsync();
+            }
+            //var path = Path.Combine(Server.MapPath("~/Uploads/HallTickets/"));
+            //if (!Directory.Exists(path))
+            //    Directory.CreateDirectory(path);
+
+            //FileStream files = new FileStream(path, FileMode.Create, FileAccess.Write);
+            //file.WriteTo(files);
+            //files.Close();
+            //stream.Close();
+            var a = from c in db.Courses
+                    join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
+                    where (c.IsActive == true && cc.CetRequired == true)
+                    select new { c.CourseId, c.CourseName };
+            ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
+            //ViewBag.Course = new SelectList(db.Courses.ToList(), "CourseId", "CourseName");
+            var obj = new List<HallTicketListVM>();
+            return View(obj);
         }
 
         #endregion
@@ -1253,6 +1338,8 @@ namespace Tsr.Web.Controllers
         }
         #endregion
 
+
+       
     }
 
 }

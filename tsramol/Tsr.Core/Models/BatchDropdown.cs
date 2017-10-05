@@ -12,4 +12,10 @@ namespace Tsr.Core.Models
         public int BatchId { get; set; }
         public string Name { get; set; }
     }
+    public class CetDropdown
+    {
+        public string CetCode { get; set; }
+        public int CetMasterId { get; set; }
+        public string Name { get; set; }
+    }
 }

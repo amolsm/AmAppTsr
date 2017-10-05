@@ -12,6 +12,7 @@
     <link rel="stylesheet" type="text/css" id="theme" href="~/Content/css/theme-black.css" />
     <link href="~/Content/css/jquery/jquery-ui.min.css" rel="stylesheet" />
     <link href="~/Content/Site.css" rel="stylesheet" />
+    @Styles.Render("~/Content/dropzonescss")
     <!-- EOF CSS INCLUDE -->
 
     <script src="~/Scripts/js/plugins/jquery/jquery.min.js"></script>
@@ -57,7 +58,7 @@
     <!-- START TEMPLATE -->
     <script src="~/Scripts/js/plugins.js"></script>
     <script src="~/Scripts/js/actions.js"></script>
-   
+   @Scripts.Render("~/bundles/dropzonescripts")
     <!-- END TEMPLATE -->
     <!-- END SCRIPTS -->
     @RenderSection("Scripts", required:false)
