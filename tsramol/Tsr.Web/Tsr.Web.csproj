@@ -957,6 +957,7 @@
     <Content Include="Views\Admission\_MedicalScheduleList.cshtml" />
     <Content Include="Views\Admission\MedicalScheduleCreate.cshtml" />
     <Content Include="Views\Admission\MedicalScheduleEdit.cshtml" />
+    <Content Include="Views\Fees\CoursePayments.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

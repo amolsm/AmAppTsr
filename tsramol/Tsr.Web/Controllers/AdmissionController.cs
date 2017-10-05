@@ -127,34 +127,34 @@ namespace Tsr.Web.Controllers
                 db.CetMasters.Add(cm);
                 await db.SaveChangesAsync();
 
-                var sm = (from ap in db.Applications
-                          join apl in db.Applied on ap.ApplicationId equals apl.ApplicationId
-                          where (ap.BatchId == obj.BatchId)
-                          select new
-                          {
-                              BatchId = (int)obj.BatchId,
-                              ApplicationId = ap.ApplicationId,
-                              CetMasterId = cm.CetMasterId,
-                              SelectStatus = false,
-                              Marks1 = 0,
-                              Marks2 = 0,
-                              Marks3 = 0,
-                              Marks4 = 0,
-                              Total = 0
-                          }).AsEnumerable().Select(x => new CetMark
-                                {
-                                  BatchId = x.BatchId,
-                                  ApplicationId = x.ApplicationId,
-                                  CetMasterId = x.CetMasterId,
-                                  SelectStatus = x.SelectStatus,
-                                  Marks1 = x.Marks1,
-                                  Marks2 = x.Marks2,
-                                  Marks3 = 0,
-                                  Marks4 = 0,
-                                  Total = 0
-                          }).ToList();
-                db.CetMarks.AddRange(sm);
-                await db.SaveChangesAsync();
+                //var sm = (from ap in db.Applications
+                //          join apl in db.Applied on ap.ApplicationId equals apl.ApplicationId
+                //          where (ap.BatchId == obj.BatchId)
+                //          select new
+                //          {
+                //              BatchId = (int)obj.BatchId,
+                //              ApplicationId = ap.ApplicationId,
+                //              CetMasterId = cm.CetMasterId,
+                //              SelectStatus = false,
+                //              Marks1 = 0,
+                //              Marks2 = 0,
+                //              Marks3 = 0,
+                //              Marks4 = 0,
+                //              Total = 0
+                //          }).AsEnumerable().Select(x => new CetMark
+                //                {
+                //                  BatchId = x.BatchId,
+                //                  ApplicationId = x.ApplicationId,
+                //                  CetMasterId = x.CetMasterId,
+                //                  SelectStatus = x.SelectStatus,
+                //                  Marks1 = x.Marks1,
+                //                  Marks2 = x.Marks2,
+                //                  Marks3 = 0,
+                //                  Marks4 = 0,
+                //                  Total = 0
+                //          }).ToList();
+                //db.CetMarks.AddRange(sm);
+                //await db.SaveChangesAsync();
 
                 return Json(new { success = true });
             }
@@ -251,15 +251,13 @@ namespace Tsr.Web.Controllers
             var obj = new List<HallTicketListVM>();
             return View(obj);
         }
-        public ActionResult GetApplicantForHalltickets(int? CetMasterId)
+        public ActionResult GetApplicantForHalltickets(int? BatchId)
         {
-            var cm = db.CetMasters.FirstOrDefault(x => x.CetMasterId == CetMasterId);
-            var BatchId = cm.BatchId;
+            
 
             var list = from ap in db.Applications
                        join b in db.Batches on ap.BatchId equals b.BatchId
-                       join opi in db.OnlinePaymentInfos on ap.ApplicationId equals opi.ApplicationId
-
+                       join appl in db.Applied on ap.ApplicationId equals appl.ApplicationId
                        where (b.BatchId == BatchId)
                        select new HallTicketListVM
                        {
@@ -267,7 +265,7 @@ namespace Tsr.Web.Controllers
                            ApplicationId = ap.ApplicationId,
                            BatchName = b.BatchCode,
                            Name = ap.FirstName + " " + ap.LastName,
-                           PaidAmount = opi.amount,
+                           //PaidAmount = opi.amount,
                            Email = ap.Email,
                            Cell = ap.CellNo,
                            Select = false

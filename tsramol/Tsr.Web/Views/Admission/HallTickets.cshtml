@@ -50,14 +50,14 @@
 
                                         </div>
 
-                                        <div class="col-md-3">
+                                        @*<div class="col-md-3">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                                 @Html.DropDownList("CetMasterId",
                    new SelectList(Enumerable.Empty<SelectListItem>(), "CetMasterId", "CetCode"), " ", new { @class = "form-control" })
                                             </div>
 
-                                        </div>
+                                        </div>*@
 
                                         <div class="col-md-3">
                                             <div class="input-group">
@@ -135,8 +135,8 @@
   }
 
   function Search() {
-      var CetMasterId = $('#CetMasterId').val();
+      var BatchId = $('#BatchId').val();
 
-      $("#dvResult").load('@(Url.Action("GetApplicantForHalltickets", "Admission",null, Request.Url.Scheme))?CetMasterId=' + CetMasterId);
+      $("#dvResult").load('@(Url.Action("GetApplicantForHalltickets", "Admission",null, Request.Url.Scheme))?BatchId=' + BatchId);
   }
 </script>

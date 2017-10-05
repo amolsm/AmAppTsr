@@ -17,6 +17,20 @@ namespace Tsr.Web.Controllers
     public class FeesController : Controller
     {
         AppContext db = new AppContext();
+
+        #region common
+        public ActionResult FillStudentsBatchwise(int BatchId)
+        {
+            var Students = from apl in db.Applied
+                           join ap in db.Applications on apl.ApplicationId equals ap.ApplicationId
+                           where (apl.BatchId == BatchId && apl.AdmissionStatus == true)
+                           select new { ApplicationId = apl.ApplicationId, Name = ap.FullName};                          
+
+            return Json(Students, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+
+        #region oldReceipt
         public ActionResult FeeReciept()
         {
             ViewBag.Categories = new SelectList(db.CourseCategories.ToList(), "CourseCategoryId", "CategoryName");
@@ -150,7 +164,16 @@ namespace Tsr.Web.Controllers
             }
             return View("FeeReciept");
         }
+        #endregion
 
+        #region CoursePayment
+        public ActionResult CoursePayments()
+        {
+            ViewBag.Categories = new SelectList(db.CourseCategories.ToList(), "CourseCategoryId", "CategoryName");
+           
+            return View();
+        }
+        #endregion
 
         #region Scrutinee
         public ActionResult Scrutinee()
