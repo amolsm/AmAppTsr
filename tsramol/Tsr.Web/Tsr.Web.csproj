@@ -981,6 +981,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="audio\" />
     <Folder Include="Uploads\CetFile\" />
+    <Folder Include="Uploads\Halltickets\" />
     <Folder Include="Uploads\Photo\" />
   </ItemGroup>
   <ItemGroup>

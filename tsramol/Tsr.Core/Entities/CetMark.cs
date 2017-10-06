@@ -18,5 +18,7 @@ namespace Tsr.Core.Entities
         public float Marks4 { get; set; }
         public float Total { get; set; }
         public bool? SelectStatus { get; set; }
+
+        public string Hallticketpath { get; set; }
     }
 }

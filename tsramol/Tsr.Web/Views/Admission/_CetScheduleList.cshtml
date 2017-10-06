@@ -58,7 +58,7 @@
                     @Html.DisplayFor(modelItem => item.IsActive)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "CetEdit", new { id = item.CetId }, new { data_modal = "" }) |
+                    @Html.ActionLink("Edit", "CetEdit", new { id = item.CetId }) |
                 </td>
             </tr>
         }
@@ -67,5 +67,3 @@
 
 </table>
 
-<script src="~/Scripts/js/plugins/bootstrap/bootstrap-select.js"></script>
-<script src="~/Scripts/ModalForm.js"></script>

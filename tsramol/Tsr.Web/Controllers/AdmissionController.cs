@@ -19,7 +19,7 @@ namespace Tsr.Web.Controllers
     {
         AppContext db = new AppContext();
         #region Common
-        
+
         public JsonResult FillBatch(int? CourseId)
         {
             var C = db.Batches
@@ -36,27 +36,28 @@ namespace Tsr.Web.Controllers
                 .Select(x => new { BatchId = x.BatchId, Name = x.StartDate });
 
             var Batches = C.ToList().Select(x => new BatchDropdown { BatchId = x.BatchId, BatchCode = Convert.ToDateTime(x.Name).ToString("dd-MM-yyyy") });
-            return Json(Batches, JsonRequestBehavior.AllowGet); 
+            return Json(Batches, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult FillCet(int? BatchId)
         {
             var C = db.CetMasters
-             .Where(x => (x.BatchId == BatchId && x.IsActive==true))
+             .Where(x => (x.BatchId == BatchId && x.IsActive == true))
              .Select(x => new { CetMasterId = x.CetMasterId, Name = x.CetDate });
             var Cet = C.ToList().Select(x => new CetDropdown { CetMasterId = x.CetMasterId, CetCode = Convert.ToDateTime(x.Name).ToString("dd-MM-yyyy") });
             return Json(Cet, JsonRequestBehavior.AllowGet);
         }
 
-      
+
         #endregion
         public ActionResult Index()
         {
-            
+
             return View();
         }
 
         #region CET
+        [HttpGet]
         public ActionResult CETSchedule()
         {
             var a = from c in db.Courses
@@ -64,9 +65,21 @@ namespace Tsr.Web.Controllers
                     where (c.IsActive == true && cc.CetRequired == true)
                     select new { c.CourseId, c.CourseName };
             ViewBag.Courses = new SelectList(a.ToList(), "CourseId", "CourseName");
-           
-            var obj = new List<AddmissionCetListVM>();
-            return View(obj.ToList());
+
+            ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
+
+            var count = db.CetMasters.Count() + 1;
+            var obj = new AddmissionCetCreateVM
+            {
+                CetCode = count.ToString().PadLeft(4, '0'),
+                _AddmissionCetListVM = new List<AddmissionCetListVM>()
+            };
+
+
+            var Batches = new List<BatchDropdown>();
+
+            ViewBag.Batches = new SelectList(Batches, "BatchId", "BatchCode");
+            return View(obj);
         }
 
         [HttpGet]
@@ -75,7 +88,7 @@ namespace Tsr.Web.Controllers
             var vm = from cm in db.CetMasters
                      join c in db.Courses on cm.CourseId equals c.CourseId
                      join b in db.Batches on cm.BatchId equals b.BatchId
-                     where (b.IsActive == true && b.OnlineBookingStatus == true && b.BatchId==BatchId)
+                     where (b.IsActive == true && b.OnlineBookingStatus == true && b.BatchId == BatchId)
                      select new AddmissionCetListVM
                      {
                          BatchCode = b.BatchCode,
@@ -92,157 +105,130 @@ namespace Tsr.Web.Controllers
             if (vm.ToList().Count == 0)
             {
                 var obj = new List<AddmissionCetListVM>();
-                return PartialView("_CetScheduleList", obj.ToList()); }
+                return PartialView("_CetScheduleList", obj.ToList());
+            }
             else { return PartialView("_CetScheduleList", vm.ToList()); }
 
 
-           
+
         }
-        public ActionResult CetCreate()
-        {
-            var a = from c in db.Courses
-                    join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
-                    where (c.IsActive == true && cc.CetRequired == true)
-                    select new { c.CourseId, c.CourseName };
-            ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
-            var count = db.CetMasters.Count() + 1;
-            var obj = new AddmissionCetCreateVM {
-                CetCode = count.ToString().PadLeft(4, '0')
-                        };
-            return PartialView("CetCreate",obj);
-        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CetCreate(AddmissionCetCreateVM obj)
+        public ActionResult CETSchedule(AddmissionCetCreateVM obj)
         {
             if (ModelState.IsValid)
             {
-                //var extension = Path.GetExtension(obj.FileUpload.FileName);
-                //var path = Path.Combine(Server.MapPath("~/Uploads/CetFile/"));
-                //if (!Directory.Exists(path))
-                //    Directory.CreateDirectory(path);
-                //obj.FileUpload.SaveAs(path + obj.CetCode + extension);
-                CetMaster cm = new CetMaster
+                string filepathname = string.Empty;
+                if (obj.CetId == 0 || obj.CetId == null)
                 {
-                    BatchId = obj.BatchId,
-                    CetCode = obj.CetCode,
-                    CetDate = obj.CetDate,
-                    CetTime = obj.CetTime,
-                    CourseId = obj.CourseId,
-                    IsActive = obj.IsActive,
-                    //StartDate = obj.StartDate,
-                    FilePath= null,
-                    Venue = obj.Venue
-                };
+                    if (Request.Files.Count > 0)
+                    {
+                        var root = "/Uploads/CetFile/";
 
-                db.CetMasters.Add(cm);
-                await db.SaveChangesAsync();
+                        var files = Request.Files[0];
+                        var ext = Path.GetExtension(files.FileName);
+                        var fileName = obj.CetCode + ext;
+                        var path = Server.MapPath(root + fileName);
+                        files.SaveAs(path);
+                        filepathname = root + fileName;
 
-                //var sm = (from ap in db.Applications
-                //          join apl in db.Applied on ap.ApplicationId equals apl.ApplicationId
-                //          where (ap.BatchId == obj.BatchId)
-                //          select new
-                //          {
-                //              BatchId = (int)obj.BatchId,
-                //              ApplicationId = ap.ApplicationId,
-                //              CetMasterId = cm.CetMasterId,
-                //              SelectStatus = false,
-                //              Marks1 = 0,
-                //              Marks2 = 0,
-                //              Marks3 = 0,
-                //              Marks4 = 0,
-                //              Total = 0
-                //          }).AsEnumerable().Select(x => new CetMark
-                //                {
-                //                  BatchId = x.BatchId,
-                //                  ApplicationId = x.ApplicationId,
-                //                  CetMasterId = x.CetMasterId,
-                //                  SelectStatus = x.SelectStatus,
-                //                  Marks1 = x.Marks1,
-                //                  Marks2 = x.Marks2,
-                //                  Marks3 = 0,
-                //                  Marks4 = 0,
-                //                  Total = 0
-                //          }).ToList();
-                //db.CetMarks.AddRange(sm);
-                //await db.SaveChangesAsync();
-               
-                return Json(new { success = true });
+                    }
+                    CetMaster cm = new CetMaster
+                    {
+                        BatchId = obj.BatchId,
+                        CetCode = obj.CetCode,
+                        CetDate = Convert.ToDateTime(obj.CetDates),
+                        CetTime = obj.CetTime,
+                        CourseId = obj.CourseId,
+                        IsActive = obj.IsActive,
+                        //StartDate = obj.StartDate,
+                        FilePath = filepathname,
+                        Venue = obj.Venue
+                    };
+
+                    db.CetMasters.Add(cm);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    if (Request.Files.Count > 0)
+                    {
+                        var root = "/Uploads/CetFile/";
+
+                        var files = Request.Files[0];
+                        var ext = Path.GetExtension(files.FileName);
+                        var fileName = obj.CetCode + ext;
+                        var path = Server.MapPath(root + fileName);
+                        files.SaveAs(path);
+                        filepathname = root + fileName;
+
+                    }
+                    CetMaster cm = new CetMaster
+                    {
+                        BatchId = obj.BatchId,
+                        CetCode = obj.CetCode,
+                        CetDate = Convert.ToDateTime(obj.CetDates),
+                        CetTime = obj.CetTime,
+                        CourseId = obj.CourseId,
+                        IsActive = obj.IsActive,
+                        CetMasterId = (int)obj.CetId,
+                        FilePath = filepathname,
+                        Venue = obj.Venue
+                    };
+
+                    db.Entry(cm).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                }
+
+
             }
-            var a = from c in db.Courses
-                    join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
-                    where (c.IsActive == true && cc.CetRequired == true)
-                    select new { c.CourseId, c.CourseName };
-            ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
-            return PartialView("CetCreate", obj);
+
+            return RedirectToAction("CETSchedule");
+
         }
 
-        public async Task<ActionResult> CetEdit(int? id)
+        public ActionResult CetEdit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            CetMaster fp = await db.CetMasters.FindAsync(id);
+            CetMaster fp = db.CetMasters.Find(id);
             if (fp == null)
             {
                 return HttpNotFound();
             }
             AddmissionCetCreateVM vm = new AddmissionCetCreateVM
             {
-                BatchId =fp.BatchId,
+                BatchId = fp.BatchId,
                 CetCode = fp.CetCode,
                 CetDates = Convert.ToDateTime(fp.CetDate).ToString("yyyy-MM-dd"),
                 CetId = fp.CetMasterId,
                 CetTime = fp.CetTime,
                 CourseId = fp.CourseId,
                 IsActive = fp.IsActive,
-                Venue = fp.Venue
+                Venue = fp.Venue,
+                _AddmissionCetListVM = new List<AddmissionCetListVM>()
+
+
             };
             var a = from c in db.Courses
                     join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
                     where (c.IsActive == true && cc.CetRequired == true)
                     select new { c.CourseId, c.CourseName };
             ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
+            ViewBag.Courses = new SelectList(a.ToList(), "CourseId", "CourseName");
             var b = db.Batches.Where(x => x.CourseId == fp.CourseId)
                     .Select(x => new { BatchId = x.BatchId, Name = x.StartDate });
 
             var Batches = b.ToList().Select(x => new BatchDropdown { BatchId = x.BatchId, BatchCode = Convert.ToDateTime(x.Name).ToString("dd-MM-yyyy") });
 
             ViewBag.Batches = new SelectList(Batches, "BatchId", "BatchCode");
-            return PartialView("CetEdit", vm);
+            return View("CETSchedule", vm);
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CetEdit(AddmissionCetCreateVM obj)
-        {
-            if (ModelState.IsValid)
-            {
-                CetMaster cm = new CetMaster
-                {
-                    BatchId = obj.BatchId,
-                    CetCode = obj.CetCode,
-                    CetDate = Convert.ToDateTime(obj.CetDates),
-                    CetTime = obj.CetTime,
-                    CourseId = obj.CourseId,
-                    IsActive = obj.IsActive,
-                    CetMasterId = (int)obj.CetId,
-                    Venue = obj.Venue
-                };
 
-                db.Entry(cm).State = EntityState.Modified;
-                try
-                {
-                    await db.SaveChangesAsync();
-                }
-                catch (Exception e)
-                {
-                    string s = e.ToString();
-                }
-                return Json(new { success = true });
-            }
-            return PartialView("CetEdit", obj);
-        }
         #endregion
 
         #region Halltickets
@@ -264,7 +250,7 @@ namespace Tsr.Web.Controllers
         }
         public ActionResult GetApplicantForHalltickets(int? BatchId)
         {
-            
+
 
             var list = from ap in db.Applications
                        join b in db.Batches on ap.BatchId equals b.BatchId
@@ -279,8 +265,8 @@ namespace Tsr.Web.Controllers
                            ApplicationId = ap.ApplicationId,
                            BatchName = b.BatchCode,
                            Name = ap.FirstName + " " + ap.LastName,
-                           BatchId=b.BatchId,
-                          
+                           BatchId = b.BatchId,
+
                            //PaidAmount = opi.amount,
                            Email = ap.Email,
                            Cell = ap.CellNo,
@@ -293,9 +279,9 @@ namespace Tsr.Web.Controllers
             }
             else
             { ViewBag.Flag = "0"; }
-             var C = db.CetMasters
-            .Where(x => (x.BatchId == BatchId && x.IsActive == true))
-            .Select(x => new { CetMasterId = x.CetMasterId, Name = x.CetDate });
+            var C = db.CetMasters
+           .Where(x => (x.BatchId == BatchId && x.IsActive == true))
+           .Select(x => new { CetMasterId = x.CetMasterId, Name = x.CetDate });
             var Cet = C.ToList().Select(x => new CetDropdown { CetMasterId = x.CetMasterId, CetCode = Convert.ToDateTime(x.Name).ToString("dd-MM-yyyy") });
             ViewBag.CetMaster = new SelectList(Cet.ToList(), "CetMasterId", "CetCode");
             return PartialView("_HallticketApplicant", list.ToList());
@@ -338,10 +324,8 @@ namespace Tsr.Web.Controllers
                 int count = 0;
                 foreach (var app in list)
                 {
-                   
-                    //var filename = app.ApplicationCode + ".pdf";
-                    //var output = new FileStream(Path.Combine("c:\\myPDF\\", filename), FileMode.Create);
-                    //var writer1 = PdfWriter.GetInstance(pdfDoc, output);
+
+
 
                     count++;
 
@@ -379,11 +363,7 @@ namespace Tsr.Web.Controllers
 
                     cb.Rectangle(36f, 450f, 410f, 250f);//Main box
                     cb.Stroke();
-                    //cb.BeginText();
-                    //cb.SetFontAndSize(bf_verdana, 10f);
-                    //cb.ShowTextAligned(Element.ALIGN_LEFT, "Course Applied", 38f, 630f, 0);
 
-                    //cb.EndText();
 
                     cb.BeginText();
                     cb.SetFontAndSize(bf_verdana, 10f);
@@ -414,7 +394,7 @@ namespace Tsr.Web.Controllers
 
                     cb.BeginText();
                     cb.SetFontAndSize(bf_arial3, 8f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT,app.CourseName == null ? "Course Applied : " : "Course Applied : " + app.CourseName, 38f, 675f, 0);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.CourseName == null ? "Course Applied : " : "Course Applied : " + app.CourseName, 38f, 675f, 0);
                     cb.EndText();
 
                     cb.BeginText();
@@ -554,11 +534,7 @@ namespace Tsr.Web.Controllers
                     cb.LineTo(180f, 450f);
                     cb.Stroke();
 
-                    //cb.SetLineWidth(1.0f);                // Vertical line 
-                    //cb.SetColorStroke(BaseColor.BLACK);
-                    //cb.MoveTo(295f, 670f);
-                    //cb.LineTo(295f, 610f);
-                    //cb.Stroke();
+
 
                     cb.SetLineWidth(1.0f);                // Vertical line 
                     cb.SetColorStroke(BaseColor.BLACK);
@@ -589,12 +565,12 @@ namespace Tsr.Web.Controllers
 
                 pdfDoc.Close();
 
-            
-              
+
+
                 //write to file
-              
+
                 return File(stream.ToArray(), "application/pdf");
-                
+
             }
 
 
@@ -621,11 +597,13 @@ namespace Tsr.Web.Controllers
                             Marks3 = 0,
                             Marks4 = 0,
                             Total = 0,
-                            SelectStatus = item.Select
+                            SelectStatus = item.Select,
+                            Hallticketpath= SavePdf(Convert.ToInt32(item.ApplicationId))
 
 
                         };
                         db.CetMarks.Add(c);
+
                     }
 
                 }
@@ -726,7 +704,7 @@ namespace Tsr.Web.Controllers
         public async Task<ActionResult> EntranceMarksEntry(List<EntranceMarksListVM> obj)
         {
             if (obj != null)
-            { 
+            {
                 foreach (var item in obj)
                 {
                     CetMark cm = db.CetMarks.FirstOrDefault(x => x.ApplicationId == item.ApplicationId);
@@ -801,7 +779,7 @@ namespace Tsr.Web.Controllers
                     CetInterview ci = new CetInterview
                     {
                         ApplicationId = item.ApplicationId,
-                        BatchId = (int) ap.BatchId,
+                        BatchId = (int)ap.BatchId,
                         InterviewMasterId = (int)InterviewMasterId
                     };
                     db.CetInterviews.Add(ci);
@@ -870,7 +848,7 @@ namespace Tsr.Web.Controllers
             ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
 
             var obj = new List<AdmissionInterviewListVM>();
-           // ViewBag.MedicalMaster = new SelectList(db.MedicalMasters.ToList(), "MedicalMasterId", "MedicalMasterCode");
+            // ViewBag.MedicalMaster = new SelectList(db.MedicalMasters.ToList(), "MedicalMasterId", "MedicalMasterCode");
             return View(obj);
         }
         [HttpPost]
@@ -943,7 +921,7 @@ namespace Tsr.Web.Controllers
             var obj = new List<AdmissionMedicalListVM>();
             // ViewBag.MedicalMaster = new SelectList(db.MedicalMasters.ToList(), "MedicalMasterId", "MedicalMasterCode");
             return View(obj);
-            
+
         }
 
         [HttpPost]
@@ -957,8 +935,8 @@ namespace Tsr.Web.Controllers
                     {
                         //var ap = await db.Applications.FindAsync(item.ApplicationId);
 
-                        Applied apl = db.Applied.FirstOrDefault(x=>x.ApplicationId == item.ApplicationId);
-                        apl.AdmissionStatus = true;                        
+                        Applied apl = db.Applied.FirstOrDefault(x => x.ApplicationId == item.ApplicationId);
+                        apl.AdmissionStatus = true;
                     }
                 }
                 await db.SaveChangesAsync();
@@ -1034,7 +1012,7 @@ namespace Tsr.Web.Controllers
                                Name = ap.FirstName + " " + ap.LastName
                            };
                 ViewBag.Flag = "1";
-                
+
                 //batchDetails
                 //var bt = db.Batches.Find(BatchId);
                 //ViewBag.TotalSeats = bt.TotalSeats;
@@ -1076,20 +1054,20 @@ namespace Tsr.Web.Controllers
                                select new AdmissionInterviewScheduleVM
                                {
                                    InterviewMasterId = i.InterviewMasterId,
-                                   InterviewCode=i.InterviewCode,
-                                   BatchId=i.BatchId,
-                                   CourseId=i.CourseId,
+                                   InterviewCode = i.InterviewCode,
+                                   BatchId = i.BatchId,
+                                   CourseId = i.CourseId,
                                    Batch = b.StartDate.ToString(),
                                    Course = c.CourseName,
-                                   InterviewDate =i.InterviewDate,
-                                   InterviewTime=i.InterviewTime,
-                                   Venue=i.Venue
+                                   InterviewDate = i.InterviewDate,
+                                   InterviewTime = i.InterviewTime,
+                                   Venue = i.Venue
 
                                };
 
-          return PartialView("_InterviewScheduleList",schedulelist.ToList());
+            return PartialView("_InterviewScheduleList", schedulelist.ToList());
         }
-      
+
 
         public ActionResult InterviewScheduleCreate()
         {
@@ -1104,7 +1082,7 @@ namespace Tsr.Web.Controllers
             {
 
                 InterviewCode = count.ToString().PadLeft(4, '0'),
-             
+
             };
             return PartialView("InterviewScheduleCreate", im);
         }
@@ -1222,13 +1200,13 @@ namespace Tsr.Web.Controllers
                                join b in db.Batches on i.BatchId equals b.BatchId
                                select new AdmissionMedicalScheduleVM
                                {
-                                   MedicalMasterId=i.MedicalMasterId,
-                                   MedicalCode=i.MedicalCode,
-                                   Batch=b.StartDate.ToString(),
-                                   Course=c.CourseName,
-                                   CourseId=i.CourseId,
-                                   MedicalDate=i.MedicalDate,
-                                   MedicalFees=i.MedicalFees
+                                   MedicalMasterId = i.MedicalMasterId,
+                                   MedicalCode = i.MedicalCode,
+                                   Batch = b.StartDate.ToString(),
+                                   Course = c.CourseName,
+                                   CourseId = i.CourseId,
+                                   MedicalDate = i.MedicalDate,
+                                   MedicalFees = i.MedicalFees
 
 
                                };
@@ -1248,7 +1226,7 @@ namespace Tsr.Web.Controllers
 
             };
             return PartialView("MedicalScheduleCreate", im);
-          
+
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -1258,7 +1236,7 @@ namespace Tsr.Web.Controllers
             {
                 MedicalMaster m = new MedicalMaster
                 {
-                
+
                     MedicalCode = obj.MedicalCode,
                     BatchId = obj.BatchId,
                     CourseId = obj.CourseId,
@@ -1269,7 +1247,7 @@ namespace Tsr.Web.Controllers
                 db.MedicalMasters.Add(m);
                 await db.SaveChangesAsync();
                 return Json(new { success = true });
-               
+
             }
 
             return PartialView("MedicalScheduleCreate", obj);
@@ -1277,7 +1255,7 @@ namespace Tsr.Web.Controllers
 
         public async Task<ActionResult> MedicalScheduleEdit(int? id)
         {
-           
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -1289,14 +1267,14 @@ namespace Tsr.Web.Controllers
             }
             AdmissionMedicalScheduleVM vm = new AdmissionMedicalScheduleVM
             {
-                MedicalMasterId=obj.MedicalMasterId,
+                MedicalMasterId = obj.MedicalMasterId,
                 MedicalCode = obj.MedicalCode,
                 BatchId = obj.BatchId,
                 CourseId = obj.CourseId,
                 MedicalDates = Convert.ToDateTime(obj.MedicalDate).ToString("yyyy-MM-dd"),
                 MedicalFees = obj.MedicalFees
 
-              
+
             };
             var b = db.Batches.Where(x => x.CourseId == obj.CourseId)
                .Select(x => new { BatchId = x.BatchId, Name = x.StartDate });
@@ -1338,8 +1316,299 @@ namespace Tsr.Web.Controllers
         }
         #endregion
 
+        public string SavePdf(int applicationid)
+        {
+            string filpath = string.Empty;
+            var list = (from ap in db.Applications.AsEnumerable()
+                        join b in db.Batches on ap.BatchId equals b.BatchId
+                        join cr in db.Courses on ap.CourseId equals cr.CourseId
+                        join op in db.OnlinePaymentInfos on ap.ApplicationId equals op.ApplicationId
+                        join cm in db.CetMasters on cr.CourseId equals cm.CourseId
+                        where (ap.ApplicationId == applicationid)
+                        select new HallTicketListVM
+                        {
+                            CetMasterId = cm.CetMasterId,
+                            ApplicationCode = ap.ApplicationCode,
+                            ApplicationId = ap.ApplicationId,
+                            CourseName = cr.CourseName,
+                            BatchName = b.BatchCode,
+                            CetDate = cm.CetDate,
+                            CetTime = cm.CetTime,
+                            Name = ap.FirstName + " " + ap.MiddleName + " " + ap.LastName,
+                            Fathername = ap.MiddleName,
+                            Mothername = ap.MotherName
+                        });
 
-       
+
+            using (MemoryStream stream = new System.IO.MemoryStream())
+            {
+
+                iTextSharp.text.Document pdfDoc = new iTextSharp.text.Document(PageSize.A4, 36, 72, 108, 180);
+                PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
+
+                pdfDoc.Open();
+                pdfDoc.AddTitle("Hall Ticket");
+                PdfContentByte cb = writer.DirectContent;
+
+
+                int count = 0;
+                foreach (var app in list)
+                {
+
+
+
+                    count++;
+
+                    cb.Stroke();
+                    iTextSharp.text.Font f = FontFactory.GetFont("Verdana", 50, iTextSharp.text.Font.BOLD, BaseColor.BLACK);
+                    BaseFont bf_verdanabold = f.GetCalculatedBaseFont(false);
+                    iTextSharp.text.Font f1 = FontFactory.GetFont("Verdana", 50, BaseColor.BLACK);
+                    BaseFont bf_verdana = f1.GetCalculatedBaseFont(false);
+                    iTextSharp.text.Font f2 = FontFactory.GetFont("Arial", 50, iTextSharp.text.Font.BOLD, BaseColor.BLACK);
+                    BaseFont bf_arialbold = f2.GetCalculatedBaseFont(false);
+                    iTextSharp.text.Font f3 = FontFactory.GetFont("Arial", 50, iTextSharp.text.Font.NORMAL, BaseColor.BLACK);
+                    BaseFont bf_arial3 = f3.GetCalculatedBaseFont(false);
+
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdanabold, 13);
+                    cb.ShowTextAligned(Element.ALIGN_CENTER, "SIR MOHAMED YUSUF SEAMEN WELFARE FOUNDATION", 300f, 785f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 11.5f);
+                    cb.ShowTextAligned(Element.ALIGN_CENTER, "TRAINING SHIP RAHAMAN", 310f, 760f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdanabold, 10);
+                    cb.ShowTextAligned(Element.ALIGN_CENTER, "ENTRANCE EXAM October 2017", 313f, 730f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10);
+                    cb.ShowTextAligned(Element.ALIGN_CENTER, "EXAM ADMIT CARD", 320f, 710f, 0);
+                    cb.EndText();
+
+
+                    cb.Rectangle(36f, 450f, 410f, 250f);//Main box
+                    cb.Stroke();
+
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Date of Exam", 38f, 650f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Day", 185f, 650f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Time", 380f, 650f, 0);
+                    cb.EndText();
+
+                    cb.SetLineWidth(1.0f);
+                    cb.SetColorStroke(BaseColor.BLACK);
+                    cb.MoveTo(36f, 640f);
+                    cb.LineTo(447f, 640f);
+                    cb.Stroke();
+                    // first horigentle line
+                    cb.SetLineWidth(1.0f);
+                    cb.SetColorStroke(BaseColor.BLACK);
+                    cb.MoveTo(36f, 670f);
+                    cb.LineTo(447f, 670f);
+                    cb.Stroke();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_arial3, 8f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.CourseName == null ? "Course Applied : " : "Course Applied : " + app.CourseName, 38f, 675f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_arial3, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.CetDate == null ? "" : Convert.ToDateTime(app.CetDate).ToString("dd-MM-yyyy"), 38f, 620f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_arial3, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, /*app.CourseName == null ? "" : app.CourseName*/ "Saturday", 185f, 620f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_arial3, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.CetTime == null ? "" : Convert.ToString(app.CetTime), 380f, 620f, 0);
+                    cb.EndText();
+
+                    cb.SetLineWidth(1.0f);
+                    cb.SetColorStroke(BaseColor.BLACK);
+                    cb.MoveTo(36f, 610f);
+                    cb.LineTo(447f, 610f);
+                    cb.Stroke();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Name of Examination Centre", 38f, 585f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 7.5f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "T. S. Rahaman, Nhava Tal, Panvel, Dist Raigad", 185f, 595f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 7.5f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Maharashtra 410206", 185f, 585f, 0);
+                    cb.EndText();
+
+                    cb.SetLineWidth(1.0f);
+                    cb.SetColorStroke(BaseColor.BLACK);
+                    cb.MoveTo(36f, 570f);
+                    cb.LineTo(447f, 570f);
+                    cb.Stroke();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Name of Candidate", 38f, 550f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 8.5f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.Name == null ? "" : app.Name, 185f, 550f, 0);
+                    cb.EndText();
+
+                    cb.SetLineWidth(1.0f);
+                    cb.SetColorStroke(BaseColor.BLACK);
+                    cb.MoveTo(36f, 540f);
+                    cb.LineTo(447f, 540f);
+                    cb.Stroke();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Father's Name", 38f, 525f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 8.5f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.Fathername == null ? "" : app.Fathername, 185f, 525f, 0);
+                    cb.EndText();
+
+                    cb.SetLineWidth(1.0f);
+                    cb.SetColorStroke(BaseColor.BLACK);
+                    cb.MoveTo(36f, 510f);
+                    cb.LineTo(447f, 510f);
+                    cb.Stroke();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Mother's Name", 38f, 490f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 8.5f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.Mothername == null ? "" : app.Mothername, 185f, 490f, 0);
+                    cb.EndText();
+
+                    cb.Rectangle(460f, 640f, 106f, 60f);//Hallticket box
+                    cb.Stroke();
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_arialbold, 9f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Hall Ticket No", 465f, 675f, 0);
+                    cb.EndText();
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_arialbold, 9f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.ApplicationCode == null ? "" : app.ApplicationCode, 465f, 650f, 0);
+                    cb.EndText();
+
+                    cb.Rectangle(460f, 510f, 106f, 120f);//Picture box
+                    cb.Stroke();
+
+
+                    cb.Rectangle(36f, 370f, 160f, 70f);// candidate signature box
+                    cb.Stroke();
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Candidates's Signature", 38f, 380f, 0);
+                    cb.EndText();
+
+
+                    cb.Rectangle(210f, 370f, 180f, 70f);//Hall Invigilator Singnature box
+                    cb.Stroke();
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Hall Invigilator Singnature with date", 215f, 380f, 0);
+                    cb.EndText();
+
+                    cb.Rectangle(405f, 370f, 160f, 70f);//Principle's Signature box
+                    cb.Stroke();
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Principle's Signature", 410f, 380f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdanabold, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Admission to Pre-Sea Course is subject to qualifying in entrance exam October 2017 and the", 38f, 350f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdanabold, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "eligiility Criteria as Per DG Shipping norms", 38f, 335f, 0);
+                    cb.EndText();
+
+                    cb.SetLineWidth(1.0f);                // Vertical line 
+                    cb.SetColorStroke(BaseColor.BLACK);
+                    cb.MoveTo(180f, 670f);
+                    cb.LineTo(180f, 450f);
+                    cb.Stroke();
+
+
+
+                    cb.SetLineWidth(1.0f);                // Vertical line 
+                    cb.SetColorStroke(BaseColor.BLACK);
+                    cb.MoveTo(375f, 670f);
+                    cb.LineTo(375f, 610f);
+                    cb.Stroke();
+
+                    string imageURL = Server.MapPath("~/Img/avatar.png"); // Image 460f, 510f, 106f, 120f
+                    iTextSharp.text.Image png = iTextSharp.text.Image.GetInstance(imageURL);
+                    png.ScaleToFit(100f, 105f);
+                    png.SpacingBefore = 1f;
+                    png.SpacingAfter = 1f;
+                    png.Alignment = Element.ALIGN_LEFT;
+                    png.SetAbsolutePosition(465f, 515f);
+                    pdfDoc.Add(png);
+
+                    string imageURL1 = Server.MapPath("~/Img/signature.PNG"); // Image 
+                    iTextSharp.text.Image png1 = iTextSharp.text.Image.GetInstance(imageURL1);
+                    png1.ScaleToFit(135f, 50f);
+                    png1.SpacingBefore = 1f;
+                    png1.SpacingAfter = 1f;
+                    png1.Alignment = Element.ALIGN_LEFT;
+                    png1.SetAbsolutePosition(410f, 390f);
+                    pdfDoc.Add(png1);
+
+                    pdfDoc.NewPage();
+                }
+
+                pdfDoc.Close();
+
+                var appcode = db.Applications.Where(x => x.ApplicationId == applicationid).Select(m => m.ApplicationCode).FirstOrDefault();
+                var root = "/Uploads/Halltickets/" + appcode + ".pdf";
+                var path = HttpContext.Server.MapPath(root);
+                byte[] content = stream.ToArray();
+                using (FileStream file = new FileStream(path, FileMode.Create, FileAccess.Write))
+                {
+                    file.Write(content, 0, (int)content.Length);
+                }
+                filpath = root;
+
+               
+            }
+            return filpath;
+        }
     }
-
 }
+
