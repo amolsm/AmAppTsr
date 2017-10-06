@@ -117,11 +117,11 @@ namespace Tsr.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var extension = Path.GetExtension(obj.FileUpload.FileName);
-                var path = Path.Combine(Server.MapPath("~/Uploads/CetFile/"));
-                if (!Directory.Exists(path))
-                    Directory.CreateDirectory(path);
-                obj.FileUpload.SaveAs(path + obj.CetCode + extension);
+                //var extension = Path.GetExtension(obj.FileUpload.FileName);
+                //var path = Path.Combine(Server.MapPath("~/Uploads/CetFile/"));
+                //if (!Directory.Exists(path))
+                //    Directory.CreateDirectory(path);
+                //obj.FileUpload.SaveAs(path + obj.CetCode + extension);
                 CetMaster cm = new CetMaster
                 {
                     BatchId = obj.BatchId,
@@ -131,7 +131,7 @@ namespace Tsr.Web.Controllers
                     CourseId = obj.CourseId,
                     IsActive = obj.IsActive,
                     //StartDate = obj.StartDate,
-                    FilePath= path + obj.CetCode + extension,
+                    FilePath= null,
                     Venue = obj.Venue
                 };
 

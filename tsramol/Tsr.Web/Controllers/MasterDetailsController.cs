@@ -727,8 +727,7 @@ namespace Tsr.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                //try
-                //{
+                
                     Course c = new Course
                     {
                         CategoryId = obj.CategoryId,
@@ -751,22 +750,7 @@ namespace Tsr.Web.Controllers
 
                     await db.SaveChangesAsync();
                     return Json(new { success = true });
-               // }
-                //catch (System.Data.Entity.Validation.DbEntityValidationException ex)
-                //{
-                //    var error = ex.EntityValidationErrors.First().ValidationErrors.First();
-                //    this.ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-                //    ViewBag.Categories = new SelectList(db.CourseCategories.ToList(), "CourseCategoryId", "CategoryName");
-                //    ViewBag.Unit = new SelectList(new List<SelectListItem>
-                //        {
-                //            new SelectListItem { Value = "Days", Text= "Days"},
-                //            new SelectListItem {Value = "Weeks", Text="Weeks" },
-                //            new SelectListItem {Value = "Months", Text="Months" },
-                //            new SelectListItem {Value = "Year" , Text = "Years"}
-                //        }, "Value", "Text");
-
-                //    return PartialView("CourseCreate", obj);
-                //}
+             
             }
 
             ViewBag.Categories = new SelectList(db.CourseCategories.ToList(), "CourseCategoryId", "CategoryName");
@@ -813,10 +797,13 @@ namespace Tsr.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> CourseEdit(MasterCourseCreateVM obj)
-        {
+        {    
             if (ModelState.IsValid)
             {
-                Course c = new Course {
+                
+             
+                   Course c = new Course
+                   {
                     CourseId = obj.CourseId,
                     ShortName = obj.ShortName,
                     CategoryId = obj.CategoryId,
@@ -1488,15 +1475,20 @@ namespace Tsr.Web.Controllers
 
 
         #region UniqueIdentifier
+       
         public JsonResult IsCourseNameExists(string CourseName)
         {
+            var data = db.Courses.Where(x=>x.CourseName== CourseName).FirstOrDefault();
+            return Json(data, JsonRequestBehavior.AllowGet);
             //check if any of the UserName matches the UserName specified in the Parameter using the ANY extension method.  
-            return Json(!db.Courses.Any(x => x.CourseName == CourseName), JsonRequestBehavior.AllowGet);
+
         }
+     
         public JsonResult IsCourseCodeExists(string CourseCode)
         {
+            var data = db.Courses.Where(x => x.CourseCode == CourseCode).FirstOrDefault();
             //check if any of the UserName matches the UserName specified in the Parameter using the ANY extension method.  
-            return Json(!db.Courses.Any(x => x.CourseCode == CourseCode), JsonRequestBehavior.AllowGet);
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
         #endregion
     }

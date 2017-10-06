@@ -26,9 +26,9 @@
                         <div class="col-md-9">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                @Html.EditorFor(model => model.CourseCode, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.EditorFor(model => model.CourseCode, new { htmlAttributes = new { @class = "form-control"} })
                             </div>
-                            @Html.ValidationMessageFor(model => model.CourseCode, "", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(model => model.CourseCode, "", new { @class = "text-danger"})
                         </div>
                     </div>
 
@@ -165,4 +165,39 @@
         <input class="btn btn-primary" type="submit" value="Save" />
     </div>
 }
-
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#CourseName').blur(function () {
+            var CourseName = $('#CourseName').val();
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("IsCourseNameExists")',
+                dataType: 'JSON',
+                data: { CourseName: CourseName },
+                success: function (data) {
+                    if (data.CourseName != null) {
+                        alert("Course Name Already Exist")
+                        $('#CourseName').val('');
+                        return false;
+                    }
+                }
+            });
+        });
+        $('#CourseCode').blur(function () {
+            var CourseCode = $('#CourseCode').val();
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("IsCourseCodeExists")',
+                dataType: 'JSON',
+                data: { CourseCode: CourseCode },
+                success: function (data) {
+                    if (data.CourseCode != null) {
+                        alert("Course Code Already Exist")
+                        $('#CourseCode').val('');
+                        return false;
+                    }
+                }
+            });
+        });
+    });
+</script>  
