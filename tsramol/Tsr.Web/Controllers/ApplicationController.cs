@@ -960,7 +960,12 @@ namespace Tsr.Web.Controllers
                         await db.SaveChangesAsync();
 
                         //Student Payment Details
-                        var totalFee = (decimal)cf.ActualFee + (((decimal)cf.ActualFee / 100) * (decimal)cf.GstPercentage);
+                        decimal tax;
+                        if (cf.GstPercentage > 0)
+                            tax = (((decimal)cf.ActualFee / 100) * (decimal)cf.GstPercentage);
+                        else
+                            tax = 0;
+                        var totalFee = (decimal)cf.ActualFee + tax;
                         StudentFeeDetail sfd = new StudentFeeDetail
                         {
                             ApplicationId = Convert.ToInt32(obj.udf3),

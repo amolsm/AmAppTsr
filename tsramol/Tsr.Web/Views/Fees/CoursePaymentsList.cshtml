@@ -1,0 +1,34 @@
+﻿@model IEnumerable<Tsr.Core.Models.FeesApplicantList>
+
+<table id="customers2" class="table datatable">
+    <thead>
+        <tr>
+
+            <th>Application Code</th>
+            
+            <th>Name</th>
+            <th>Paid Amount</th>
+            <th>Balance Amount</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.ApplicationCode)</td>
+                
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.PaidAmount)</td>
+                <td>@Html.DisplayFor(modelItem => item.BalanceAmount)</td>
+                <td>
+                    @Html.ActionLink("Make Payment", "ViewPaymentDetails", new { id = item.ApplicationId }) |
+                </td>
+            </tr>
+        }
+
+    </tbody>
+
+</table>
+

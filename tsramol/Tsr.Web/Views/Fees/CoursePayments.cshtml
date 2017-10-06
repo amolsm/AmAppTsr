@@ -166,8 +166,8 @@
       });
   }
   function Search() {
-      var BatchId = $('#BatchId').val();
+      var ApplicationId = $('#StudentId').val();
 
-      $("#dvResult").load('@(Url.Action("GetApplicantList", "Fees",null, Request.Url.Scheme))?BatchId=' + BatchId);
+      $("#dvResult").load('@(Url.Action("CoursePaymentsSearch", "Fees",null, Request.Url.Scheme))?ApplicationId=' + ApplicationId);
   }
 </script>

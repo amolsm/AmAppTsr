@@ -173,6 +173,48 @@ namespace Tsr.Web.Controllers
            
             return View();
         }
+
+        public ActionResult CoursePaymentsSearch(int? ApplicationId)
+        {
+            var list = from apd in db.Applied
+                       join ap in db.Applications on apd.ApplicationId equals ap.ApplicationId
+                       join sd in db.StudentFeeDetails on ap.ApplicationId equals sd.ApplicationId
+                       join b in db.Batches on apd.BatchId equals b.BatchId
+                       where (apd.ApplicationId == ApplicationId)
+                       select new FeesApplicantList
+                       {
+                           ApplicationCode = ap.ApplicationCode,
+                           ApplicationId = ap.ApplicationId,
+                           //BatchCode = (b.StartDate).ToString("dd-MM-yyyy"),
+                           Name = ap.FullName,
+                           PaidAmount = sd.FeePaid.ToString(),
+                           Email = ap.Email,
+                           Cell = ap.CellNo,
+                           BalanceAmount = sd.FeeBal.ToString()
+                           //FeesType = fr.FeesType,
+                           //PaymentMode = fr.PaymentMode,
+                           //FeeReceiptNo = fr.FeeReceiptNo
+                       };
+
+
+            return PartialView("CoursePaymentsList", list.ToList());
+        }
+
+        public async Task<ActionResult> CoursePaymentsMP(int? id)
+        {
+            var ap = await db.Applications.FindAsync(id);
+            var sfd = await db.StudentFeeDetails.FirstOrDefaultAsync(x => x.ApplicationId == id);
+
+            ScrutineeMakePaymentVM vm = new ScrutineeMakePaymentVM
+            {
+                ApplicationId = ap.ApplicationId,
+                ApplicationCode = ap.ApplicationCode
+            };
+
+            
+            ViewBag.PaymentMode = DropdownData.PaymentMode();
+            return PartialView("ScrutineeMakePayment", vm);
+        }
         #endregion
 
         #region Scrutinee
@@ -264,7 +306,8 @@ namespace Tsr.Web.Controllers
                 var cc = await db.CourseCategories.FindAsync(ap.CategoryId);
                 var c = await db.Courses.FindAsync(ap.CourseId);
                 //var b = await db.Batches.FindAsync(ap.BatchId);
-                var cf = await db.CourseFees.FindAsync(ap.CourseId);
+                
+                var cf = db.CourseFees.FirstOrDefault(x => x.CourseId == ap.CourseId);
 
                 if (cc.CetRequired == true)
                 {
@@ -324,7 +367,12 @@ namespace Tsr.Web.Controllers
                     await db.SaveChangesAsync();
 
                     //Student Payment Details
-                    var totalFee = (decimal)cf.ActualFee + (((decimal)cf.ActualFee / 100) * (decimal)cf.GstPercentage);
+                    decimal tax ;
+                    if (cf.GstPercentage > 0)
+                        tax = (((decimal)cf.ActualFee / 100) * (decimal)cf.GstPercentage);
+                    else
+                        tax = 0;
+                    var totalFee = (decimal)cf.ActualFee + tax;
                     StudentFeeDetail sfd = new StudentFeeDetail
                     {
                         ApplicationId = Convert.ToInt32(ap.ApplicationId),
