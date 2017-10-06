@@ -196,8 +196,9 @@ namespace Tsr.Web.Controllers
                            //FeeReceiptNo = fr.FeeReceiptNo
                        };
 
-
-            return PartialView("CoursePaymentsList", list.ToList());
+            List<FeesApplicantList> obj = new List<FeesApplicantList>();
+            obj.Add(list.FirstOrDefault());
+            return PartialView("CoursePaymentsList",obj);
         }
 
         public async Task<ActionResult> CoursePaymentsMP(int? id)
@@ -208,15 +209,55 @@ namespace Tsr.Web.Controllers
             ScrutineeMakePaymentVM vm = new ScrutineeMakePaymentVM
             {
                 ApplicationId = ap.ApplicationId,
-                ApplicationCode = ap.ApplicationCode
+                ApplicationCode = ap.ApplicationCode,
+                Amount = sfd.FeeBal,
+                FeesType = "CourseFee"
             };
 
             
             ViewBag.PaymentMode = DropdownData.PaymentMode();
-            return PartialView("ScrutineeMakePayment", vm);
+            return PartialView("CoursePaymentsMP", vm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CoursePaymentsMP(ScrutineeMakePaymentVM obj)
+        {
+            var ap = await db.Applications.FindAsync(obj.ApplicationId);
+            if (ap.IsPackage == false || ap.IsPackage == null)
+            {
+
+                StudentFeeDetail sfd = await db.StudentFeeDetails.FirstOrDefaultAsync(x => x.ApplicationId == obj.ApplicationId);
+                sfd.FeePaid = sfd.FeePaid + obj.Amount;
+                sfd.FeeBal = sfd.FeeBal - obj.Amount;
+
+                //feeReceipt
+                FeeReceipt fr = new FeeReceipt
+                {
+                    Amount = Convert.ToDecimal(obj.Amount),
+                    ApplicationId = Convert.ToInt32(ap.ApplicationId),
+                    PaymentMode = obj.PaymentMode,
+                    PrintStatus = false,
+                    FeesType = "CourseFee"
+                };
+                db.FeeReceipts.Add(fr);
+                await db.SaveChangesAsync();
+
+
+                //return RedirectToAction("Scrutinee");
+                return Json(new { success = true });
+            }
+            return View();
         }
         #endregion
 
+        #region PackagePayment
+
+        #endregion
+
+        #region PrintReceipts
+
+        #endregion
         #region Scrutinee
         public ActionResult Scrutinee()
         {

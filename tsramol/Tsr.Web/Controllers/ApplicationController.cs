@@ -533,7 +533,8 @@ namespace Tsr.Web.Controllers
                     db.Applications.Add(ap);
                     await db.SaveChangesAsync();
 
-                    //Application Package Details
+                    //Application Package Details and Fee Calcuation
+                    decimal fee = 0, taxamount = 0, minBalance = 0;
                     foreach (var item in obj.PackageBatchId)
                     {
                         ApplicationPackageDetail apd = new ApplicationPackageDetail
@@ -545,31 +546,30 @@ namespace Tsr.Web.Controllers
                             CourseId = item.CourseId
                         };
                         db.ApplicationPackageDetails.Add(apd);
-                    }
-                    await db.SaveChangesAsync();
 
-                    var a1 = obj.PackageBatchId.ToList().Select(x => new {PackageId=x.PackageId, CourseId = x.CourseId, BatchId = x.BatchId, PackageFee = db.CourseFees.FirstOrDefault(y=>y.CourseId == x.CourseId).PackageFee, GstPercentage = db.CourseFees.FirstOrDefault(y => y.CourseId == x.CourseId).GstPercentage, MinBal = db.CourseFees.FirstOrDefault(y => y.CourseId == x.CourseId).MinBalance });
-                    decimal fee = 0, taxamount = 0, minBalance = 0;
-                    foreach (var item in a1)
-                    {
-                        if (item.GstPercentage == 0)
+                        //Fee Calculations
+                        var cf = await db.CourseFees.FirstOrDefaultAsync(x => x.CourseId == item.CourseId);
+                        if (cf.GstPercentage == 0)
                         {
-                            fee = fee + (decimal)item.PackageFee;
-                            if (item.MinBal == 0)
-                                minBalance = minBalance + (decimal)item.PackageFee;
+                            fee = fee + (decimal)cf.PackageFee;
+                            if (cf.MinBalance == 0)
+                                minBalance = minBalance + (decimal)cf.PackageFee;
                             else
-                                minBalance = minBalance + (decimal)item.MinBal;
+                                minBalance = minBalance + (decimal)cf.MinBalance;
                         }
                         else
                         {
-                            fee = fee + (decimal)item.PackageFee + (((decimal)item.PackageFee / 100)* (decimal) item.GstPercentage);
-                            taxamount = taxamount + (((decimal)item.PackageFee / 100) * (decimal)item.GstPercentage);
-                            if (item.MinBal == 0)
-                                minBalance = minBalance + (decimal)item.PackageFee + (((decimal)item.PackageFee / 100) * (decimal)item.GstPercentage);
+                            fee = fee + (decimal)cf.PackageFee + (((decimal)cf.PackageFee / 100) * (decimal)cf.GstPercentage);
+                            taxamount = taxamount + (((decimal)cf.PackageFee / 100) * (decimal)cf.GstPercentage);
+                            if (cf.MinBalance == 0)
+                                minBalance = minBalance + (decimal)cf.PackageFee + (((decimal)cf.PackageFee / 100) * (decimal)cf.GstPercentage);
                             else
-                                minBalance = minBalance + (decimal)item.MinBal;
+                                minBalance = minBalance + (decimal)cf.MinBalance;
                         }
                     }
+                    await db.SaveChangesAsync();
+
+                    
                     ApplicationSumPayNonCetVM apsm = new ApplicationSumPayNonCetVM
                     {
                         ApplicationId = ap.ApplicationId,

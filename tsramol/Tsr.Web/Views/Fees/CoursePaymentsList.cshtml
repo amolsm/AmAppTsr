@@ -23,7 +23,7 @@
                 <td>@Html.DisplayFor(modelItem => item.PaidAmount)</td>
                 <td>@Html.DisplayFor(modelItem => item.BalanceAmount)</td>
                 <td>
-                    @Html.ActionLink("Make Payment", "ViewPaymentDetails", new { id = item.ApplicationId }) |
+                    @Html.ActionLink("Make Payment", "CoursePaymentsMP", new { id = item.ApplicationId }, new { data_modal = "" }) |
                 </td>
             </tr>
         }
@@ -32,3 +32,15 @@
 
 </table>
 
+<!-- MODALS -->
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="defModalHead" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/js/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/js/plugins/bootstrap/bootstrap-select.js"></script>
+<script src="~/Scripts/ModalForm.js"></script>
