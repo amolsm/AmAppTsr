@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Tsr.Core.Models.AddmissionCetListVM>
+﻿@model Tsr.Core.Models.AddmissionCetCreateVM
 
 @{
     ViewBag.Title = "Cet Schedule List";
@@ -21,27 +21,119 @@
                 <div class="form-horizontal">
                     <div class="panel panel-default">
                         <div class="panel-heading">
+                            <h3 class="panel-title">Cet Schedule</h3>
+
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="row">
+
+                                @using (Html.BeginForm("CETSchedule", "Admission", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.HiddenFor(model => model.CetId)
+
+
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+                                    <div class="col-xs-6 form-group">
+                                        @Html.LabelFor(model => model.CetCode, htmlAttributes: new { @class = "control-label col-md-3" })
+                                        <div class="col-md-6">
+                                            @Html.EditorFor(model => model.CetCode, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.CetCode, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-6 form-group">
+                                        @Html.LabelFor(model => model.CourseId, htmlAttributes: new { @class = "control-label col-md-3" })
+                                        <div class="col-md-6">
+                                            @Html.DropDownListFor(model => model.CourseId,
+                        (IEnumerable<SelectListItem>)ViewBag.Course, "Select Course", new { @class = "form-control", @onchange = "FillBatchs()" })
+                                            @Html.ValidationMessageFor(model => model.CourseId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                        <div class="col-xs-6 form-group">
+                                            @Html.LabelFor(model => model.BatchId, htmlAttributes: new { @class = "control-label col-md-3" })
+                                            <div class="col-md-6">
+                                                @Html.DropDownListFor(model => model.BatchId, (IEnumerable<SelectListItem>)ViewBag.Batches, "Select Batch", new { @class = "form-control",@onchange= "CheckIsCetScheduleExists()" })
+                                                @Html.ValidationMessageFor(model => model.BatchId, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="col-xs-6 form-group">
+                                            @Html.LabelFor(model => model.CetDates, htmlAttributes: new { @class = "control-label col-md-3" })
+                                            <div class="col-md-6">
+                                                @Html.TextBoxFor(model => model.CetDates, new { @class = "form-control", @type = "Date" })
+                                                @Html.ValidationMessageFor(model => model.CetDates, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6 form-group">
+                                            @Html.LabelFor(model => model.CetTime, htmlAttributes: new { @class = "control-label col-md-3" })
+                                            <div class="col-md-6">
+                                                @Html.TextBoxFor(model => model.CetTime, new { @class = "form-control", @type = "time" })
+                                                @Html.ValidationMessageFor(model => model.CetTime, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6 form-group">
+                                            @Html.LabelFor(model => model.Venue, htmlAttributes: new { @class = "control-label col-md-3" })
+                                            <div class="col-md-6">
+                                                @Html.TextBoxFor(model => model.Venue, new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(model => model.Venue, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="col-xs-6 form-group">
+                                            @Html.LabelFor(model => model.IsActive, htmlAttributes: new { @class = "control-label col-md-3" })
+                                            <div class="col-md-6">
+                                                @Html.EditorFor(model => model.IsActive, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xs-6 form-group">
+                                            @Html.LabelFor(model => model.FileUpload, htmlAttributes: new { @class = "control-label col-md-3" })
+                                            <div class="col-md-6">
+                                                @Html.TextBoxFor(m => m.FileUpload, new { type = "file", @onchange = "CheckValidation()" })
+
+                                                @Html.ValidationMessageFor(m => m.FileUpload, string.Empty, new { id = "validationTxt", @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-xs-5 form-group pull-right">
+                                            <input class="btn btn-primary" type="submit" name="submit" />
+                                        </div>
+
+
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
                             <h3 class="panel-title">Cet Schedule List</h3>
 
                         </div>
 
                         <div class="panel-body">
-                            <div class="row" style="padding-bottom:10px">
-                              @Html.ActionLink("New Cet Entrance", "CetCreate", "Admission", null, new { data_modal = "", id = "btnCreate", @class = "btn btn-info btn-rounded" })
-                            </div>
-                         
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group pull-right">
 
-                                    
+
 
                                         <div class="col-md-3">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span>Course</span></span>
                                                 @Html.DropDownList("CourseIds",
                                          (IEnumerable<SelectListItem>)ViewBag.Courses, "Select Course", new { @class = "form-control", @onchange = "FillBatch()" })
-                                         </div>
+                                            </div>
 
                                         </div>
 
@@ -49,7 +141,7 @@
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span>Batch</span></span>
                                                 @Html.DropDownList("BatchIds",
-            new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "BatchCode")," ", new { @class = "form-control" })
+            new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "BatchCode"), " ", new { @class = "form-control" })
                                             </div>
 
                                         </div>
@@ -62,33 +154,33 @@
                                         </div>
 
                                     </div>
+                                </div>
+                            </div>
+                            <div class="panel">
+                                <div>
+                                    <h3 class="panel-title">Cet Schedule List</h3>
+                                    <div id="dvResult">
+                                        @{Html.RenderPartial("_CetScheduleList", Model._AddmissionCetListVM);}
+                                        <script src="~/Scripts/js/plugins/datatables/jquery.dataTables.min.js"></script>
                                     </div>
                                 </div>
-                            <div id="dvResult">
-                                @{Html.RenderPartial("_CetScheduleList", Model);}
-                                <script src="~/Scripts/js/plugins/datatables/jquery.dataTables.min.js"></script>
                             </div>
                         </div>
                     </div>
+
                 </div>
 
             </div>
         </div>
 
-
     </div>
 
 
-</div>
+
+
 <!-- END PAGE CONTENT WRAPPER -->
 <!-- MODALS -->
-<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="defModalHead" aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div id='myModalContent'></div>
-        </div>
-    </div>
-</div>
+
 
 
 <script src="~/Scripts/js/plugins/bootstrap/bootstrap-select.js"></script>
@@ -118,8 +210,86 @@ function Search() {
         });
     }
 </script>
+<script>
+    function FillBatchs() {
 
- 
+        var CourseId = $('#CourseId').val();
+    $.ajax({
+        url: '/Admission/FillBatchForCet',
+        type: "GET",
+        dataType: "JSON",
+        data: { CourseId: CourseId },
+        success: function (Batches) {
+            $("#BatchId").html(""); // clear before appending new list
+            var item = '<option value="0">Select Batch</option>';
+            $.each(Batches, function (i, c) {
+              
+                item += '<option value="' + c.BatchId + '">' + c.BatchCode + '</option>';
+                   
+            });
+            $("#BatchId").append(item);
+        }
+    });
+    }
+    function CheckValidation()
+    {
+        var file = getNameFromPath($('#FileUpload').val());
+        if (file != null) {
+            var extension = file.substr((file.lastIndexOf('.') + 1));
+            switch (extension) {
+                case 'doc':
+                case 'docx':
+
+                    flag = true;
+                    break;
+                default:
+                    flag = false;
+            }
+        }
+        if (flag == false) {
+            $("#validationTxt").text("You can upload only doc,docx extension file");
+            $("#FileUpload").html("")
+            return false;
+        }
+
+    }
+
+
+    //get file path from client system
+    function getNameFromPath(strFilepath) {
+        var objRE = new RegExp(/([^\/\\]+)$/);
+        var strName = objRE.exec(strFilepath);
+
+        if (strName == null) {
+            return null;
+        }
+        else {
+            return strName[0];
+        }
+    }
+
+    function CheckIsCetScheduleExists()
+    {
+        debugger;
+        var CourseId = $('#CourseId').val();
+        var BatchId = $('#BatchId').val();
+        $.ajax({
+            url: '/Admission/IsCetScheduleExists',
+            type: "GET",
+            dataType: "JSON",
+            data: { CourseId: CourseId, BatchId: BatchId },
+            success: function (data) {
+                if (data != null) {
+                    alert("CET Schedule Already Exist")
+                    $('#BatchId').val('');
+                    return false;
+                }
+            }
+        });
+    }
+</script>
+
+
 
 
 

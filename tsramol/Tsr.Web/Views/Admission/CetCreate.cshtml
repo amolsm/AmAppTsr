@@ -91,96 +91,61 @@
     </div>
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal">Cancel</button>
-        <input class="btn btn-primary" type="submit" value="Save" />
+        <input class="btn btn-primary" type="submit" value="Save" id="btnSubmit" />
     </div>
 }
 
+<div class="modal fade" id="myModalSave" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Infromation Dialog</h4>
+            </div>
+            <div class="modal-body">
+                <p id="txtMessage"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script>
-    function FillBatchs() {
-        debugger;
-        var CourseId = $('#CourseId').val();
-    $.ajax({
-        url: '/Admission/FillBatchForCet',
-        type: "GET",
-        dataType: "JSON",
-        data: { CourseId: CourseId },
-        success: function (Batches) {
-            $("#BatchId").html(""); // clear before appending new list
-            $.each(Batches, function (i, c) {
-                $("#BatchId").append(
-                    $('<option></option>').val(c.BatchId).html(c.BatchCode));
+        $(document).ready(function () {
+//Start of the document ready function
+            $("#btnSubmit").click(function () {
+                debugger;
+                var frmData = new FormData();
+                var filebase = $("#FileUpload").get(0);
+                var files = filebase.files;
+                frmData.append(files[0].name, files[0]);
+                $.ajax({
+                    url: '/Admission/CetCreate',
+                    type: "POST",
+                    contentType: false,
+                    processData: false,
+                    data: frmData,
+                    success: function (data) {
+                        $('#myModalSave').modal('show');
+                        $('#txtMessage').html(data.message);
+                        if (data.success) {
+                            $('.modal-header').addClass('alert alert-success');
+                        } else {
+                            $('.modal-header').addClass('alert alert-info');
+                        }
+                    },
+                    error: function (err) {
+                        $('#myModalSave').modal('show');
+                        $('.modal-header').addClass('alert alert-danger');
+                        $('#txtMessage').html(err.statusText);
+                    }
+                });
             });
-        }
-    });
-    }
-    function CheckValidation()
-    {
-        var file = getNameFromPath($('#FileUpload').val());
-        if (file != null) {
-            var extension = file.substr((file.lastIndexOf('.') + 1));
-            switch (extension) {
-                case 'doc':
-                case 'docx':
 
-                    flag = true;
-                    break;
-                default:
-                    flag = false;
-            }
-        }
-        if (flag == false) {
-            $("#validationTxt").text("You can upload only doc,docx extension file");
-            $("#FileUpload").html("")
-            return false;
-        }
-        else {
-            var size = GetFileSize(file);
-            if (size > 3) {
-                $("#validationTxt").text("You can upload file up to 1 MB");
-                $("#FileUpload").html("")
-            }
-            else {
-                $("#validationTxt").text("");
-            }
-        }
-    }
-    function GetFileSize(fileid) {
-        try {
-            var fileSize = 0;
-            //for IE
-            if ($.browser.msie) {
-                //before making an object of ActiveXObject,
-                //please make sure ActiveX is enabled in your IE browser
-                var objFSO = new ActiveXObject("Scripting.FileSystemObject"); var filePath = $("#" + fileid)[0].value;
-                var objFile = objFSO.getFile(filePath);
-                var fileSize = objFile.size; //size in kb
-                fileSize = fileSize / 1048576; //size in mb
-            }
-                //for FF, Safari, Opeara and Others
-            else {
-                fileSize = $("#" + fileid)[0].files[0].size //size in kb
-                fileSize = fileSize / 1048576; //size in mb
-            }
-
-            return fileSize;
-        }
-        catch (e) {
-            alert("Error is :" + e);
-        }
-    }
-
-    //get file path from client system
-    function getNameFromPath(strFilepath) {
-        var objRE = new RegExp(/([^\/\\]+)$/);
-        var strName = objRE.exec(strFilepath);
-
-        if (strName == null) {
-            return null;
-        }
-        else {
-            return strName[0];
-        }
-    }
+//End of the document ready function...
+        });
 </script>
 
 

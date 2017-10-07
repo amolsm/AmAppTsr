@@ -31,35 +31,10 @@ namespace Tsr.Core.Models
         [Display(Name = "CET Date")]
         public string CetDates { get; set; }
         [Display(Name = "Upload Word file")]
-     
-       
+
+        public List<AddmissionCetListVM> _AddmissionCetListVM { get; set; }
         public HttpPostedFileBase FileUpload { get; set; }
     }
 
-    public class ValidateFileAttribute : ValidationAttribute
-    {
-        public override bool IsValid(object value)
-        {
-            int maxContent = 1024 * 1024; //1 MB
-            string[] sAllowedExt = new string[] { ".doc", ".docx"};
-
-
-            var file = value as HttpPostedFileBase;
-
-            if (file == null)
-                return false;
-            else if (!sAllowedExt.Contains(file.FileName.Substring(file.FileName.LastIndexOf('.'))))
-            {
-                ErrorMessage = "Please upload Your File of type: " + string.Join(", ", sAllowedExt);
-                return false;
-            }
-            else if (file.ContentLength > maxContent)
-            {
-                ErrorMessage = "Your File is too large, maximum allowed size is : " + (maxContent / 1024).ToString() + "MB";
-                return false;
-            }
-            else
-                return true;
-        }
-    }
+   
 }

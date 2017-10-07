@@ -18,4 +18,16 @@ namespace Tsr.Core.Models
         public int CetMasterId { get; set; }
         public string Name { get; set; }
     }
+    public class InterviewDropdown
+    {
+        public string InterviewCode { get; set; }
+        public int InterviewMasterId { get; set; }
+        public string Name { get; set; }
+    }
+    public class MedicalDropdown
+    {
+        public string MedicalCode { get; set; }
+        public int MedicalMasterId { get; set; }
+        public string Name { get; set; }
+    }
 }
