@@ -2,6 +2,7 @@
 using iTextSharp.text.pdf;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
@@ -12,6 +13,7 @@ using System.Web.Mvc;
 using Tsr.Core.Entities;
 using Tsr.Core.Models;
 using Tsr.Infra;
+using Tsr.Web.Common;
 
 namespace Tsr.Web.Controllers
 {
@@ -234,17 +236,14 @@ namespace Tsr.Web.Controllers
         #region Halltickets
         public ActionResult HallTickets()
         {
-            //var obj = from cs in db.CetMasters 
-            //          join b in db.Batches on cs.BatchId equals b.BatchId
-            //          where (cs.IsActive == true)
-            //          select 
+           
 
             var a = from c in db.Courses
                     join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
                     where (c.IsActive == true && cc.CetRequired == true)
                     select new { c.CourseId, c.CourseName };
             ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
-            //ViewBag.Course = new SelectList(db.Courses.ToList(), "CourseId", "CourseName");
+           
             var obj = new List<HallTicketListVM>();
             return View(obj);
         }
@@ -580,29 +579,62 @@ namespace Tsr.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> HallTickets(List<HallTicketListVM> ht, int? CetMasterId)
         {
-            //FileContentResult file= Export(98);
+         
             if (ht != null && CetMasterId != null)
             {
                 foreach (var item in ht)
                 {
                     if (item.Select == true)
                     {
-                        CetMark c = new CetMark
+                        
+                        var hallticketpath=SavePdf(Convert.ToInt32(item.ApplicationId));
+                        if (db.CetMarks.Any(u => (u.CetMasterId == (int)CetMasterId) && (u.BatchId == item.BatchId) && (u.ApplicationId == item.ApplicationId)))
                         {
-                            CetMasterId = Convert.ToInt32(CetMasterId),
-                            BatchId = item.BatchId,
-                            ApplicationId = Convert.ToInt32(item.ApplicationId),
-                            Marks1 = 0,
-                            Marks2 = 0,
-                            Marks3 = 0,
-                            Marks4 = 0,
-                            Total = 0,
-                            SelectStatus = item.Select,
-                            Hallticketpath= SavePdf(Convert.ToInt32(item.ApplicationId))
+                            var CetMarkIds = db.CetMarks.Where(u => (u.CetMasterId == (int)CetMasterId) && (u.BatchId == item.BatchId) && (u.ApplicationId == item.ApplicationId)).Select(x=>x.CetMarkId).ToList();
+                            foreach (var cetmarkid in CetMarkIds)
+                            {
+                                CetMark c = new CetMark
+                                {
+                                    CetMarkId = cetmarkid,
+                                    CetMasterId = Convert.ToInt32(CetMasterId),
+                                    BatchId = item.BatchId,
+                                    ApplicationId = Convert.ToInt32(item.ApplicationId),
+                                    Marks1 = 0,
+                                    Marks2 = 0,
+                                    Marks3 = 0,
+                                    Marks4 = 0,
+                                    Total = 0,
+                                    SelectStatus = item.Select,
+                                    Hallticketpath = hallticketpath,
+                                    IsPublish = await SendHalltcketEmail(Convert.ToInt32(item.ApplicationId), Convert.ToInt32(CetMasterId), hallticketpath)
 
 
-                        };
-                        db.CetMarks.Add(c);
+
+                                };
+                                db.Entry(c).State = EntityState.Modified;
+                                db.SaveChanges();
+                            }
+                        }
+                        else {
+                            CetMark c = new CetMark
+                            {
+                                CetMasterId = Convert.ToInt32(CetMasterId),
+                                BatchId = item.BatchId,
+                                ApplicationId = Convert.ToInt32(item.ApplicationId),
+                                Marks1 = 0,
+                                Marks2 = 0,
+                                Marks3 = 0,
+                                Marks4 = 0,
+                                Total = 0,
+                                SelectStatus = item.Select,
+                                Hallticketpath = hallticketpath,
+                                IsPublish = await SendHalltcketEmail(Convert.ToInt32(item.ApplicationId), Convert.ToInt32(CetMasterId), hallticketpath)
+
+
+
+                            };
+                            db.CetMarks.Add(c);
+                        }
 
                     }
 
@@ -610,20 +642,13 @@ namespace Tsr.Web.Controllers
 
                 await db.SaveChangesAsync();
             }
-            //var path = Path.Combine(Server.MapPath("~/Uploads/HallTickets/"));
-            //if (!Directory.Exists(path))
-            //    Directory.CreateDirectory(path);
-
-            //FileStream files = new FileStream(path, FileMode.Create, FileAccess.Write);
-            //file.WriteTo(files);
-            //files.Close();
-            //stream.Close();
+          
             var a = from c in db.Courses
                     join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
                     where (c.IsActive == true && cc.CetRequired == true)
                     select new { c.CourseId, c.CourseName };
             ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
-            //ViewBag.Course = new SelectList(db.Courses.ToList(), "CourseId", "CourseName");
+           
             var obj = new List<HallTicketListVM>();
             return View(obj);
         }
@@ -828,8 +853,11 @@ namespace Tsr.Web.Controllers
                     ViewBag.Flag = "1";
                 else
                     ViewBag.Flag = "1";
+                var ims = db.InterviewMasters.Where(x=>x.BatchId == BatchId)
+                  .Select(x => new { InterviewMasterId = x.InterviewMasterId, Name = x.InterviewDate });
 
-                ViewBag.InterveiwMasters = new SelectList(db.InterviewMasters.ToList(), "InterviewMasterId", "InterviewCode");
+                var InterveiwMasters = ims.ToList().Select(x => new InterviewDropdown { InterviewMasterId = x.InterviewMasterId, InterviewCode = Convert.ToDateTime(x.Name).ToString("dd-MM-yyyy") });
+                ViewBag.InterveiwMasters = new SelectList(InterveiwMasters.ToList(), "InterviewMasterId", "InterviewCode");
                 return PartialView("TopStudentsList", topList.ToList());
             }
             var obj = new List<EntranceMarksListVM>();
@@ -901,7 +929,12 @@ namespace Tsr.Web.Controllers
                                Name = ap.FirstName + " " + ap.LastName
                            };
                 ViewBag.Flag = "1";
-                ViewBag.MedicalMaster = new SelectList(db.MedicalMasters.ToList(), "MedicalMasterId", "MedicalCode");
+                var ims = db.MedicalMasters.Where(x => x.BatchId == BatchId)
+                .Select(x => new { MedicalMasterId = x.MedicalMasterId, Name = x.MedicalDate });
+
+                var MedicalMasters = ims.ToList().Select(x => new MedicalDropdown { MedicalMasterId = x.MedicalMasterId, MedicalCode = Convert.ToDateTime(x.Name).ToString("dd-MM-yyyy") });
+
+                ViewBag.MedicalMaster = new SelectList(MedicalMasters.ToList(), "MedicalMasterId", "MedicalCode");
                 return PartialView("InterviewList", list.ToList());
             }
             var obj = new List<AdmissionInterviewListVM>();
@@ -1598,17 +1631,57 @@ namespace Tsr.Web.Controllers
                 var appcode = db.Applications.Where(x => x.ApplicationId == applicationid).Select(m => m.ApplicationCode).FirstOrDefault();
                 var root = "/Uploads/Halltickets/" + appcode + ".pdf";
                 var path = HttpContext.Server.MapPath(root);
+                if ((System.IO.File.Exists(path)))
+                {
+                    System.IO.File.Delete(path);
+                }
                 byte[] content = stream.ToArray();
                 using (FileStream file = new FileStream(path, FileMode.Create, FileAccess.Write))
                 {
                     file.Write(content, 0, (int)content.Length);
+                    file.Close();
+                    file.Dispose();
                 }
+                stream.Dispose();
                 filpath = root;
 
                
             }
             return filpath;
         }
+
+        public async Task<bool> SendHalltcketEmail(int applicationid,int cetmasterid,string HallticketFile)
+        {
+            var ap = db.Applications.Where(x => x.ApplicationId == applicationid).FirstOrDefault();
+            var cet=db.CetMasters.Where(x => x.CetMasterId == cetmasterid).FirstOrDefault();
+            var File1path = HttpContext.Server.MapPath(HallticketFile);
+            var File2path = HttpContext.Server.MapPath(cet.FilePath);
+            EmailModel em = new EmailModel
+            {
+                From = ConfigurationManager.AppSettings["admsmail"],
+                FromPass = ConfigurationManager.AppSettings["admsps"],
+                To = ap.Email,
+                Subject = "Hallticket",
+                Body = ap.FirstName + " " + ap.LastName,
+                File1= File1path,
+                File2= File2path
+            };
+
+            var res = await MessageService.sendAttachmentEmail(em);
+            return res;
+        }
+
+        #region UniqueIdentifier
+        public JsonResult IsCetScheduleExists(string CourseId,string BatchId)
+        {
+            int courseid= CourseId == null ? 0 : Convert.ToInt32(CourseId);
+            int batchid = BatchId == null ? 0 : Convert.ToInt32(BatchId);
+            var data = db.CetMasters.Where(x => (x.CourseId == courseid) && (x.BatchId == batchid)).FirstOrDefault();
+            return Json(data, JsonRequestBehavior.AllowGet);
+            //check if any of the UserName matches the UserName specified in the Parameter using the ANY extension method.  
+
+        }
+        #endregion
     }
 }
 

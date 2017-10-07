@@ -64,7 +64,7 @@
                                                 <div class="input-group">
                                                     <input class="btn btn-primary" type="button" value="Search" onclick="Search()" />
 
-                                                    &nbsp;&nbsp;&nbsp;<input class="btn btn-primary" type="button" value="View In Pdf" onclick="location.href='@Url.Action("GetApplicationApplicantList", "Report")?id=' + document.getElementById('BatchId').value" />
+                                                    &nbsp;&nbsp;&nbsp;<input class="btn btn-primary" type="button" value="View In Pdf" onclick="window.open('@Url.Action("GetApplicationApplicantList", "Report")?id=' + document.getElementById('BatchId').value,'_blank')" />
                                               </div>
 
                                             </div>

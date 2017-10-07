@@ -21,7 +21,7 @@
                 <div class="form-horizontal">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Cet Schedule List</h3>
+                            <h3 class="panel-title">Cet Schedule</h3>
 
                         </div>
 
@@ -45,19 +45,19 @@
                                         </div>
                                     </div>
 
-                                        <div class="col-xs-6 form-group">
-                                            @Html.LabelFor(model => model.CourseId, htmlAttributes: new { @class = "control-label col-md-3" })
-                                            <div class="col-md-6">
-                                                @Html.DropDownListFor(model => model.CourseId,
-                        (IEnumerable<SelectListItem>)ViewBag.Course, " ", new { @class = "form-control", @onchange = "FillBatchs()" })
-                                                @Html.ValidationMessageFor(model => model.CourseId, "", new { @class = "text-danger" })
-                                            </div>
+                                    <div class="col-xs-6 form-group">
+                                        @Html.LabelFor(model => model.CourseId, htmlAttributes: new { @class = "control-label col-md-3" })
+                                        <div class="col-md-6">
+                                            @Html.DropDownListFor(model => model.CourseId,
+                        (IEnumerable<SelectListItem>)ViewBag.Course, "Select Course", new { @class = "form-control", @onchange = "FillBatchs()" })
+                                            @Html.ValidationMessageFor(model => model.CourseId, "", new { @class = "text-danger" })
                                         </div>
+                                    </div>
 
                                         <div class="col-xs-6 form-group">
                                             @Html.LabelFor(model => model.BatchId, htmlAttributes: new { @class = "control-label col-md-3" })
                                             <div class="col-md-6">
-                                                @Html.DropDownListFor(model => model.BatchId, (IEnumerable<SelectListItem>)ViewBag.Batches, " ", new { @class = "form-control" })
+                                                @Html.DropDownListFor(model => model.BatchId, (IEnumerable<SelectListItem>)ViewBag.Batches, "Select Batch", new { @class = "form-control",@onchange= "CheckIsCetScheduleExists()" })
                                                 @Html.ValidationMessageFor(model => model.BatchId, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
@@ -114,48 +114,55 @@
                                 }
                             </div>
                         </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Cet Schedule List</h3>
 
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group pull-right">
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group pull-right">
 
 
 
-                                    <div class="col-md-3">
-                                        <div class="input-group">
-                                            <span class="input-group-addon"><span>Course</span></span>
-                                            @Html.DropDownList("CourseIds",
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><span>Course</span></span>
+                                                @Html.DropDownList("CourseIds",
                                          (IEnumerable<SelectListItem>)ViewBag.Courses, "Select Course", new { @class = "form-control", @onchange = "FillBatch()" })
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><span>Batch</span></span>
+                                                @Html.DropDownList("BatchIds",
+            new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "BatchCode"), " ", new { @class = "form-control" })
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <input class="btn btn-primary" type="button" value="Search" onclick="Search()" />
+                                            </div>
+
                                         </div>
 
                                     </div>
-
-                                    <div class="col-md-3">
-                                        <div class="input-group">
-                                            <span class="input-group-addon"><span>Batch</span></span>
-                                            @Html.DropDownList("BatchIds",
-            new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "BatchCode")," ", new { @class = "form-control" })
-                                        </div>
-
-                                    </div>
-
-                                    <div class="col-md-3">
-                                        <div class="input-group">
-                                            <input class="btn btn-primary" type="button" value="Search" onclick="Search()" />
-                                        </div>
-
-                                    </div>
-
                                 </div>
                             </div>
-                        </div>
-                        <div class="panel">
-                            <div>
-                                <h3 class="panel-title">Cet Schedule List</h3>
-                                <div id="dvResult">
-                                    @{Html.RenderPartial("_CetScheduleList", Model._AddmissionCetListVM);}
-                                    <script src="~/Scripts/js/plugins/datatables/jquery.dataTables.min.js"></script>
-                                </div>
+                            <div class="panel">
+                                <div>
+                                    <h3 class="panel-title">Cet Schedule List</h3>
+                                    <div id="dvResult">
+                                        @{Html.RenderPartial("_CetScheduleList", Model._AddmissionCetListVM);}
+                                        <script src="~/Scripts/js/plugins/datatables/jquery.dataTables.min.js"></script>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -166,7 +173,7 @@
             </div>
         </div>
 
-
+    </div>
 
 
 
@@ -205,7 +212,7 @@ function Search() {
 </script>
 <script>
     function FillBatchs() {
-        debugger;
+
         var CourseId = $('#CourseId').val();
     $.ajax({
         url: '/Admission/FillBatchForCet',
@@ -214,10 +221,13 @@ function Search() {
         data: { CourseId: CourseId },
         success: function (Batches) {
             $("#BatchId").html(""); // clear before appending new list
+            var item = '<option value="0">Select Batch</option>';
             $.each(Batches, function (i, c) {
-                $("#BatchId").append(
-                    $('<option></option>').val(c.BatchId).html(c.BatchCode));
+              
+                item += '<option value="' + c.BatchId + '">' + c.BatchCode + '</option>';
+                   
             });
+            $("#BatchId").append(item);
         }
     });
     }
@@ -257,9 +267,29 @@ function Search() {
             return strName[0];
         }
     }
+
+    function CheckIsCetScheduleExists()
+    {
+        debugger;
+        var CourseId = $('#CourseId').val();
+        var BatchId = $('#BatchId').val();
+        $.ajax({
+            url: '/Admission/IsCetScheduleExists',
+            type: "GET",
+            dataType: "JSON",
+            data: { CourseId: CourseId, BatchId: BatchId },
+            success: function (data) {
+                if (data != null) {
+                    alert("CET Schedule Already Exist")
+                    $('#BatchId').val('');
+                    return false;
+                }
+            }
+        });
+    }
 </script>
 
- 
+
 
 
 
