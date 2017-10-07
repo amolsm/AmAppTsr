@@ -525,6 +525,7 @@ namespace Tsr.Web.Controllers
                 string fileName = file.FileName.ToString();
                 string imgPath = "/Uploads/Photo/" + fileName;
                 file.SaveAs(Server.MapPath(imgPath));
+                //file.SaveAs(imgPath);
                 var ext = Path.GetExtension(file.FileName);
                 if (allowedExtensions.Contains(ext)) //check what type of extension  
                 {
