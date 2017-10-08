@@ -261,12 +261,23 @@ namespace Tsr.Web.Controllers
         #region Scrutinee
         public ActionResult Scrutinee()
         {
-            var obj = new List<FeesScrutineeListVM>();
-            return View(obj);
+            ViewBag.Categories = new SelectList(db.CourseCategories.ToList(), "CourseCategoryId", "CategoryName");
+            return View();
         }
-        public async Task<ActionResult> GetListByApplicationCode(string ApplicationCode)
+        public ActionResult FillStudentsForScrutinee(int BatchId)
         {
-            Application ap = await db.Applications.FirstOrDefaultAsync(x => x.ApplicationCode==ApplicationCode);
+            var Students = from ap in db.Applications
+                    
+                    where (ap.BatchId == BatchId && ap.Scrutinee == true)
+                    select new { ApplicationId = ap.ApplicationId, Name = ap.FullName};
+
+            
+            return Json(Students, JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<ActionResult> GetListScrutineePayment(int ApplicationId)
+        {
+            Application ap = await db.Applications.FindAsync(ApplicationId);
 
             var obj = new List<FeesScrutineeListVM>();
             if (ap.IsPackage == false || ap.IsPackage == null)

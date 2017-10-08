@@ -19,5 +19,6 @@ namespace Tsr.Core.Models
         public string PaidAmount { get; set; }
         public string BalanceAmount { get; set; }
         public string FeeReceiptNo { get; set; }
+        public bool? Flag { get; set; }
     }
 }

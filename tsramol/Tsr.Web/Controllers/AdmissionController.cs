@@ -1682,6 +1682,68 @@ namespace Tsr.Web.Controllers
 
         }
         #endregion
+
+        #region Scrutinee
+        public ActionResult Scrutinee()
+        {
+            ViewBag.Categories = new SelectList(db.CourseCategories.ToList(), "CourseCategoryId", "CategoryName");
+            return View();
+        }
+
+        public ActionResult FillStudentsForScrutinee(int BatchId)
+        {
+            var s = from ap in db.Applications
+                           join apd in db.Applied on ap.ApplicationId equals apd.ApplicationId
+                           into aps from apd in aps.DefaultIfEmpty()
+                           where (ap.BatchId == BatchId && ap.Scrutinee != true)
+                           select new { ApplicationId = ap.ApplicationId, Name = ap.FullName, check = (apd==null)? true:false };
+
+            var Students = s.ToList().Where(x => x.check == true);
+            return Json(Students, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult ScrutineeSearch(int? ApplicationId)
+        {
+            var list = from ap in db.Applications
+                       where (ap.ApplicationId == ApplicationId)
+                       select new FeesApplicantList
+                       {
+                           ApplicationCode = ap.ApplicationCode,
+                           ApplicationId = ap.ApplicationId,
+                           
+                           Name = ap.FullName,
+                           
+                           Email = ap.Email,
+                           Cell = ap.CellNo,
+                           Flag = ap.Scrutinee
+                       };
+
+            List<FeesApplicantList> obj = new List<FeesApplicantList>();
+            obj.Add(list.FirstOrDefault());
+            return PartialView("ScrutineeList", obj);
+        }
+        public async Task<ActionResult> ScrutineeAction(int? id, string flag1 = null)
+        {
+
+            if (id == null || flag1 == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Application ap = await db.Applications.FindAsync(id);
+
+            if (ap == null)
+            {
+                return HttpNotFound();
+            }
+            if (flag1 == "R")
+                ap.Scrutinee = false;
+            if (flag1 == "A")
+                ap.Scrutinee = true;
+
+            db.SaveChanges();
+            return RedirectToAction("Scrutinee");
+        }
+
+        #endregion
     }
 }
 

@@ -191,7 +191,7 @@
       });
   }
   function checkAge() {
-      debugger;
+      //debugger;
       var CourseId = $('#CourseId').val();
       var DateOfBirth = $('#DateOfBirth').val();
       $.ajax({
@@ -203,7 +203,7 @@
               debugger;
               if (res == true)
               {
-                  alert('Age is valid');
+                  //alert('Age is valid');
               }
               else
               {
@@ -231,6 +231,24 @@
           $('#PresentContactNo').val(PermenentContactNo);
       }
   }
+  function SingleCourseDivBatch()
+  {
+      var BatchId = $('#BatchId').val();
+      
+      $.ajax({
+          url: '/Application/getBatchRemainingSeats',
+          type: "GET",
+          dataType: "JSON",
+          data: { BatchId: BatchId },
+          success: function (rem) {
+              if (rem != "null")
+              { $('#SingleCourseDivBatch').html('Remainig Seats ' + rem) }
+              else { $('#SingleCourseDivBatch').html(' ') }
+              
+          }
+      });
+
+  }
   function FillPackageBatches()
   {
 
@@ -239,6 +257,17 @@
       $("#PackageBatches").show();
       $("#PackageBatches").load('@(Url.Action("FillPackageBatches", "Application",null, Request.Url.Scheme))?PackageId=' + PackageId + '&CategoryId=' + CategoryId);
   }
+    function show(input) {
+        if (input.files && input.files[0]) {
+            var filerdr = new FileReader();
+            filerdr.onload = function (e) {
+                $('#user_img').attr('src', e.target.result);
+            }
+            filerdr.readAsDataURL(input.files[0]);
+        }
+
+
+    }
   function CreateApplicationId() {
       var CourseId = $('#CourseId').val();
       var CategoryId = $('#CategoryId').val();

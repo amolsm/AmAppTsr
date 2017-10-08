@@ -123,6 +123,22 @@ namespace Tsr.Web.Controllers
             
             return Json(res, JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult getBatchRemainingSeats(int BatchId)
+        {
+            
+            var b = db.Batches.Find(BatchId);
+            var cc = db.CourseCategories.Find(b.CategoryId);
+            string rem;
+            if (cc.CetRequired == false)
+            {
+                var r = b.TotalSeats - b.ReserveSeats - b.BookedSeats;
+                rem = r.ToString();
+            }
+            else
+                rem = "null";
+            return Json(rem, JsonRequestBehavior.AllowGet);
+        }
         #endregion
         public ActionResult Index()
         {
@@ -264,7 +280,7 @@ namespace Tsr.Web.Controllers
         //}
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CetApplication(ApplicationCetVM obj)
+        public async Task<ActionResult> CetApplication(ApplicationCetVM obj, HttpPostedFileBase file)
         {
             if (ModelState.IsValid)
             {
@@ -274,6 +290,23 @@ namespace Tsr.Web.Controllers
                 var cc = c.CourseCode;
                 var n = db.Applications.Count(x=>x.BatchId == obj.BatchId);
                 n = n + 1;
+
+                var allowedExtensions = new[] {
+                ".Jpg", ".png", ".jpg", "jpeg"
+                  };
+                //string fileName = cc.ToString() + bc.ToString() + n.ToString().PadLeft(4, '0');
+                //string imgPath = "/Uploads/CetPhoto/" + fileName;
+                //file.SaveAs(Server.MapPath(imgPath));
+                //var ext = Path.GetExtension(file.FileName);
+                var root = "/Uploads/CetPhoto/";
+                var appcode = cc.ToString() + bc.ToString() + n.ToString().PadLeft(4, '0');
+                var files = file;
+                var ext = Path.GetExtension(files.FileName);
+                var fileName = appcode + ext;
+                var path = Server.MapPath(root + fileName);
+                files.SaveAs(path);
+                var filepathname = root + fileName;
+
                 Application ap = new Application
                 {
                     ApplicationCode = cc.ToString() + bc.ToString() + n.ToString().PadLeft(4,'0'),

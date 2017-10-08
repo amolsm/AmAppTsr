@@ -51,9 +51,13 @@
                     <div class="form-group label-floating">
                         <label class="control-label">Batch </label>
                         @Html.DropDownListFor(model => model.BatchId,
-                                         new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "BatchName"), " ", new { @class = "form-control" })
+                                         new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "BatchName"), " ", new { @class = "form-control", @onchange= "SingleCourseDivBatch()" })
+                        
                     </div>
                 </div>
+                <div class="col-sm-2">
+                    <div id="SingleCourseDivBatch" style="padding-top: 20%;"></div>
+                </div>                
             </div>
             <div id="PackageCourseDiv">
                 <div class="col-sm-6 col-sm-offset-3">

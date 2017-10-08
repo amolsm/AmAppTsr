@@ -688,6 +688,28 @@ namespace Tsr.Web.Controllers
             //return PartialView("CourseDocuments");
             return Json(new { success = true });
         }
+
+        public async Task<ActionResult> PackageDeactive(int? id, string flag = null)
+        {
+
+            if (id == null || flag == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Package obj = await db.packages.FindAsync(id);
+
+            if (obj == null)
+            {
+                return HttpNotFound();
+            }
+            if (flag == "D")
+                obj.IsActive = false;
+            if (flag == "A")
+                obj.IsActive = true;
+
+            db.SaveChanges();
+            return RedirectToAction("PackageList");
+        }
         #endregion
 
         #region Course

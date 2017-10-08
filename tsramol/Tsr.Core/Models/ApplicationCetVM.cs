@@ -90,5 +90,6 @@ namespace Tsr.Core.Models
         public string GradSubjects { get; set; }
         public bool? GradPassAttempt { get; set; }
         public string CourseName { get; set; }
+        public string ImgUrl { get; set; }
     }
 }

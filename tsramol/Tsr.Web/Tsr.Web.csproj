@@ -976,11 +976,14 @@
     <Content Include="Views\Fees\CoursePayments.cshtml" />
     <Content Include="Views\Fees\CoursePaymentsList.cshtml" />
     <Content Include="Views\Fees\CoursePaymentsMP.cshtml" />
+    <Content Include="Views\Admission\Scrutinee.cshtml" />
+    <Content Include="Views\Admission\ScrutineeList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="audio\" />
     <Folder Include="Uploads\CetFile\" />
+    <Folder Include="Uploads\CetPhoto\" />
     <Folder Include="Uploads\Halltickets\" />
     <Folder Include="Uploads\Photo\" />
   </ItemGroup>

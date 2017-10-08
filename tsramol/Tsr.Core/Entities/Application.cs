@@ -103,5 +103,6 @@ namespace Tsr.Core.Entities
         public string RankOfCandidate { get; set; }
         public bool? CourseAttendedInTSR { get; set; }
         public string FPFF_AFF_1995 { get; set; }
+        public bool? Scrutinee { get; set; }
     }
 }

@@ -6,8 +6,8 @@
 <!-- START BREADCRUMB -->
 <ul class="breadcrumb push-down-0">
     <li><a href="#">Home</a></li>
-    <li><a href="#">Fees</a></li>
-    <li><a href="#">Scrutinee Payments</a></li>
+    <li><a href="#">Admission</a></li>
+    <li><a href="#">Scrutinee</a></li>
     @*<li class="active">Error 404</li>*@
 </ul>
 <!-- END BREADCRUMB -->
@@ -149,7 +149,7 @@
   function FillStudents() {
       var BatchId = $('#BatchId').val();
       $.ajax({
-          url: '/Fees/FillStudentsForScrutinee',
+          url: '/Admission/FillStudentsForScrutinee',
           type: "GET",
           dataType: "JSON",
           data: { BatchId: BatchId },
@@ -168,7 +168,7 @@
   function Search() {
       var ApplicationId = $('#StudentId').val();
 
-      $("#dvResult").load('@(Url.Action("GetListScrutineePayment", "Fees",null, Request.Url.Scheme))?ApplicationId=' + ApplicationId);
+      $("#dvResult").load('@(Url.Action("ScrutineeSearch", "Admission",null, Request.Url.Scheme))?ApplicationId=' + ApplicationId);
   }
 </script>
 
