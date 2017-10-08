@@ -978,6 +978,8 @@
     <Content Include="Views\Fees\CoursePaymentsMP.cshtml" />
     <Content Include="Views\Admission\Scrutinee.cshtml" />
     <Content Include="Views\Admission\ScrutineeList.cshtml" />
+    <Content Include="Views\Fees\ScrutineePrintReceipt.cshtml" />
+    <Content Include="Views\Fees\CoursePaymentPrintReceipt.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

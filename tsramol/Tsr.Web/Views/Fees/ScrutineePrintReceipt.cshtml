@@ -1,0 +1,177 @@
+﻿@model IEnumerable<Tsr.Core.Models.FeesViewPaymentDetailsVM>
+@{
+    ViewBag.Title = "Receipt";
+    Layout = "~/Views/Shared/_PdfLayoutForCertificate.cshtml";
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+
+
+    <title>Fees Receipt</title>
+</head>
+<body>
+
+
+
+
+
+    @foreach (var item in Model)
+            {
+        <div style="height:10px"></div>
+        var batchdate = Convert.ToDateTime(@item.BatchStartDate).ToString("dd-MM-yyyy");
+        <table style="width:100%">
+
+            <tr>
+                <td align="center" colspan="15">
+                    <div style="text-align:center;font-weight:bold;padding-top:5px;">
+                        SIR MOHAMED YUSUF SEAMEN WELFARE FOUNDATION<br />
+                        TRAINING SHIP RAHAMAN<br />
+                    </div>
+                    <div style="text-align:center;font-size:12px; padding-top: 10px;">
+                        Reg.off Jahaz Mahal 170k Samander Point Estate Worli, Mumbai 400018 Nhava, Panvel Tauka Dist Raigad-410206,Maharashtra<br />
+                        Phone No . Nhava 022-27212800/900  Worli : 24938740/24933324 Fax : 02227212495<br />
+                        tsrahaman@tsrahaman.org<br />
+                        www.tsrahaman.org<br />
+                    </div>
+                </td>
+            </tr>
+            <tr><td class="mystyle" colspan="15"></td></tr>
+            <tr>
+                <td align="center" colspan="15"><u>FEE RECEIPT</u></td>
+            </tr>
+            <tr><td class="mystyle" colspan="15"></td></tr>
+            <tr style="border-bottom-style:hidden">
+                <td class="hide_right" colspan="1" style="text-align:left">
+
+                    @Html.LabelFor(modelItem => item.FeeReceiptNo, "ReceiptNo:")
+                </td>
+                <td class="hide_all" colspan="4" style="text-align:left">
+                    @Html.DisplayFor(modelItem => item.FeeReceiptNo)
+                </td>
+
+                <td class="hide_right" colspan="5" style="text-align:left">
+                    @Html.LabelFor(modelItem => item.PaymentDate, "Date:")
+                </td>
+                <td colspan="5" style="text-align:right">
+                    @Html.ValueFor(modelItem => item.PaymentDate, "{0:dd/MM/yyyy}")
+                </td>
+            </tr>
+            <tr style="border-top-style:hidden">
+                <td class="hide_right" colspan="2" style="text-align:left">
+                    @Html.LabelFor(modelItem => item.Name, "Received with thanks from")
+                </td>
+                <td colspan="13" style="text-align:left">
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+            </tr>
+
+            <tr style="border-top-style:hidden">
+                <td class="hide_right" colspan="1" style="text-align:left">
+                    @Html.LabelFor(modelItem => item.Course)
+                </td>
+                <td class="hide_all" colspan="4" style="text-align:left">
+                    @Html.DisplayFor(modelItem => item.Course)
+                </td>
+                <td class="hide_all" colspan="5" style="text-align:left">
+                    @Html.LabelFor(modelItem => item.BatchStartDate, "Batch")
+                </td>
+                <td class="hide_left" colspan="5" style="text-align:right">
+
+                    @Html.DisplayFor(modelItem => batchdate)
+                </td>
+            </tr>
+            <tr style="border-top-style:hidden">
+                <td class="hide_right" colspan="1" style="text-align:left">
+                    @Html.LabelFor(modelItem => item.StudentId)
+
+                </td>
+
+
+                <td class="hide_top_left_right" colspan="4" style="text-align:left">
+                    @Html.DisplayFor(modelItem => item.StudentId)
+                </td>
+                <td class="hide_top_left_right" colspan="4" style="text-align:left">
+                    @Html.LabelFor(modelItem => item.ApplicationCode, "ApplicationId")
+                </td>
+                <td class="hide_left" colspan="6" style="text-align:right">
+                    @Html.DisplayFor(modelItem => item.ApplicationCode)
+                </td>
+
+
+
+            </tr>
+            <tr><td class="mystyle" colspan="15"></td></tr>
+
+            <tr>
+                <td class="hide_right" colspan="5" style="text-align:left">
+                    @Html.LabelFor(modelItem => item.Course, "Description")
+                </td>
+                <td class="hide_top_left_right" colspan="5" style="text-align:left">
+                    @Html.LabelFor(modelItem => item.FeePaid, "Paid Amount Rs")
+                </td>
+                <td class="hide_left" colspan="5" style="text-align:right">
+                    @Html.LabelFor(modelItem => item.FeeBal, "Balance Rs")
+                </td>
+            </tr>
+            <tr><td class="mystyle" colspan="15"></td></tr>
+            <tr>
+                <td class="hide_right" colspan="5" style="text-align:left">
+                    @Html.DisplayFor(modelItem => item.Course)
+                </td>
+                <td class="hide_top_left_right" colspan="5" style="text-align:left">
+                    @Html.DisplayFor(modelItem => item.FeePaid)
+                </td>
+                <td class="hide_left" colspan="5" style="text-align:right">
+                    @Html.DisplayFor(modelItem => item.FeeBal)
+                </td>
+            </tr>
+            <tr><td class="mystyle" colspan="15">&nbsp;&nbsp;</td></tr>
+            <tr>
+                <td class="hide_right" colspan="1" style="text-align:left">
+                    Rs. @Html.DisplayFor(modelItem => item.FeePaid)
+
+                </td>
+                <td class="hide_right" colspan="4" style="text-align:left">
+                    @Html.DisplayFor(modelItem => item.AmountInRs)
+                </td>
+                <td class="hide_top_left_right" colspan="5" style="text-align:left">
+                    @Html.DisplayFor(modelItem => item.FeePaid)
+                </td>
+                <td class="hide_left" colspan="5" style="text-align:right">
+                    @Html.DisplayFor(modelItem => item.FeeBal)
+                </td>
+            </tr>
+            <tr style="border-top-style:hidden">
+                <td colspan="15" style="text-align:left">
+                    By @Html.DisplayFor(modelItem => item.PaymentMode)
+                </td>
+            </tr>
+            <tr style="border-top-style:hidden">
+                <td colspan="15" style="text-align:left;font-size:15px"><strong>Thanks</strong></td>
+            </tr>
+            <tr style="border-top-style:hidden;padding-top:2px">
+                <td class="hide_right" colspan="10" style="text-align:left">
+                    <ul style="padding-left:10px">
+                        <li>Fees Not Transferable</li>
+                        <li>Receipt Subject to realization of cheque</li>
+                        <li>Note</li>
+                    </ul>
+                </td>
+                <td colspan="5" style="text-align:left">
+                    Cashier
+                </td>
+            </tr>
+        </table>
+    }
+
+
+
+
+
+
+</body>
+</html>
+

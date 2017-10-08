@@ -1187,6 +1187,7 @@ namespace Tsr.Web.Controllers
                 b.ModifiedBy = 1;
                 b.ModifiedDate = DateTime.Now;
                 b.Remark = obj.Remark;
+                b.ReserveSeats = obj.ReserveSeats;
                 db.Entry(b).State = EntityState.Modified;
                 await db.SaveChangesAsync();
                 return Json(new { success = true });

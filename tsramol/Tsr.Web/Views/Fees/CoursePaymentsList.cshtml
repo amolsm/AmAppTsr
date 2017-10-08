@@ -23,7 +23,7 @@
                 <td>@Html.DisplayFor(modelItem => item.PaidAmount)</td>
                 <td>@Html.DisplayFor(modelItem => item.BalanceAmount)</td>
                 <td>
-                    @Html.ActionLink("Make Payment", "CoursePaymentsMP", new { id = item.ApplicationId }, new { data_modal = "" }) |
+                    @Html.ActionLink("Make Payment", "CoursePaymentsMP", new { id = item.ApplicationId }, new { data_modal = "" }) |@Html.ActionLink("Print Receipt", "CoursePaymentPrintReceipt", new { id = item.ApplicationId })
                 </td>
             </tr>
         }

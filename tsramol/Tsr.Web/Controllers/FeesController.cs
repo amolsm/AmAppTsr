@@ -96,9 +96,10 @@ namespace Tsr.Web.Controllers
                             join fr in db.FeeReceipts on ap.ApplicationId equals fr.ApplicationId
                             join sd in db.StudentFeeDetails on ap.ApplicationId equals sd.ApplicationId
                             join cr in db.Courses on ap.CourseId equals cr.CourseId
-                            join op in db.OnlinePaymentInfos on ap.ApplicationId equals op.ApplicationId
+                            //join op in db.OnlinePaymentInfos on ap.ApplicationId equals op.ApplicationId
 
                             where (ap.ApplicationId == Id)
+                            
                             select new FeesViewPaymentDetailsVM
                             {
                                 FeeReceiptNo = fr.FeeReceiptNo,
@@ -111,11 +112,12 @@ namespace Tsr.Web.Controllers
                                 StudentId = ap.ApplicationId,
                                 ApplicationId = ap.ApplicationId,
                                 ApplicationCode = ap.ApplicationCode,
-                                FeePaid = sd.FeePaid,
+                                FeePaid = fr.Amount,
                                 FeeBal = sd.FeeBal,
-                                AmountInRs = Common.AmountInWords.ConvertNumbertoWords(Convert.ToInt64(sd.FeePaid)),
+                                AmountInRs = Common.AmountInWords.ConvertNumbertoWords(Convert.ToInt64(fr.Amount)),
                                 BatchStartDate = b.StartDate,
-                                PaymentDate = op.PaymentDate
+                                PaymentDate = fr.ReceiptDate
+
 
                             }).ToList();
 
@@ -137,7 +139,7 @@ namespace Tsr.Web.Controllers
                             join fr in db.FeeReceipts on ap.ApplicationId equals fr.ApplicationId
                             join sd in db.StudentFeeDetails on ap.ApplicationId equals sd.ApplicationId
                             join cr in db.Courses on ap.CourseId equals cr.CourseId
-                            join op in db.OnlinePaymentInfos on ap.ApplicationId equals op.ApplicationId
+                            //join op in db.OnlinePaymentInfos on ap.ApplicationId equals op.ApplicationId
 
                             where (ap.BatchId == Id)
                             select new FeesViewPaymentDetailsVM
@@ -152,11 +154,11 @@ namespace Tsr.Web.Controllers
                                 StudentId = ap.ApplicationId,
                                 ApplicationId = ap.ApplicationId,
                                 ApplicationCode = ap.ApplicationCode,
-                                FeePaid = sd.FeePaid,
+                                FeePaid = fr.Amount,
                                 FeeBal = sd.FeeBal,
-                                AmountInRs = Common.AmountInWords.ConvertNumbertoWords(Convert.ToInt64(sd.FeePaid)),
+                                AmountInRs = Common.AmountInWords.ConvertNumbertoWords(Convert.ToInt64(fr.Amount)),
                                 BatchStartDate = b.StartDate,
-                                PaymentDate = op.PaymentDate
+                                PaymentDate = fr.ReceiptDate
 
                             }).ToList();
 
@@ -221,13 +223,13 @@ namespace Tsr.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CoursePaymentsMP(ScrutineeMakePaymentVM obj)
+        public ActionResult CoursePaymentsMP(ScrutineeMakePaymentVM obj)
         {
-            var ap = await db.Applications.FindAsync(obj.ApplicationId);
+            var ap = db.Applications.Find(obj.ApplicationId);
             if (ap.IsPackage == false || ap.IsPackage == null)
             {
 
-                StudentFeeDetail sfd = await db.StudentFeeDetails.FirstOrDefaultAsync(x => x.ApplicationId == obj.ApplicationId);
+                StudentFeeDetail sfd = db.StudentFeeDetails.FirstOrDefault(x => x.ApplicationId == obj.ApplicationId);
                 sfd.FeePaid = sfd.FeePaid + obj.Amount;
                 sfd.FeeBal = sfd.FeeBal - obj.Amount;
 
@@ -241,11 +243,10 @@ namespace Tsr.Web.Controllers
                     FeesType = "CourseFee"
                 };
                 db.FeeReceipts.Add(fr);
-                await db.SaveChangesAsync();
+                db.SaveChanges();
 
+                  return Json(new { success = true });
 
-                //return RedirectToAction("Scrutinee");
-                return Json(new { success = true });
             }
             return View();
         }
@@ -256,7 +257,56 @@ namespace Tsr.Web.Controllers
         #endregion
 
         #region PrintReceipts
+        public ActionResult CoursePaymentPrintReceipt(int?  id )
+         {  
+           
+            if (id != null)
+            {
+                var receiptid = db.FeeReceipts.Where(x => (x.ApplicationId == (int)id) && (x.PrintStatus == false)).Select(x => x.FeeReceiptId).FirstOrDefault();
 
+                var list = (from ap in db.Applications.AsEnumerable()
+                            join b in db.Batches on ap.BatchId equals b.BatchId
+                            join fr in db.FeeReceipts on ap.ApplicationId equals fr.ApplicationId
+                            join sd in db.StudentFeeDetails on ap.ApplicationId equals sd.ApplicationId
+                            join cr in db.Courses on ap.CourseId equals cr.CourseId
+                            //join op in db.OnlinePaymentInfos on ap.ApplicationId equals op.ApplicationId
+
+                            where (fr.FeeReceiptId == receiptid)
+                            select new FeesViewPaymentDetailsVM
+                            {
+                                FeeReceiptNo = fr.FeeReceiptId.ToString(),//fr.FeeReceiptNo,
+                                PaymentMode = fr.PaymentMode,
+                                FeesType = fr.FeesType,
+                                ReceiptDate = fr.ReceiptDate,
+                                Name = ap.FirstName + " " + ap.LastName,
+                                Course = cr.CourseName,
+                                Batch = b.BatchCode,
+                                StudentId = ap.ApplicationId,
+                                ApplicationId = ap.ApplicationId,
+                                ApplicationCode = ap.ApplicationCode,
+                                FeePaid = fr.Amount,
+                                FeeBal = sd.FeeBal,
+                                AmountInRs = Common.AmountInWords.ConvertNumbertoWords(Convert.ToInt64(fr.Amount)),
+                                BatchStartDate = b.StartDate,
+                                PaymentDate = DateTime.Now,
+                                FeeReceiptId = fr.FeeReceiptId
+
+
+                            }).ToList();
+                foreach (var l in list)
+                {
+                    FeeReceipt fr = db.FeeReceipts.Find(l.FeeReceiptId);
+                    fr.PrintStatus = true;
+                    fr.ReceiptDate = DateTime.Now;
+                    db.SaveChanges();
+
+                }
+
+                return new PdfActionResult(list);
+            }
+
+            return View("CoursePayments");
+        }
         #endregion
         #region Scrutinee
         public ActionResult Scrutinee()
@@ -456,6 +506,51 @@ namespace Tsr.Web.Controllers
 
         public ActionResult ScrutineePrintReceipt(int? id)
         {
+            if (id != null)
+            {
+
+
+                var list = (from ap in db.Applications.AsEnumerable()
+                            join b in db.Batches on ap.BatchId equals b.BatchId
+                            join fr in db.FeeReceipts on ap.ApplicationId equals fr.ApplicationId
+                            join sd in db.StudentFeeDetails on ap.ApplicationId equals sd.ApplicationId
+                            join cr in db.Courses on ap.CourseId equals cr.CourseId
+                            //join op in db.OnlinePaymentInfos on ap.ApplicationId equals op.ApplicationId
+
+                            where (ap.ApplicationId == id)
+                            select new FeesViewPaymentDetailsVM
+                            {
+                                FeeReceiptNo = fr.FeeReceiptId.ToString(),//fr.FeeReceiptNo,
+                                PaymentMode = fr.PaymentMode,
+                                FeesType = fr.FeesType,
+                                ReceiptDate = fr.ReceiptDate,
+                                Name = ap.FirstName + " " + ap.LastName,
+                                Course = cr.CourseName,
+                                Batch = b.BatchCode,
+                                StudentId = ap.ApplicationId,
+                                ApplicationId = ap.ApplicationId,
+                                ApplicationCode = ap.ApplicationCode,
+                                FeePaid = fr.Amount,
+                                FeeBal = sd.FeeBal,
+                                AmountInRs = Common.AmountInWords.ConvertNumbertoWords(Convert.ToInt64(fr.Amount)),
+                                BatchStartDate = b.StartDate,
+                                PaymentDate = DateTime.Now,
+                                FeeReceiptId=fr.FeeReceiptId
+
+
+                            }).ToList();
+                foreach (var l in list)
+                {
+                    FeeReceipt fr = db.FeeReceipts.Find(l.FeeReceiptId);
+                    fr.PrintStatus = true;
+                    fr.ReceiptDate = DateTime.Now;
+                    db.SaveChanges();
+                  
+                }
+
+                return new PdfActionResult(list);
+            }
+          
             return View();
         }
         #endregion

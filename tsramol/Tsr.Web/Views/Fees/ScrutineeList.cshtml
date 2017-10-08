@@ -33,7 +33,7 @@
                 }
                   @if (item.MakePaymentFlag == false)
                 {
-                    @Html.ActionLink("Print Receipt", "ScrutineePrintReceipt", new { id = item.ApplicationId }, new { data_modal = "" })
+                    @Html.ActionLink("Print Receipt", "ScrutineePrintReceipt", new { id = item.ApplicationId })
                 }
             </td>
             </tr>
