@@ -36,6 +36,7 @@ namespace Tsr.Core.Models
         [Display(Name = "CertificateFormat")]
         public int CertificateFormatId { get; set; }
 
+        public List<CertificateDesignList> _certificatedesignlist { get; set; }
 
     }
     public class CertificateDesignList : CertificateDesignCertificateVM

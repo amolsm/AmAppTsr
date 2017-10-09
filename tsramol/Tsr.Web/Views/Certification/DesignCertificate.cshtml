@@ -1,0 +1,311 @@
+﻿@model Tsr.Core.Models.CertificateDesignCertificateVM
+@{
+    ViewBag.Title = "DesignCertificate";
+}
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<!-- START BREADCRUMB -->
+<ul class="breadcrumb push-down-0">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Certificate Design</a></li>
+    <li><a href="#">Design Form</a></li>
+    @*<li class="active">Error 404</li>*@
+</ul>
+<!-- END BREADCRUMB -->
+<!-- PAGE CONTENT WRAPPER -->
+<div class="page-content-wrap">
+    <div>
+
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="form-horizontal">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Certificate Design</h3>
+
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="row">
+
+                                @using (Html.BeginForm("DesignCertificate", "Certification", FormMethod.Post))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.HiddenFor(model => model.CertificateDesignId)
+
+                                    <div class="form-horizontal">
+
+                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+
+
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.CourseId, htmlAttributes: new { @class = "control-label col-md-3" })
+                                            <div class="col-md-8">
+                                                @Html.DropDownListFor(model => model.CourseId,
+(IEnumerable<SelectListItem>)ViewBag.Course, " ", new { @class = "form-control", @onchange = "CheckCourseFormatExists()" })
+                                                @Html.ValidationMessageFor(model => model.CourseId, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.PrincipalId, htmlAttributes: new { @class = "control-label col-md-3" })
+                                            <div class="col-md-8">
+                                                @Html.DropDownListFor(model => model.PrincipalId,
+(IEnumerable<SelectListItem>)ViewBag.Principal, " ", new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(model => model.PrincipalId, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.CertificateFormatId, htmlAttributes: new { @class = "control-label col-md-3" })
+                                            <div class="col-md-8">
+                                                @Html.DropDownListFor(model => model.CertificateFormatId,
+(IEnumerable<SelectListItem>)ViewBag.CertificateFormat, " ", new { @class = "form-control", @onchange = "FillCertificateFormatImage(this)" })
+                                                @Html.ValidationMessageFor(model => model.CertificateFormatId, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.CertificateFormatId, htmlAttributes: new { @class = "control-label col-md-3" })
+                                            <div class="col-md-8">
+                                                <img id="myImg" src="@("/Uploads/CertificateFormat/"+Model.CertificateFormatId+".jpg")" alt="Certificate Format" width="300" height="200">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.CourseName, htmlAttributes: new { @class = "control-label col-md-3" })
+                                            <div class="col-md-8">
+                                                @Html.TextBoxFor(model => model.CourseName, new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(model => model.CourseName, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                     
+
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.LineOfCertificate, htmlAttributes: new { @class = "control-label col-md-3" })
+                                            <div class="col-md-8">
+                                                @Html.EditorFor(model => model.LineOfCertificate, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.LineOfCertificate, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.Paragraph1, htmlAttributes: new { @class = "control-label col-md-3" })
+                                            <div class="col-md-8">
+                                                @Html.EditorFor(model => model.Paragraph1, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.Paragraph1, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.Paragraph2, htmlAttributes: new { @class = "control-label col-md-3" })
+                                            <div class="col-md-8">
+                                                @Html.EditorFor(model => model.Paragraph2, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.Paragraph2, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.Paragraph3, htmlAttributes: new { @class = "control-label col-md-3" })
+                                            <div class="col-md-8">
+                                                @Html.EditorFor(model => model.Paragraph3, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.Paragraph3, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.Topic4, htmlAttributes: new { @class = "control-label col-md-3" })
+                                            <div class="col-md-8">
+                                                @Html.EditorFor(model => model.Topic4, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.Topic4, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="col-md-9 pull-right">
+                                            <input class="btn btn-primary" type="submit" name="submit" />
+                                        </div>
+                                    </div>
+                                    }
+                                <!-- END PAGE CONTENT WRAPPER -->
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Certifcate Design List</h3>
+
+                        </div>
+
+                        <div class="panel-body">
+                            <div>
+                          @{ Html.RenderPartial("CertificateDesignList",Model._certificatedesignlist);  }
+                                </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="~/Scripts/js/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/js/plugins/bootstrap/bootstrap-select.js"></script>
+<script src="~/Scripts/ModalForm.js"></script>
+<!-- The Modal -->
+<div id="myModalcetrificate" class="modal">
+
+    <!-- The Close Button -->
+    <span class="close" onclick="document.getElementById('myModalcetrificate').style.display = 'none'">&times;</span>
+
+    <!-- Modal Content (The Image) -->
+    <img class="modal-content" id="img01">
+
+    <!-- Modal Caption (Image Text) -->
+    <div id="caption"></div>
+</div>
+<script>
+    var modal = document.getElementById('myModalcetrificate');
+
+    // Get the image and insert it inside the modal - use its "alt" text as a caption
+    var img = document.getElementById('myImg');
+    var modalImg = document.getElementById("img01");
+    var captionText = document.getElementById("caption");
+    img.onclick = function () {
+        modal.style.display = "block";
+        modalImg.src = this.src;
+        captionText.innerHTML = this.alt;
+    }
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+    function FillCertificateFormatImage(sel) {
+        var img = document.getElementById('myImg');
+        var id = document.getElementById('CertificateFormatId');
+        var src="/Uploads/CertificateFormat/"+sel.value+".jpg"
+        img.src =src;
+           
+    }
+   
+    function CheckCourseFormatExists() {
+        var CourseId = $('#CourseId').val();
+        debugger;
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("IsCourseFormatExists")',
+            dataType: 'JSON',
+            data: { CourseId: CourseId },
+            success: function (data) {
+                if (data.CourseId != null) {
+                    alert("Course Certificate Already Exist")
+                    $('#CourseId').val('');
+                    return false;
+                }
+            }
+        });
+    }
+</script>
+<style>
+    /* Style the Image Used to Trigger the Modal */
+    #myImg {
+        border-radius: 5px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+        #myImg:hover {
+            opacity: 0.7;
+        }
+
+    /* The Modal (background) */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        padding-top: 100px; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.28); /* Black w/ opacity */
+    }
+
+    /* Modal Content (Image) */
+    .modal-content {
+        margin: auto;
+        display: block;
+        width: 80%;
+        max-width: 700px;
+    }
+
+    /* Caption of Modal Image (Image Text) - Same Width as the Image */
+    #caption {
+        margin: auto;
+        display: block;
+        width: 80%;
+        max-width: 700px;
+        text-align: center;
+        color: #ccc;
+        padding: 10px 0;
+        height: 150px;
+    }
+
+    /* Add Animation - Zoom in the Modal */
+    .modal-content, #caption {
+        -webkit-animation-name: zoom;
+        -webkit-animation-duration: 0.6s;
+        animation-name: zoom;
+        animation-duration: 0.6s;
+    }
+
+    @@-webkit-keyframes zoom {
+        from {
+            -webkit-transform: scale(0);
+        }
+
+        to {
+            -webkit-transform: scale(1);
+        }
+    }
+
+    @@keyframes zoom {
+        from {
+            transform: scale(0);
+        }
+
+        to {
+            transform: scale(1);
+        }
+    }
+
+    /* The Close Button */
+    .close {
+        position: absolute;
+        top: 15px;
+        right: 35px;
+        color: #ffffff;
+        font-size: 100px;
+        font-weight: bold;
+        transition: 0.3s;
+        opacity:5.0;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    /* 100% Image Width on Smaller Screens */
+    @@media only screen and (max-width: 700px) {
+        .modal-content {
+            width: 100%;
+        }
+    }
+</style>

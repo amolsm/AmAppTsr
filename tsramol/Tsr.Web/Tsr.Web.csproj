@@ -812,6 +812,17 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\wizard.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Uploads\CertificateFormat\1.jpg" />
+    <Content Include="Uploads\CertificateFormat\11.jpg" />
+    <Content Include="Uploads\CertificateFormat\12.jpg" />
+    <Content Include="Uploads\CertificateFormat\2.jpg" />
+    <Content Include="Uploads\CertificateFormat\3.jpg" />
+    <Content Include="Uploads\CertificateFormat\4.jpg" />
+    <Content Include="Uploads\CertificateFormat\5.jpg" />
+    <Content Include="Uploads\CertificateFormat\6.jpg" />
+    <Content Include="Uploads\CertificateFormat\7.jpg" />
+    <Content Include="Uploads\CertificateFormat\8.jpg" />
+    <Content Include="Uploads\CertificateFormat\9.jpg" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -917,8 +928,6 @@
     <Content Include="Views\Admission\MedicalList.cshtml" />
     <Content Include="Views\Admission\MedicalTest.cshtml" />
     <Content Include="Views\MasterDetails\BatchListGet.cshtml" />
-    <Content Include="Views\Certification\DesignCreate.cshtml" />
-    <Content Include="Views\Certification\DesignEdit.cshtml" />
     <Content Include="Views\Certification\PrincipalSignImage.cshtml" />
     <Content Include="Views\Certification\Certificate.cshtml" />
     <Content Include="Views\Certification\_CertificateList.cshtml" />
@@ -980,6 +989,7 @@
     <Content Include="Views\Admission\ScrutineeList.cshtml" />
     <Content Include="Views\Fees\ScrutineePrintReceipt.cshtml" />
     <Content Include="Views\Fees\CoursePaymentPrintReceipt.cshtml" />
+    <Content Include="Views\Certification\DesignCertificate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -77,7 +77,7 @@ namespace Tsr.Web.Controllers
                             join fr in db.FeeReceipts on ap.ApplicationId equals fr.ApplicationId
                             join sd in db.StudentFeeDetails on ap.ApplicationId equals sd.ApplicationId
                             join cr in db.Courses on ap.CourseId equals cr.CourseId
-                            join op in db.OnlinePaymentInfos on ap.ApplicationId equals op.ApplicationId
+                           
                             where (b.BatchId == id)
                             select new CheckListVM
                             {
@@ -229,7 +229,7 @@ namespace Tsr.Web.Controllers
                     cell5.Border = Rectangle.BOTTOM_BORDER;
                     cell5.Colspan = 2;
                     table.AddCell(cell5);
-                    PdfPCell cell6 = new PdfPCell(new Phrase(s.PassportNo==null?"":s.PassportNo.ToString()));
+                    PdfPCell cell6 = new PdfPCell(new Phrase(s.PassportNo == null ? "" : s.PassportNo.ToString()));
                     cell6.Border = Rectangle.BOTTOM_BORDER;
                     cell6.Colspan = 2;
                     table.AddCell(cell6);
@@ -283,7 +283,7 @@ namespace Tsr.Web.Controllers
                             Batchfrom = b.StartDate,
                             Batchto = b.EndDate,
                             StudentId = ap.ApplicationId,
-                            Name = ap.FirstName==null?" ":ap.FirstName + " "+ap.MiddleName==null?" ":ap.MiddleName+ " " + ap.LastName==null?" ":ap.LastName,
+                            Name = ap.FirstName == null ? " " : ap.FirstName + " " + ap.MiddleName == null ? " " : ap.MiddleName + " " + ap.LastName == null ? " " : ap.LastName,
                             DOB = ap.DateOfBirth,
                             Cdcno = ap.CdcNo,
                             PassportNo = ap.PassportNo,
@@ -299,23 +299,23 @@ namespace Tsr.Web.Controllers
         public async Task<ActionResult> CheckListEditModal(int? id)
         {
             Application ap = await db.Applications.FindAsync(id);
-           
+
             var obj = new CheckListVM
-                        {
-                            ApplicationId = ap.ApplicationId,
-                            FirstName = ap.FirstName,
-                            MiddleName=ap.MiddleName,
-                            LastName=ap.LastName,
-                            DOB = ap.DateOfBirth,
-                            Cdcno = ap.CdcNo,
-                            PassportNo = ap.PassportNo,
-                            Rank = ap.RankOfCandidate,
-                            Grade = ap.GradeOfCompetencyNo,
-                            IndosNo = ap.InDosNo
+            {
+                ApplicationId = ap.ApplicationId,
+                FirstName = ap.FirstName,
+                MiddleName = ap.MiddleName,
+                LastName = ap.LastName,
+                DOB = ap.DateOfBirth,
+                Cdcno = ap.CdcNo,
+                PassportNo = ap.PassportNo,
+                Rank = ap.RankOfCandidate,
+                Grade = ap.GradeOfCompetencyNo,
+                IndosNo = ap.InDosNo
 
 
-                        };
-            
+            };
+
             return PartialView("CheckListEditModal", obj);
         }
 
@@ -324,11 +324,11 @@ namespace Tsr.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> CheckListEditModal(CheckListVM obj)
         {
-          
+
             if (ModelState.IsValid)
             {
-                
-                Application c = db.Applications.First(i=>i.ApplicationId==obj.ApplicationId);
+
+                Application c = db.Applications.First(i => i.ApplicationId == obj.ApplicationId);
                 c.FirstName = obj.FirstName;
                 c.MiddleName = obj.MiddleName;
                 c.LastName = obj.LastName;
@@ -339,7 +339,7 @@ namespace Tsr.Web.Controllers
                 c.GradeOfCompetencyNo = obj.Grade;
                 c.InDosNo = obj.IndosNo;
                 await db.SaveChangesAsync();
-            
+
                 return Json(new { success = true });
             }
 
@@ -350,42 +350,6 @@ namespace Tsr.Web.Controllers
 
         #region DesignCertificate
         public ActionResult DesignCertificate()
-        {
-            ViewBag.Course = new SelectList(db.Courses.ToList(), "CourseId", "CourseName");
-            var obj = new List<CertificateDesignCertificateVM>();
-
-            return View(obj);
-
-        }
-        public async Task<ActionResult> CertificateDesignList()
-        {
-            var obj = from cd in db.CertificateDesigns
-                      join c in db.Courses on cd.CourseId equals c.CourseId
-                      join f in db.CertificateFormats on cd.CertificateFormatId equals f.CertificateFormatId
-                      into tmpMappc
-                      from mappingsc in tmpMappc.DefaultIfEmpty()
-                      join p in db.Principals on cd.PrincipalId equals p.PrincipalId into tmpMapp
-                      from mappings in tmpMapp.DefaultIfEmpty()
-                      select new CertificateDesignList
-                      {
-                          CertificateDesignId = cd.CertificateDesignId,
-                          CourseName = c.CourseName,
-                          CourseNameTitle = cd.CourseName,
-                          LineOfCertificate=cd.LineOfCertificate,
-                          Paragraph1 = cd.Paragraph1,
-                          Paragraph2 = cd.Paragraph2,
-                          Paragraph3 = cd.Paragraph3,
-                          Topic4 = cd.Topic4,
-                          PrincipalName = mappings.PricipalName,
-                          CertificateFormat= mappingsc.FormatName,
-                          CreatedDate = cd.CreatedDate
-
-                      };
-
-            return View(await obj.ToListAsync());
-        }
-
-        public ActionResult DesignCreate()
         {
             ViewBag.Course = new SelectList(db.Courses.Where(x => x.IsActive == true).ToList(), "CourseId", "CourseName");
 
@@ -401,122 +365,142 @@ namespace Tsr.Web.Controllers
                   Text = p.FormatName,
                   Value = p.CertificateFormatId.ToString()
               });
+            CertificateDesignCertificateVM obj = new CertificateDesignCertificateVM();
+            obj._certificatedesignlist = CertificateDesignList();
 
-            return PartialView("DesignCreate");
+            return View(obj);
+
         }
+        public List<CertificateDesignList> CertificateDesignList()
+        {
+            var obj = from cd in db.CertificateDesigns
+                      join c in db.Courses on cd.CourseId equals c.CourseId
+                      join f in db.CertificateFormats on cd.CertificateFormatId equals f.CertificateFormatId
+                      into tmpMappc
+                      from mappingsc in tmpMappc.DefaultIfEmpty()
+                      join p in db.Principals on cd.PrincipalId equals p.PrincipalId into tmpMapp
+                      from mappings in tmpMapp.DefaultIfEmpty()
+                      select new CertificateDesignList
+                      {
+                          CertificateDesignId = cd.CertificateDesignId,
+                          CourseName = c.CourseName,
+                          CourseNameTitle = cd.CourseName,
+                          LineOfCertificate = cd.LineOfCertificate,
+                          Paragraph1 = cd.Paragraph1,
+                          Paragraph2 = cd.Paragraph2,
+                          Paragraph3 = cd.Paragraph3,
+                          Topic4 = cd.Topic4,
+                          PrincipalName = mappings.PricipalName,
+                          CertificateFormat = mappingsc.FormatName,
+                          CreatedDate = cd.CreatedDate
+
+                      };
+
+            return obj.ToList();
+        }
+
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DesignCreate(CertificateDesignCertificateVM obj)
+        public ActionResult DesignCertificate(CertificateDesignCertificateVM obj)
         {
+           
             if (ModelState.IsValid)
             {
-              
-                CertificateDesign b = new CertificateDesign
+                if (obj.CertificateDesignId == 0)
                 {
-                   
-                    CourseId = obj.CourseId,
-                    PrincipalId=obj.PrincipalId,
-                    LineOfCertificate=obj.LineOfCertificate,
-                    CourseName=obj.CourseName,
-                    Paragraph1=obj.Paragraph1,
-                    Paragraph2=obj.Paragraph2,
-                    Paragraph3=obj.Paragraph3,
-                    Topic4=obj.Topic4,
-                    CertificateFormatId=obj.CertificateFormatId
+                    CertificateDesign b = new CertificateDesign
+                    {
 
-                
-                };
+                        CourseId = obj.CourseId,
+                        PrincipalId = obj.PrincipalId,
+                        LineOfCertificate = obj.LineOfCertificate,
+                        CourseName = obj.CourseName,
+                        Paragraph1 = obj.Paragraph1,
+                        Paragraph2 = obj.Paragraph2,
+                        Paragraph3 = obj.Paragraph3,
+                        Topic4 = obj.Topic4,
+                        CertificateFormatId = obj.CertificateFormatId
 
-                db.CertificateDesigns.Add(b);
 
-                await db.SaveChangesAsync();
-                return Json(new { success = true });
+                    };
+
+                    db.CertificateDesigns.Add(b);
+
+                    db.SaveChanges();
+                }
+                else
+                {
+                    CertificateDesign cf = new CertificateDesign
+                    {
+                        CertificateDesignId = (Int32)obj.CertificateDesignId,
+                        LineOfCertificate = obj.LineOfCertificate,
+                        CourseId = obj.CourseId,
+                        PrincipalId = obj.PrincipalId,
+                        CourseName = obj.CourseName,
+                        Paragraph1 = obj.Paragraph1,
+                        Paragraph2 = obj.Paragraph2,
+                        Paragraph3 = obj.Paragraph3,
+                        Topic4 = obj.Topic4,
+                        CreatedDate = DateTime.UtcNow,
+                        CertificateFormatId = obj.CertificateFormatId
+                    };
+
+                    db.Entry(cf).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+
+                return RedirectToAction("DesignCertificate");
             }
-
             ViewBag.Course = new SelectList(db.Courses.Where(x => x.IsActive == true).ToList(), "CourseId", "CourseName");
-
-            ViewBag.Principal = db.Principals.ToList()
-                .Select(p => new SelectListItem
-                {
-                    Text = p.PricipalName,
-                    Value = p.PrincipalId.ToString()
-                });
-            ViewBag.CertificateFormat = db.CertificateFormats.ToList()
-            .Select(p => new SelectListItem
-            {
-                Text = p.FormatName,
-                Value = p.CertificateFormatId.ToString()
-            });
-            return PartialView("DesignCreate", obj);
+            ViewBag.Principal = new SelectList(db.Principals.ToList(), "PrincipalId", "PricipalName");
+            ViewBag.CertificateFormat = new SelectList(db.CertificateFormats.ToList(), "CertificateFormatId", "FormatName");
+            obj._certificatedesignlist = CertificateDesignList();
+            return View(obj);
         }
 
-        public async Task<ActionResult> DesignEdit(int? id)
+        public ActionResult DesignEdit(int? id)
         {
-            CertificateDesign obj = await db.CertificateDesigns.FindAsync(id);
+            CertificateDesign obj =  db.CertificateDesigns.Find(id);
             var vm = new CertificateDesignCertificateVM
             {
-                CertificateDesignId=obj.CertificateDesignId,
-                LineOfCertificate=obj.LineOfCertificate,
+                CertificateDesignId = obj.CertificateDesignId,
+                LineOfCertificate = obj.LineOfCertificate,
+                CertificateFormatId=obj.CertificateFormatId,
                 CourseId = obj.CourseId,
                 PrincipalId = obj.PrincipalId,
-                CourseName =obj.CourseName,
-                Paragraph1=obj.Paragraph1,
-                Paragraph2=obj.Paragraph2,
-                Paragraph3=obj.Paragraph3,
-                Topic4=obj.Topic4
-                
+                CourseName = obj.CourseName,
+                Paragraph1 = obj.Paragraph1,
+                Paragraph2 = obj.Paragraph2,
+                Paragraph3 = obj.Paragraph3,
+                Topic4 = obj.Topic4
+
             };
 
             ViewBag.Course = new SelectList(db.Courses.Where(x => x.IsActive == true).ToList(), "CourseId", "CourseName");
-            ViewBag.Principal=new SelectList(db.Principals.ToList(),"PrincipalId","PricipalName");
+            ViewBag.Principal = new SelectList(db.Principals.ToList(), "PrincipalId", "PricipalName");
             ViewBag.CertificateFormat = new SelectList(db.CertificateFormats.ToList(), "CertificateFormatId", "FormatName");
+            vm._certificatedesignlist= CertificateDesignList();
+            return View("DesignCertificate", vm);
+        }
 
-            return PartialView("DesignEdit", vm);
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DesignEdit(CertificateDesignCertificateVM obj)
-        {
-            if (ModelState.IsValid)
-            {
-                CertificateDesign cf = new CertificateDesign
-                {
-                    CertificateDesignId = (Int32)obj.CertificateDesignId,
-                    LineOfCertificate = obj.LineOfCertificate,
-                    CourseId = obj.CourseId,
-                    PrincipalId = obj.PrincipalId,
-                    CourseName = obj.CourseName,
-                    Paragraph1 = obj.Paragraph1,
-                    Paragraph2 = obj.Paragraph2,
-                    Paragraph3 = obj.Paragraph3,
-                    Topic4 = obj.Topic4,
-                    CreatedDate= DateTime.UtcNow,
-                    CertificateFormatId=obj.CertificateFormatId
-                };
-                
-                db.Entry(cf).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                return Json(new { success = true });
-            }
-            return PartialView("DesignEdit", obj);
-        }
         #endregion
 
         #region PrincipalSignature
         public ActionResult PrincipalSignImage()
         {
             CertificatePrincipalVM c = new CertificatePrincipalVM();
-            c._principalList  = db.Principals.ToList();
+            c._principalList = db.Principals.ToList();
             return View(c);
         }
 
-      
+
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public  ActionResult PrincipalSignImage(CertificatePrincipalVM obj, HttpPostedFileBase file)
+        public ActionResult PrincipalSignImage(CertificatePrincipalVM obj, HttpPostedFileBase file)
         {
             if (ModelState.IsValid)
             {
@@ -546,7 +530,7 @@ namespace Tsr.Web.Controllers
                     {
                         Principal b = new Principal
                         {
-                            PrincipalId=obj.PrincipalId,
+                            PrincipalId = obj.PrincipalId,
                             PricipalName = obj.PricipalName,
                             SignatureImgUrl = imgPath
                         };
@@ -554,14 +538,14 @@ namespace Tsr.Web.Controllers
                         db.SaveChanges();
                     }
                     obj._principalList = db.Principals.ToList();
-                    return View(obj);   
+                    return View(obj);
                 }
                 else
                 {
                     obj._principalList = db.Principals.ToList();
                     return View(obj);
                 }
-                   
+
             }
             obj._principalList = db.Principals.ToList();
             return View(obj);
@@ -572,7 +556,7 @@ namespace Tsr.Web.Controllers
             var p = db.Principals.Where(m => m.PrincipalId == id).FirstOrDefault();
             var obj = new CertificatePrincipalVM
             {
-                PrincipalId=p.PrincipalId,
+                PrincipalId = p.PrincipalId,
                 PricipalName = p.PricipalName,
                 SignatureImgUrl = p.SignatureImgUrl
             };
@@ -606,13 +590,13 @@ namespace Tsr.Web.Controllers
                                      join b in db.Applied on a.ApplicationId equals b.ApplicationId
                                      join c in db.CertificateDesigns on a.CourseId equals c.CourseId
                                      join p in db.Principals on c.PrincipalId equals p.PrincipalId
-                                     join batch in db.Batches on a.BatchId equals batch.BatchId
+                                     join batch in db.Batches on b.BatchId equals batch.BatchId
                                      join e in db.Employees on batch.CoordinatorId equals e.EmployeeId
                                      where b.AdmissionStatus == true && a.CategoryId == obj.CategoryId && a.CourseId == obj.CourseId && a.BatchId == obj.BatchId
                                      select new CertificationCertificateVM.Certificate
                                      {
-                                         CertificateNo = "0330590012017",
-                                         ApplicantName = a.FirstName + " " + a.MiddleName+ " " + a.LastName,
+                                         CertificateNo = "",
+                                         ApplicantName = a.FirstName + " " + a.MiddleName + " " + a.LastName,
                                          CDCNo = a.CdcNo,
                                          DateofBirth = a.DateOfBirth,
                                          PassportNo = a.PassportNo,
@@ -629,11 +613,11 @@ namespace Tsr.Web.Controllers
                                          CourseInCharge = e.FirstName == null ? "" : e.FirstName + "" + e.MiddleName == null ? "" : e.MiddleName + "" + e.LastName == null ? "" : e.LastName,
                                          DateofExpiry = c.Topic4 == null ? "" : c.Topic4,
                                          DateOfIssue = DateTime.Now,
-                                         PrincipalName=p.PricipalName,
-                                         PrincipalSign=p.SignatureImgUrl
-                                        
+                                         PrincipalName = p.PricipalName,
+                                         PrincipalSign = p.SignatureImgUrl
 
-                              };
+
+                                     };
 
                 var certificateformatid = db.CertificateDesigns.Where(m => m.CourseId == obj.CourseId).Select(m => m.CertificateFormatId).FirstOrDefault();
                 var performaction = db.CertificateFormats.Where(m => m.CertificateFormatId == certificateformatid).Select(m => m.ActionName).FirstOrDefault();
@@ -649,7 +633,20 @@ namespace Tsr.Web.Controllers
             return View(obj);
         }
         #endregion
+        #region UniqueIdentifier
+        public JsonResult IsCourseFormatExists(string CourseId)
+        {
+            int courseid = 0;
+            try { courseid = Convert.ToInt32(CourseId); }
+            catch { courseid = 0; }
+           
+            var data = db.CertificateDesigns.Where(x => x.CourseId == courseid).FirstOrDefault();
+            return Json(data, JsonRequestBehavior.AllowGet);
+            //check if any of the UserName matches the UserName specified in the Parameter using the ANY extension method.  
 
-        
+        }
+        #endregion
+
+
     }
 }
