@@ -32,20 +32,16 @@ namespace Tsr.Web.Controllers
         [HttpGet]
         public ActionResult GetCheckList(int? BatchId)
         {
-            var list = (from ap in db.Applications.AsEnumerable()
-                        join b in db.Batches on ap.BatchId equals b.BatchId
-                        join fr in db.FeeReceipts on ap.ApplicationId equals fr.ApplicationId
-                        join sd in db.StudentFeeDetails on ap.ApplicationId equals sd.ApplicationId
-                        join cr in db.Courses on ap.CourseId equals cr.CourseId
-                        join op in db.OnlinePaymentInfos on ap.ApplicationId equals op.ApplicationId
-                        where (b.BatchId == BatchId)
+            var list = from apd in db.Applied
+                       join ap in db.Applications on apd.ApplicationId equals ap.ApplicationId
+                       where (apd.BatchId == BatchId && apd.AdmissionStatus == true)
                         select new CheckListVM
                         {
-                            Course = cr.CourseName,
-                            Batchfrom = b.StartDate,
-                            Batchto = b.EndDate,
-                            StudentId = ap.ApplicationId,
-                            Name = ap.FirstName + " " + ap.LastName,
+                            //Course = cr.CourseName,
+                           // Batchfrom = b.StartDate,
+                            //Batchto = b.EndDate,
+                            StudentId = ap.ApplicationCode,
+                            Name = ap.FullName,
                             DOB = ap.DateOfBirth,
                             Cdcno = ap.CdcNo,
                             PassportNo = ap.PassportNo,
@@ -54,7 +50,7 @@ namespace Tsr.Web.Controllers
                             IndosNo = ap.InDosNo
 
 
-                        }).ToList();
+                        };
             return PartialView("_ApplicantsList", list.ToList());
         }
 
@@ -72,20 +68,18 @@ namespace Tsr.Web.Controllers
                             join c in db.Courses on b.CourseId equals c.CourseId
                             where b.BatchId == id
                             select new { c.CourseName, b.StartDate, b.EndDate, b.BatchCode };
-                var list = (from ap in db.Applications.AsEnumerable()
-                            join b in db.Batches on ap.BatchId equals b.BatchId
-                            join fr in db.FeeReceipts on ap.ApplicationId equals fr.ApplicationId
-                            join sd in db.StudentFeeDetails on ap.ApplicationId equals sd.ApplicationId
-                            join cr in db.Courses on ap.CourseId equals cr.CourseId
-                           
-                            where (b.BatchId == id)
+                var list = (from apd in db.Applied
+                            join ap in db.Applications on apd.ApplicationId equals ap.ApplicationId
+                            join cr in db.Courses on apd.CourseId equals cr.CourseId
+                            join b in db.Batches on apd.BatchId equals b.BatchId
+                            where (apd.BatchId == id && apd.AdmissionStatus == true)
                             select new CheckListVM
                             {
                                 Course = cr.CourseName,
                                 Batchfrom = b.StartDate,
                                 Batchto = b.EndDate,
-                                StudentId = ap.ApplicationId,
-                                Name = ap.FirstName + " " + ap.LastName,
+                                StudentId = ap.ApplicationCode,
+                                Name = ap.FullName,
                                 DOB = ap.DateOfBirth,
                                 Cdcno = ap.CdcNo,
                                 PassportNo = ap.PassportNo,
@@ -225,7 +219,7 @@ namespace Tsr.Web.Controllers
                     cell4.Border = Rectangle.BOTTOM_BORDER;
                     cell4.Colspan = 2;
                     table.AddCell(cell4);
-                    PdfPCell cell5 = new PdfPCell(new Phrase(s.Cdcno.ToString()));
+                    PdfPCell cell5 = new PdfPCell(new Phrase((s.Cdcno == null)?"":s.Cdcno.ToString()));
                     cell5.Border = Rectangle.BOTTOM_BORDER;
                     cell5.Colspan = 2;
                     table.AddCell(cell5);
@@ -269,21 +263,17 @@ namespace Tsr.Web.Controllers
         [HttpGet]
         public ActionResult GetCheckListEdit(int? BatchId)
         {
-            var list = (from ap in db.Applications.AsEnumerable()
-                        join b in db.Batches on ap.BatchId equals b.BatchId
-                        join fr in db.FeeReceipts on ap.ApplicationId equals fr.ApplicationId
-                        join sd in db.StudentFeeDetails on ap.ApplicationId equals sd.ApplicationId
-                        join cr in db.Courses on ap.CourseId equals cr.CourseId
-                        join op in db.OnlinePaymentInfos on ap.ApplicationId equals op.ApplicationId
-                        where (b.BatchId == BatchId)
+            var list = (from apd in db.Applied
+                        join ap in db.Applications on apd.ApplicationId equals ap.ApplicationId
+                        where (apd.BatchId == BatchId && apd.AdmissionStatus == true)
                         select new CheckListVM
                         {
                             ApplicationId = ap.ApplicationId,
-                            Course = cr.CourseName,
-                            Batchfrom = b.StartDate,
-                            Batchto = b.EndDate,
-                            StudentId = ap.ApplicationId,
-                            Name = ap.FirstName == null ? " " : ap.FirstName + " " + ap.MiddleName == null ? " " : ap.MiddleName + " " + ap.LastName == null ? " " : ap.LastName,
+                            //Course = cr.CourseName,
+                            //Batchfrom = b.StartDate,
+                            //Batchto = b.EndDate,
+                            StudentId = ap.ApplicationCode,
+                            Name = ap.FullName,
                             DOB = ap.DateOfBirth,
                             Cdcno = ap.CdcNo,
                             PassportNo = ap.PassportNo,
@@ -303,9 +293,8 @@ namespace Tsr.Web.Controllers
             var obj = new CheckListVM
             {
                 ApplicationId = ap.ApplicationId,
-                FirstName = ap.FirstName,
-                MiddleName = ap.MiddleName,
-                LastName = ap.LastName,
+                Name = ap.FullName,
+                
                 DOB = ap.DateOfBirth,
                 Cdcno = ap.CdcNo,
                 PassportNo = ap.PassportNo,
@@ -328,10 +317,9 @@ namespace Tsr.Web.Controllers
             if (ModelState.IsValid)
             {
 
-                Application c = db.Applications.First(i => i.ApplicationId == obj.ApplicationId);
-                c.FirstName = obj.FirstName;
-                c.MiddleName = obj.MiddleName;
-                c.LastName = obj.LastName;
+                Application c = db.Applications.FirstOrDefault(i => i.ApplicationId == obj.ApplicationId);
+                c.FullName = obj.Name;
+                
                 c.DateOfBirth = obj.DOB;
                 c.CdcNo = obj.Cdcno;
                 c.PassportNo = obj.PassportNo;

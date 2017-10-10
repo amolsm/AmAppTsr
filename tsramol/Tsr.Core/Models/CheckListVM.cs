@@ -14,7 +14,7 @@ namespace Tsr.Core.Models
         public DateTime? Batchfrom { get; set; }
         public DateTime? Batchto { get; set; }
         public int SrNo { get; set; }
-        public int StudentId { get; set; }
+        public string StudentId { get; set; }
         public string Name { get; set; }
 
         public string FirstName { get; set; }
