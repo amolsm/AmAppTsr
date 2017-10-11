@@ -571,7 +571,35 @@ namespace Tsr.Web.Controllers
                            };
                 return new PdfActionResult(list);
             }
+
+        public ActionResult Test1()
+        {
+            string MailUser = "onlinebooking@tsrahaman.org";
+            string MailPass = "OB2017tsr";
+            string MailTo = "skygroup1402@gmail.com";
+           try
+            {
+                Microsoft.Exchange.WebServices.Data.ExchangeService service = new Microsoft.Exchange.WebServices.Data.ExchangeService(Microsoft.Exchange.WebServices.Data.ExchangeVersion.Exchange2010_SP1);
+                service.Credentials = new System.Net.NetworkCredential(MailUser, MailPass, "tsrahaman.org");
+                service.AutodiscoverUrl(MailUser);
+                Microsoft.Exchange.WebServices.Data.EmailMessage emailMessage = new Microsoft.Exchange.WebServices.Data.EmailMessage(service);
+                emailMessage.Subject = "test";
+                emailMessage.Body = new Microsoft.Exchange.WebServices.Data.MessageBody("test");
+                emailMessage.ToRecipients.Add(MailTo);
+                emailMessage.SendAndSaveCopy();
+               
+
+                ViewData["Message"] = "Message Send Successfully";
+            }
+            catch (Exception ex)
+            {
+                ViewData["Message"] = ex.ToString();
+            }
+           
+            return View();
         }
-        
-   
+    }
+
+    
+
 }
