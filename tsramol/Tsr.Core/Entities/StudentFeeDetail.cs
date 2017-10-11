@@ -15,5 +15,7 @@ namespace Tsr.Core.Entities
         public decimal? TotalFee { get; set; }
         public decimal? FeePaid { get; set; }
         public decimal? FeeBal { get; set; }
+
+      
     }
 }

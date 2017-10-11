@@ -22,5 +22,7 @@ namespace Tsr.Core.Entities
         public int DesignationId { get; set; }
         public string Phone { get; set; }
         public int OrganisationId { get; set; }
+
+       
     }
 }

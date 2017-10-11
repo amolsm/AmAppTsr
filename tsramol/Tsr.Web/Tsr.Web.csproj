@@ -374,6 +374,7 @@
     <Content Include="Content\wiz\assets\scss\gsdk-bootstrap-wizard\_variables.scss" />
     <Content Include="Content\wiz\assets\scss\gsdk-bootstrap-wizard\_wizard-card.scss" />
     <None Include="Properties\PublishProfiles\am.pubxml" />
+    <None Include="Properties\PublishProfiles\sy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\commonjs\commondropdown.js" />
     <Content Include="Scripts\dropzone\basic.css" />

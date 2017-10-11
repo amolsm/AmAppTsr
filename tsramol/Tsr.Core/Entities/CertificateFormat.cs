@@ -14,5 +14,7 @@ namespace Tsr.Core.Entities
         public string ActionName { get; set; }
 
         public bool? IsActive { get; set; }
+
+      
     }
 }

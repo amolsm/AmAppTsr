@@ -40,6 +40,6 @@ namespace Tsr.Core.Entities
             set { createdDate = value; }
         }
 
-
+      
     }
 }

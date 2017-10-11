@@ -14,5 +14,7 @@ namespace Tsr.Core.Entities
         public int CourseId { get; set; }
         public int CategoryId { get; set; }
         public bool? AdmissionStatus { get; set; }
+
+      
     }
 }

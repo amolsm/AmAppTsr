@@ -19,5 +19,7 @@ namespace Tsr.Core.Entities
 
         public string ChequeNo { get; set; }
         public string DDNo { get; set; }
+
+       
     }
 }

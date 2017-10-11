@@ -15,5 +15,7 @@ namespace Tsr.Core.Entities
         public DateTime? InterviewDate { get; set; }
         public TimeSpan? InterviewTime { get; set; }
         public string Venue { get; set; }
+
+       
     }
 }

@@ -20,5 +20,7 @@ namespace Tsr.Core.Entities
         public bool? IsActive { get; set; }
 
         public string FilePath { get; set; }
+
+       
     }
 }

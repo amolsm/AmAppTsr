@@ -29,5 +29,7 @@ namespace Tsr.Core.Entities
         public int? ModifiedBy { get; set; }
 
         public DateTime? ModifiedDate { get; set; }
+
+      
     }
 }

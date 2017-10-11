@@ -211,11 +211,11 @@ namespace Tsr.Web.Controllers
                     cell2.Border = Rectangle.BOTTOM_BORDER;
                     cell2.Colspan = 2;
                     table.AddCell(cell2);
-                    PdfPCell cell3 = new PdfPCell(new Phrase(s.Name.ToString()));
+                    PdfPCell cell3 = new PdfPCell(new Phrase((s.Name==null)?"":s.Name.ToString()));
                     cell3.Border = Rectangle.BOTTOM_BORDER;
                     cell3.Colspan = 2;
                     table.AddCell(cell3);
-                    PdfPCell cell4 = new PdfPCell(new Phrase(dob.ToString()));
+                    PdfPCell cell4 = new PdfPCell(new Phrase((dob==null)?"":dob.ToString()));
                     cell4.Border = Rectangle.BOTTOM_BORDER;
                     cell4.Colspan = 2;
                     table.AddCell(cell4);
@@ -498,7 +498,7 @@ namespace Tsr.Web.Controllers
                 string fileName = file.FileName.ToString();
                 string imgPath = "/Uploads/Photo/" + fileName;
                 file.SaveAs(Server.MapPath(imgPath));
-                //file.SaveAs(imgPath);
+              
                 var ext = Path.GetExtension(file.FileName);
                 if (allowedExtensions.Contains(ext)) //check what type of extension  
                 {

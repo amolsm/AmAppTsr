@@ -16,5 +16,7 @@ namespace Tsr.Core.Entities
 
         public DateTime? MedicalDate { get; set; }        
         public decimal? MedicalFees { get; set; }
+
+       
     }
 }

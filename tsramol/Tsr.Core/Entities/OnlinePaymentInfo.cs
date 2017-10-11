@@ -32,5 +32,7 @@ namespace Tsr.Core.Entities
         public string udf3 { get; set; } //ApplicationId
         public string udf4 { get; set; } //
         public string udf5 { get; set; } //
+
+        
     }
 }

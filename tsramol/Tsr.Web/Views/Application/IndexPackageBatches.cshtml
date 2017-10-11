@@ -14,7 +14,7 @@
                 <div class="form-group label-floating">
                     <label class="control-label">Batch </label>
                     @*@Html.DropDownList("obj[" + @i + "].ApplicationCode", Model.PackageBatchId[i].BatchId)*@
-                    @Html.DropDownList("PackageBatchId[" + @i + "].BatchId", new SelectList((Model.PackageBatchId[i].BatchDropdowns), "BatchId", "Name"), " ", new { @class = "form-control", @required = "true" })
+                    @Html.DropDownList("PackageBatchId[" + @i + "].BatchId", new SelectList((Model.PackageBatchId[i].BatchDropdowns), "BatchId", "Name"), " ", new { @class = "form-control", @required = "true",@onchage=""})
 
                 </div>
             </div>

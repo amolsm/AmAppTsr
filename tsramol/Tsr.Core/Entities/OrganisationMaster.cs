@@ -39,5 +39,7 @@ namespace Tsr.Core.Entities
         public string RegisteredNo { get; set; }
 
         public bool? IsActive { get; set; }
+
+       
     }
 }

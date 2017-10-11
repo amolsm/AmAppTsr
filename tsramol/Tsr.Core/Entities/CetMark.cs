@@ -22,5 +22,7 @@ namespace Tsr.Core.Entities
         public string Hallticketpath { get; set; }
 
         public bool? IsPublish { get; set; }
+
+      
     }
 }

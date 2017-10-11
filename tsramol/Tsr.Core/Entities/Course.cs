@@ -57,5 +57,7 @@ namespace Tsr.Core.Entities
         public DateTime? ModifiedDate { get; set; }
 
         public string ShortName { get; set; }
+
+        
     }
 }

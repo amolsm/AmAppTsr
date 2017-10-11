@@ -14,5 +14,7 @@ namespace Tsr.Core.Entities
         public int CourseId { get; set; }
         public int BatchId { get; set; }
         public bool? ConfirmStatus { get; set; }
+
+      
     }
 }

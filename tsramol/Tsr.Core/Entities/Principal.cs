@@ -13,5 +13,8 @@ namespace Tsr.Core.Entities
         public string PricipalName { get; set; }
 
         public string SignatureImgUrl { get; set; }
+
+     
+     
     }
 }

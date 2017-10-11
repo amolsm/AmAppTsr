@@ -12,7 +12,9 @@ namespace Tsr.Core.Entities
         public int InterviewMasterId { get; set; }
         public int ApplicationId { get; set; }
         public int BatchId { get; set; }
-        
+
+    
+
 
     }
 }
