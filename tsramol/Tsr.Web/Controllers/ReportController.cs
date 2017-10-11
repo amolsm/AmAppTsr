@@ -9,6 +9,7 @@ using System.IO;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Tsr.ToPdf;
+using Tsr.Web.Common;
 
 namespace Tsr.Web.Controllers
 {
@@ -16,6 +17,21 @@ namespace Tsr.Web.Controllers
     {
         // GET: Report
         AppContext db = new AppContext();
+
+        public ActionResult test()
+        {
+            EmailModel em = new EmailModel
+            {
+                //From = ConfigurationManager.AppSettings["admsmail"],
+                //FromPass = ConfigurationManager.AppSettings["admsps"],
+                To = "amolmurkute@gmail.com",
+                Subject = "Course Registration with TSR",
+                Body = "test"
+            };
+
+            var res = MessageService.sendEmail2(em);
+            return View();
+        }
         public ActionResult Index()
         {
             return View();

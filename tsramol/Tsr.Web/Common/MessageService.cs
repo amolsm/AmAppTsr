@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Exchange.WebServices.Data;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -39,7 +40,45 @@ namespace Tsr.Web.Common
                 return true;
             }
         }
+        internal static  bool sendEmail2(EmailModel obj)
+        {
+            //string MailUser = "onlinebooking@tsrahaman.org";
+            //string MailPass = "OB2017tsr";
+            //string MailTo = "amolmurkute@gmail.com";
+            try
+            {
+                var message = new MailMessage();
+                message.To.Add(new MailAddress(obj.To));  // replace with valid value 
+                message.From = new MailAddress("onlinebooking@tsrahaman.org");  // replace with valid value
+                message.Subject = "Hii";
+                message.Body = string.Format(obj.Body);
+                message.IsBodyHtml = true;
 
+                using (var smtp = new SmtpClient())
+                {
+                    var credential = new NetworkCredential
+                    {
+                        UserName = "onlinebooking@tsrahaman.org",  // replace with valid value
+                        Password = "OB2017tsr"  // replace with valid value
+                    };
+                    smtp.Credentials = credential;
+                    smtp.Host = "smtp.office365.com";
+                    smtp.Port = 25;
+                    smtp.EnableSsl = true;
+                    smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    smtp.Send(message);
+
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                string e = ex.ToString();
+                return false;
+            }
+            //return true;
+            }
+        
         internal static async Task<bool> sendAttachmentEmail(EmailModel obj)
         {
             var message = new MailMessage();
@@ -48,8 +87,8 @@ namespace Tsr.Web.Common
             message.Subject = obj.Subject;
             message.Body = string.Format(obj.Body);
             message.IsBodyHtml = true;
-         
-            Attachment file1 = new Attachment(obj.File1, MediaTypeNames.Application.Octet);
+
+            System.Net.Mail.Attachment file1 = new System.Net.Mail.Attachment(obj.File1, MediaTypeNames.Application.Octet);
             // Add time stamp information for the file.
             ContentDisposition disposition = file1.ContentDisposition;
             disposition.CreationDate = System.IO.File.GetCreationTime(obj.File1);
@@ -57,7 +96,7 @@ namespace Tsr.Web.Common
             disposition.ReadDate = System.IO.File.GetLastAccessTime(obj.File1);
             // Add the file attachment to this e-mail message.
             message.Attachments.Add(file1);
-            Attachment file2 = new Attachment(obj.File2, MediaTypeNames.Application.Octet);
+            System.Net.Mail.Attachment file2 = new System.Net.Mail.Attachment(obj.File2, MediaTypeNames.Application.Octet);
             // Add time stamp information for the file.
             ContentDisposition dispositions = file2.ContentDisposition;
             dispositions.CreationDate = System.IO.File.GetCreationTime(obj.File2);
@@ -85,25 +124,25 @@ namespace Tsr.Web.Common
             }
         }
 
-        public Task SendSmsAsync(string msg, string mobileno)
-        {
-            String message = HttpUtility.UrlEncode(msg);
-            using (var wb = new WebClient())
-            {
+        //public Task SendSmsAsync(string msg, string mobileno)
+        //{
+        //    String message = HttpUtility.UrlEncode(msg);
+        //    using (var wb = new WebClient())
+        //    {
 
-                byte[] response = wb.UploadValues("http://api.textlocal.in/send/", new NameValueCollection()
-                {
-                {"username" , "ranjithkumar01@gmail.com"},
-                {"hash" , "e399e1b41bbe615c57453488771c9ac83e102d9b87f3b7ae41654d2a8e3c4cb1"},
-                {"numbers" , mobileno},
-                {"message" , message},
-                {"sender" , "TXTLCL"}
-                });
-                string result = System.Text.Encoding.UTF8.GetString(response);
-                //return result;
-            }
-            return Task.FromResult(0);
-        }
+        //        byte[] response = wb.UploadValues("http://api.textlocal.in/send/", new NameValueCollection()
+        //        {
+        //        {"username" , "ranjithkumar01@gmail.com"},
+        //        {"hash" , "e399e1b41bbe615c57453488771c9ac83e102d9b87f3b7ae41654d2a8e3c4cb1"},
+        //        {"numbers" , mobileno},
+        //        {"message" , message},
+        //        {"sender" , "TXTLCL"}
+        //        });
+        //        string result = System.Text.Encoding.UTF8.GetString(response);
+        //        //return result;
+        //    }
+        //    return Task.FromResult(0);
+        //}
     }
 
         
