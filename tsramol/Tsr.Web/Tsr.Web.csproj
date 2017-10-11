@@ -232,11 +232,13 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Common\AmountInWords.cs" />
+    <Compile Include="Common\Class1.cs" />
     <Compile Include="Common\DropdownData.cs" />
     <Compile Include="Common\ImageHelper.cs" />
     <Compile Include="Common\MessageService.cs" />
     <Compile Include="Common\Others.cs" />
     <Compile Include="Common\RemotePost.cs" />
+    <Compile Include="Common\SmsService.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdmissionController.cs" />
     <Compile Include="Controllers\ApplicationController.cs" />
