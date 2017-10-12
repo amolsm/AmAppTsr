@@ -592,7 +592,7 @@ namespace Tsr.Web.Controllers
         {
             string MailUser = "onlinebooking@tsrahaman.org";
             string MailPass = "OB2017tsr";
-            string MailTo = "skygroup1402@gmail.com";
+            string MailTo = "amolmurkute@gmail.com";
            try
             {
                 Microsoft.Exchange.WebServices.Data.ExchangeService service = new Microsoft.Exchange.WebServices.Data.ExchangeService(Microsoft.Exchange.WebServices.Data.ExchangeVersion.Exchange2010_SP1);

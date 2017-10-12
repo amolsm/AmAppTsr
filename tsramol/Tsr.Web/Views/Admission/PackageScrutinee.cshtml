@@ -1,0 +1,119 @@
+﻿
+@{
+    ViewBag.Title = "Package Scrutinee";
+}
+
+<!-- START BREADCRUMB -->
+<ul class="breadcrumb push-down-0">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Admission</a></li>
+    <li><a href="#">Package Scrutinee</a></li>
+    @*<li class="active">Error 404</li>*@
+</ul>
+<!-- END BREADCRUMB -->
+<!-- PAGE CONTENT WRAPPER -->
+<div class="page-content-wrap">
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+
+                <form class="form-horizontal">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Student List</h3>
+
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="row">
+
+                                <div class="col-md-12">
+
+                                    <div class="form-group">
+
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                @Html.DropDownList("PackageId",
+                                                (IEnumerable<SelectListItem>)ViewBag.Packages, "Select Package", new { @class = "form-control", @onchange = "FillStudents()" })
+                                            </div>
+
+                                        </div>
+
+                                        
+
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                @Html.DropDownList("StudentId",
+                   new SelectList(Enumerable.Empty<SelectListItem>(), "ApplicationId", "Name"),
+              " ", new { @class = "form-control" })
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group">
+
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <input class="btn btn-primary" type="button" value="Search" onclick="Search()" />
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+
+
+                            </div>
+                            <br /><br /><br />
+                            <div id="dvResult">
+                                @*@{Html.RenderPartial("ApplicantsList", Model);}*@
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>
+<!-- END PAGE CONTENT WRAPPER -->
+<script>
+
+  function FillStudents() {
+      var PackageId = $('#PackageId').val();
+      $.ajax({
+          url: '/Admission/FillStudentsForPackageScrutinee',
+          type: "GET",
+          dataType: "JSON",
+          data: { PackageId: PackageId },
+          success: function (Students) {
+              $("#StudentId").html(""); // clear before appending new list
+              $("#StudentId").append(
+                      $('<option></option>').val(0).html("Select Student"));
+
+              $.each(Students, function (i, c) {
+                  $("#StudentId").append(
+                      $('<option></option>').val(c.ApplicationId).html(c.Name));
+              });
+          }
+      });
+  }
+  function Search() {
+      var ApplicationId = $('#StudentId').val();
+
+      $("#dvResult").load('@(Url.Action("ScrutineeSearch", "Admission",null, Request.Url.Scheme))?ApplicationId=' + ApplicationId);
+  }
+</script>
+
+
