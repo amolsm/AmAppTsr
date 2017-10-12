@@ -2,9 +2,9 @@
 @using Tsr.Web.Common
 <style>
     html, tbody {
-        font-family: Calibri;
+        font-family: Arial;
     }
-
+  
     input {
         border: 0;
         border-bottom: solid 1px #000;
@@ -35,7 +35,7 @@
                                 <span style="font-family:'Old English Text MT';font-size:40px; font-weight:bold">Training Ship Rahaman</span>
                             </div>
                             <div style="width:150px;height:160px;text-align:left;margin-right:15%">
-                                <img src="~/Img/avatar.png" style="width:140px;height:150px;position:absolute" />
+                                <img src="~/Img/LOGO.jpg" style="width:140px;height:150px;position:absolute" />
                             </div>
 
 
@@ -56,7 +56,7 @@
             </tr>
             <tr style="border-bottom:1px solid black">
                 <td colspan="15">
-                    <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"><input type="text" value="@(c.ApplicantName == null ? "" : c.ApplicantName)" /></span>
+                    <input type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold" value="@(c.ApplicantName == null ? "" : c.ApplicantName)" />
                 </td>
 
             </tr>
@@ -65,13 +65,13 @@
                     RollNo
                 </td>
                 <td colspan="2">
-                    <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"><input type="text" style="width:100px" value="" /> </span>
+                   <input type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" value="" /> 
                 </td>
                 <td colspan="6">
                     Date of Birth
                 </td>
                 <td colspan="5">
-                    <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"><input type="text" style="width:100%" value="@(c.DateofBirth == null ? "" : @Convert.ToDateTime(c.DateofBirth).ToString("dd-MM-yyyy"))" /> </span>
+                    <input type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100%" value="@(c.DateofBirth == null ? "" : @Convert.ToDateTime(c.DateofBirth).ToString("dd-MM-yyyy"))" /> 
                 </td>
             </tr>
             <tr>
@@ -79,7 +79,7 @@
                     Indian National Database(*INDoS No.)
                 </td>
                 <td colspan="4">
-                    <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"> <input type="text" style="width:100px" value="@(c.Indosno == null ? "" : c.Indosno)" /></span>
+                    <input type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" value="@(c.Indosno == null ? "" : c.Indosno)" />
                 </td>
                 <td colspan="4">
                     has successfully
@@ -94,7 +94,7 @@
                 </tr>
             <tr>
                 <td colspan="15">
-                    Engineering watch from <input type="text" style="width:100px"/> to <input type="text" style="width:100px"/>
+                    Engineering watch from <input type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px"/> to <input type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px"/>
                 </td>
             </tr>
          
@@ -118,7 +118,7 @@
             </tr>
             <tr>
                 <td colspan="15">
-                    <div style="width:125px;height:135px;border:1px solid #000;text-align: center;">Photograph</div>
+                    <div style="width:125px;height:135px;border:1px solid #000; display: flex;align-items: center;justify-content: center;"><p style="text-align:center;vertical-align:middle">Photograph</p></div>
                 </td>
             </tr>
             <tr>
@@ -134,7 +134,7 @@
                 <td colspan="8" style="text-align:center">
                     <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"> @(c.PrincipalName == null ? "" :c.PrincipalName)</span>
                     <br />
-                    <b>CAPTAIN SUPERINTENDENT/PRINCIPAL</b>
+                    <b>PRINCIPAL</b>
                 </td>
             </tr>
             <tr>

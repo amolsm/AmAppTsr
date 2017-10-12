@@ -10,6 +10,9 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Tsr.ToPdf;
 using Tsr.Web.Common;
+using Aspose.Email.Clients.Exchange.WebService;
+using Aspose.Email;
+using Aspose.Email.Clients.Exchange;
 
 namespace Tsr.Web.Controllers
 {
@@ -590,22 +593,50 @@ namespace Tsr.Web.Controllers
 
         public ActionResult Test1()
         {
-            string MailUser = "onlinebooking@tsrahaman.org";
-            string MailPass = "OB2017tsr";
-            string MailTo = "skygroup1402@gmail.com";
+            //string MailUser = "onlinebooking@tsrahaman.org";
+            //string MailPass = "OB2017tsr";
+            //string MailTo = "skygroup1402@gmail.com";
            try
             {
-                Microsoft.Exchange.WebServices.Data.ExchangeService service = new Microsoft.Exchange.WebServices.Data.ExchangeService(Microsoft.Exchange.WebServices.Data.ExchangeVersion.Exchange2010_SP1);
-                service.Credentials = new System.Net.NetworkCredential(MailUser, MailPass, "tsrahaman.org");
-                service.AutodiscoverUrl(MailUser);
-                Microsoft.Exchange.WebServices.Data.EmailMessage emailMessage = new Microsoft.Exchange.WebServices.Data.EmailMessage(service);
-                emailMessage.Subject = "test";
-                emailMessage.Body = new Microsoft.Exchange.WebServices.Data.MessageBody("test");
-                emailMessage.ToRecipients.Add(MailTo);
-                emailMessage.SendAndSaveCopy();
-               
+                IEWSClient client = EWSClient.GetEWSClient("https://outlook.office365.com/ews/exchange.asmx", "onlinebooking@tsrahaman.org", "OB2017tsr", "tsrahaman.org");
 
-                ViewData["Message"] = "Message Send Successfully";
+                //Microsoft.Exchange.WebServices.Data.ExchangeService service = new Microsoft.Exchange.WebServices.Data.ExchangeService(Microsoft.Exchange.WebServices.Data.ExchangeVersion.Exchange2010_SP1);
+                //service.Credentials = new System.Net.NetworkCredential(MailUser, MailPass, "tsrahaman.org");
+                //service.AutodiscoverUrl(MailUser, RedirectionUrlValidationCallback);
+                //Microsoft.Exchange.WebServices.Data.EmailMessage emailMessage = new Microsoft.Exchange.WebServices.Data.EmailMessage(service);
+                //emailMessage.Subject = "test";
+                //emailMessage.Body = new Microsoft.Exchange.WebServices.Data.MessageBody("test");
+                //emailMessage.ToRecipients.Add(MailTo);
+                //emailMessage.Save();
+                //emailMessage.SendAndSaveCopy();
+                //Create instance of type MailMessage
+               MailMessage msg = new MailMessage();
+                msg.From = "onlinebooking@tsrahaman.org";
+                msg.To = "skygroup1402@gmail.com";
+                msg.Subject = "Sending message from exchange server";
+                msg.HtmlBody = "<h3>sending message from exchange server</h3>";
+
+                // Send the message
+                client.Send(msg);
+                //IEWSClient client = EWSClient.GetEWSClient("https://outlook.office365.com/ews/exchange.asmx", "onlinebooking@tsrahaman.org", "OB2017tsr", "tsrahaman.org");
+
+                // Call ListMessages method to list messages info from Inbox
+                //ExchangeMessageInfoCollection msgCollection = client.ListMessages(client.MailboxInfo.InboxUri);
+
+                //string result=string.Empty;
+                //// Loop through the collection to display the basic information
+                //foreach (ExchangeMessageInfo msgInfo in msgCollection)
+                //{
+
+                //    string ms = "Subject: " + msgInfo.Subject;
+                //    ms+="From: " + msgInfo.From.ToString();
+                //    ms += "To: " + msgInfo.To.ToString();
+                //    ms += "Message ID: " + msgInfo.MessageId;
+                //    ms += "Unique URI: " + msgInfo.UniqueUri;
+                //    result+= ms;
+                //}
+
+                ViewData["Message"] = "Msg Send";
             }
             catch (Exception ex)
             {
@@ -613,6 +644,22 @@ namespace Tsr.Web.Controllers
             }
            
             return View();
+        }
+        private static bool RedirectionUrlValidationCallback(string redirectionUrl)
+        {
+            // The default for the validation callback is to reject the URL.
+            bool result = false;
+
+            Uri redirectionUri = new Uri(redirectionUrl);
+
+            // Validate the contents of the redirection URL. In this simple validation
+            // callback, the redirection URL is considered valid if it is using HTTPS
+            // to encrypt the authentication credentials. 
+            if (redirectionUri.Scheme == "https")
+            {
+                result = true;
+            }
+            return result;
         }
     }
 
