@@ -1687,6 +1687,7 @@ namespace Tsr.Web.Controllers
         public ActionResult Scrutinee()
         {
             ViewBag.Categories = new SelectList(db.CourseCategories.ToList(), "CourseCategoryId", "CategoryName");
+            ViewBag.Packages = new SelectList(db.packages.ToList(), "PackageId", "PackageName");
             return View();
         }
 
@@ -1740,9 +1741,32 @@ namespace Tsr.Web.Controllers
                 ap.Scrutinee = true;
 
             db.SaveChanges();
+            if(ap.IsPackage==false)
             return RedirectToAction("Scrutinee");
+            else
+            return RedirectToAction("PackageScrutinee");
         }
 
+        #endregion
+
+        #region PackageScrutinee
+        public ActionResult PackageScrutinee()
+        {
+            ViewBag.Packages = new SelectList(db.packages.ToList(), "PackageId", "PackageName");
+            return View();
+        }
+        public ActionResult FillStudentsForPackageScrutinee(int PackageId)
+        {
+            var s = from ap in db.Applications
+                    join apd in db.Applied on ap.ApplicationId equals apd.ApplicationId
+                    into aps
+                    from apd in aps.DefaultIfEmpty()
+                    where (ap.PackageId == PackageId && ap.Scrutinee != true)
+                    select new { ApplicationId = ap.ApplicationId, Name = ap.FullName, check = (apd == null) ? true : false };
+
+            var Students = s.ToList().Where(x => x.check == true);
+            return Json(Students, JsonRequestBehavior.AllowGet);
+        }
         #endregion
     }
 }

@@ -1007,6 +1007,7 @@
     <Content Include="Views\Fees\CoursePaymentPrintReceipt.cshtml" />
     <Content Include="Views\Certification\DesignCertificate.cshtml" />
     <Content Include="Views\Report\Test1.cshtml" />
+    <Content Include="Views\Admission\PackageScrutinee.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

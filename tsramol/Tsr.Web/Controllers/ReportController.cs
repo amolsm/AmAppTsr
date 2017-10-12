@@ -593,9 +593,15 @@ namespace Tsr.Web.Controllers
 
         public ActionResult Test1()
         {
+<<<<<<< HEAD
             //string MailUser = "onlinebooking@tsrahaman.org";
             //string MailPass = "OB2017tsr";
             //string MailTo = "skygroup1402@gmail.com";
+=======
+            string MailUser = "onlinebooking@tsrahaman.org";
+            string MailPass = "OB2017tsr";
+            string MailTo = "amolmurkute@gmail.com";
+>>>>>>> origin/master
            try
             {
                 IEWSClient client = EWSClient.GetEWSClient("https://outlook.office365.com/ews/exchange.asmx", "onlinebooking@tsrahaman.org", "OB2017tsr", "tsrahaman.org");

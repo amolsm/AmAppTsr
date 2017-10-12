@@ -312,6 +312,7 @@ namespace Tsr.Web.Controllers
         public ActionResult Scrutinee()
         {
             ViewBag.Categories = new SelectList(db.CourseCategories.ToList(), "CourseCategoryId", "CategoryName");
+            ViewBag.Packages = new SelectList(db.packages.ToList(), "PackageId", "PackageName");
             return View();
         }
         public ActionResult FillStudentsForScrutinee(int BatchId)
@@ -324,14 +325,22 @@ namespace Tsr.Web.Controllers
             
             return Json(Students, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult FillStudentsForPackageScrutinee(int PackageId)
+        {
+            var Students = from ap in db.Applications
 
+                           where (ap.PackageId == PackageId && ap.Scrutinee == true)
+                           select new { ApplicationId = ap.ApplicationId, Name = ap.FullName };
+
+
+            return Json(Students, JsonRequestBehavior.AllowGet);
+        }
         public async Task<ActionResult> GetListScrutineePayment(int ApplicationId)
         {
             Application ap = await db.Applications.FindAsync(ApplicationId);
 
             var obj = new List<FeesScrutineeListVM>();
-            if (ap.IsPackage == false || ap.IsPackage == null)
-            {
+            
                 var t = db.Applied.FirstOrDefault(x => x.ApplicationId == ap.ApplicationId);
                 string ps;
                 bool mpf;
@@ -339,7 +348,8 @@ namespace Tsr.Web.Controllers
                 { ps = "Pending"; mpf = true; }
                 else
                 { ps = "Success"; mpf = false; }
-
+            if (ap.IsPackage == false || ap.IsPackage == null)
+            {
                 FeesScrutineeListVM vm = new FeesScrutineeListVM
                 {
                     ApplicationId = ap.ApplicationId,
@@ -354,46 +364,127 @@ namespace Tsr.Web.Controllers
                 };
                 obj.Add(vm);
             }
+            else
+            {
+                if (mpf == true)
+                {
+                    var l = db.ApplicationPackageDetails.Where(x => x.ApplicationId == ap.ApplicationId).ToList();
+                    foreach (var item in l)
+                    {
+                        var bz = await db.Batches.FindAsync(item.BatchId);
+                        var bn = Convert.ToDateTime(bz.StartDate).ToString("dd-MM-yyyy");
+                        var cn = db.Courses.Find(item.CourseId).CourseName;
+                        FeesScrutineeListVM vm1 = new FeesScrutineeListVM
+                        {
+                            ApplicationId = ap.ApplicationId,
+                            ApplicationCode = ap.ApplicationCode,
+                            PaymentStatus = ps,
+                            MakePaymentFlag = mpf,
+                            BatchName = bn,
+                            CourseName = cn ,
+                            Cell = ap.CellNo,
+                            Email = ap.Email,
+                            Name = ap.FirstName + " " + ap.MiddleName + " " + ap.LastName
+                        };
+                        obj.Add(vm1);
+                    }
+                }
+                else
+                {
+                    var l2 = db.Applied.Where(x => x.ApplicationId == ap.ApplicationId).ToList();
+                    foreach (var item in l2)
+                    {
+                        FeesScrutineeListVM vm2 = new FeesScrutineeListVM
+                        {
+                            ApplicationId = ap.ApplicationId,
+                            ApplicationCode = ap.ApplicationCode,
+                            PaymentStatus = ps,
+                            MakePaymentFlag = mpf,
+                            BatchName = Convert.ToDateTime(db.Batches.Find(item.BatchId).StartDate).ToString("dd-MM-yyyy"),
+                            CourseName = db.Courses.Find(item.CourseId).CourseName,
+                            Cell = ap.CellNo,
+                            Email = ap.Email,
+                            Name = ap.FirstName + " " + ap.MiddleName + " " + ap.LastName
+                        };
+                        obj.Add(vm2);
+                    }
+                }
+            }
             return PartialView("ScrutineeList", obj.ToList());
         }
 
         public async Task<ActionResult> ScrutineeMakePayment(int? id)
         {
             var ap = await db.Applications.FindAsync(id);
-            var c = await db.Courses.FindAsync(ap.CourseId);
-            var cc = await db.CourseCategories.FindAsync(c.CategoryId);
-            var cf = await db.CourseFees.FirstOrDefaultAsync(x => x.CourseId == ap.CourseId);
-
             ScrutineeMakePaymentVM vm = new ScrutineeMakePaymentVM
             {
                 ApplicationId = ap.ApplicationId,
                 ApplicationCode = ap.ApplicationCode
             };
+            if (ap.IsPackage == false || ap.IsPackage == null)
+            {
+                var c = await db.Courses.FindAsync(ap.CourseId);
+                var cc = await db.CourseCategories.FindAsync(c.CategoryId);
+                var cf = await db.CourseFees.FirstOrDefaultAsync(x => x.CourseId == ap.CourseId);
 
-            if (cc.CetRequired == true)
-            {
-                vm.Amount = cf.ApplicationFee;
-                vm.FeesType = "ApplicationFee";
-            }
-            else
-            {
-                vm.FeesType = "CourseFee";
-                if (cf.GstPercentage > 0)
-                {                    
-                    vm.totalFee = cf.ActualFee + ((cf.ActualFee / 100) * (decimal)cf.GstPercentage);
-                    if (cf.MinBalance > 0)
-                        vm.Amount = cf.MinBalance;
-                    else
-                        vm.Amount = cf.ActualFee + ((cf.ActualFee / 100) * (decimal)cf.GstPercentage);
-                      
+               
+
+                if (cc.CetRequired == true)
+                {
+                    vm.Amount = cf.ApplicationFee;
+                    vm.FeesType = "ApplicationFee";
                 }
                 else
                 {
-                    if (cf.MinBalance > 0)
-                        vm.Amount = cf.MinBalance;
+                    vm.FeesType = "CourseFee";
+                    if (cf.GstPercentage > 0)
+                    {
+                        vm.totalFee = cf.ActualFee + ((cf.ActualFee / 100) * (decimal)cf.GstPercentage);
+                        if (cf.MinBalance > 0)
+                            vm.Amount = cf.MinBalance;
+                        else
+                            vm.Amount = cf.ActualFee + ((cf.ActualFee / 100) * (decimal)cf.GstPercentage);
+
+                    }
                     else
-                        vm.Amount = cf.ActualFee;
+                    {
+                        if (cf.MinBalance > 0)
+                            vm.Amount = cf.MinBalance;
+                        else
+                            vm.Amount = cf.ActualFee;
+                    }
                 }
+            }
+            else
+            {
+                //Application Package Details and Fee Calcuation
+                decimal fee = 0, taxamount = 0, minBalance = 0;
+                var l = db.ApplicationPackageDetails.Where(x => x.ApplicationId == ap.ApplicationId).ToList();
+                foreach (var item in l)
+                {
+                    //Fee Calculations
+                    var cf = await db.CourseFees.FirstOrDefaultAsync(x => x.CourseId == item.CourseId);
+                    if (cf.GstPercentage == 0)
+                    {
+                        fee = fee + (decimal)cf.PackageFee;
+                        if (cf.MinBalance == 0)
+                            minBalance = minBalance + (decimal)cf.PackageFee;
+                        else
+                            minBalance = minBalance + (decimal)cf.MinBalance;
+                    }
+                    else
+                    {
+                        fee = fee + (decimal)cf.PackageFee + (((decimal)cf.PackageFee / 100) * (decimal)cf.GstPercentage);
+                        taxamount = taxamount + (((decimal)cf.PackageFee / 100) * (decimal)cf.GstPercentage);
+                        if (cf.MinBalance == 0)
+                            minBalance = minBalance + (decimal)cf.PackageFee + (((decimal)cf.PackageFee / 100) * (decimal)cf.GstPercentage);
+                        else
+                            minBalance = minBalance + (decimal)cf.MinBalance;
+                    }
+                }
+                vm.Amount = fee;
+                vm.FeesType = "PackageFee";
+
             }
             ViewBag.PaymentMode = DropdownData.PaymentMode();
             return PartialView("ScrutineeMakePayment",vm);
@@ -408,7 +499,7 @@ namespace Tsr.Web.Controllers
                 var cc = await db.CourseCategories.FindAsync(ap.CategoryId);
                 var c = await db.Courses.FindAsync(ap.CourseId);
                 //var b = await db.Batches.FindAsync(ap.BatchId);
-                
+
                 var cf = db.CourseFees.FirstOrDefault(x => x.CourseId == ap.CourseId);
 
                 if (cc.CetRequired == true)
@@ -469,7 +560,7 @@ namespace Tsr.Web.Controllers
                     await db.SaveChangesAsync();
 
                     //Student Payment Details
-                    decimal tax ;
+                    decimal tax;
                     if (cf.GstPercentage > 0)
                         tax = (((decimal)cf.ActualFee / 100) * (decimal)cf.GstPercentage);
                     else
@@ -501,7 +592,76 @@ namespace Tsr.Web.Controllers
                 //return RedirectToAction("Scrutinee");
                 return Json(new { success = true });
             }
-            return View();
+            else
+            {
+                //Package
+                //feeReceipt
+                FeeReceipt fr = new FeeReceipt
+                {
+                    Amount = Convert.ToDecimal(obj.Amount),
+                    ApplicationId = Convert.ToInt32(obj.ApplicationId),
+                    PaymentMode = obj.PaymentMode,
+                    PrintStatus = false,
+                    FeesType = "PackageFee"
+                };
+                db.FeeReceipts.Add(fr);
+                await db.SaveChangesAsync();
+
+                var aps = db.ApplicationPackageDetails
+                     .Where(x => x.ApplicationId == obj.ApplicationId)
+                     .ToList();
+
+                decimal totalFee = 0;
+                foreach (var item in aps)
+                {
+                    //fee
+                    var cf = db.CourseFees.FirstOrDefault(x => x.CourseId == item.CourseId);
+                    totalFee = totalFee + (decimal)cf.PackageFee + (((decimal)cf.PackageFee / 100) * (decimal)cf.GstPercentage);
+
+                    //seatStock
+                    Batch bs = await db.Batches.FindAsync(item.BatchId);
+                    bs.BookedSeats = bs.BookedSeats + 1;
+
+                    //Applied
+                    Applied nca = new Applied
+                    {
+                        AdmissionStatus = true,
+                        ApplicationId = obj.ApplicationId,
+                        BatchId = Convert.ToInt32(item.BatchId),
+                        CategoryId = (int)db.Courses.Find(item.CourseId).CategoryId,
+                        CourseId = Convert.ToInt32(item.CourseId)
+                    };
+
+                    db.Applied.Add(nca);
+                    await db.SaveChangesAsync();
+                }
+
+                //Student Payment Details                   
+                StudentFeeDetail sfd = new StudentFeeDetail
+                {
+                    ApplicationId = obj.ApplicationId,
+                    TotalFee = totalFee,
+                    FeePaid = obj.Amount,
+                    FeeBal = totalFee - obj.Amount,
+                    PackageId = ap.PackageId
+                };
+                db.StudentFeeDetails.Add(sfd);
+                await db.SaveChangesAsync();
+                //send mail
+                EmailModel em = new EmailModel
+                {
+                    From = ConfigurationManager.AppSettings["admsmail"],
+                    FromPass = ConfigurationManager.AppSettings["admsps"],
+                    To = ap.Email,
+                    Subject = "Your Admission Confirm",
+                    Body = ap.FullName + " " 
+                };
+
+                var res = await MessageService.sendEmail(em);
+
+                return Json(new { success = true });
+            }
+           // return View();
         }
 
         public ActionResult ScrutineePrintReceipt(int? id)
