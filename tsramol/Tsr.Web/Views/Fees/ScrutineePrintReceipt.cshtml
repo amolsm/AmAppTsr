@@ -20,8 +20,9 @@
 
     @foreach (var item in Model)
             {
+
         <div style="height:10px"></div>
-        var batchdate = Convert.ToDateTime(@item.BatchStartDate).ToString("dd-MM-yyyy");
+        var batchdate = @item.BatchStartDate==null?"":Convert.ToDateTime(@item.BatchStartDate).ToString("dd-MM-yyyy");
         <table style="width:100%">
 
             <tr>

@@ -672,7 +672,7 @@ namespace Tsr.Web.Controllers
                 var app = db.Applications.Find(id);
                 if (app.IsPackage == null || app.IsPackage==false)
                 {
-                    var list = (from ap in db.Applications.AsEnumerable()
+                     var list = (from ap in db.Applications.AsEnumerable()
                                 join b in db.Batches on ap.BatchId equals b.BatchId
                                 join fr in db.FeeReceipts on ap.ApplicationId equals fr.ApplicationId
                                 join sd in db.StudentFeeDetails on ap.ApplicationId equals sd.ApplicationId
@@ -680,6 +680,7 @@ namespace Tsr.Web.Controllers
                                 //join op in db.OnlinePaymentInfos on ap.ApplicationId equals op.ApplicationId
 
                                 where (ap.ApplicationId == id)
+                               
                                 select new FeesViewPaymentDetailsVM
                                 {
                                     FeeReceiptNo = fr.FeeReceiptId.ToString(),//fr.FeeReceiptNo,
@@ -709,15 +710,34 @@ namespace Tsr.Web.Controllers
                         db.SaveChanges();
 
                     }
-
+                    list.AddRange(Enumerable.Repeat(0, 1).Select(
+                        x => new FeesViewPaymentDetailsVM()
+                        { FeeReceiptNo =list[0].FeeReceiptNo,
+                          PaymentMode = list[0].PaymentMode,
+                          FeesType = list[0].FeesType,
+                          ReceiptDate = list[0].ReceiptDate,
+                          Name =  list[0].Name,
+                          Course = list[0].Course,
+                          Batch = list[0].Batch,
+                          StudentId = list[0].StudentId,
+                          ApplicationId = list[0].ApplicationId,
+                          ApplicationCode = list[0].ApplicationCode,
+                          FeePaid = list[0].FeePaid,
+                          FeeBal = list[0].FeeBal,
+                          AmountInRs = list[0].AmountInRs,
+                          BatchStartDate = list[0].BatchStartDate,
+                          PaymentDate = list[0].PaymentDate,
+                          FeeReceiptId = list[0].FeeReceiptId
+                        }));
                     return new PdfActionResult(list);
                 }
                 else
                 {
-                    var list = (from ap in db.Applications
+                    var list = (from ap in db.Applications.AsEnumerable()
                                 join pk in db.packages on ap.PackageId equals pk.PackageId
                                 join fr in db.FeeReceipts on ap.ApplicationId equals fr.ApplicationId
                                 join sd in db.StudentFeeDetails on ap.ApplicationId equals sd.ApplicationId
+                                where (ap.ApplicationId == id)
                                 select new FeesViewPaymentDetailsVM
                                 {
                                     FeeReceiptNo = fr.FeeReceiptId.ToString(),//fr.FeeReceiptNo,
@@ -739,7 +759,7 @@ namespace Tsr.Web.Controllers
 
 
                                 }).ToList();
-                    //var list1 = list.ToList();
+                 
                     foreach (var l in list)
                     {
                         FeeReceipt fr = db.FeeReceipts.Find(l.FeeReceiptId);
@@ -748,6 +768,26 @@ namespace Tsr.Web.Controllers
                         db.SaveChanges();
 
                     }
+                    list.AddRange(Enumerable.Repeat(0, 1).Select(
+                      x => new FeesViewPaymentDetailsVM()
+                      {
+                          FeeReceiptNo = list[0].FeeReceiptNo,
+                          PaymentMode = list[0].PaymentMode,
+                          FeesType = list[0].FeesType,
+                          ReceiptDate = list[0].ReceiptDate,
+                          Name = list[0].Name,
+                          Course = list[0].Course,
+                          Batch = list[0].Batch,
+                          StudentId = list[0].StudentId,
+                          ApplicationId = list[0].ApplicationId,
+                          ApplicationCode = list[0].ApplicationCode,
+                          FeePaid = list[0].FeePaid,
+                          FeeBal = list[0].FeeBal,
+                          AmountInRs = list[0].AmountInRs,
+                          BatchStartDate = list[0].BatchStartDate,
+                          PaymentDate = list[0].PaymentDate,
+                          FeeReceiptId = list[0].FeeReceiptId
+                      }));
 
                     return new PdfActionResult(list);
                 }
