@@ -1741,10 +1741,10 @@ namespace Tsr.Web.Controllers
                 ap.Scrutinee = true;
 
             db.SaveChanges();
-            if(ap.IsPackage==false)
+            //if(ap.IsPackage==false)
             return RedirectToAction("Scrutinee");
-            else
-            return RedirectToAction("PackageScrutinee");
+            //else
+            //return RedirectToAction("PackageScrutinee");
         }
 
         #endregion
