@@ -550,21 +550,23 @@ namespace Tsr.Web.Controllers
         }
         public ActionResult GetAdmissionApplicantList(int? id)
         {
-            var list = from ap in db.Applications
+            var list = from ap in db.Applied
+                       join a in db.Applications on ap.ApplicationId equals a.ApplicationId
                        join b in db.Batches on ap.BatchId equals b.BatchId
                        //join opi in db.OnlinePaymentInfos on ap.ApplicationId equals opi.ApplicationId
 
                        where (b.BatchId == id)
                        select new ApplicationApplicantsList
                        {
-                           ApplicationCode = ap.ApplicationCode,
+                           ApplicationCode = a.ApplicationCode,
                            ApplicationId = ap.ApplicationId,
                            BatchName = b.BatchCode,
-                           Name = ap.FirstName + " " + ap.LastName,
+                           Name = a.FirstName + " " + a.LastName,
                            //PaidAmount = opi.amount,
-                           Email = ap.Email,
-                           Cell = ap.CellNo
+                           Email = a.Email,
+                           Cell = a.CellNo
                        };
+            
             return new PdfActionResult(list);
         }
 

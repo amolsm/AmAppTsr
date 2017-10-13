@@ -499,7 +499,7 @@ namespace Tsr.Web.Controllers
             {
                 var cc = await db.CourseCategories.FindAsync(ap.CategoryId);
                 var c = await db.Courses.FindAsync(ap.CourseId);
-                //var b = await db.Batches.FindAsync(ap.BatchId);
+                var b = await db.Batches.FindAsync(ap.BatchId);
 
                 var cf = db.CourseFees.FirstOrDefault(x => x.CourseId == ap.CourseId);
 
@@ -528,6 +528,22 @@ namespace Tsr.Web.Controllers
                     };
                     db.FeeReceipts.Add(fr);
                     await db.SaveChangesAsync();
+
+                    EmailModel em = new EmailModel
+                    {
+                        From = ConfigurationManager.AppSettings["admsmail"],
+                        FromPass = ConfigurationManager.AppSettings["admsps"],
+                        To = ap.Email,
+                        Subject = "Course Registration with TSR",
+                        Body = "Dear " + ap.FirstName + " " + ap.LastName + ", with the reference to your Enrolment ID " + ap.ApplicationCode + " This is to confirm that your Application has been reached for " + c.CourseName + " starting BATCH on " + Convert.ToDateTime(b.StartDate).ToString("dd-MM-yyyy") + "  Thanking you T.S.Rahaman"
+                    };
+
+                    var res = await MessageService.sendEmail(em);
+
+                    MessageService ms = new MessageService();
+                    string msg = "Dear " + ap.FullName + ", with the reference to your Enrolment ID " + ap.ApplicationCode + " This is to confirm that your Application Fee " + obj.Amount + "recieved for " + c.CourseName + " starting BATCH on " + Convert.ToDateTime(b.StartDate).ToString("dd-MM-yyyy") + "  Thanking you T.S.Rahaman";
+                    string mobileno = ap.CellNo;
+                    await ms.SendSmsAsync(msg, mobileno);
                 }
                 else
                 {
@@ -583,11 +599,16 @@ namespace Tsr.Web.Controllers
                         From = ConfigurationManager.AppSettings["admsmail"],
                         FromPass = ConfigurationManager.AppSettings["admsps"],
                         To = ap.Email,
-                        Subject = "Your Admission Confirm",
-                        Body = ap.FirstName + " " + ap.LastName + " " + obj.Amount + " " + c.CourseName
+                        Subject = "Course Registration with TSR",
+                        Body = "Dear " + ap.FullName  + ", with the reference to your Enrolment ID " + ap.ApplicationCode + " This is to confirm that your seat has been confirmed for " + c.CourseName + " starting BATCH on " + Convert.ToDateTime(bs.StartDate).ToString("dd-MM-yyyy") + "  Thanking you T.S.Rahaman"
                     };
 
                     var res = await MessageService.sendEmail(em);
+
+                    MessageService ms = new MessageService();
+                    string msg = "Dear " + ap.FullName + ", with the reference to your Enrolment ID " + ap.ApplicationCode + " This is to confirm that your seat has been confirmed for " + c.CourseName + " starting BATCH on " + Convert.ToDateTime(bs.StartDate).ToString("dd-MM-yyyy") + "  Thanking you T.S.Rahaman";
+                    string mobileno = ap.CellNo;
+                    await ms.SendSmsAsync(msg, mobileno);
                 }
 
                 //return RedirectToAction("Scrutinee");
@@ -648,17 +669,24 @@ namespace Tsr.Web.Controllers
                 };
                 db.StudentFeeDetails.Add(sfd);
                 await db.SaveChangesAsync();
+
                 //send mail
+                //Application ap1 = await db.Applications.FindAsync(obj.ApplicationId);
                 EmailModel em = new EmailModel
                 {
                     From = ConfigurationManager.AppSettings["admsmail"],
                     FromPass = ConfigurationManager.AppSettings["admsps"],
                     To = ap.Email,
-                    Subject = "Your Admission Confirm",
-                    Body = ap.FullName + " " 
+                    Subject = "Course Registration with TSR",
+                    Body = "Dear " + ap.FullName + ", with the reference to your Enrolment ID " + ap.ApplicationCode + " This is to confirm that your seat has been confirmed for " + db.packages.Find(ap.PackageId).PackageName + "  Thanking you T.S.Rahaman"
                 };
 
                 var res = await MessageService.sendEmail(em);
+
+                MessageService ms = new MessageService();
+                string msg = "Dear " + ap.FullName + ", with the reference to your Enrolment ID " + ap.ApplicationCode + " This is to confirm that your seat has been confirmed for " + db.packages.Find(ap.PackageId).PackageName + "  Thanking you T.S.Rahaman";
+                string mobileno = ap.CellNo;
+                await ms.SendSmsAsync(msg, mobileno);
 
                 return Json(new { success = true });
             }

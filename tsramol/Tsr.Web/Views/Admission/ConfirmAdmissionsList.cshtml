@@ -12,7 +12,7 @@
 
                 <th>Email</th>
                 <th>Cell</th>
-                @*<th>Select</th>*@
+                <th>Fee Paid</th>
             </tr>
         </thead>
         <tbody>
@@ -36,9 +36,10 @@
                         @Html.Hidden("obj[" + @i + "].Cell", Model[i].Cell)
                         @Model[i].Cell
                     </td>
-                    @*<td>
-                        @Html.CheckBox("obj[" + @i + "].Select", Model[i].Select)
-                    </td>*@
+                    <td>
+                       @Html.Hidden("obj[" + @i + "].FeePaid", Model[i].FeePaid)
+                    @Model[i].FeePaid
+                    </td>
 
                 </tr>
             }

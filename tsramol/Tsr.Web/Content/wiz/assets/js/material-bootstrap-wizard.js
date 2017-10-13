@@ -41,6 +41,9 @@ $(document).ready(function () {
                 required: true
             }
             ,
+            FullName: {
+                required: true
+            },
             MotherName: {
                 required: true
             },

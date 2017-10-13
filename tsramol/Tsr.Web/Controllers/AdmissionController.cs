@@ -710,6 +710,7 @@ namespace Tsr.Web.Controllers
             return PartialView("ApplicantsList", list.ToList());
         }
 
+
         #endregion
 
         #region EntranceMarks
@@ -966,10 +967,28 @@ namespace Tsr.Web.Controllers
                 {
                     if (item.Select == true)
                     {
-                        //var ap = await db.Applications.FindAsync(item.ApplicationId);
+                        var ap = await db.Applications.FindAsync(item.ApplicationId);
+                        var cf = db.CourseFees.FirstOrDefault(x => x.CourseId == ap.CourseId);
+                        decimal tax;
+                        if (cf.GstPercentage > 0)
+                            tax = (((decimal)cf.ActualFee / 100) * (decimal)cf.GstPercentage);
+                        else
+                            tax = 0;
+                        var totalFee = (decimal)cf.ActualFee + tax;
 
                         Applied apl = db.Applied.FirstOrDefault(x => x.ApplicationId == item.ApplicationId);
                         apl.AdmissionStatus = true;
+
+                        StudentFeeDetail sfd = new StudentFeeDetail
+                        {
+                            ApplicationId = item.ApplicationId,
+                            BatchId = ap.BatchId,
+                            FeePaid = 0,
+                            TotalFee = totalFee,
+                            FeeBal = totalFee
+                        };
+
+                        db.StudentFeeDetails.Add(sfd);
                     }
                 }
                 await db.SaveChangesAsync();
@@ -1024,6 +1043,7 @@ namespace Tsr.Web.Controllers
                     select new { c.CourseId, c.CourseName };
             ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
 
+            ViewBag.Categories = new SelectList(db.CourseCategories.ToList(), "CourseCategoryId", "CategoryName");
             var obj = new List<AdmissionConfirmListVM>();
             return View(obj);
         }
@@ -1035,6 +1055,7 @@ namespace Tsr.Web.Controllers
                 var list = from mt in db.Applied
                            join ap in db.Applications on mt.ApplicationId equals ap.ApplicationId
                            join b in db.Batches on mt.BatchId equals b.BatchId
+                           join sfd in db.StudentFeeDetails on ap.ApplicationId equals sfd.ApplicationId
                            where (mt.BatchId == BatchId && mt.AdmissionStatus == true)
                            select new AdmissionConfirmListVM
                            {
@@ -1042,7 +1063,8 @@ namespace Tsr.Web.Controllers
                                ApplicationCode = ap.ApplicationCode,
                                Cell = ap.CellNo,
                                Email = ap.Email,
-                               Name = ap.FirstName + " " + ap.LastName
+                               Name = ap.FirstName + " " + ap.LastName,
+                               FeePaid = sfd.FeePaid.ToString()
                            };
                 ViewBag.Flag = "1";
 
@@ -1056,6 +1078,7 @@ namespace Tsr.Web.Controllers
             var obj = new List<AdmissionConfirmListVM>();
             return PartialView("ConfirmAdmissionsList", obj.ToList());
         }
+
         #endregion
 
         #region RejectedList

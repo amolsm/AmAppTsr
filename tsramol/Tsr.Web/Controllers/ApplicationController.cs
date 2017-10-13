@@ -418,6 +418,11 @@ namespace Tsr.Web.Controllers
                     udf3 = ap.ApplicationId.ToString(), //udf3 ApplicationID   
                     udf4 = "0" //Single Course Non Package          
                 };
+
+                MessageService ms = new MessageService();
+                string msg = "Dear " + ap.FullName + ", with the reference to your Enrolment ID " + ap.ApplicationCode + " This is to confirm that your Application has been submitted for " + obj.CourseName + "  Thanking you T.S.Rahaman";
+                string mobileno = ap.CellNo;
+                await ms.SendSmsAsync(msg, mobileno);
                 return View("ApplicationSummaryPre", apsm);
             }
             
@@ -526,7 +531,7 @@ namespace Tsr.Web.Controllers
                     MessageService ms = new MessageService();
                     string msg = "Dear " + ap.FirstName + " " + ap.LastName + ", with the reference to your Enrolment ID " + ap.ApplicationCode + " This is to confirm that your Application has been submitted for " + obj.CourseName + " starting BATCH on " + Convert.ToDateTime(b.StartDate).ToString("dd-MM-yyyy") + "  Thanking you T.S.Rahaman";
                     string mobileno = ap.CellNo;
-                    //await ms.SendSmsAsync(msg, mobileno);
+                    await ms.SendSmsAsync(msg, mobileno);
 
                     return View("ApplicationSummary", apsm);
                 }
@@ -630,6 +635,12 @@ namespace Tsr.Web.Controllers
                         udf3 = ap.ApplicationId.ToString(), //udf3 ApplicationID 
                         udf4 = ap.PackageId.ToString() //udf4 PackageId if package             
                     };
+
+                    MessageService ms = new MessageService();
+                    string msg = "Dear " + ap.FullName + ", with the reference to your Enrolment ID " + ap.ApplicationCode + " This is to confirm that your Application has been submitted for " + db.packages.Find(ap.PackageId).PackageName + "  Thanking you T.S.Rahaman";
+                    string mobileno = ap.CellNo;
+                    await ms.SendSmsAsync(msg, mobileno);
+
                     return View("ApplicationSummary", apsm);
                 }
             }
@@ -923,8 +934,8 @@ namespace Tsr.Web.Controllers
                     db.OnlinePaymentInfos.Add(opi);
                     await db.SaveChangesAsync();
 
-
-                    Application ap = await db.Applications.FindAsync(obj.udf3);
+                    var apcode = Convert.ToInt32(obj.udf3);
+                    Application ap = await db.Applications.FindAsync(apcode);
                     Batch bs = await db.Batches.FindAsync(bid);
                     if (cc.CetRequired == true)
                     {
@@ -964,6 +975,11 @@ namespace Tsr.Web.Controllers
                         };
 
                         var res = await MessageService.sendEmail(em);
+
+                        MessageService ms = new MessageService();
+                        string msg = "Dear " + ap.FullName + ", with the reference to your Enrolment ID " + ap.ApplicationCode + " This is to confirm that your Application Fee "+ obj.amount + "recieved for " + obj.CourseName + " starting BATCH on " + Convert.ToDateTime(b.StartDate).ToString("dd-MM-yyyy") + "  Thanking you T.S.Rahaman";
+                        string mobileno = ap.CellNo;
+                        await ms.SendSmsAsync(msg, mobileno);
 
                         return View("PaymentSuccessNC", obj);
                     }
@@ -1030,7 +1046,7 @@ namespace Tsr.Web.Controllers
                         MessageService ms = new MessageService();
                         string msg = "Dear " + obj.Firstname + " " + obj.Lastname + ", with the reference to your Enrolment ID " + obj.udf2 + " This is to confirm that your seat has been confirmed for " + obj.CourseName + " starting BATCH on " + Convert.ToDateTime(bs.StartDate).ToString("dd-MM-yyyy") + "  Thanking you T.S.Rahaman";
                         string mobileno = ap.CellNo;
-                        //await ms.SendSmsAsync(msg, mobileno);
+                        await ms.SendSmsAsync(msg, mobileno);
 
                         return View("PaymentSuccessNC", obj);
                     }
@@ -1119,16 +1135,23 @@ namespace Tsr.Web.Controllers
                     db.StudentFeeDetails.Add(sfd);
                     await db.SaveChangesAsync();
                     //send mail
+                    //Application ap = await db.Applications.FindAsync(obj.udf3);
                     EmailModel em = new EmailModel
                     {
                         From = ConfigurationManager.AppSettings["admsmail"],
                         FromPass = ConfigurationManager.AppSettings["admsps"],
                         To = obj.Email,
-                        Subject = "Your Admission Confirm",
-                        Body = obj.Firstname + " " + obj.Lastname + " " + obj.amount + " " + obj.CourseName
-                    };
+                        Subject = "Course Registration with TSR",
+                        Body = "Dear " + obj.Firstname + " " + obj.Lastname + ", with the reference to your Enrolment ID " + obj.udf2 + " This is to confirm that your seat has been confirmed for " + db.packages.Find(obj.udf4).PackageName + "  Thanking you T.S.Rahaman"
+                };
 
                     var res = await MessageService.sendEmail(em);
+
+                    MessageService ms = new MessageService();
+                    string msg = "Dear " + obj.Firstname + " " + obj.Lastname + ", with the reference to your Enrolment ID " + obj.udf2 + " This is to confirm that your seat has been confirmed for " + db.packages.Find(obj.udf4).PackageName + "  Thanking you T.S.Rahaman";
+                    string mobileno = obj.Phone;
+                    await ms.SendSmsAsync(msg, mobileno);
+
                     return View("PaymentSuccessNC", obj);
                 }
             }

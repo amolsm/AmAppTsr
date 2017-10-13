@@ -14,5 +14,6 @@ namespace Tsr.Core.Models
         public string Email { get; set; }
         public string Cell { get; set; }
         public bool Select { get; set; }
+        public string FeePaid { get; set; }
     }
 }

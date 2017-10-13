@@ -36,6 +36,15 @@
                                         <div class="col-md-3">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                @Html.DropDownList("CategoryId",
+                                                (IEnumerable<SelectListItem>)ViewBag.Categories, "Select Category", new { @class = "form-control", @onchange = "FillCourse()" })
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                                 @Html.DropDownList("CourseId",
                                                 (IEnumerable<SelectListItem>)ViewBag.Course, "Select Course", new { @class = "form-control", @onchange = "FillBatch()" })
                                             </div>
@@ -89,6 +98,25 @@
 </div>
 <!-- END PAGE CONTENT WRAPPER -->
 <script>
+    function FillCourse() {
+        var CategoryId = $('#CategoryId').val();
+        $.ajax({
+            url: '/Application/FillCourse',
+            type: "GET",
+            dataType: "JSON",
+            data: { CategoryId: CategoryId },
+            success: function (Courses) {
+                $("#CourseId").html(""); // clear before appending new list
+                $("#CourseId").append(
+                        $('<option></option>').val(0).html("Select Course"));
+
+                $.each(Courses, function (i, c) {
+                    $("#CourseId").append(
+                        $('<option></option>').val(c.CourseId).html(c.CourseName));
+                });
+            }
+        });
+    }
     function FillBatch() {
         //debugger;
         var CourseId = $('#CourseId').val();
