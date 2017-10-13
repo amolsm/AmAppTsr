@@ -190,16 +190,16 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/28/2015 04:04:30</publishTime>
     </File>
     <File Include="bin/Tsr.Core.dll">
-      <publishTime>10/13/2017 11:00:53</publishTime>
+      <publishTime>10/13/2017 13:57:02</publishTime>
     </File>
     <File Include="bin/Tsr.Infra.dll">
-      <publishTime>10/13/2017 11:00:53</publishTime>
+      <publishTime>10/13/2017 13:57:02</publishTime>
     </File>
     <File Include="bin/Tsr.ToPdf.dll">
-      <publishTime>10/13/2017 09:42:01</publishTime>
+      <publishTime>10/13/2017 13:57:01</publishTime>
     </File>
     <File Include="bin/Tsr.Web.dll">
-      <publishTime>10/13/2017 11:01:04</publishTime>
+      <publishTime>10/13/2017 13:57:16</publishTime>
     </File>
     <File Include="bin/TugberkUg.MVC.dll">
       <publishTime>10/06/2017 14:10:31</publishTime>
@@ -2056,7 +2056,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/26/2017 11:46:38</publishTime>
     </File>
     <File Include="Views/Application/CetApplication.cshtml">
-      <publishTime>10/12/2017 21:00:22</publishTime>
+      <publishTime>10/13/2017 13:55:44</publishTime>
     </File>
     <File Include="Views/Application/Index.cshtml">
       <publishTime>10/07/2017 20:40:24</publishTime>
@@ -2389,7 +2389,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/12/2017 09:23:24</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>10/13/2017 10:13:17</publishTime>
+      <publishTime>10/13/2017 13:57:23</publishTime>
     </File>
   </ItemGroup>
 </Project>
