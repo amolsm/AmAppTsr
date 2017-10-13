@@ -97,7 +97,7 @@ namespace Tsr.Web.Controllers
                             join fr in db.FeeReceipts on ap.ApplicationId equals fr.ApplicationId
                             join sd in db.StudentFeeDetails on ap.ApplicationId equals sd.ApplicationId
                             join cr in db.Courses on ap.CourseId equals cr.CourseId
-                            //join op in db.OnlinePaymentInfos on ap.ApplicationId equals op.ApplicationId
+                        
 
                             where (ap.ApplicationId == Id)
                             
@@ -140,8 +140,7 @@ namespace Tsr.Web.Controllers
                             join fr in db.FeeReceipts on ap.ApplicationId equals fr.ApplicationId
                             join sd in db.StudentFeeDetails on ap.ApplicationId equals sd.ApplicationId
                             join cr in db.Courses on ap.CourseId equals cr.CourseId
-                            //join op in db.OnlinePaymentInfos on ap.ApplicationId equals op.ApplicationId
-
+                           
                             where (ap.BatchId == Id)
                             select new FeesViewPaymentDetailsVM
                             {
@@ -270,7 +269,7 @@ namespace Tsr.Web.Controllers
                             join fr in db.FeeReceipts on ap.ApplicationId equals fr.ApplicationId
                             join sd in db.StudentFeeDetails on ap.ApplicationId equals sd.ApplicationId
                             join cr in db.Courses on ap.CourseId equals cr.CourseId
-                            //join op in db.OnlinePaymentInfos on ap.ApplicationId equals op.ApplicationId
+                          
 
                             where (fr.FeeReceiptId == receiptid)
                             select new FeesViewPaymentDetailsVM
@@ -302,10 +301,30 @@ namespace Tsr.Web.Controllers
                     db.SaveChanges();
 
                 }
-
-                return new PdfActionResult(list);
+                list.AddRange(Enumerable.Repeat(0, 1).Select(
+                      x => new FeesViewPaymentDetailsVM()
+                      {
+                          FeeReceiptNo = list[0].FeeReceiptNo,
+                          PaymentMode = list[0].PaymentMode,
+                          FeesType = list[0].FeesType,
+                          ReceiptDate = list[0].ReceiptDate,
+                          Name = list[0].Name,
+                          Course = list[0].Course,
+                          Batch = list[0].Batch,
+                          StudentId = list[0].StudentId,
+                          ApplicationId = list[0].ApplicationId,
+                          ApplicationCode = list[0].ApplicationCode,
+                          FeePaid = list[0].FeePaid,
+                          FeeBal = list[0].FeeBal,
+                          AmountInRs = list[0].AmountInRs,
+                          BatchStartDate = list[0].BatchStartDate,
+                          PaymentDate = list[0].PaymentDate,
+                          FeeReceiptId = list[0].FeeReceiptId
+                      }));
+                return new PdfActionResult(list); 
+               
             }
-
+            ViewBag.Categories = new SelectList(db.CourseCategories.ToList(), "CourseCategoryId", "CategoryName");
             return View("CoursePayments");
         }
         #endregion

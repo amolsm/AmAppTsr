@@ -839,6 +839,7 @@
     <Content Include="Uploads\CertificateFormat\7.jpg" />
     <Content Include="Uploads\CertificateFormat\8.jpg" />
     <Content Include="Uploads\CertificateFormat\9.jpg" />
+    <Content Include="Uploads\CetPhoto\nophoto.jpg" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1008,12 +1009,12 @@
     <Content Include="Views\Certification\DesignCertificate.cshtml" />
     <Content Include="Views\Report\Test1.cshtml" />
     <Content Include="Views\Admission\PackageScrutinee.cshtml" />
+    <Content Include="Views\Admission\ConformStudentListPdf.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="audio\" />
     <Folder Include="Uploads\CetFile\" />
-    <Folder Include="Uploads\CetPhoto\" />
     <Folder Include="Uploads\Halltickets\" />
     <Folder Include="Uploads\Photo\" />
   </ItemGroup>

@@ -9,7 +9,8 @@
 
                 <th>Application Code</th>
                 <th>Name</th>
-
+                <th>Course</th>
+                <th>Batch</th>
                 <th>Email</th>
                 <th>Cell</th>
                 <th>Fee Paid</th>
@@ -27,6 +28,14 @@
                     <td>
                         @Html.Hidden("obj[" + @i + "].Name", Model[i].Name)
                         @Model[i].Name
+                    </td>
+                    <td>
+                        @Html.Hidden("obj[" + @i + "].Course", Model[i].Course)
+                        @Model[i].Course
+                    </td>
+                    <td>
+                        @Html.Hidden("obj[" + @i + "].Batch", Model[i].Batch)
+                        @Model[i].Batch
                     </td>
                     <td>
                         @Html.Hidden("obj[" + @i + "].Email", Model[i].Email)

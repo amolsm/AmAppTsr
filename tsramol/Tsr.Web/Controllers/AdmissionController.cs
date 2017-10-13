@@ -13,6 +13,7 @@ using System.Web.Mvc;
 using Tsr.Core.Entities;
 using Tsr.Core.Models;
 using Tsr.Infra;
+using Tsr.ToPdf;
 using Tsr.Web.Common;
 
 namespace Tsr.Web.Controllers
@@ -255,8 +256,7 @@ namespace Tsr.Web.Controllers
                        join b in db.Batches on ap.BatchId equals b.BatchId
                        join cr in db.Courses on ap.CourseId equals cr.CourseId
                        join appl in db.Applied on ap.ApplicationId equals appl.ApplicationId
-                       //join op in db.OnlinePaymentInfos on ap.ApplicationId equals op.ApplicationId
-                       //join cm in db.CetMasters on ap.BatchId equals cm.BatchId
+                    
                        where (b.BatchId == BatchId && appl.AdmissionStatus == false)
                        select new HallTicketListVM
                        {
@@ -291,9 +291,9 @@ namespace Tsr.Web.Controllers
             var list = (from ap in db.Applications.AsEnumerable()
                         join b in db.Batches on ap.BatchId equals b.BatchId
                         join cr in db.Courses on ap.CourseId equals cr.CourseId
-                        join op in db.OnlinePaymentInfos on ap.ApplicationId equals op.ApplicationId
-                        join cm in db.CetMasters on cr.CourseId equals cm.CourseId
-                        where (cm.CetMasterId == id)
+                        join appl in db.Applied on ap.ApplicationId equals appl.ApplicationId
+                        where (b.BatchId == id && appl.AdmissionStatus == false)
+                        join cm in db.CetMasters on b.BatchId equals cm.BatchId
                         select new HallTicketListVM
                         {
                             CetMasterId = cm.CetMasterId,
@@ -540,14 +540,25 @@ namespace Tsr.Web.Controllers
                     cb.MoveTo(375f, 670f);
                     cb.LineTo(375f, 610f);
                     cb.Stroke();
-
-                    string imageURL = Server.MapPath("~/Img/avatar.png"); // Image 460f, 510f, 106f, 120f
+                    string imageURL = string.Empty;
+                   
+                    string[] photos = Directory.GetFiles(Server.MapPath("~/Uploads/CetPhoto/"));
+                    for (int i = 0; i < photos.Length; i++)
+                    {
+                        if ((Path.GetFileNameWithoutExtension(photos[i])) ==app.ApplicationCode)
+                            imageURL = photos[i];
+                      
+                    }
+                    if (imageURL == string.Empty) { imageURL = Server.MapPath("~/Uploads/CetPhoto/nophoto.jpg"); }
+                   
+                    // Image 460f, 510f, 106f, 120f
                     iTextSharp.text.Image png = iTextSharp.text.Image.GetInstance(imageURL);
-                    png.ScaleToFit(100f, 105f);
+                    png.ScaleToFit(100f, 110f);
                     png.SpacingBefore = 1f;
                     png.SpacingAfter = 1f;
+                    
                     png.Alignment = Element.ALIGN_LEFT;
-                    png.SetAbsolutePosition(465f, 515f);
+                    png.SetAbsolutePosition(465f, 520f);
                     pdfDoc.Add(png);
 
                     string imageURL1 = Server.MapPath("~/Img/signature.PNG"); // Image 
@@ -910,14 +921,25 @@ namespace Tsr.Web.Controllers
                     cb.MoveTo(375f, 670f);
                     cb.LineTo(375f, 610f);
                     cb.Stroke();
+                    string imageURL = string.Empty;
+                    
+                    string[] photos = Directory.GetFiles(Server.MapPath("~/Uploads/CetPhoto/"));
+                    for (int i = 0; i < photos.Length; i++)
+                    {
+                        if ((Path.GetFileNameWithoutExtension(photos[i])) == app.ApplicationCode)
+                            imageURL = photos[i];
 
-                    string imageURL = Server.MapPath("~/Img/avatar.png"); // Image 460f, 510f, 106f, 120f
+                    }
+                    if (imageURL == string.Empty) { imageURL = Server.MapPath("~/Uploads/CetPhoto/nophoto.jpg"); }
+
+                    // Image 460f, 510f, 106f, 120f
                     iTextSharp.text.Image png = iTextSharp.text.Image.GetInstance(imageURL);
-                    png.ScaleToFit(100f, 105f);
+                    png.ScaleToFit(100f, 110f);
                     png.SpacingBefore = 1f;
                     png.SpacingAfter = 1f;
+
                     png.Alignment = Element.ALIGN_LEFT;
-                    png.SetAbsolutePosition(465f, 515f);
+                    png.SetAbsolutePosition(465f, 520f);
                     pdfDoc.Add(png);
 
                     string imageURL1 = Server.MapPath("~/Img/signature.PNG"); // Image 
@@ -1354,18 +1376,21 @@ namespace Tsr.Web.Controllers
         {
             if (BatchId != null)
             {
-                var list = from mt in db.Applied
+                var list = from mt in db.Applied.AsEnumerable()
                            join ap in db.Applications on mt.ApplicationId equals ap.ApplicationId
                            join b in db.Batches on mt.BatchId equals b.BatchId
+                           join c in db.Courses on mt.CourseId equals c.CourseId
                            join sfd in db.StudentFeeDetails on ap.ApplicationId equals sfd.ApplicationId
                            where (mt.BatchId == BatchId && mt.AdmissionStatus == true)
                            select new AdmissionConfirmListVM
                            {
                                ApplicationId = ap.ApplicationId,
                                ApplicationCode = ap.ApplicationCode,
+                               Course = c.CourseName,
+                               Batch = Convert.ToDateTime(b.StartDate).ToString("dd-MM-yyyy"),
                                Cell = ap.CellNo,
                                Email = ap.Email,
-                               Name = ap.FirstName + " " + ap.LastName,
+                               Name = ap.FullName,
                                FeePaid = sfd.FeePaid.ToString()
                            };
                 ViewBag.Flag = "1";
@@ -1381,6 +1406,33 @@ namespace Tsr.Web.Controllers
             return PartialView("ConfirmAdmissionsList", obj.ToList());
         }
 
+        public ActionResult ConformStudentListPdf(int? id)
+        {
+            if (id != null)
+            {
+                var list = from mt in db.Applied.AsEnumerable()
+                           join ap in db.Applications on mt.ApplicationId equals ap.ApplicationId
+                           join b in db.Batches on mt.BatchId equals b.BatchId
+                           join c in db.Courses on mt.CourseId equals c.CourseId
+                           join sfd in db.StudentFeeDetails on ap.ApplicationId equals sfd.ApplicationId
+                           where (mt.BatchId == id && mt.AdmissionStatus == true)
+                           select new AdmissionConfirmListVM
+                           {
+                               ApplicationId = ap.ApplicationId,
+                               ApplicationCode = ap.ApplicationCode,
+                               Course = c.CourseName,
+                               Batch = Convert.ToDateTime(b.StartDate).ToString("dd-MM-yyyy"),
+                               Cell = ap.CellNo,
+                               Email = ap.Email,
+                               Name = ap.FullName,
+                               FeePaid = sfd.FeePaid.ToString()
+                           };
+                return new PdfActionResult(list);
+
+            }
+            return RedirectToAction("ConfirmAdmissions");
+        }
+       
         #endregion
 
         #region RejectedList

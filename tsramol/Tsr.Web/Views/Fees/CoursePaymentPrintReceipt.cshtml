@@ -22,7 +22,7 @@
             {
         <div style="height:10px"></div>
         var batchdate = Convert.ToDateTime(@item.BatchStartDate).ToString("dd-MM-yyyy");
-        <table style="width:100%">
+        <table style="width:100%;page-break-inside:avoid">
 
             <tr>
                 <td align="center" colspan="15">
@@ -60,10 +60,10 @@
                 </td>
             </tr>
             <tr style="border-top-style:hidden">
-                <td class="hide_right" colspan="2" style="text-align:left">
+                <td class="hide_right" colspan="3" style="text-align:left">
                     @Html.LabelFor(modelItem => item.Name, "Received with thanks from")
                 </td>
-                <td colspan="13" style="text-align:left">
+                <td colspan="12" style="text-align:left">
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
             </tr>
@@ -72,31 +72,32 @@
                 <td class="hide_right" colspan="1" style="text-align:left">
                     @Html.LabelFor(modelItem => item.Course)
                 </td>
-                <td class="hide_all" colspan="4" style="text-align:left">
+                <td class="hide_all" colspan="14">
                     @Html.DisplayFor(modelItem => item.Course)
                 </td>
-                <td class="hide_all" colspan="5" style="text-align:left">
+                </tr>
+            <tr style="border-top-style:hidden">
+                <td class="hide_all" colspan="1">
                     @Html.LabelFor(modelItem => item.BatchStartDate, "Batch")
                 </td>
-                <td class="hide_left" colspan="5" style="text-align:right">
+                <td class="hide_all" colspan="2">
 
                     @Html.DisplayFor(modelItem => batchdate)
                 </td>
-            </tr>
-            <tr style="border-top-style:hidden">
-                <td class="hide_right" colspan="1" style="text-align:left">
+           
+                <td class="hide_all" colspan="1">
                     @Html.LabelFor(modelItem => item.StudentId)
 
                 </td>
 
 
-                <td class="hide_top_left_right" colspan="4" style="text-align:left">
+                <td class="hide_all" colspan="2">
                     @Html.DisplayFor(modelItem => item.StudentId)
                 </td>
-                <td class="hide_top_left_right" colspan="4" style="text-align:left">
+                <td class="hide_all" colspan="4">
                     @Html.LabelFor(modelItem => item.ApplicationCode, "ApplicationId")
                 </td>
-                <td class="hide_left" colspan="6" style="text-align:right">
+                <td class="hide_all" colspan="5" style="text-align:right">
                     @Html.DisplayFor(modelItem => item.ApplicationCode)
                 </td>
 

@@ -15,5 +15,9 @@ namespace Tsr.Core.Models
         public string Cell { get; set; }
         public bool Select { get; set; }
         public string FeePaid { get; set; }
+
+        public string Batch { get; set; }
+
+        public string Course { get; set; }
     }
 }
