@@ -704,7 +704,8 @@ namespace Tsr.Web.Controllers
                                 join b in db.Batches on ap.BatchId equals b.BatchId
                                 join fr in db.FeeReceipts on ap.ApplicationId equals fr.ApplicationId
                                 join sd in db.StudentFeeDetails on ap.ApplicationId equals sd.ApplicationId
-                                join cr in db.Courses on ap.CourseId equals cr.CourseId
+                                into sdf from sd in sdf.DefaultIfEmpty()
+                                 join cr in db.Courses on ap.CourseId equals cr.CourseId
                                 //join op in db.OnlinePaymentInfos on ap.ApplicationId equals op.ApplicationId
 
                                 where (ap.ApplicationId == id)
@@ -722,7 +723,7 @@ namespace Tsr.Web.Controllers
                                     ApplicationId = ap.ApplicationId,
                                     ApplicationCode = ap.ApplicationCode,
                                     FeePaid = fr.Amount,
-                                    FeeBal = sd.FeeBal,
+                                    FeeBal = (sd==null) ? 0: sd.FeeBal ,
                                     AmountInRs = Common.AmountInWords.ConvertNumbertoWords(Convert.ToInt64(fr.Amount)),
                                     BatchStartDate = b.StartDate,
                                     PaymentDate = DateTime.Now,
