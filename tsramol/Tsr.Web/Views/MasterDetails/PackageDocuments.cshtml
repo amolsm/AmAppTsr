@@ -1,12 +1,11 @@
-﻿
-<!-- Latest compiled and minified CSS -->
+﻿<!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.3/css/bootstrap-select.min.css">
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.3/js/bootstrap-select.min.js"></script>
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h4 class="modal-title" id="myModalLabel">Course Documents</h4>
+    <h4 class="modal-title" id="myModalLabel">Package Documents</h4>
 </div>
 
 @using (Html.BeginForm())
@@ -19,16 +18,16 @@
 
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-            @Html.Hidden("id", (object) ViewBag.CourseId)
+            @Html.Hidden("id", (object)ViewBag.CourseId)
 
             <div class="form-group">
-               
+
                 <div class="col-md-8">
-                   @Html.ListBox("DocumentsListId", (MultiSelectList)ViewBag.Documents, new { @class = "form-control selectpicker", data_style = "btn-inverse" })
+                    @Html.ListBox("DocumentsListId", (MultiSelectList)ViewBag.Documents, new { @class = "form-control selectpicker", data_style = "btn-inverse" })
                 </div>
             </div>
 
-            
+
 
 
         </div>
@@ -47,7 +46,7 @@
 
         $('.selectpicker').selectpicker();
 
-        
+
 
     });
 </script>

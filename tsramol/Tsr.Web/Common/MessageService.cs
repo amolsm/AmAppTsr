@@ -35,8 +35,12 @@ namespace Tsr.Web.Common
                 smtp.Host = "smtp.gmail.com";
                 smtp.Port = 587;
                 smtp.EnableSsl = true;
-                await smtp.SendMailAsync(message);
-
+                try
+                {
+                    await smtp.SendMailAsync(message);
+                }
+                catch (Exception )
+                { }
                 return true;
             }
         }

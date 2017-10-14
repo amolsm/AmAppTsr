@@ -104,7 +104,17 @@ namespace Tsr.Web.Controllers
 
             return Json(obj, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult FillTermsPackage(int PackageId)
+        {
+            //var Courses = db.Batches.Where(c => c.CourseId == CourseId && c.IsActive == true && c.OnlineBookingStatus == true);
+            var obj = from cd in db.CourseDocuments
+                      join d in db.Documents on cd.DocumentId equals d.DocumentsListId
+                      where cd.PackageId == PackageId
+                      select new { d.DocumentName, d.DocumentsListId };
 
+
+            return Json(obj, JsonRequestBehavior.AllowGet);
+        }
         public JsonResult checkAge(int CourseId, string DateOfBirth)
         {
             bool res;

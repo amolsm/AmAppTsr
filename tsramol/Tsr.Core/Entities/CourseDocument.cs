@@ -11,7 +11,7 @@ namespace Tsr.Core.Entities
         public int CourseDocumentId { get; set; }
         public int CourseId { get; set; }
         public int DocumentId { get; set; }
+        public int? PackageId { get; set; }
 
-       
     }
 }

@@ -710,6 +710,42 @@ namespace Tsr.Web.Controllers
             db.SaveChanges();
             return RedirectToAction("PackageList");
         }
+
+        public ActionResult PackageDocuments(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var obj = (from cd in db.CourseDocuments
+                       join d in db.Documents on cd.DocumentId equals d.DocumentsListId
+                       where (cd.PackageId == id)
+                       select cd.DocumentId).ToArray();
+
+            var docs = db.Documents.Where(x => x.IsActive == true).ToList();
+            ViewBag.Documents = new MultiSelectList(docs, "DocumentsListId", "DocumentName", obj);
+
+            return PartialView("PackageDocuments");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> PackageDocuments(IEnumerable<int> DocumentsListId, string id)
+        {
+            int PackageId = Convert.ToInt32(id);
+            db.CourseDocuments.RemoveRange(db.CourseDocuments.Where(x => x.PackageId == PackageId));
+            await db.SaveChangesAsync();
+
+            foreach (var item in DocumentsListId)
+            {
+                var obj = new CourseDocument { CourseId = 0,PackageId=PackageId, DocumentId = item };
+                db.CourseDocuments.Add(obj);
+                await db.SaveChangesAsync();
+            }
+            //return PartialView("CourseDocuments");
+            return Json(new { success = true });
+        }
         #endregion
 
         #region Course

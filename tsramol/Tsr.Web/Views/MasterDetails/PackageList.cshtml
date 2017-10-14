@@ -56,6 +56,7 @@
                                             <td>
                                                 @Html.ActionLink("Edit", "PackageEdit", new { id = item.PackageId }, new { data_modal = "" }) |
                                                 @Html.ActionLink("Package Courses", "PackageCourses", new { id = item.PackageId }, new { data_modal = "" }) |
+                                                @Html.ActionLink("Documents", "PackageDocuments", new { id = item.PackageId }, new { data_modal = "" }) |
                                                 @if (item.IsActive == true)
                                                 {  @Html.ActionLink("Deactivate", "PackageDeactive", new { id = item.PackageId, flag = "D" }, new { onclick = "return confirm('Are you sure you wish to make Deactive?');" })}
                                                 else

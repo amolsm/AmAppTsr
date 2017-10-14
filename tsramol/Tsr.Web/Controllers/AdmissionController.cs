@@ -1125,7 +1125,7 @@ namespace Tsr.Web.Controllers
                 foreach (var item in obj)
                 {
                     var ap = await db.Applications.FindAsync(item.ApplicationId);
-
+                    var cim = await db.InterviewMasters.FindAsync(InterviewMasterId);
                     CetInterview ci = new CetInterview
                     {
                         ApplicationId = item.ApplicationId,
@@ -1133,7 +1133,25 @@ namespace Tsr.Web.Controllers
                         InterviewMasterId = (int)InterviewMasterId
                     };
                     db.CetInterviews.Add(ci);
+
+
+                    EmailModel em = new EmailModel
+                    {
+                        From = ConfigurationManager.AppSettings["admsmail"],
+                        FromPass = ConfigurationManager.AppSettings["admsps"],
+                        To = ap.Email,
+                        Subject = "Interview for Pre Sea Course",
+                        Body = "Dear " + ap.FullName + ", with the reference to your Enrolment ID " + ap.ApplicationCode + " you are selected for the Interview Date "+ Convert.ToDateTime(cim.InterviewDate).ToString("dd-MM-yyyy") + " Time " + cim.InterviewTime   + "  Thanking you T.S.Rahaman"
+                    };
+
+                    var res = await MessageService.sendEmail(em);
+
+                    MessageService ms = new MessageService();
+                    string msg = "Dear " + ap.FullName + ", with the reference to your Enrolment ID " + ap.ApplicationCode + " you are selected for the Interview Date " + Convert.ToDateTime(cim.InterviewDate).ToString("dd-MM-yyyy") + " Time " + cim.InterviewTime + "  Thanking you T.S.Rahaman";
+                    string mobileno = ap.CellNo;
+                    await ms.SendSmsAsync(msg, mobileno);
                 }
+
                 await db.SaveChangesAsync();
             }
 
@@ -1169,7 +1187,8 @@ namespace Tsr.Web.Controllers
                                Marks1 = sm.Marks1,
                                Marks2 = sm.Marks2,
                                Marks3 = sm.Marks3,
-                               Marks4 = sm.Marks4
+                               Marks4 = sm.Marks4,
+                               Total = sm.Marks1 + sm.Marks2 + sm.Marks3 + sm.Marks4
                            };
                 var c = (int)Count;
                 var topList = list.Take(c);
@@ -1598,7 +1617,13 @@ namespace Tsr.Web.Controllers
 
         public ActionResult MedicalSchedule()
         {
-            ViewBag.Courses = new SelectList(db.Courses.ToList(), "CourseId", "CourseName");
+            var a = from c in db.Courses
+                    join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
+                    where (c.IsActive == true && cc.CetRequired == true)
+                    select new { c.CourseId, c.CourseName };
+            ViewBag.Courses = new SelectList(a.ToList(), "CourseId", "CourseName");
+
+            //ViewBag.Courses = new SelectList(db.Courses.ToList(), "CourseId", "CourseName");
             var schedulelist = new List<AdmissionMedicalScheduleVM>();
             return View(schedulelist.ToList());
         }
@@ -1626,8 +1651,15 @@ namespace Tsr.Web.Controllers
 
         public ActionResult MedicalScheduleCreate()
         {
+            
+            var a = from c in db.Courses
+                    join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
+                    where (c.IsActive == true && cc.CetRequired == true)
+                    select new { c.CourseId, c.CourseName };
+            ViewBag.Courses = new SelectList(a.ToList(), "CourseId", "CourseName");
+
             ViewBag.Batches = new SelectList(db.Batches.ToList(), "BatchId", "StartDate");
-            ViewBag.Course = new SelectList(db.Courses.ToList(), "CourseId", "CourseName");
+
             var count = db.MedicalMasters.Count() + 1;
             AdmissionMedicalScheduleVM im = new AdmissionMedicalScheduleVM
             {
@@ -1740,7 +1772,7 @@ namespace Tsr.Web.Controllers
                 FromPass = ConfigurationManager.AppSettings["admsps"],
                 To = ap.Email,
                 Subject = "Hallticket",
-                Body = ap.FirstName + " " + ap.LastName,
+                Body = "Dear "+ ap.FullName + " student Hall Ticket For Pre Sea Entrance Exam",
                 File1= File1path,
                 File2= File2path
             };

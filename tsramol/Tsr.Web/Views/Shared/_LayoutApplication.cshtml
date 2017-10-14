@@ -231,6 +231,22 @@
           $('#PresentContactNo').val(PermenentContactNo);
       }
   }
+  function chkGuardian() {
+      if ($('#chkGuardianAddr').is(':checked')) {
+          //alert('checked');
+          var PresentAddress = $('#PresentAddress').val();
+          var PresentCity = $('#PresentCity').val();
+          var PresentState = $('#PresentState').val();
+          var PresentPin = $('#PresentPin').val();
+          var PresentContactNo = $('#PresentContactNo').val();
+
+          $('#GuardianAddress').val(PresentAddress);
+          $('#GuardianCity').val(PresentCity);
+          $('#GuardianState').val(PresentState);
+          $('#GuardianPin').val(PresentPin);
+          $('#GuardianContact').val(PresentContactNo);
+      }
+  }
   function SingleCourseDivBatch()
   {
       var BatchId = $('#BatchId').val();
@@ -324,6 +340,34 @@
 
             }
 
-        });</script>
+  });
+    $("#PackageId").change(function () {
+        var urlSource = '@Url.Action("FillTermsPackage", "Application")';
+        var fromsouyrcetype = $("#PackageId").val();
+        if (fromsouyrcetype != "") {
+            $.ajax({
+                url: urlSource,
+                method: "GET",
+                data: {
+                    "PackageId": fromsouyrcetype
+                },
+                success: function (result) {
+                    $('#checkboxContainer').empty();
+                    var content = "";
+                    $.each(result, function (index, value) {
+                        //content += '<input type="checkbox" class="form-control" name="' + value.DocumentName + '" id="' + value.DocumentsListId + '"/>'
+                        content += '<div class="input-group"> <span class="input-group-addon"> <i class="material-icons">check</i> </span><input type="text" class="form-control" Value = "' + value.DocumentName + '" disabled></div>'
+                    });
+                    $('#checkboxContainer').html(content);
+                }
+
+            });
+        } else {
+            $('#checkboxContainer').empty();
+
+        }
+
+    });
+</script>
 </html>
 

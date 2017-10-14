@@ -1010,6 +1010,7 @@
     <Content Include="Views\Report\Test1.cshtml" />
     <Content Include="Views\Admission\PackageScrutinee.cshtml" />
     <Content Include="Views\Admission\ConformStudentListPdf.cshtml" />
+    <Content Include="Views\MasterDetails\PackageDocuments.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
