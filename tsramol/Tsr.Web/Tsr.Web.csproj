@@ -357,6 +357,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Img\avatar.png" />
     <Content Include="Img\border.png" />
+    <Content Include="Img\border1.png" />
     <Content Include="Img\DNV LOGO.jpg" />
     <Content Include="Img\LOGO.jpg" />
     <Content Include="Img\signature.PNG" />

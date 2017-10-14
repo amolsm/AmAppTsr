@@ -62,6 +62,7 @@ namespace Tsr.Core.Models
 
             public string PrincipalSign { get; set; }
 
+            public string Topic5 { get; set; }
 
 
 

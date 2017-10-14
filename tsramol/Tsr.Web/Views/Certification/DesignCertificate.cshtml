@@ -120,6 +120,13 @@
                                                 @Html.ValidationMessageFor(model => model.Topic4, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.Topic5, htmlAttributes: new { @class = "control-label col-md-3" })
+                                            <div class="col-md-8">
+                                                @Html.EditorFor(model => model.Topic5, new { htmlAttributes = new { @class = "form-control seven" } })
+                                                @Html.ValidationMessageFor(model => model.Topic5, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
                                         <div class="col-md-9 pull-right">
                                             <input class="btn btn-primary" type="submit" name="submit" />
                                         </div>
@@ -233,6 +240,10 @@
                  textarea.six {
     border-style: solid;
     border-color:rosybrown;
+}
+                 textarea.seven {
+    border-style: solid;
+    border-color:skyblue;
 }
     /* Style the Image Used to Trigger the Modal */
     #myImg {

@@ -378,6 +378,7 @@ namespace Tsr.Web.Controllers
                           Paragraph2 = cd.Paragraph2,
                           Paragraph3 = cd.Paragraph3,
                           Topic4 = cd.Topic4,
+                          Topic5=cd.Topic5,
                           PrincipalName = mappings.PricipalName,
                           CertificateFormat = mappingsc.FormatName,
                           CreatedDate = cd.CreatedDate
@@ -409,6 +410,7 @@ namespace Tsr.Web.Controllers
                         Paragraph2 = obj.Paragraph2,
                         Paragraph3 = obj.Paragraph3,
                         Topic4 = obj.Topic4,
+                        Topic5=obj.Topic5,
                         CertificateFormatId = obj.CertificateFormatId
 
 
@@ -431,6 +433,7 @@ namespace Tsr.Web.Controllers
                         Paragraph2 = obj.Paragraph2,
                         Paragraph3 = obj.Paragraph3,
                         Topic4 = obj.Topic4,
+                        Topic5=obj.Topic5,
                         CreatedDate = DateTime.UtcNow,
                         CertificateFormatId = obj.CertificateFormatId
                     };
@@ -462,7 +465,8 @@ namespace Tsr.Web.Controllers
                 Paragraph1 = obj.Paragraph1,
                 Paragraph2 = obj.Paragraph2,
                 Paragraph3 = obj.Paragraph3,
-                Topic4 = obj.Topic4
+                Topic4 = obj.Topic4,
+                Topic5=obj.Topic5
 
             };
 
@@ -574,35 +578,36 @@ namespace Tsr.Web.Controllers
             {
 
 
-                var CertifcateList = from a in db.Applications
-                                     join b in db.Applied on a.ApplicationId equals b.ApplicationId
-                                     join c in db.CertificateDesigns on a.CourseId equals c.CourseId
-                                     join p in db.Principals on c.PrincipalId equals p.PrincipalId
-                                     join batch in db.Batches on b.BatchId equals batch.BatchId
-                                     join e in db.Employees on batch.CoordinatorId equals e.EmployeeId
-                                     where b.AdmissionStatus == true && a.CategoryId == obj.CategoryId && a.CourseId == obj.CourseId && a.BatchId == obj.BatchId
+                var CertifcateList = from appld in db.Applied
+                                     join app in db.Applications on appld.ApplicationId equals app.ApplicationId
+                                     join cd in db.CertificateDesigns on appld.CourseId equals cd.CourseId
+                                     join pr in db.Principals on cd.PrincipalId equals pr.PrincipalId
+                                     join b in db.Batches on appld.BatchId equals b.BatchId
+                                     join e in db.Employees on b.CoordinatorId equals e.EmployeeId
+                                     where appld.AdmissionStatus == true && appld.BatchId == obj.BatchId
                                      select new CertificationCertificateVM.Certificate
                                      {
                                          CertificateNo = "",
-                                         ApplicantName = a.FirstName + " " + a.MiddleName + " " + a.LastName,
-                                         CDCNo = a.CdcNo,
-                                         DateofBirth = a.DateOfBirth,
-                                         PassportNo = a.PassportNo,
-                                         Grade = a.GradPercentage.ToString(),
-                                         Number = "213",
-                                         Indosno = a.InDosNo.ToString(),
-                                         LineOfCertificate = c.LineOfCertificate,
-                                         CourseName = c.CourseName,
-                                         StartDate = batch.StartDate,
-                                         EndDate = batch.EndDate,
-                                         Paragraph1 = c.Paragraph1,
-                                         Paragraph2 = c.Paragraph2,
-                                         Paragraph3 = c.Paragraph3,
+                                         ApplicantName = app.FullName,
+                                         CDCNo = app.CdcNo,
+                                         DateofBirth = app.DateOfBirth,
+                                         PassportNo = app.PassportNo,
+                                         Grade = app.GradeOfCompetencyNo,
+                                         Number = app.CertOfCompetencyNo,
+                                         Indosno = app.InDosNo.ToString(),
+                                         LineOfCertificate = cd.LineOfCertificate,
+                                         CourseName = cd.CourseName,
+                                         StartDate = b.StartDate,
+                                         EndDate = b.EndDate,
+                                         Paragraph1 = cd.Paragraph1,
+                                         Paragraph2 = cd.Paragraph2,
+                                         Paragraph3 = cd.Paragraph3,
                                          CourseInCharge = e.FirstName == null ? "" : e.FirstName + "" + e.MiddleName == null ? "" : e.MiddleName + "" + e.LastName == null ? "" : e.LastName,
-                                         DateofExpiry = c.Topic4 == null ? "" : c.Topic4,
+                                         DateofExpiry = cd.Topic4 == null ? "" : cd.Topic4,
+                                         Topic5=cd.Topic5==null?"":cd.Topic5,
                                          DateOfIssue = DateTime.Now,
-                                         PrincipalName = p.PricipalName,
-                                         PrincipalSign = p.SignatureImgUrl
+                                         PrincipalName = pr.PricipalName,
+                                         PrincipalSign = pr.SignatureImgUrl
 
 
                                      };

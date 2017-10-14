@@ -3,7 +3,7 @@
 @using Tsr.Web.Common
 <style>
     html, tbody {
-        font-family: Calibri;
+        font-family: Arial;
         font-size:small;
     }
 
@@ -17,7 +17,7 @@
 @foreach (var c in Model._CertificateList)
 {
 
-    <table style="width:100%; height:100%; padding:20px;border-collapse:separate;border-style: solid;border-width: 27px;-moz-border-image: url('../Img/border.png') 27 round;-webkit-border-image: url('../Img/border.png') 27 round;-o-border-image: url('../Img/border.png') 27 round;border-image: url('../Img/border.png') 27 fill round;page-break-inside:avoid" cellspacing="0">
+    <table style="width:100%; height:100%; padding:20px;border-collapse:separate;border-style: solid;border-width:20px;-moz-border-image: url('../Img/border.png') 100 round;-webkit-border-image: url('../Img/border.png') 100 round;-o-border-image: url('../Img/border.png') 100 round;border-image: url('../Img/border.png') 100 fill round;page-break-inside:avoid" cellspacing="0">
 
         <thead>
             <tr>
@@ -68,14 +68,14 @@
             <tr>
                 <td colspan="2">
 
-                   Roll No
+                    Roll No
                 </td>
                 <td colspan="2">
                     <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"><input type="text" style="width:100px" value="@(c.CDCNo == null ? "" : c.CDCNo)" /></span>
-                   
+
                 </td>
                 <td colspan="8">
-                  Date of Birth
+                    Date of Birth
                 </td>
                 <td colspan="3">
                     <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"><input type="text" style="width:100%" value="@(c.DateofBirth == null ? "" : @Convert.ToDateTime(c.DateofBirth).ToString("dd-MM-yyyy"))" /> </span>
@@ -83,8 +83,8 @@
             </tr>
             <tr>
                 <td colspan="11">
-                   Indian National Database(INDoS No.)
-                   
+                    Indian National Database(INDoS No.)
+
                 </td>
                 <td colspan="2">
                     <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"> <input type="text" style="width:100px" value="@(c.Indosno == null ? "" : c.Indosno)" /></span>
@@ -92,7 +92,7 @@
                 <td colspan="2">
                     has successfully
 
-                    
+
                 </td>
 
             </tr>
@@ -101,10 +101,10 @@
                 <td colspan="15">completed a 25 weeks Pre Sea Certificate Course in Maritime Catering held</td>
 
             </tr>
-           
-        
-      
-            
+
+
+
+
             <tr>
                 <td colspan="15">
                     from <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"><input type="text" style="width:150px" value="@(c.StartDate == null ? "" : @Convert.ToDateTime(c.StartDate).ToString("dd-MM-yyyy"))" /></span> to
@@ -133,7 +133,7 @@
             </tr>
             <tr>
                 <td colspan="15">This Certificate is issued under the authority of the Directorate General of Shipping, Ministry of Shipping, Govt. of India.</td>
-           </tr>
+            </tr>
             <tr>
                 <td colspan="9">Signature of Rating:<input style="width:100px" type="text" /></td>
 
@@ -158,12 +158,12 @@
                     Principal <br />(@(c.PrincipalName == null ? "" : c.PrincipalName))
                 </td>
                 <td colspan="2" style="text-align:center">
-                    @Html.Image(c.PrincipalSign, "No Signature Available", "80", "100")
+                    @Html.Image(c.PrincipalSign, "No Signature Available", "100", "200")
                 </td>
             </tr>
             <tr>
                 <td colspan="8">
-                    <div style="width:125px;height:130px;border:1px solid #000;text-align: center;">Photograph</div>
+                    <div style="width:125px;height:135px;border:1px solid #000; display: flex;align-items: center;justify-content: center;"><p style="text-align:center;vertical-align:middle">Photograph</p></div>
                 </td>
 
                 <td align="right" colspan="7">
@@ -175,7 +175,11 @@
 
             </tr>
 
-
+            <tr>
+                <td colspan="15">
+                    <span style="font-weight:normal;font-size:xx-small"> @(c.Topic5 == null ? "" : c.Topic5)</span>
+                </td>
+            </tr>
 
 
 
