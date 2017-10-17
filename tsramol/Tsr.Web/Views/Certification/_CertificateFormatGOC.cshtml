@@ -2,7 +2,7 @@
 @using Tsr.Web.Common
 <style>
     html, tbody {
-        font-family: 'Times New Roman';
+        font-family: Arial;
         font-size: small;
     }
 
@@ -16,14 +16,14 @@
 @foreach (var c in Model._CertificateList)
 {
 
-    <table style="width:100%; height:100%; padding:20px;border-collapse:separate;border-style: solid;border-width: 27px;-moz-border-image: url('../Img/border.png') 27 round;-webkit-border-image: url('../Img/border.png') 27 round;-o-border-image: url('../Img/border.png') 27 round;border-image: url('../Img/border.png') 27 fill round;page-break-inside:avoid" cellspacing="0">
+    <table style="width:100%; height:100%; padding:20px;border-collapse:separate;border-style: solid;border-width:20px;-moz-border-image: url('../Img/border.png') 100 round;-webkit-border-image: url('../Img/border.png') 100 round;-o-border-image: url('../Img/border.png') 100 round;border-image: url('../Img/border.png') 100 fill round;page-break-inside:avoid" cellspacing="0">
 
         <thead>
             <tr>
                 <td colspan="15" style="text-align:right">
                     MCA Approval Certificate No.002420
                     <div style="text-align:center">
-                       <div style="width:100%;">
+                        <div style="width:100%;">
                             <div style="width:85%;float:right">
                                 <span style="font-family:'Old English Text MT';font-size:40px; font-weight:bold">Training Ship Rahaman</span><br />
                                 <span style="font-family:'Times New Roman';font-size:10px; font-weight:bold">
@@ -56,8 +56,8 @@
                 <td colspan="15" style="text-align:right;font-weight:bold;font-family:Calibri;font-size:large">Certificate No. 0610510012016</td>
             </tr>
             <tr>
-                <td colspan="7">Course Start</td>
-                <td colspan="8">Course End</td>
+                <td colspan="7">Course Start  @(c.StartDate == null ? "" : @Convert.ToDateTime(c.StartDate).ToString("dd-MM-yyyy"))</td>
+                <td colspan="8">Course End    @(c.EndDate == null ? "" : @Convert.ToDateTime(c.EndDate).ToString("dd-MM-yyyy"))</td>
 
             </tr>
 
@@ -66,8 +66,8 @@
 
             </tr>
             <tr>
-                <td colspan="7">Date of Birth</td>
-                <td colspan="8">CDC/Passport No.</td>
+                <td colspan="7">Date of Birth   @(c.DateofBirth == null ? "" : @Convert.ToDateTime(c.DateofBirth).ToString("dd-MM-yyyy"))</td>
+                <td colspan="8">CDC/Passport No.  @(c.CDCNo == null ? "" : c.CDCNo)/@(c.PassportNo == null ? "" : c.PassportNo)</td>
 
             </tr>
 
@@ -129,7 +129,11 @@
 
             </tr>
 
-
+            <tr>
+                <td colspan="15">
+                    <span style="font-weight:normal;font-size:xx-small">@(c.Topic5 == null ? "" : c.Topic5)</span>
+                </td>
+            </tr>
 
 
 

@@ -24,12 +24,12 @@ namespace Tsr.Core.Models
         public string Paragraph2 { get; set; }
         [DataType(DataType.MultilineText)]
         public string Paragraph3 { get; set; }
+        [Display(Name = "Paragraph4")]
         [DataType(DataType.MultilineText)]
         public string Topic4 { get; set; }
-
-
-       
-
+        [Display(Name ="Paragraph5")]
+        [DataType(DataType.MultilineText)]
+        public string Topic5 { get; set; }
 
         [Display(Name = "Principal")]
         public int PrincipalId { get; set; }

@@ -1,14 +1,20 @@
 ﻿@model Tsr.Core.Models.CertificationCertificateVM
 @using Tsr.Web.Common
 <style>
-    html, tbody {
-        font-family: Calibri;
+   html, tbody {
+        font-family: Arial;
+    }
+    input {
+        border: 0;
+        border-bottom: solid 1px #000;
+        outline: none;
+        width: 100%;
     }
 </style>
 @foreach (var c in Model._CertificateList)
 {
 
-    <table style="width:100%; height:100%; padding:20px;border-collapse:separate;border-style: solid;border-width: 27px;-moz-border-image: url('../Img/border.png') 27 round;-webkit-border-image: url('../Img/border.png') 27 round;-o-border-image: url('../Img/border.png') 27 round;border-image: url('../Img/border.png') 27 fill round;page-break-inside:avoid" cellspacing="0">
+    <table style="width:100%; height:100%; padding:20px;border-collapse:separate;border-style: solid;border-width:20px;-moz-border-image: url('../Img/border.png') 100 round;-webkit-border-image: url('../Img/border.png') 100 round;-o-border-image: url('../Img/border.png') 100 round;border-image: url('../Img/border.png') 100 fill round;page-break-inside:avoid" cellspacing="0">
 
         <thead>
             <tr>
@@ -92,7 +98,7 @@
                 <td style="border-bottom: 1px solid black;" colspan="7">
                     <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold">@(c.Number == null ? "" : c.Number)</span>
                 </td>
-             
+
             </tr>
             <tr>
                 <td colspan="15">@(c.LineOfCertificate == null ? "" : c.LineOfCertificate)</td>
@@ -133,7 +139,7 @@
                 </td>
                 <td rowspan="2" colspan="10" style="text-align:center">
 
-                    @Html.Image(c.PrincipalSign, "No Signature Available", "80", "100")
+                    @Html.Image(c.PrincipalSign, "No Signature Available", "100", "200")
 
                 </td>
             </tr>
@@ -144,7 +150,7 @@
             </tr>
             <tr>
                 <td colspan="8">
-                    <div style="width:125px;height:135px;border:1px solid #000;text-align: center;">Photograph</div>
+                    <div style="width:125px;height:135px;border:1px solid #000; display: flex;align-items: center;justify-content: center;"><p style="text-align:center;vertical-align:middle">Photograph</p></div>
                 </td>
 
                 <td align="center" colspan="7">
@@ -155,7 +161,11 @@
                 </td>
 
             </tr>
-
+            <tr>
+                <td colspan="15">
+                    <span style="font-weight:normal;font-size:xx-small">@(c.Topic5 == null ? "" : c.Topic5)</span>
+                </td>
+            </tr>
 
         </tbody>
 

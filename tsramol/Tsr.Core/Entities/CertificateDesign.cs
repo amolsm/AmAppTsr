@@ -26,6 +26,8 @@ namespace Tsr.Core.Entities
 
         public string Topic4 { get; set; }
 
+        public string Topic5 { get; set; }
+
 
         public int PrincipalId { get; set; }
 
