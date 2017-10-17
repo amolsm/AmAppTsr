@@ -272,6 +272,8 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\chosen-sprite.png" />
+    <Content Include="Content\chosen.css" />
     <Content Include="Content\css\animate\animate.css" />
     <Content Include="Content\css\animate\animate.min.css" />
     <Content Include="Content\css\blueimp\blueimp-gallery.min.css" />
@@ -391,6 +393,7 @@
     <None Include="Properties\PublishProfiles\am.pubxml" />
     <None Include="Properties\PublishProfiles\sy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\chosen.jquery.js" />
     <Content Include="Scripts\commonjs\commondropdown.js" />
     <Content Include="Scripts\dropzone\basic.css" />
     <Content Include="Scripts\dropzone\basic.min.css" />

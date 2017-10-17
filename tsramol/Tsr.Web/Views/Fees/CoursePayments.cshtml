@@ -25,17 +25,83 @@
                         </div>
 
                         <div class="panel-body">
-                            <div class="row">
+                            <div style="border:solid; padding:18px">
+                                <h4>Single Course</h4>
+                                <div class="row">
 
-                                <div class="col-md-12">
+                                    <div class="col-md-12">
 
+                                        <div class="form-group">
+
+                                            <div class="col-md-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                    @Html.DropDownList("CategoryId",
+                                                (IEnumerable<SelectListItem>)ViewBag.Categories, "Select Category", new { @class = "form-control", @onchange = "FillCourse()" })
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                    @Html.DropDownList("CourseId",
+                   new SelectList(Enumerable.Empty<SelectListItem>(), "CourseId", "CourseName"),
+              " ", new { @class = "form-control", @onchange = "FillBatch()" })
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                    @Html.DropDownList("BatchId",
+                   new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "Name"),
+              " ", new { @class = "form-control", @onchange = "FillStudents()" })
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                    @Html.DropDownList("StudentId",
+                   new SelectList(Enumerable.Empty<SelectListItem>(), "ApplicationId", "Name"),
+              " ", new { @class = "form-control" })
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                        <div class="form-group">
+
+                                            <div class="col-md-3">
+                                                <div class="input-group">
+                                                    <input class="btn btn-primary" type="button" value="Search" onclick="Search()" />
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <br /><br />
+                            <div style="border:solid; padding:18px">
+                                <h4>Package Course</h4>
+                                <div class="row">
                                     <div class="form-group">
 
                                         <div class="col-md-3">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                @Html.DropDownList("CategoryId",
-                                                (IEnumerable<SelectListItem>)ViewBag.Categories, "Select Category", new { @class = "form-control", @onchange = "FillCourse()" })
+                                                @Html.DropDownList("PackageId",
+                                                (IEnumerable<SelectListItem>)ViewBag.Packages, "Select Package", new { @class = "form-control", @onchange = "FillStudentsP()" })
                                             </div>
 
                                         </div>
@@ -43,55 +109,28 @@
                                         <div class="col-md-3">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                @Html.DropDownList("CourseId",
-                   new SelectList(Enumerable.Empty<SelectListItem>(), "CourseId", "CourseName"),
-              " ", new { @class = "form-control", @onchange = "FillBatch()" })
-                                            </div>
-
-                                        </div>
-
-                                        <div class="col-md-3">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                @Html.DropDownList("BatchId",
-                   new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "Name"),
-              " ", new { @class = "form-control", @onchange = "FillStudents()" })
-                                            </div>
-
-                                        </div>
-
-                                        <div class="col-md-3">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                @Html.DropDownList("StudentId",
+                                                @Html.DropDownList("StudentIdP",
                    new SelectList(Enumerable.Empty<SelectListItem>(), "ApplicationId", "Name"),
               " ", new { @class = "form-control" })
                                             </div>
 
                                         </div>
 
-                                        </div>
-                                    <div class="form-group">
-
                                         <div class="col-md-3">
                                             <div class="input-group">
-                                                <input class="btn btn-primary" type="button" value="Search" onclick="Search()" />
+                                                <input class="btn btn-primary" type="button" value="Search" onclick="SearchP()" />
 
                                             </div>
 
                                         </div>
 
                                     </div>
-
-
                                 </div>
-
-
                             </div>
                             <br /><br /><br />
                             <div id="dvResult">
                                 @*@{Html.RenderPartial("ApplicantsList", Model);}*@
-                                
+
                             </div>
                         </div>
                     </div>
@@ -165,11 +204,39 @@
           }
       });
   }
+  function FillStudentsP() {
+      var PackageId = $('#PackageId').val();
+      $.ajax({
+          url: '/Fees/FillStudentsForPackageScrutinee',
+          type: "GET",
+          dataType: "JSON",
+          data: { PackageId: PackageId },
+          success: function (Students) {
+              $("#StudentIdP").html(""); // clear before appending new list
+              $("#StudentIdP").append(
+                      $('<option></option>').val(0).html("Select Student"));
+
+              $.each(Students, function (i, c) {
+                  $("#StudentIdP").append(
+                      $('<option></option>').val(c.ApplicationId).html(c.Name));
+              });
+              $("#StudentIdP").chosen({
+                  //disable_search_threshold: 10,
+                  no_results_text: "Oops, nothing found!",
+                  width: "95%"
+              });
+          }
+      });
+  }
   function Search() {
       var ApplicationId = $('#StudentId').val();
 
       $("#dvResult").load('@(Url.Action("CoursePaymentsSearch", "Fees",null, Request.Url.Scheme))?ApplicationId=' + ApplicationId);
   }
-   
+    function SearchP() {
+        var ApplicationId = $('#StudentIdP').val();
+
+        $("#dvResult").load('@(Url.Action("CoursePaymentsSearch", "Fees",null, Request.Url.Scheme))?ApplicationId=' + ApplicationId);
+    }
 
 </script>

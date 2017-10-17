@@ -220,6 +220,11 @@
                   $("#StudentIdP").append(
                       $('<option></option>').val(c.ApplicationId).html(c.Name));
               });
+              $("#StudentIdP").chosen({
+                  //disable_search_threshold: 10,
+                  no_results_text: "Oops, nothing found!",
+                  width: "95%"
+              });
           }
       });
   }
