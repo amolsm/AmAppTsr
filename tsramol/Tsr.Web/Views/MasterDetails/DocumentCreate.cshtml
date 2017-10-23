@@ -43,4 +43,24 @@
         </div>
 }
 
-      
+      <script type="text/javascript">
+    $(document).ready(function () {
+        $('#DocumentName').blur(function () {
+            var DocumentName = $('#DocumentName').val();
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("IsDocumentNameExists")',
+                dataType: 'JSON',
+                data: { DocumentName: DocumentName },
+                success: function (data) {
+                    if (data.DocumentName != null) {
+                        alert("Document Name Already Exist")
+                        $('#DocumentName').val('');
+                        $('#DocumentName').focus();
+                        return false;
+                    }
+                }
+            });
+        });
+    })
+</script>

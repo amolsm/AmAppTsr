@@ -42,5 +42,25 @@
             <input class="btn btn-primary" type="submit" value="Save" />
         </div>
 }
-
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#Name').blur(function () {
+            var Name = $('#Name').val();
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("IsFeesNameExists")',
+                dataType: 'JSON',
+                data: { Name: Name },
+                success: function (data) {
+                    if (data.Name != null) {
+                        alert("Fees Name Already Exist")
+                        $('#Name').val('');
+                        $('#Name').focus();
+                        return false;
+                    }
+                }
+            });
+        });
+    })
+</script>
         

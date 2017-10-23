@@ -39,5 +39,26 @@
         <input class="btn btn-primary" type="submit" value="Save" />
     </div>
 }
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#DesignationName').blur(function () {
+            var DesignationName = $('#DesignationName').val();
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("IsDesignationNameExists")',
+                dataType: 'JSON',
+                data: { DesignationName: DesignationName },
+                success: function (data) {
+                    if (data.DesignationName != null) {
+                        alert("Designation Name Already Exist")
+                        $('#DesignationName').val('');
+                        $('#DesignationName').focus();
+                        return false;
+                    }
+                }
+            });
+        });
+    })
+</script>
 
 

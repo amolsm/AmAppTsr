@@ -1543,19 +1543,73 @@ namespace Tsr.Web.Controllers
        
         public JsonResult IsCourseNameExists(string CourseName)
         {
-            var data = db.Courses.Where(x=>x.CourseName== CourseName).FirstOrDefault();
+            
+            var data = db.Courses.Where(x=>x.CourseName.Trim()== CourseName.Trim()).FirstOrDefault();
             return Json(data, JsonRequestBehavior.AllowGet);
             //check if any of the UserName matches the UserName specified in the Parameter using the ANY extension method.  
 
         }
-     
+        public JsonResult IsOrganisationNameExists(string Name)
+        {
+
+            var data = db.Organisations.Where(x => x.Name.Trim() == Name.Trim()).FirstOrDefault();
+            return Json(data, JsonRequestBehavior.AllowGet);
+            //check if any of the UserName matches the UserName specified in the Parameter using the ANY extension method.  
+
+        }
+        public JsonResult IsCourseCategoryExists(string CategoryName)
+        {
+
+            var data = db.CourseCategories.Where(x => x.CategoryName.Trim() == CategoryName.Trim()).FirstOrDefault();
+            return Json(data, JsonRequestBehavior.AllowGet);
+            //check if any of the UserName matches the UserName specified in the Parameter using the ANY extension method.  
+
+        }
+
         public JsonResult IsCourseCodeExists(string CourseCode)
         {
-            var data = db.Courses.Where(x => x.CourseCode == CourseCode).FirstOrDefault();
+            var data = db.Courses.Where(x => x.CourseCode.Trim() == CourseCode.Trim()).FirstOrDefault();
             //check if any of the UserName matches the UserName specified in the Parameter using the ANY extension method.  
             return Json(data, JsonRequestBehavior.AllowGet);
         }
-       
+
+        public JsonResult IsDocumentNameExists(string DocumentName)
+        {
+            var data = db.Documents.Where(x => x.DocumentName.Trim() == DocumentName.Trim()).FirstOrDefault();
+            //check if any of the UserName matches the UserName specified in the Parameter using the ANY extension method.  
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult IsDepartmentNameExists(string Name)
+        {
+            var data = db.Departments.Where(x => x.Name.Trim() == Name.Trim()).FirstOrDefault();
+            //check if any of the UserName matches the UserName specified in the Parameter using the ANY extension method.  
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult IsDesignationNameExists(string DesignationName)
+        {
+            var data = db.Designations.Where(x => x.DesignationName.Trim() == DesignationName.Trim()).FirstOrDefault();
+            //check if any of the UserName matches the UserName specified in the Parameter using the ANY extension method.  
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult IsFeesNameExists(string Name)
+        {
+            var data = db.FeesPatterns.Where(x => x.Name.Trim() == Name.Trim()).FirstOrDefault();
+            //check if any of the UserName matches the UserName specified in the Parameter using the ANY extension method.  
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult IsFormatNameExists(string FormatName)
+        {
+            var data = db.CertificateFormats.Where(x => x.FormatName.Trim() == FormatName.Trim()).FirstOrDefault();
+            //check if any of the UserName matches the UserName specified in the Parameter using the ANY extension method.  
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult IsPackageNameExists(string PackageName)
+        {
+            var data = db.packages.Where(x => x.PackageName.Trim() == PackageName.Trim()).FirstOrDefault();
+            //check if any of the UserName matches the UserName specified in the Parameter using the ANY extension method.  
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
         #endregion
     }
 }

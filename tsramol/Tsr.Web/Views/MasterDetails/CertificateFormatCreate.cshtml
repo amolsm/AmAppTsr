@@ -49,4 +49,24 @@
         <input class="btn btn-primary" type="submit" value="Save" />
     </div>
 }
-
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#FormatName').blur(function () {
+            var FormatName = $('#FormatName').val();
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("IsFormatNameExists")',
+                dataType: 'JSON',
+                data: { FormatName: FormatName },
+                success: function (data) {
+                    if (data.FormatName != null) {
+                        alert("Format Name Already Exist")
+                        $('#FormatName').val('');
+                        $('#FormatName').focus();
+                        return false;
+                    }
+                }
+            });
+        });
+    })
+</script>

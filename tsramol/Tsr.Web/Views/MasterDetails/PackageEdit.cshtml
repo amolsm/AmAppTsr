@@ -73,3 +73,24 @@
     </div>
 }
 
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#PackageName').blur(function () {
+            var PackageName = $('#PackageName').val();
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("IsPackageNameExists")',
+                dataType: 'JSON',
+                data: { PackageName: PackageName },
+                success: function (data) {
+                    if (data.PackageName != null) {
+                        alert("Package Name Already Exist")
+                        $('#PackageName').val('');
+                        $('#PackageName').focus();
+                        return false;
+                    }
+                }
+            });
+        });
+    })
+</script>

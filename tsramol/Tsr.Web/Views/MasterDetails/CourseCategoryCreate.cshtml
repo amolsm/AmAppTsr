@@ -61,3 +61,25 @@
 }
 
       
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#CategoryName').blur(function () {
+            debugger;
+            var CategoryName = $('#CategoryName').val();
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("IsCourseCategoryExists")',
+                dataType: 'JSON',
+                data: { CategoryName: CategoryName },
+                success: function (data) {
+                    if (data.CategoryName != null) {
+                        alert("Category Name Already Exist")
+                        $('#CategoryName').val('');
+                        $('#CategoryName').focus();
+                        return false;
+                    }
+                }
+            });
+        });
+    })
+</script>
