@@ -28,7 +28,9 @@ namespace Tsr.Core.Entities
         public DateTime? CreatedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
       
-      public string Remark { get; set; }
+        public string Remark { get; set; }
+
+        public DateTime? CourseExpiryDate { get; set; }
 
     }
 }

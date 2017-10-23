@@ -53,6 +53,8 @@ namespace Tsr.Core.Models
         public bool? IsActive { get; set; }
         public int? CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }
+        [Display(Name ="CourseExpiry")]
+        public DateTime? CourseExpiryDate { get; set; }
     }
    
    

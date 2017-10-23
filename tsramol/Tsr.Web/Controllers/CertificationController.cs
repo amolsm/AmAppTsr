@@ -603,11 +603,12 @@ namespace Tsr.Web.Controllers
                                          Paragraph2 = cd.Paragraph2,
                                          Paragraph3 = cd.Paragraph3,
                                          CourseInCharge = e.FirstName == null ? "" : e.FirstName + "" + e.MiddleName == null ? "" : e.MiddleName + "" + e.LastName == null ? "" : e.LastName,
-                                         DateofExpiry = cd.Topic4 == null ? "" : cd.Topic4,
+                                         Topic4 = cd.Topic4 == null ? "" : cd.Topic4,
                                          Topic5=cd.Topic5==null?"":cd.Topic5,
                                          DateOfIssue = DateTime.Now,
                                          PrincipalName = pr.PricipalName,
-                                         PrincipalSign = pr.SignatureImgUrl
+                                         PrincipalSign = pr.SignatureImgUrl,
+                                         DateofExpiry=Convert.ToDateTime(b.CourseExpiryDate).ToString("dd-MM-yyyy")
 
 
                                      };

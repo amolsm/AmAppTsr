@@ -49,5 +49,7 @@ namespace Tsr.Core.Models
         public DateTime? ModifiedDate { get; set; }
         [DataType(DataType.MultilineText)]
         public string Remark { get; set; }
+
+        public DateTime? CourseExpiryDate { get; set; }
     }
 }

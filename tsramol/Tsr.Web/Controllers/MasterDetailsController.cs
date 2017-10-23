@@ -798,6 +798,7 @@ namespace Tsr.Web.Controllers
                         TotalSeats = obj.TotalSeats,
                         Unit = obj.Unit,
                         ShortName = obj.ShortName
+                       
                     };
 
                     c.CreatedBy = 1;
@@ -843,7 +844,8 @@ namespace Tsr.Web.Controllers
                 TotalSeats = obj.TotalSeats,
                 Unit = obj.Unit,
                 CreatedBy = obj.CreatedBy,
-                CreatedDate = obj.CreatedDate                
+                CreatedDate = obj.CreatedDate
+                             
             };
 
             ViewBag.Categories = new SelectList(db.CourseCategories.ToList(), "CourseCategoryId", "CategoryName");
@@ -878,6 +880,7 @@ namespace Tsr.Web.Controllers
                    // MinBalance = obj.MinBalance,
                     TotalSeats = obj.TotalSeats,
                     Unit = obj.Unit
+                    
                 };
 
                 c.ModifiedBy = 1;
@@ -1148,7 +1151,8 @@ namespace Tsr.Web.Controllers
                     StartDate = obj.StartDate,
                     TotalSeats = totSeat,
                     BookedSeats = 0,
-                    Remark=obj.Remark
+                    Remark=obj.Remark,
+                    CourseExpiryDate=obj.CourseExpiryDate
                 };
 
                 b.CreatedBy = 1;
@@ -1192,7 +1196,8 @@ namespace Tsr.Web.Controllers
                 CreatedDate = obj.CreatedDate,
                 CategoryName = db.CourseCategories.Find(obj.CategoryId).CategoryName,
                 CourseName = db.Courses.Find(obj.CourseId).CourseName,
-                Remark=obj.Remark
+                Remark=obj.Remark,
+                CourseExpiryDate=obj.CourseExpiryDate
 
             };
 
@@ -1224,6 +1229,7 @@ namespace Tsr.Web.Controllers
                 b.ModifiedDate = DateTime.Now;
                 b.Remark = obj.Remark;
                 b.ReserveSeats = obj.ReserveSeats;
+                b.CourseExpiryDate = obj.CourseExpiryDate;
                 db.Entry(b).State = EntityState.Modified;
                 await db.SaveChangesAsync();
                 return Json(new { success = true });

@@ -9,6 +9,7 @@
     border:0;
     border-bottom:solid 1px #000;
     outline:none;
+    width: 100%;
    }
 </style>
 @foreach (var c in Model._CertificateList)
@@ -53,8 +54,8 @@
 
             </tr>
             <tr style="border-bottom:1px solid black">
-                <td style="border-bottom: 1px solid black;" colspan="15">
-                    <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"> @(c.ApplicantName == null ? "" : c.ApplicantName)</span>
+                <td  colspan="15">
+                    <input style="font-family:'Times New Roman';font-size:15px; font-weight:bold"> @(c.ApplicantName == null ? "" : c.ApplicantName)/>
                 </td>
 
             </tr>
@@ -62,21 +63,21 @@
                 <td colspan="15">
                     Date of Birth&nbsp;&nbsp;
 
-                    <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"><input type="text" style="width:100px" value="@(c.DateofBirth == null ? "" : @Convert.ToDateTime(c.DateofBirth).ToString("dd-MM-yyyy"))" /> </span>
+                   <input type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px"  value="@(c.DateofBirth == null ? "" : @Convert.ToDateTime(c.DateofBirth).ToString("dd-MM-yyyy"))" /> 
 
 
                     Holder of C.D.C .No.&nbsp;&nbsp;
 
-                    <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"><input type="text" style="width:100px" value="@(c.CDCNo == null ? "" : c.CDCNo)" /></span>
+                   <input type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px"  value="@(c.CDCNo == null ? "" : c.CDCNo)" />
                 </td>
             </tr>
             <tr>
                 <td colspan="15">
                     Passport No.&nbsp;&nbsp;
-                    <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"> <input type="text" style="width:100px" value="@(c.PassportNo == null ? "" : c.PassportNo)" /></span>
+                    <input type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" value="@(c.PassportNo == null ? "" : c.PassportNo)" />
                     Indian National Database(INDOs No.)&nbsp;&nbsp;
 
-                    <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"><input type="text" style="width:100px" value="@(c.Indosno == null ? "" : c.Indosno)" /></span>
+                   <input style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" type="text"  value="@(c.Indosno == null ? "" : c.Indosno)" />
                 </td>
 
             </tr>
@@ -98,7 +99,7 @@
             <tr>
                 <td colspan="15">
                     held on
-                    <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"><input type="text" value="@(c.StartDate == null ? "" : @Convert.ToDateTime(c.StartDate).ToString("dd-MM-yyyy"))" /></span>
+                    <input type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" value="@(c.StartDate == null ? "" : @Convert.ToDateTime(c.StartDate).ToString("dd-MM-yyyy"))" />
                     and has provided evidence of having maintained the
                 </td>
             </tr>
@@ -120,7 +121,7 @@
             <tr>
                 <td colspan="2">Date of Issue: </td>
                 <td colspan="6">
-                    <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"> <input type="text" value="@(c.DateOfIssue == null ? "" : Convert.ToDateTime(c.DateOfIssue).ToString("dd-MM-yyyy"))" /></span>
+                    <input style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" type="text" value="@(c.DateOfIssue == null ? "" : Convert.ToDateTime(c.DateOfIssue).ToString("dd-MM-yyyy"))" />
                 </td>
                 <td rowspan="2" colspan="10" style="text-align:center">
 
@@ -130,7 +131,7 @@
             </tr>
             <tr>
                 <td colspan="15">
-                    @(c.DateofExpiry == null ? "" : c.DateofExpiry)<input type="text" />
+                    @(c.Topic4 == null ? "" : c.Topic4)<input type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" value="@(c.DateofExpiry == null ? "" : c.DateofExpiry)" />
                 </td>
             </tr>
             <tr>

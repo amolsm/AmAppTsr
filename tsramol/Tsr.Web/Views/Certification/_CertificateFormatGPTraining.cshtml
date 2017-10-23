@@ -63,9 +63,9 @@
                 <td colspan="15">THIS IS TO CERTIFY THAT</td>
 
             </tr>
-            <tr style="border-bottom:1px solid black">
+            <tr>
                 <td colspan="15">
-                    <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"><input type="text" value="@(c.ApplicantName == null ? "" : c.ApplicantName)" /></span>
+                    <input type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold" value="@(c.ApplicantName == null ? "" : c.ApplicantName)" />
                 </td>
 
             </tr>
@@ -75,14 +75,14 @@
                     Roll No
                 </td>
                 <td colspan="2">
-                    <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"><input type="text" style="width:100px" value="@(c.CDCNo == null ? "" : c.CDCNo)" /></span>
+                    <input type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" value="@(c.CDCNo == null ? "" : c.CDCNo)" />
 
                 </td>
                 <td colspan="8">
                     Date of Birth
                 </td>
                 <td colspan="3">
-                    <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"><input type="text" style="width:100%" value="@(c.DateofBirth == null ? "" : @Convert.ToDateTime(c.DateofBirth).ToString("dd-MM-yyyy"))" /> </span>
+                    <input type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100%" value="@(c.DateofBirth == null ? "" : @Convert.ToDateTime(c.DateofBirth).ToString("dd-MM-yyyy"))" /> 
                 </td>
             </tr>
             <tr>
@@ -91,7 +91,7 @@
 
                 </td>
                 <td colspan="2">
-                    <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"> <input type="text" style="width:100px" value="@(c.Indosno == null ? "" : c.Indosno)" /></span>
+                    <input type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" value="@(c.Indosno == null ? "" : c.Indosno)" />
                 </td>
                 <td colspan="2">
                     has attended
@@ -111,8 +111,8 @@
 
             <tr>
                 <td colspan="15">
-                    @(c.Paragraph1 == null ? "" : c.Paragraph1) <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"><input type="text" style="width:150px" value="@(c.StartDate == null ? "" : @Convert.ToDateTime(c.StartDate).ToString("dd-MM-yyyy"))" /></span> to
-                    <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"><input type="text" style="width:150px" value="@(c.EndDate == null ? "" : @Convert.ToDateTime(c.EndDate).ToString("dd-MM-yyyy"))" /></span>
+                    @(c.Paragraph1 == null ? "" : c.Paragraph1) <input type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:150px" value="@(c.StartDate == null ? "" : @Convert.ToDateTime(c.StartDate).ToString("dd-MM-yyyy"))" /> to
+                   <input type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:150px" value="@(c.EndDate == null ? "" : @Convert.ToDateTime(c.EndDate).ToString("dd-MM-yyyy"))" />
                     at Training Ship "Rahaman"
                 </td>
             </tr>
@@ -144,7 +144,7 @@
                     Date of Issue:
                 </td>
                 <td colspan="2">
-                    <input type="text" style="width:100px" value="@(c.DateOfIssue == null ? "" : Convert.ToDateTime(c.DateOfIssue).ToString("dd-MM-yyyy"))" />
+                    <input type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" value="@(c.DateOfIssue == null ? "" : Convert.ToDateTime(c.DateOfIssue).ToString("dd-MM-yyyy"))" />
                 </td>
                 <td style="text-align:center" colspan="9">
                     Principal <br />(@(c.PrincipalName == null ? "" : c.PrincipalName))

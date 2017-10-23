@@ -64,6 +64,7 @@ namespace Tsr.Core.Models
 
             public string Topic5 { get; set; }
 
+            public string Topic4 { get; set; }
 
 
 

@@ -58,6 +58,6 @@ namespace Tsr.Core.Entities
 
         public string ShortName { get; set; }
 
-        
+       
     }
 }
