@@ -358,6 +358,8 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Img\avatar.png" />
+    <Content Include="Img\border-g.png" />
+    <Content Include="Img\border-o.png" />
     <Content Include="Img\border.png" />
     <Content Include="Img\border1.png" />
     <Content Include="Img\DNV LOGO.jpg" />
@@ -391,6 +393,7 @@
     <Content Include="Content\wiz\assets\scss\gsdk-bootstrap-wizard\_typography.scss" />
     <Content Include="Content\wiz\assets\scss\gsdk-bootstrap-wizard\_variables.scss" />
     <Content Include="Content\wiz\assets\scss\gsdk-bootstrap-wizard\_wizard-card.scss" />
+    <None Include="Properties\PublishProfiles\a.pubxml" />
     <None Include="Properties\PublishProfiles\am.pubxml" />
     <None Include="Properties\PublishProfiles\sy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
