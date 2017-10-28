@@ -3,18 +3,21 @@
 <style>
    html, tbody {
         font-family: Arial;
+         font-size:14px;
     }
     input {
         border: 0;
         border-bottom: solid 1px #000;
         outline: none;
         width: 100%;
+         text-transform:uppercase;
     }
 </style>
 @foreach (var c in Model._CertificateList)
 {
 
-    <table style="width:100%; height:100%; padding:20px;border-collapse:separate;border-style: solid;border-width:20px;-moz-border-image: url('../Img/border.png') 100 round;-webkit-border-image: url('../Img/border.png') 100 round;-o-border-image: url('../Img/border.png') 100 round;border-image: url('../Img/border.png') 100 fill round;page-break-inside:avoid" cellspacing="0">
+
+    <table style="width:100%; height:100%; padding:20px;border-collapse:separate;border-style: solid;border-width:25px;-moz-border-image: url('../Img/border.png') 100 round;-webkit-border-image: url('../Img/border.png') 100 round;-o-border-image: url('../Img/border.png') 100 round;border-image: url('../Img/border.png') 100 fill round;page-break-inside:avoid" cellspacing="0">
 
         <thead>
             <tr>
@@ -27,14 +30,14 @@
                             <div style="width:85%;float:right">
                                 Nhava,Panvel Taluka Dist. Raigad-410206,Maharashtra<br />
 
-                                Tel : 022-27212800/900 Fax: 0222272112495<br />
+                                <b>Tel : 022-27212800/900 Fax: 0222272112495</b><br />
                                 Email ID: tsrahman@tsrahaman.org<br />
                                 www.tsrahaman.org<br />
                                 INDOS No.009<br />
                                 <span style="font-family:'Old English Text MT';font-size:40px; font-weight:bold">Training Ship Rahaman</span>
                             </div>
-                            <div style="width:150px;height:160px;text-align:left;margin-right:15%">
-                                <img src="~/Img/LOGO.jpg" style="width:140px;height:150px;position:absolute" />
+                            <div style="width:125px;height:155px;text-align:left;margin-right:15%">
+                                <img src="~/Img/LOGO.jpg" style="width:120px;height:150px;position:absolute" />
                             </div>
 
 
@@ -53,24 +56,24 @@
 
             </tr>
             <tr>
-                <td  colspan="15">
+                <td colspan="15">
                     <input style="font-family:'Times New Roman';font-size:15px; font-weight:bold"> @(c.ApplicantName == null ? "" : c.ApplicantName)/>
                 </td>
 
             </tr>
             <tr>
                 <td colspan="2">Date of Birth</td>
-                <td  colspan="3">
+                <td colspan="3">
                     <input style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px">@(c.DateofBirth == null ? "" : @Convert.ToDateTime(c.DateofBirth).ToString("dd-MM-yyyy"))/>
                 </td>
                 <td align="center" colspan="6">Holder of C.D.C .No.</td>
-                <td  colspan="5">
+                <td colspan="5">
                     <input style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px">@(c.CDCNo == null ? "" : c.CDCNo)/>
                 </td>
             </tr>
             <tr>
                 <td colspan="2">Passport No.</td>
-                <td  colspan="3">
+                <td colspan="3">
                     <input style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px">@(c.PassportNo == null ? "" : c.PassportNo)/>
                 </td>
                 <td colspan="10">Certificate of Competency,(if any)</td>
@@ -80,22 +83,22 @@
             <tr>
 
                 <td colspan="1">Grade:</td>
-                <td  colspan="6">
+                <td colspan="6">
                     <input style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px">@(c.Grade == null ? "" : c.Grade)/>
                 </td>
                 <td colspan="1">No.</td>
-                <td  colspan="3">
+                <td colspan="3">
                     <input style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px">@(c.Number == null ? "" : c.Number)/>
                 </td>
                 <td colspan="4">Indian National Database</td>
             </tr>
             <tr>
                 <td colspan="2">(INDoS No.)</td>
-                <td  colspan="3">
+                <td colspan="3">
                     <input style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px">@(c.Indosno == null ? "" : c.Indosno)/>
                 </td>
                 <td colspan="3">holding Certificate No.</td>
-                <td  colspan="7">
+                <td colspan="7">
                     <input style="font-family:'Times New Roman';font-size:15px; font-weight:bold">@(c.Number == null ? "" : c.Number)/>
                 </td>
 
@@ -104,16 +107,16 @@
                 <td colspan="15">@(c.LineOfCertificate == null ? "" : c.LineOfCertificate)</td>
             </tr>
             <tr>
-                <td style="text-align:center" colspan="15"><span style="font-family:Calibri;font-size:22px; font-weight:bold">@(c.CourseName == null ? "" : c.CourseName)</span></td>
+                <td style="text-align:center" colspan="15"><span style="font-family:Calibri;font-size:22px; font-weight:bold;color:#3e4095">@(c.CourseName == null ? "" : c.CourseName)</span></td>
             </tr>
 
             <tr>
                 <td colspan="2">held from </td>
-                <td  colspan="5">
+                <td colspan="5">
                     <input style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px">@(c.StartDate == null ? "" : @Convert.ToDateTime(c.StartDate).ToString("dd-MM-yyyy"))/>
                 </td>
                 <td align="center">to</td>
-                <td  colspan="7">
+                <td colspan="7">
                     <input style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px">@(c.EndDate == null ? "" : @Convert.ToDateTime(c.EndDate).ToString("dd-MM-yyyy"))/>
                 </td>
             </tr>
@@ -134,12 +137,12 @@
             </tr>
             <tr>
                 <td colspan="2">Date of Issue: </td>
-                <td colspan="5" >
+                <td colspan="5">
                     <input style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px"> @(c.DateOfIssue == null ? "" : Convert.ToDateTime(c.DateOfIssue).ToString("dd-MM-yyyy"))/>
                 </td>
                 <td rowspan="2" colspan="10" style="text-align:center">
 
-                    @Html.Image(c.PrincipalSign, "No Signature Available", "100", "200")
+                    @Html.Image(c.PrincipalSign, "No Signature Available", "100", "180")
 
                 </td>
             </tr>

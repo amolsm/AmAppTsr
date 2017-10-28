@@ -54,7 +54,7 @@ namespace Tsr.Core.Models
 
             public DateTime? DateOfIssue { get; set; }
 
-            public string DateofExpiry { get; set; }
+            public DateTime? DateofExpiry { get; set; }
 
             public string PrincipalName { get; set; }
 

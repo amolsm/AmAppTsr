@@ -1,21 +1,23 @@
 ﻿@model Tsr.Core.Models.CertificationCertificateVM
 @using Tsr.Web.Common
 <style>
-    html, tbody {
+      html, tbody {
         font-family: Arial;
+         font-size:14px;
     }
-  
     input {
         border: 0;
         border-bottom: solid 1px #000;
         outline: none;
         width: 100%;
+         text-transform:uppercase;
     }
 </style>
 @foreach (var c in Model._CertificateList)
 {
 
-    <table style="width:100%; height:100%; padding:20px;border-collapse:separate;border-style: solid;border-width:20px;-moz-border-image: url('../Img/border.png') 100 round;-webkit-border-image: url('../Img/border.png') 100 round;-o-border-image: url('../Img/border.png') 100 round;border-image: url('../Img/border.png') 100 fill round;page-break-inside:avoid" cellspacing="0">
+
+    <table style="width:100%; height:100%; padding:20px;border-collapse:separate;border-style: solid;border-width:25px;-moz-border-image: url('../Img/border.png') 100 round;-webkit-border-image: url('../Img/border.png') 100 round;-o-border-image: url('../Img/border.png') 100 round;border-image: url('../Img/border.png') 100 fill round;page-break-inside:avoid" cellspacing="0">
 
         <thead>
             <tr>
@@ -28,14 +30,14 @@
                             <div style="width:85%;float:right">
                                 Nhava,Panvel Taluka Dist. Raigad-410206,Maharashtra<br />
 
-                                Tel : 022-27212800/900 Fax: 0222272112495<br />
+                                <b>Tel : 022-27212800/900 Fax: 0222272112495</b><br />
                                 Email ID: tsrahman@tsrahaman.org<br />
                                 www.tsrahaman.org<br />
                                 INDOS No.009<br />
                                 <span style="font-family:'Old English Text MT';font-size:40px; font-weight:bold">Training Ship Rahaman</span>
                             </div>
-                            <div style="width:150px;height:160px;text-align:left;margin-right:15%">
-                                <img src="~/Img/LOGO.jpg" style="width:140px;height:150px;position:absolute" />
+                            <div style="width:125px;height:155px;text-align:left;margin-right:15%">
+                                <img src="~/Img/LOGO.jpg" style="width:120px;height:150px;position:absolute" />
                             </div>
 
 
@@ -49,7 +51,7 @@
 
             <tr><td colspan="15" style="text-align:right;font-weight:bold;font-family:Calibri;font-size:large">Certificate No. 0610510012016</td></tr>
             <tr>
-                <td style="text-align:center" colspan="15"><span style="font-family:Calibri;font-size:30px; font-weight:bold;font-style:italic">@(c.CourseName == null ? "" : c.CourseName)</span></td>
+                <td style="text-align:center" colspan="15"><span style="font-family:Calibri;font-size:30px; font-weight:bold;font-style:italic;color:#3e4095">@(c.CourseName == null ? "" : c.CourseName)</span></td>
             </tr>
             <tr>
                 <td colspan="15">THIS IS TO CERTIFY THAT</td>

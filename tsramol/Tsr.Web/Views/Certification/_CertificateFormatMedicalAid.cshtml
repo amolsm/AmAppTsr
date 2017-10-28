@@ -1,21 +1,23 @@
 ﻿@model Tsr.Core.Models.CertificationCertificateVM
 @using Tsr.Web.Common
 <style>
-    html, tbody {
+     html, tbody {
         font-family: Arial;
+         font-size:14px;
     }
-
     input {
         border: 0;
         border-bottom: solid 1px #000;
         outline: none;
-        width:100%;
+        width: 100%;
+         text-transform:uppercase;
     }
 </style>
 @foreach (var c in Model._CertificateList)
 {
 
-    <table style="width:100%; height:100%; padding:20px;border-collapse:separate;border-style: solid;border-width:20px;-moz-border-image: url('../Img/border.png') 100 round;-webkit-border-image: url('../Img/border.png') 100 round;-o-border-image: url('../Img/border.png') 100 round;border-image: url('../Img/border.png') 100 fill round;page-break-inside:avoid" cellspacing="0">
+
+    <table style="width:100%; height:100%; padding:20px;border-collapse:separate;border-style: solid;border-width:25px;-moz-border-image: url('../Img/border.png') 100 round;-webkit-border-image: url('../Img/border.png') 100 round;-o-border-image: url('../Img/border.png') 100 round;border-image: url('../Img/border.png') 100 fill round;page-break-inside:avoid" cellspacing="0">
 
         <thead>
             <tr>
@@ -28,14 +30,14 @@
                             <div style="width:85%;float:right">
                                 Nhava,Panvel Taluka Dist. Raigad-410206,Maharashtra<br />
 
-                                Tel : 022-27212800/900 Fax: 0222272112495<br />
+                                <b>Tel : 022-27212800/900 Fax: 0222272112495</b><br />
                                 Email ID: tsrahman@tsrahaman.org<br />
                                 www.tsrahaman.org<br />
                                 INDOS No.009<br />
                                 <span style="font-family:'Old English Text MT';font-size:40px; font-weight:bold">Training Ship Rahaman</span>
                             </div>
-                            <div style="width:150px;height:160px;text-align:left;margin-right:15%">
-                                <img src="~/Img/LOGO.jpg" style="width:140px;height:150px;position:absolute" />
+                            <div style="width:125px;height:155px;text-align:left;margin-right:15%">
+                                <img src="~/Img/LOGO.jpg" style="width:120px;height:150px;position:absolute" />
                             </div>
 
 
@@ -64,14 +66,14 @@
                     Date of Birth
                 </td>
                 <td colspan="2">
-                   <input type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" value="@(c.DateofBirth == null ? "" : @Convert.ToDateTime(c.DateofBirth).ToString("dd-MM-yyyy"))" /> 
+                    <input type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" value="@(c.DateofBirth == null ? "" : @Convert.ToDateTime(c.DateofBirth).ToString("dd-MM-yyyy"))" />
                 </td>
                 <td colspan="6">
 
                     Holder of C.D.C .No.
                 </td>
                 <td colspan="5">
-                   <input type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100%" value="@(c.CDCNo == null ? "" : c.CDCNo)" />
+                    <input type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100%" value="@(c.CDCNo == null ? "" : c.CDCNo)" />
                 </td>
             </tr>
             <tr>
@@ -89,7 +91,7 @@
             </tr>
             <tr>
                 <td colspan="4">
-                   <input type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100%" value="@(c.Grade == null ? "" : c.Grade)" />
+                    <input type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100%" value="@(c.Grade == null ? "" : c.Grade)" />
                 </td>
                 <td>
                     No.
@@ -114,7 +116,7 @@
                     holding Certificate No.
                 </td>
                 <td colspan="7" style="text-align:right">
-                  <input type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100%" value="" />
+                    <input type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100%" value="" />
                 </td>
 
 
@@ -150,7 +152,7 @@
             </tr>
 
             <tr>
-                <td style="text-align:center" colspan="15"><span style="font-family:Calibri;font-size:22px; font-weight:bold">@(c.CourseName == null ? "" : c.CourseName)</span></td>
+                <td style="text-align:center" colspan="15"><span style="font-family:Calibri;font-size:22px; font-weight:bold;color:#3e4095">@(c.CourseName == null ? "" : c.CourseName)</span></td>
             </tr>
 
 
@@ -176,25 +178,29 @@
                 </td>
                 <td rowspan="2" colspan="10" style="text-align:center">
 
-                    @Html.Image(c.PrincipalSign, "No Signature Available", "100", "200")
+                    @Html.Image(c.PrincipalSign, "No Signature Available", "100", "180")
 
                 </td>
             </tr>
             <tr>
                 <td colspan="15">
-                    @(c.Topic4 == null ? "" : c.Topic4)<input type="text" value="@(c.DateofExpiry == null ? "" : c.DateofExpiry)" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:150px" />
+                    @(c.Topic4 == null ? "" : c.Topic4)<input type="text" value="@(c.DateofExpiry == null ? "" : Convert.ToDateTime(c.DateofExpiry).ToString("dd-MM-yyyy"))" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:150px" />
                 </td>
             </tr>
             <tr>
                 <td colspan="8">
-                    <div style="width:125px;height:135px;border:1px solid #000; display: flex;align-items: center;justify-content: center;"><p style="text-align:center;vertical-align:middle">Photograph</p></div>
-                </td>
+                    <div style="padding-left:40px">
+                        <div style="width:125px;height:140px;border:1px solid #000; display: flex;align-items: center;justify-content: center;"><p style="text-align:center;vertical-align:middle">Photograph</p></div>
+                 </div></td>
 
                 <td align="center" colspan="7">
-
-                    Principal<br />(@(c.PrincipalName == null ? "" : c.PrincipalName))<br />
-                    <img src="~/Img/DNV LOGO.jpg" style="width:50px;height:80px;" />
-
+                    <div style="align-content:center">
+                        Principal<br />(@(c.PrincipalName == null ? "" : c.PrincipalName))<br />
+                        <br />
+                        <div style="padding-left:50%">
+                            <img src="~/Img/DNV LOGO.jpg" style="width:50px;height:85px;" />
+                        </div>
+                    </div>
                 </td>
 
 

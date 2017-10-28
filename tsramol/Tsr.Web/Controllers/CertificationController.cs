@@ -594,7 +594,7 @@ namespace Tsr.Web.Controllers
                                          PassportNo = app.PassportNo,
                                          Grade = app.GradeOfCompetencyNo,
                                          Number = app.CertOfCompetencyNo,
-                                         Indosno = app.InDosNo.ToString(),
+                                         Indosno = app.InDosNo,
                                          LineOfCertificate = cd.LineOfCertificate,
                                          CourseName = cd.CourseName,
                                          StartDate = b.StartDate,
@@ -608,7 +608,7 @@ namespace Tsr.Web.Controllers
                                          DateOfIssue = DateTime.Now,
                                          PrincipalName = pr.PricipalName,
                                          PrincipalSign = pr.SignatureImgUrl,
-                                         DateofExpiry=Convert.ToDateTime(b.CourseExpiryDate).ToString("dd-MM-yyyy")
+                                         DateofExpiry=b.CourseExpiryDate
 
 
                                      };

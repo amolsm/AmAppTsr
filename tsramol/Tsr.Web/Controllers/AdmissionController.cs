@@ -1656,7 +1656,7 @@ namespace Tsr.Web.Controllers
                     join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
                     where (c.IsActive == true && cc.CetRequired == true)
                     select new { c.CourseId, c.CourseName };
-            ViewBag.Courses = new SelectList(a.ToList(), "CourseId", "CourseName");
+            ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
 
             ViewBag.Batches = new SelectList(db.Batches.ToList(), "BatchId", "StartDate");
 
