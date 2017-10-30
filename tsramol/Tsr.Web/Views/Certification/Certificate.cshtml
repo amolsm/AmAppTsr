@@ -70,10 +70,10 @@
                                 <div class="col-lg-3">
 
                                     <div class="input-group">
-                                        <input class="btn btn-primary" type="submit" style="width:150px" value="View Certificate" />
+                                        <input class="btn btn-primary" type="submit" style="width:150px" value="Generate Certificate" />
                                        
-                                           &nbsp;&nbsp; <input type="button" class="btn btn-primary" style="width:50px" value="Print" id="btnPrint" />
-                                       
+                                           &nbsp; <input type="button" class="btn btn-primary" style="width:60px" value="Print" id="btnPrint" />
+                                        &nbsp;  <input class="btn btn-primary" type="button" value="Result" style="width:60px" onclick="window.open('@Url.Action("ViewResultFormat", "Certification")?id=' + document.getElementById('BatchId').value,'_blank')" />
                                        
 
                                     </div>

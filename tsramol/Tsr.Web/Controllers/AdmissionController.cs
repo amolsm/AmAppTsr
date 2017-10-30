@@ -299,7 +299,7 @@ namespace Tsr.Web.Controllers
                             CetMasterId = cm.CetMasterId,
                             ApplicationCode = ap.ApplicationCode,
                             ApplicationId = ap.ApplicationId,
-                            CourseName = cr.CourseName,
+                            CourseName = cr.ShortName,
                             BatchName = b.BatchCode,
                             CetDate = cm.CetDate,
                             CetTime = cm.CetTime,

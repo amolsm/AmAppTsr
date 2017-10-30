@@ -54,7 +54,7 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="15" style="text-align:right;font-weight:bold;font-family:Calibri;font-size:large">Certificate No. 0610510012016</td>
+                <td colspan="15" style="text-align:right;font-weight:bold;font-family:Calibri;font-size:large">Certificate No. @(c.CertificateNo == null ? "" : c.CertificateNo)</td>
             </tr>
             <tr>
                 <td colspan="7">Course Start  @(c.StartDate == null ? "" : @Convert.ToDateTime(c.StartDate).ToString("dd-MM-yyyy"))</td>
@@ -101,7 +101,7 @@
             <tr>
                 <td colspan="7">
 
-                    <input type="text" style="width:150px" />
+                    <input readonly type="text" style="width:150px" />
                     <br />
                     Signature of ECC Co-ordinator
                 </td>
@@ -116,7 +116,7 @@
 
             <tr>
                 <td colspan="7">
-                    <input type="text" style="width:150px" />
+                    <input readonly type="text" style="width:150px" />
                     <br />
                     Signature of holder
                 </td>

@@ -55,7 +55,7 @@ namespace Tsr.Web.Controllers
         public ActionResult FillBatch(int CourseId)
         {
             var C = db.Batches
-                .Where(c => c.CourseId == CourseId && c.IsActive == true && c.OnlineBookingStatus == true && c.StartDate > DbFunctions.AddDays(DateTime.Now, 1))
+                .Where(c => c.CourseId == CourseId && c.IsActive == true && c.OnlineBookingStatus == true && c.StartDate > DbFunctions.AddDays(DateTime.Now, 1) && c.CourseId ==(db.CourseFees.Where(x=>x.CourseId==CourseId).Select(m=>m.CourseId).FirstOrDefault()))
                 .Select(x => new { BatchId = x.BatchId, Name = x.StartDate});
 
             var Courses = C.ToList().Select(x => new BatchDropdown {BatchId = x.BatchId, Name = Convert.ToDateTime(x.Name).ToString("dd-MM-yyyy") });

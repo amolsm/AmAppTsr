@@ -1,0 +1,86 @@
+﻿@model Tsr.Core.Models.CertificateViewResultFormat
+@{
+    ViewBag.Title = "ViewResultFormat";
+    Layout = "~/Views/Shared/_PdfLayoutForCertificate.cshtml";
+}
+<style>
+   
+    table {
+        border: 1px solid black;
+        border-spacing: 0px;
+        font-size:12px;
+    }
+
+       
+
+        table tr td {
+            margin: 0px;
+            padding:10px;
+        }
+
+    .mystyle {
+        border-bottom: 0.5px solid black;
+    }
+</style>
+
+<table style="width:100%;border:none">
+
+    <tr>
+        <td align="center" colspan="8">TRAINING SHIP RAHAMAN</td>
+       
+    </tr>
+    <tr>
+        <td colspan="2">Officer In Charge</td>
+        <td colspan="2"></td>
+        <td>Batch</td>
+        <td colspan="3">@Model.BatchCode</td>
+
+    </tr>
+    <tr>
+        <td>Course</td>
+        <td colspan="3">@Model.CourseName</td>
+        <td>From</td>
+        <td>@(Model.From == null ? "" : @Convert.ToDateTime(Model.From).ToString("dd-MM-yyyy"))</td>
+        <td>To</td>
+        <td>@(Model.To == null ? "" : @Convert.ToDateTime(Model.To).ToString("dd-MM-yyyy"))</td>
+
+    </tr>
+    <tr>
+        <td colspan="5">FOLLOWING IS THE LIST OF CANDIDATES FOR THIS COURSE</td>
+        <td>DATE:</td>
+        
+        <td colspan="2">@(Model.Date == null ? "" : @Convert.ToDateTime(Model.Date).ToString("dd-MM-yyyy"))</td>
+       
+
+    </tr>
+    </table>
+<table style="width:100%;">
+    <tr>
+        <td>No.</td>
+        <td>NAME OF THE CANDIDATES</td>
+
+        <td>RANK</td>
+        <td>RESULTS</td>
+     
+    </tr>
+ @{int i = 0;}
+    @foreach (var item in Model._CertificateApplicantList)
+    {
+        i++;
+        <tr>
+            <td style="border-top: 0.5px solid black; border-bottom: 0.5px solid black;">@i</td>
+            <td style="border-top: 0.5px solid black; border-bottom: 0.5px solid black;">@item.ApplicantName</td>
+            <td style="border-top: 0.5px solid black; border-bottom: 0.5px solid black;">@item.Rank</td>
+            <td style="border-top: 0.5px solid black; border-bottom: 0.5px solid black;">@item.Results</td>
+          
+        </tr>
+    }
+</table>
+<table style="width:100%;">
+   <tr><td colspan="3"  style="border-bottom: solid 1px #000;text-align:right">Office Assistance</td></tr>
+    <tr><td colspan="2">To</td><td>Date : @(Model.CurrentDate == null ? "" : @Convert.ToDateTime(Model.CurrentDate).ToString("dd-MM-yyyy"))</td></tr>
+    <tr><td colspan="2" style="padding-left:20px">Office Assistance<br/>Please issue certificates to the above mentioned successful Candidates</td><td>Officer Incharge</td></tr>
+</table>
+
+
+

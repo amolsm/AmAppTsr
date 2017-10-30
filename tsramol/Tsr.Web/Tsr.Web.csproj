@@ -364,6 +364,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Img\ajax-loader.gif" />
     <Content Include="Img\avatar.png" />
     <Content Include="Img\border-g.png" />
     <Content Include="Img\border-o.png" />
@@ -1030,6 +1031,7 @@
     <Content Include="Views\Shared\_SidebarFees.cshtml" />
     <Content Include="Views\Shared\_SidebarAdmission.cshtml" />
     <Content Include="Views\Shared\_SidebarPrinting.cshtml" />
+    <Content Include="Views\Certification\ViewResultFormat.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

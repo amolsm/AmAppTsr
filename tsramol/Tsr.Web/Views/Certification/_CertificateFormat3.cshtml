@@ -52,29 +52,29 @@
 
             <tr>
                 <td colspan="6">THIS IS TO CERTIFY THAT</td>
-                <td colspan="9" style="text-align:right;font-weight:bold;font-family:Calibri;font-size:large">Certificate No. 0610510012016</td>
+                <td colspan="9" style="text-align:right;font-weight:bold;font-family:Calibri;font-size:large">Certificate No. @(c.CertificateNo == null ? "" : c.CertificateNo)</td>
 
             </tr>
             <tr>
                 <td colspan="15">
-                    <input style="font-family:'Times New Roman';font-size:15px; font-weight:bold"> @(c.ApplicantName == null ? "" : c.ApplicantName)/>
+                    <input readonly style="font-family:'Times New Roman';font-size:15px; font-weight:bold"> @(c.ApplicantName == null ? "" : c.ApplicantName)/>
                 </td>
 
             </tr>
             <tr>
                 <td colspan="2">Date of Birth</td>
                 <td colspan="3">
-                    <input style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px">@(c.DateofBirth == null ? "" : @Convert.ToDateTime(c.DateofBirth).ToString("dd-MM-yyyy"))/>
+                    <input readonly style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px">@(c.DateofBirth == null ? "" : @Convert.ToDateTime(c.DateofBirth).ToString("dd-MM-yyyy"))/>
                 </td>
                 <td align="center" colspan="6">Holder of C.D.C .No.</td>
                 <td colspan="5">
-                    <input style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px">@(c.CDCNo == null ? "" : c.CDCNo)/>
+                    <input readonly style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px">@(c.CDCNo == null ? "" : c.CDCNo)/>
                 </td>
             </tr>
             <tr>
                 <td colspan="2">Passport No.</td>
                 <td colspan="3">
-                    <input style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px">@(c.PassportNo == null ? "" : c.PassportNo)/>
+                    <input readonly style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px">@(c.PassportNo == null ? "" : c.PassportNo)/>
                 </td>
                 <td colspan="10">Certificate of Competency,(if any)</td>
 
@@ -84,22 +84,22 @@
 
                 <td colspan="1">Grade:</td>
                 <td colspan="6">
-                    <input style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px">@(c.Grade == null ? "" : c.Grade)/>
+                    <input readonly style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px">@(c.Grade == null ? "" : c.Grade)/>
                 </td>
                 <td colspan="1">No.</td>
                 <td colspan="3">
-                    <input style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px">@(c.Number == null ? "" : c.Number)/>
+                    <input readonly style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px">@(c.Number == null ? "" : c.Number)/>
                 </td>
                 <td colspan="4">Indian National Database</td>
             </tr>
             <tr>
                 <td colspan="2">(INDoS No.)</td>
                 <td colspan="3">
-                    <input style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px">@(c.Indosno == null ? "" : c.Indosno)/>
+                    <input readonly style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px">@(c.Indosno == null ? "" : c.Indosno)/>
                 </td>
                 <td colspan="3">holding Certificate No.</td>
                 <td colspan="7">
-                    <input style="font-family:'Times New Roman';font-size:15px; font-weight:bold">@(c.Number == null ? "" : c.Number)/>
+                    <input  readonly style="font-family:'Times New Roman';font-size:15px; font-weight:bold">@(c.Number == null ? "" : c.Number)/>
                 </td>
 
             </tr>
@@ -113,11 +113,11 @@
             <tr>
                 <td colspan="2">held from </td>
                 <td colspan="5">
-                    <input style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px">@(c.StartDate == null ? "" : @Convert.ToDateTime(c.StartDate).ToString("dd-MM-yyyy"))/>
+                    <input readonly style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px">@(c.StartDate == null ? "" : @Convert.ToDateTime(c.StartDate).ToString("dd-MM-yyyy"))/>
                 </td>
                 <td align="center">to</td>
                 <td colspan="7">
-                    <input style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px">@(c.EndDate == null ? "" : @Convert.ToDateTime(c.EndDate).ToString("dd-MM-yyyy"))/>
+                    <input readonly style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px">@(c.EndDate == null ? "" : @Convert.ToDateTime(c.EndDate).ToString("dd-MM-yyyy"))/>
                 </td>
             </tr>
             <tr>
@@ -138,7 +138,7 @@
             <tr>
                 <td colspan="2">Date of Issue: </td>
                 <td colspan="5">
-                    <input style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px"> @(c.DateOfIssue == null ? "" : Convert.ToDateTime(c.DateOfIssue).ToString("dd-MM-yyyy"))/>
+                    <input readonly style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px"> @(c.DateOfIssue == null ? "" : Convert.ToDateTime(c.DateOfIssue).ToString("dd-MM-yyyy"))/>
                 </td>
                 <td rowspan="2" colspan="10" style="text-align:center">
 

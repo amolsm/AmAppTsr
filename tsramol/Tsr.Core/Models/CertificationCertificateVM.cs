@@ -24,6 +24,12 @@ namespace Tsr.Core.Models
     
         public class Certificate
         {
+            public int ApplicationID { get; set; }
+
+            public string CourseCode { get; set; }
+
+            public string BatchCode { get; set; }
+            public int BatchId { get; set; }
             public string CertificateNo { get; set; }
             public string ApplicantName { get; set; }
 

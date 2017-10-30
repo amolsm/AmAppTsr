@@ -577,17 +577,23 @@ namespace Tsr.Web.Controllers
             if (ModelState.IsValid)
             {
 
-
+                 
                 var CertifcateList = from appld in db.Applied
                                      join app in db.Applications on appld.ApplicationId equals app.ApplicationId
                                      join cd in db.CertificateDesigns on appld.CourseId equals cd.CourseId
+                                     join c in db.Courses on appld.CourseId equals c.CourseId
                                      join pr in db.Principals on cd.PrincipalId equals pr.PrincipalId
                                      join b in db.Batches on appld.BatchId equals b.BatchId
                                      join e in db.Employees on b.CoordinatorId equals e.EmployeeId
                                      where appld.AdmissionStatus == true && appld.BatchId == obj.BatchId
                                      select new CertificationCertificateVM.Certificate
-                                     {
-                                         CertificateNo = "",
+                                     { 
+                                         
+                                         CertificateNo ="",
+                                         BatchCode=b.BatchCode,
+                                         CourseCode=c.CourseCode,
+                                         ApplicationID=app.ApplicationId,
+                                         BatchId=b.BatchId,
                                          ApplicantName = app.FullName,
                                          CDCNo = app.CdcNo,
                                          DateofBirth = app.DateOfBirth,
@@ -617,9 +623,69 @@ namespace Tsr.Web.Controllers
                 var performaction = db.CertificateFormats.Where(m => m.CertificateFormatId == certificateformatid).Select(m => m.ActionName).FirstOrDefault();
                 CertificationCertificateVM ccvm = new CertificationCertificateVM();
                 ccvm.PerformAction = performaction;
-                ccvm._CertificateList = CertifcateList.ToList();
+               
                 ViewBag.Categories = new SelectList(db.CourseCategories.Where(x => x.IsActive == true).ToList(), "CourseCategoryId", "CategoryName");
+                foreach (var item in CertifcateList.ToList())
+                {
+                    var existingitem = db.Certificates.Where(c => (c.ApplicationId == item.ApplicationID && c.BatchId == item.BatchId)).Select(m => m.CertificateId).ToList();
+                    int count = 0;
+                    if (existingitem.Count == 0)
+                    {   count++;
+                        string year = DateTime.Now.Year.ToString();
+                        Certificate c = new Certificate
+                        {
+                            CertificateCode = item.CourseCode + item.BatchCode + count.ToString().PadLeft(3, '0') + year,
+                            ApplicationId = item.ApplicationID,
+                            BatchId = item.BatchId,
+                            CreateDate = DateTime.Now,
+                            IsPrint=true
+                        };
+                        db.Certificates.Add(c);
+                        db.SaveChanges();
+                    }
+                }
+                var CertifcatesList = from appld in db.Applied
+                                     join app in db.Applications on appld.ApplicationId equals app.ApplicationId
+                                     join cd in db.CertificateDesigns on appld.CourseId equals cd.CourseId
+                                     join c in db.Courses on appld.CourseId equals c.CourseId
+                                     join pr in db.Principals on cd.PrincipalId equals pr.PrincipalId
+                                     join b in db.Batches on appld.BatchId equals b.BatchId
+                                     join e in db.Employees on b.CoordinatorId equals e.EmployeeId
+                                     where appld.AdmissionStatus == true && appld.BatchId == obj.BatchId
+                                     select new CertificationCertificateVM.Certificate
+                                     {
 
+                                         CertificateNo = db.Certificates.Where(x=>(x.ApplicationId==app.ApplicationId && x.BatchId==b.BatchId)).Select(x=>x.CertificateCode).FirstOrDefault(),
+                                         BatchCode = b.BatchCode,
+                                         CourseCode = c.CourseCode,
+                                         ApplicationID = app.ApplicationId,
+                                         BatchId = b.BatchId,
+                                         ApplicantName = app.FullName,
+                                         CDCNo = app.CdcNo,
+                                         DateofBirth = app.DateOfBirth,
+                                         PassportNo = app.PassportNo,
+                                         Grade = app.GradeOfCompetencyNo,
+                                         Number = app.CertOfCompetencyNo,
+                                         Indosno = app.InDosNo,
+                                         LineOfCertificate = cd.LineOfCertificate,
+                                         CourseName = cd.CourseName,
+                                         StartDate = b.StartDate,
+                                         EndDate = b.EndDate,
+                                         Paragraph1 = cd.Paragraph1,
+                                         Paragraph2 = cd.Paragraph2,
+                                         Paragraph3 = cd.Paragraph3,
+                                         CourseInCharge = e.FirstName == null ? "" : e.FirstName + "" + e.MiddleName == null ? "" : e.MiddleName + "" + e.LastName == null ? "" : e.LastName,
+                                         Topic4 = cd.Topic4 == null ? "" : cd.Topic4,
+                                         Topic5 = cd.Topic5 == null ? "" : cd.Topic5,
+                                         DateOfIssue = db.Certificates.Where(x => (x.ApplicationId == app.ApplicationId && x.BatchId == b.BatchId)).Select(x => x.CreateDate).FirstOrDefault(),
+                                         PrincipalName = pr.PricipalName,
+                                         PrincipalSign = pr.SignatureImgUrl,
+                                         DateofExpiry = b.CourseExpiryDate
+
+
+                                     };
+               
+                ccvm._CertificateList = CertifcatesList.ToList();
                 return View(ccvm);
             }
             ViewBag.Categories = new SelectList(db.CourseCategories.Where(x => x.IsActive == true).ToList(), "CourseCategoryId", "CategoryName");
@@ -641,6 +707,36 @@ namespace Tsr.Web.Controllers
         }
         #endregion
 
+        #region ResultFormat
+        public ActionResult ViewResultFormat(int? id)
+        {
+            var studentlist = from appld in db.Certificates
+                              join app in db.Applications on appld.ApplicationId equals app.ApplicationId
+                              join b in db.Batches on appld.BatchId equals b.BatchId
+                              join c in db.Courses on b.CourseId equals c.CourseId
+                              where  appld.BatchId == id
+                              select new CertificateApplicantList
+                              {
+                                  ApplicantId=app.ApplicationId,
+                                  ApplicantName=app.FullName,
+                                  Rank=app.RankOfCandidate
+                                   
+                              };
+            var batchdetails = db.Batches.Where(x => x.BatchId == id).FirstOrDefault();
+            var coursedetails = db.Courses.Where(x => x.CourseId == batchdetails.CourseId).FirstOrDefault();
+            CertificateViewResultFormat cvrf = new CertificateViewResultFormat();
+            cvrf.BatchCode = batchdetails.BatchCode;
+            cvrf.From = batchdetails.StartDate;
+            cvrf.To = batchdetails.EndDate;
+            cvrf.Date = batchdetails.StartDate;
+            cvrf.CurrentDate = DateTime.Now;
+            cvrf._CertificateApplicantList = studentlist.ToList();
+
+                              
+                             
+           return new PdfActionResult(cvrf);
+        }
+        #endregion
 
     }
 }

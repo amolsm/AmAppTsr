@@ -49,7 +49,7 @@
         </thead>
         <tbody>
 
-            <tr><td colspan="15" style="text-align:right;font-weight:bold;font-family:Calibri;font-size:large">Certificate No. 0610510012016</td></tr>
+            <tr><td colspan="15" style="text-align:right;font-weight:bold;font-family:Calibri;font-size:large">Certificate No. @(c.CertificateNo == null ? "" : c.CertificateNo)</td></tr>
             <tr>
                 <td style="text-align:center" colspan="15"><span style="font-family:Calibri;font-size:30px; font-weight:bold;font-style:italic;color:#3e4095">@(c.CourseName == null ? "" : c.CourseName)</span></td>
             </tr>
@@ -58,7 +58,7 @@
             </tr>
             <tr style="border-bottom:1px solid black">
                 <td colspan="15">
-                    <input type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold" value="@(c.ApplicantName == null ? "" : c.ApplicantName)" />
+                    <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold" value="@(c.ApplicantName == null ? "" : c.ApplicantName)" />
                 </td>
 
             </tr>
@@ -67,13 +67,13 @@
                     RollNo
                 </td>
                 <td colspan="2">
-                    <input type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" value="" />
+                    <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" value="" />
                 </td>
                 <td colspan="6">
                     Date of Birth
                 </td>
                 <td colspan="5">
-                    <input type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100%" value="@(c.DateofBirth == null ? "" : @Convert.ToDateTime(c.DateofBirth).ToString("dd-MM-yyyy"))" />
+                    <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100%" value="@(c.DateofBirth == null ? "" : @Convert.ToDateTime(c.DateofBirth).ToString("dd-MM-yyyy"))" />
                 </td>
             </tr>
             <tr>
@@ -81,7 +81,7 @@
                     Indian National Database(*INDoS No.)
                 </td>
                 <td colspan="4">
-                    <input type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" value="@(c.Indosno == null ? "" : c.Indosno)" />
+                    <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" value="@(c.Indosno == null ? "" : c.Indosno)" />
                 </td>
                 <td colspan="4">
                     has successfully
@@ -96,7 +96,7 @@
             </tr>
             <tr>
                 <td colspan="15">
-                    Engineering watch from <input type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" /> to <input type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" />
+                    Engineering watch from <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" /> to <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" />
                 </td>
             </tr>
 
