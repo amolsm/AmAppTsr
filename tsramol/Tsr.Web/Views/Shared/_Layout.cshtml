@@ -28,7 +28,25 @@
     <div class="page-container">
 
         <!-- START PAGE SIDEBAR -->
-        @Html.Partial("_SidebarAdmin")
+        @if (User.IsInRole("Admin"))
+        {
+            @Html.Partial("_SidebarAdmin");
+        }
+        else if(User.IsInRole("Admission"))
+        { 
+            @Html.Partial("_SidebarAdmission");
+        }
+        else if (User.IsInRole("Fees"))
+        {
+            @Html.Partial("_SidebarFees");
+        }
+        else if (User.IsInRole("Printing"))
+        {
+            @Html.Partial("_SidebarPrinting");
+        }
+
+
+
         <!-- END PAGE SIDEBAR -->
         <!-- PAGE CONTENT -->
         <div class="page-content">

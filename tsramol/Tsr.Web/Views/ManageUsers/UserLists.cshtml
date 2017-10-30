@@ -1,0 +1,88 @@
+﻿@model IEnumerable<Tsr.Core.Models.UserlistViewModel>
+
+@{
+    ViewBag.Title = "UserList";
+}
+
+<!-- START BREADCRUMB -->
+<ul class="breadcrumb push-down-0">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">UserLists</a></li>
+    @*<li class="active">Error 404</li>*@
+</ul>
+<!-- END BREADCRUMB -->
+<!-- PAGE CONTENT WRAPPER -->
+<div class="page-content-wrap">
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+
+                <form class="form-horizontal">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Users List</h3>
+
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="row" style="padding-bottom:10px">
+                                @*<button class="btn btn-info btn-rounded" data-toggle="modal" data-target="#modal_basic" ng-click="modules = null">Add New</button>*@
+                                @Html.ActionLink("Create New", "CreateUser", "ManageUsers", null, new { data_modal = "", id = "btnCreate", @class = "btn btn-info btn-rounded" })
+                            </div>
+                            <table id="customers2" class="table datatable">
+                                <thead>
+                                    <tr>
+                                        <th>User Name</th>
+                                        <th>Role</th>
+
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Name)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Role)
+                                            </td>
+                                            <td>
+                                                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                                                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                                                @Html.ActionLink("Delete", "Delete", new { id = item.Id }) |
+                                                @Html.ActionLink("Change Password", "ChangePassword", new { id = item.Id }, new { data_modal = "" })
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>
+<!-- END PAGE CONTENT WRAPPER -->
+<!-- MODALS -->
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="defModalHead" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/js/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/js/plugins/bootstrap/bootstrap-select.js"></script>
+<script src="~/Scripts/ModalForm.js"></script>

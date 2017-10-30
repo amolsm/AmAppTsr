@@ -141,6 +141,7 @@
     <Compile Include="Models\CertificationCertificateVM.cs" />
     <Compile Include="Models\CheckListVM.cs" />
     <Compile Include="Models\CourseFeeListVM.cs" />
+    <Compile Include="Models\CreateUserVM.cs" />
     <Compile Include="Models\EmailModel.cs" />
     <Compile Include="Models\EntranceMarksListVM.cs" />
     <Compile Include="Models\FeesApplicantList.cs" />
@@ -158,6 +159,7 @@
     <Compile Include="Models\MastersCourseFeeCreateVM.cs" />
     <Compile Include="Models\ReportApplicationVM.cs" />
     <Compile Include="Models\ScrutineeMakePaymentVM.cs" />
+    <Compile Include="Models\UserlistViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -258,11 +258,17 @@
     <Compile Include="Controllers\FeesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ManageUsersController.cs" />
     <Compile Include="Controllers\MasterDetailsController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201710281256245_InitialCreate.cs" />
+    <Compile Include="Migrations\201710281256245_InitialCreate.Designer.cs">
+      <DependentUpon>201710281256245_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -328,6 +334,7 @@
     <Content Include="Content\css\theme-white.css" />
     <Content Include="Content\img\bg.png" />
     <Content Include="Content\img\border.png" />
+    <Content Include="Content\img\wall_1.jpg" />
     <Content Include="Content\wiz\assets\css\b.css" />
     <Content Include="Content\wiz\assets\css\bootstrap.min.css" />
     <Content Include="Content\wiz\assets\css\demo.css" />
@@ -1018,10 +1025,16 @@
     <Content Include="Views\Admission\PackageScrutinee.cshtml" />
     <Content Include="Views\Admission\ConformStudentListPdf.cshtml" />
     <Content Include="Views\MasterDetails\PackageDocuments.cshtml" />
+    <Content Include="Views\ManageUsers\UserLists.cshtml" />
+    <Content Include="Views\ManageUsers\_CreateUser.cshtml" />
+    <Content Include="Views\Shared\_SidebarFees.cshtml" />
+    <Content Include="Views\Shared\_SidebarAdmission.cshtml" />
+    <Content Include="Views\Shared\_SidebarPrinting.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="audio\" />
+    <Folder Include="Content\css\backgrounds\" />
     <Folder Include="Uploads\CetFile\" />
     <Folder Include="Uploads\Halltickets\" />
     <Folder Include="Uploads\Photo\" />
@@ -1046,6 +1059,11 @@
       <Project>{9dfd69c9-4e4a-4d63-a6f8-e73287026e96}</Project>
       <Name>Tsr.ToPdf</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201710281256245_InitialCreate.resx">
+      <DependentUpon>201710281256245_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
