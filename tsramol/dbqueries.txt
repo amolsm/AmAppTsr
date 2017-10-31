@@ -1,0 +1,2 @@
+--first
+ALTER TABLE [dbo].[AspNetUsers] ADD [EmployeeId] [int] NOT NULL DEFAULT 0
