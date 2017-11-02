@@ -625,16 +625,17 @@ namespace Tsr.Web.Controllers
                 ccvm.PerformAction = performaction;
                
                 ViewBag.Categories = new SelectList(db.CourseCategories.Where(x => x.IsActive == true).ToList(), "CourseCategoryId", "CategoryName");
+                int count = 0;
                 foreach (var item in CertifcateList.ToList())
                 {
                     var existingitem = db.Certificates.Where(c => (c.ApplicationId == item.ApplicationID && c.BatchId == item.BatchId)).Select(m => m.CertificateId).ToList();
-                    int count = 0;
+                   
                     if (existingitem.Count == 0)
                     {   count++;
                         string year = DateTime.Now.Year.ToString();
                         Certificate c = new Certificate
                         {
-                            CertificateCode = item.CourseCode + item.BatchCode + count.ToString().PadLeft(3, '0') + year,
+                            CertificateCode = item.BatchCode + count.ToString().PadLeft(3, '0') + year,
                             ApplicationId = item.ApplicationID,
                             BatchId = item.BatchId,
                             CreateDate = DateTime.Now,
@@ -644,6 +645,7 @@ namespace Tsr.Web.Controllers
                         db.SaveChanges();
                     }
                 }
+                
                 var CertifcatesList = from appld in db.Applied
                                      join app in db.Applications on appld.ApplicationId equals app.ApplicationId
                                      join cd in db.CertificateDesigns on appld.CourseId equals cd.CourseId
