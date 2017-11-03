@@ -190,6 +190,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/07/2017 11:18:17</publishTime>
     </File>
     <File Include="bin/Tsr.Core.dll">
+<<<<<<< HEAD
       <publishTime>11/03/2017 18:20:14</publishTime>
     </File>
     <File Include="bin/Tsr.Infra.dll">
@@ -200,6 +201,18 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     </File>
     <File Include="bin/Tsr.Web.dll">
       <publishTime>11/03/2017 18:20:21</publishTime>
+=======
+      <publishTime>10/31/2017 10:47:12</publishTime>
+    </File>
+    <File Include="bin/Tsr.Infra.dll">
+      <publishTime>10/31/2017 10:47:13</publishTime>
+    </File>
+    <File Include="bin/Tsr.ToPdf.dll">
+      <publishTime>10/31/2017 10:47:11</publishTime>
+    </File>
+    <File Include="bin/Tsr.Web.dll">
+      <publishTime>10/31/2017 10:47:25</publishTime>
+>>>>>>> origin/master
     </File>
     <File Include="bin/TugberkUg.MVC.dll">
       <publishTime>12/05/2011 16:30:52</publishTime>
@@ -551,6 +564,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     </File>
     <File Include="Img/ajax-loader.gif">
       <publishTime>10/30/2017 15:05:23</publishTime>
+    </File>
+    <File Include="Img/ajax-loader.gif">
+      <publishTime>10/31/2017 10:35:12</publishTime>
     </File>
     <File Include="Img/avatar.png">
       <publishTime>09/07/2017 11:18:16</publishTime>
@@ -2020,10 +2036,17 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/03/2017 19:43:09</publishTime>
     </File>
     <File Include="Views/Admission/InterviewScheduleCreate.cshtml">
+<<<<<<< HEAD
       <publishTime>10/30/2017 20:43:57</publishTime>
     </File>
     <File Include="Views/Admission/InterviewScheduleEdit.cshtml">
       <publishTime>10/30/2017 20:44:46</publishTime>
+=======
+      <publishTime>10/31/2017 10:35:12</publishTime>
+    </File>
+    <File Include="Views/Admission/InterviewScheduleEdit.cshtml">
+      <publishTime>10/31/2017 10:35:12</publishTime>
+>>>>>>> origin/master
     </File>
     <File Include="Views/Admission/MedicalList.cshtml">
       <publishTime>09/11/2017 11:51:04</publishTime>
@@ -2110,7 +2133,11 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/07/2017 17:46:35</publishTime>
     </File>
     <File Include="Views/Certification/Certificate.cshtml">
+<<<<<<< HEAD
       <publishTime>10/30/2017 18:54:55</publishTime>
+=======
+      <publishTime>10/31/2017 10:35:12</publishTime>
+>>>>>>> origin/master
     </File>
     <File Include="Views/Certification/CertificateDesignList.cshtml">
       <publishTime>10/14/2017 15:59:16</publishTime>
@@ -2133,6 +2160,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Views/Certification/ViewResultFormat.cshtml">
       <publishTime>10/30/2017 20:34:22</publishTime>
     </File>
+    <File Include="Views/Certification/ViewResultFormat.cshtml">
+      <publishTime>10/31/2017 10:35:12</publishTime>
+    </File>
     <File Include="Views/Certification/_ApplicantsList.cshtml">
       <publishTime>09/13/2017 11:46:47</publishTime>
     </File>
@@ -2140,6 +2170,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/14/2017 16:42:43</publishTime>
     </File>
     <File Include="Views/Certification/_CertificateDRLeoGME.cshtml">
+<<<<<<< HEAD
       <publishTime>11/03/2017 19:03:15</publishTime>
     </File>
     <File Include="Views/Certification/_CertificateFormat1.cshtml">
@@ -2177,6 +2208,45 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     </File>
     <File Include="Views/Certification/_RefresherTraining.cshtml">
       <publishTime>11/02/2017 19:49:38</publishTime>
+=======
+      <publishTime>10/31/2017 10:35:12</publishTime>
+    </File>
+    <File Include="Views/Certification/_CertificateFormat1.cshtml">
+      <publishTime>10/31/2017 10:35:12</publishTime>
+    </File>
+    <File Include="Views/Certification/_CertificateFormat2.cshtml">
+      <publishTime>10/31/2017 10:35:12</publishTime>
+    </File>
+    <File Include="Views/Certification/_CertificateFormat3.cshtml">
+      <publishTime>10/31/2017 10:35:12</publishTime>
+    </File>
+    <File Include="Views/Certification/_CertificateFormatCadetcourse.cshtml">
+      <publishTime>10/31/2017 10:35:12</publishTime>
+    </File>
+    <File Include="Views/Certification/_CertificateFormatGOC.cshtml">
+      <publishTime>10/31/2017 10:35:12</publishTime>
+    </File>
+    <File Include="Views/Certification/_CertificateFormatGPRating.cshtml">
+      <publishTime>10/31/2017 10:35:12</publishTime>
+    </File>
+    <File Include="Views/Certification/_CertificateFormatGPTraining.cshtml">
+      <publishTime>10/31/2017 10:35:12</publishTime>
+    </File>
+    <File Include="Views/Certification/_CertificateFormatMaritimeCatering.cshtml">
+      <publishTime>10/31/2017 10:35:12</publishTime>
+    </File>
+    <File Include="Views/Certification/_CertificateFormatMedicalAid.cshtml">
+      <publishTime>10/31/2017 10:35:12</publishTime>
+    </File>
+    <File Include="Views/Certification/_CertificateFormatWorkshopskills.cshtml">
+      <publishTime>10/31/2017 10:35:12</publishTime>
+    </File>
+    <File Include="Views/Certification/_CertificateList.cshtml">
+      <publishTime>10/31/2017 10:35:12</publishTime>
+    </File>
+    <File Include="Views/Certification/_RefresherTraining.cshtml">
+      <publishTime>10/31/2017 10:35:12</publishTime>
+>>>>>>> origin/master
     </File>
     <File Include="Views/Fees/ApplicantsList.cshtml">
       <publishTime>09/07/2017 11:18:16</publishTime>
@@ -2191,7 +2261,11 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/09/2017 01:41:17</publishTime>
     </File>
     <File Include="Views/Fees/CoursePaymentsMP.cshtml">
+<<<<<<< HEAD
       <publishTime>10/30/2017 13:03:47</publishTime>
+=======
+      <publishTime>10/31/2017 10:35:12</publishTime>
+>>>>>>> origin/master
     </File>
     <File Include="Views/Fees/FeeReciept.cshtml">
       <publishTime>09/15/2017 15:01:34</publishTime>
@@ -2203,7 +2277,11 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/08/2017 22:14:13</publishTime>
     </File>
     <File Include="Views/Fees/ScrutineeMakePayment.cshtml">
+<<<<<<< HEAD
       <publishTime>10/30/2017 13:04:25</publishTime>
+=======
+      <publishTime>10/31/2017 10:35:12</publishTime>
+>>>>>>> origin/master
     </File>
     <File Include="Views/Fees/ScrutineePrintReceipt.cshtml">
       <publishTime>10/13/2017 15:11:18</publishTime>
@@ -2410,7 +2488,11 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/07/2017 11:18:16</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
+<<<<<<< HEAD
       <publishTime>11/02/2017 17:24:04</publishTime>
+=======
+      <publishTime>10/31/2017 10:35:12</publishTime>
+>>>>>>> origin/master
     </File>
     <File Include="Views/Shared/_LayoutApplication.cshtml">
       <publishTime>10/14/2017 11:37:41</publishTime>
@@ -2419,7 +2501,11 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/07/2017 11:18:16</publishTime>
     </File>
     <File Include="Views/Shared/_PdfLayoutForCertificate.cshtml">
+<<<<<<< HEAD
       <publishTime>10/30/2017 15:10:07</publishTime>
+=======
+      <publishTime>10/31/2017 10:35:12</publishTime>
+>>>>>>> origin/master
     </File>
     <File Include="Views/Shared/_SidebarAdmin.cshtml">
       <publishTime>11/03/2017 16:42:29</publishTime>
@@ -2440,7 +2526,11 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/07/2017 11:18:16</publishTime>
     </File>
     <File Include="Web.config">
+<<<<<<< HEAD
       <publishTime>11/03/2017 18:20:22</publishTime>
+=======
+      <publishTime>10/31/2017 10:47:28</publishTime>
+>>>>>>> origin/master
     </File>
   </ItemGroup>
 </Project>
