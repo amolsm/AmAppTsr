@@ -1135,7 +1135,7 @@ namespace Tsr.Web.Controllers
                         InterviewMasterId = (int)InterviewMasterId
                     };
                     db.CetInterviews.Add(ci);
-
+                    int Id = (int)InterviewMasterId;
 
                     EmailModel em = new EmailModel
                     {
@@ -1143,10 +1143,12 @@ namespace Tsr.Web.Controllers
                         FromPass = ConfigurationManager.AppSettings["admsps"],
                         To = ap.Email,
                         Subject = "Interview for Pre Sea Course",
-                        Body = "Dear " + ap.FullName + ", with the reference to your Enrolment ID " + ap.ApplicationCode + " you are selected for the Interview Date "+ Convert.ToDateTime(cim.InterviewDate).ToString("dd-MM-yyyy") + " Time " + cim.InterviewTime   + "  Thanking you T.S.Rahaman"
-                    };
+                        Body = "Dear " + ap.FullName + ", with the reference to your Enrolment ID " + ap.ApplicationCode + " you are selected for the Interview Date " + Convert.ToDateTime(cim.InterviewDate).ToString("dd-MM-yyyy") + " Time " + cim.InterviewTime + "  Thanking you T.S.Rahaman",
+                        File1 = HttpContext.Server.MapPath(db.InterviewMasters.Where(x => x.InterviewMasterId == Id).Select(x => x.FilePath).FirstOrDefault())
+                        
+                };
 
-                    var res = await MessageService.sendEmail(em);
+                    var res = await MessageService.sendAttachmentEmail(em);
 
                     MessageService ms = new MessageService();
                     string msg = "Dear " + ap.FullName + ", with the reference to your Enrolment ID " + ap.ApplicationCode + " you are selected for the Interview Date " + Convert.ToDateTime(cim.InterviewDate).ToString("dd-MM-yyyy") + " Time " + cim.InterviewTime + "  Thanking you T.S.Rahaman";
@@ -1632,8 +1634,21 @@ namespace Tsr.Web.Controllers
                     where (c.IsActive == true && cc.CetRequired == true)
                     select new { c.CourseId, c.CourseName };
             ViewBag.Courses = new SelectList(a.ToList(), "CourseId", "CourseName");
-            var schedulelist = new List<AdmissionInterviewScheduleVM>();
-            return View(schedulelist.ToList());
+
+            ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
+            var count = db.InterviewMasters.Count() + 1;
+            AdmissionInterviewScheduleVM im = new AdmissionInterviewScheduleVM
+            {
+
+                InterviewCode = count.ToString().PadLeft(4, '0'),
+                _AdmissionInterviewScheduleVM= new List<AdmissionInterviewScheduleVM>()
+
+        };
+            
+            var Batches = new List<BatchDropdown>();
+
+            ViewBag.Batches = new SelectList(Batches, "BatchId", "BatchCode");
+            return View(im);
         }
         [HttpGet]
         public ActionResult GetInterviewScheduleList(int? BatchId)
@@ -1659,59 +1674,85 @@ namespace Tsr.Web.Controllers
         }
 
 
-        public ActionResult InterviewScheduleCreate()
-        {
-            ViewBag.Batches = new SelectList(db.Batches.ToList(), "BatchId", "StartDate");
-            var a = from c in db.Courses
-                    join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
-                    where (c.IsActive == true && cc.CetRequired == true)
-                    select new { c.CourseId, c.CourseName };
-            ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
-            var count = db.InterviewMasters.Count() + 1;
-            AdmissionInterviewScheduleVM im = new AdmissionInterviewScheduleVM
-            {
 
-                InterviewCode = count.ToString().PadLeft(4, '0'),
-
-            };
-            return PartialView("InterviewScheduleCreate", im);
-        }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> InterviewScheduleCreate(AdmissionInterviewScheduleVM obj)
+        public ActionResult InterviewSchedule(AdmissionInterviewScheduleVM obj)
         {
             if (ModelState.IsValid)
             {
-                InterviewMaster i = new InterviewMaster
+                if (obj.InterviewMasterId == 0)
                 {
-                    InterviewCode = obj.InterviewCode,
-                    BatchId = obj.BatchId,
-                    CourseId = obj.CourseId,
-                    InterviewDate = obj.InterviewDate,
-                    InterviewTime = obj.InterviewTime,
-                    Venue = obj.Venue
-                };
-                db.InterviewMasters.Add(i);
-                await db.SaveChangesAsync();
-                return Json(new { success = true });
+                    string filepathname = string.Empty;
+                    if (Request.Files.Count > 0)
+                    {
+                        var root = "/Uploads/InterviewFile/";
+                      
+                        var files = Request.Files[0];
+                        var ext = Path.GetExtension(files.FileName);
+                        var fileName = obj.InterviewCode + ext;
+                        var path = Server.MapPath(root + fileName);
+                        files.SaveAs(path);
+                        filepathname = root + fileName;
+
+                    }
+
+                    InterviewMaster i = new InterviewMaster
+                    {
+                        InterviewCode = obj.InterviewCode,
+                        BatchId = obj.BatchId,
+                        CourseId = obj.CourseId,
+                        InterviewDate = Convert.ToDateTime(obj.InterviewDates),
+                        InterviewTime = obj.InterviewTime,
+                        Venue = obj.Venue,
+                        FilePath = filepathname
+                    };
+                    db.InterviewMasters.Add(i);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    string filepathname = string.Empty;
+                    if (Request.Files.Count > 0)
+                    {
+                        var root = "/Uploads/InterviewFile/";
+                       
+                        var files = Request.Files[0];
+                        var ext = Path.GetExtension(files.FileName);
+                        var fileName = obj.InterviewCode + ext;
+                        var path = Server.MapPath(root + fileName);
+                        files.SaveAs(path);
+                        filepathname = root + fileName;
+
+                    }
+                    InterviewMaster i = new InterviewMaster
+                    {
+                        InterviewMasterId = obj.InterviewMasterId,
+                        InterviewCode = obj.InterviewCode,
+                        BatchId = obj.BatchId,
+                        CourseId = obj.CourseId,
+                        InterviewDate = Convert.ToDateTime(obj.InterviewDates),
+                        InterviewTime = obj.InterviewTime,
+                        Venue = obj.Venue,
+                        FilePath = filepathname
+                    };
+                    db.Entry(i).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+               
+               
             }
-            ViewBag.Batches = new SelectList(db.Batches.ToList(), "BatchId", "StartDate");
-            var a = from c in db.Courses
-                    join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
-                    where (c.IsActive == true && cc.CetRequired == true)
-                    select new { c.CourseId, c.CourseName };
-            ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
-            return PartialView("InterviewScheduleCreate", obj);
+            return RedirectToAction("InterviewSchedule");
         }
 
-        public async Task<ActionResult> InterviewScheduleEdit(int? id)
+        public ActionResult InterviewScheduleEdit(int? id)
         {
 
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            InterviewMaster obj = await db.InterviewMasters.FindAsync(id);
+            InterviewMaster obj = db.InterviewMasters.Find(id);
             if (obj == null)
             {
                 return HttpNotFound();
@@ -1725,7 +1766,8 @@ namespace Tsr.Web.Controllers
                 CourseId = obj.CourseId,
                 InterviewDates = Convert.ToDateTime(obj.InterviewDate).ToString("yyyy-MM-dd"),
                 InterviewTime = obj.InterviewTime,
-                Venue = obj.Venue
+                Venue = obj.Venue,
+                _AdmissionInterviewScheduleVM= new List<AdmissionInterviewScheduleVM>()
             };
             var b = db.Batches.Where(x => x.CourseId == obj.CourseId)
                    .Select(x => new { BatchId = x.BatchId, Name = x.StartDate });
@@ -1738,37 +1780,12 @@ namespace Tsr.Web.Controllers
                     where (c.IsActive == true && cc.CetRequired == true)
                     select new { c.CourseId, c.CourseName };
             ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
-            return PartialView("InterviewScheduleEdit", vm);
+            ViewBag.Courses = new SelectList(a.ToList(), "CourseId", "CourseName");
+            return View("InterviewSchedule", vm);
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> InterviewScheduleEdit(AdmissionInterviewScheduleVM obj)
-        {
-            if (ModelState.IsValid)
-            {
-                InterviewMaster i = new InterviewMaster
-                {
-                    InterviewMasterId = obj.InterviewMasterId,
-                    InterviewCode = obj.InterviewCode,
-                    BatchId = obj.BatchId,
-                    CourseId = obj.CourseId,
-                    InterviewDate = Convert.ToDateTime(obj.InterviewDates),
-                    InterviewTime = obj.InterviewTime,
-                    Venue = obj.Venue
-                };
-                db.Entry(i).State = EntityState.Modified;
-                try
-                {
-                    await db.SaveChangesAsync();
-                }
-                catch (Exception e)
-                {
-                    string s = e.ToString();
-                }
-                return Json(new { success = true });
-            }
-            return PartialView("InterviewScheduleEdit", obj);
-        }
+      
+      
+      
 
 
 

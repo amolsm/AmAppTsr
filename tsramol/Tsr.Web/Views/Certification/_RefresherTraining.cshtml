@@ -65,29 +65,36 @@
             </tr>
             <tr>
                 <td colspan="15">
-                    Date of Birth&nbsp;&nbsp;
-
+                   <span style="padding-right:10px"> Date of Birth</span>
+<span style="padding-right:10px">
                     <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" value="@(c.DateofBirth == null ? "" : @Convert.ToDateTime(c.DateofBirth).ToString("dd-MM-yyyy"))" />
-
-
-                    Holder of C.D.C .No.&nbsp;&nbsp;
-
-                    <input type="text" readonly style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" value="@(c.CDCNo == null ? "" : c.CDCNo)" />
-                </td>
+                    </span>
+                    <span style="padding-right:10px">
+                        Holder of C.D.C.No.
+                        </span>
+                    <span>
+                        <input type="text" readonly style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" value="@(c.CDCNo == null ? "" : c.CDCNo)" />
+                    </span></td>
             </tr>
             <tr>
                 <td colspan="15">
-                    Passport No.&nbsp;&nbsp;
-                    <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" value="@(c.PassportNo == null ? "" : c.PassportNo)" />
-                    Indian National Database(INDoS No.)&nbsp;&nbsp;
-
-                    <input readonly style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" type="text" value="@(c.Indosno == null ? "" : c.Indosno)" />
-                </td>
+                    <span style="padding-right:10px">
+                        Passport No.
+                        </span>
+                    <span style="padding-right:10px">
+                        <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" value="@(c.PassportNo == null ? "" : c.PassportNo)" />
+                       </span> 
+                    <span style="padding-right:10px">
+                        Indian National Database(INDoS No.)
+                        </span>
+                    <span>
+                        <input readonly style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" type="text" value="@(c.Indosno == null ? "" : c.Indosno)" />
+                    </span></td>
 
             </tr>
 
             <tr>
-                <td colspan="15">has Successfully completed&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family:'Times New Roman';font-size:15px; font-weight:bold;font-style:italic">REFRESHER TRAINING</span></td>
+                <td colspan="15"><span style="padding-right:10px">has Successfully completed</span><span style="font-family:'Times New Roman';font-size:15px; font-weight:bold;font-style:italic">REFRESHER TRAINING</span></td>
             </tr>
             <tr>
                 <td colspan="15">approved by the Directorate General of Shipping as per the requirement laid down in</td>

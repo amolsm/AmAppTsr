@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Tsr.Core.Models
 {
@@ -20,5 +21,12 @@ namespace Tsr.Core.Models
         public string InterviewDates { get; set; }
         public TimeSpan? InterviewTime { get; set; }
         public string Venue { get; set; }
+
+        public HttpPostedFileBase FileUpload { get; set; }
+
+        public List<AdmissionInterviewScheduleVM> _AdmissionInterviewScheduleVM { get; set; }
+        
     }
+
+   
 }

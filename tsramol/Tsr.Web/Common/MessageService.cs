@@ -91,24 +91,28 @@ namespace Tsr.Web.Common
             message.Subject = obj.Subject;
             message.Body = string.Format(obj.Body);
             message.IsBodyHtml = true;
-
-            System.Net.Mail.Attachment file1 = new System.Net.Mail.Attachment(obj.File1, MediaTypeNames.Application.Octet);
-            // Add time stamp information for the file.
-            ContentDisposition disposition = file1.ContentDisposition;
-            disposition.CreationDate = System.IO.File.GetCreationTime(obj.File1);
-            disposition.ModificationDate = System.IO.File.GetLastWriteTime(obj.File1);
-            disposition.ReadDate = System.IO.File.GetLastAccessTime(obj.File1);
-            // Add the file attachment to this e-mail message.
-            message.Attachments.Add(file1);
-            System.Net.Mail.Attachment file2 = new System.Net.Mail.Attachment(obj.File2, MediaTypeNames.Application.Octet);
-            // Add time stamp information for the file.
-            ContentDisposition dispositions = file2.ContentDisposition;
-            dispositions.CreationDate = System.IO.File.GetCreationTime(obj.File2);
-            dispositions.ModificationDate = System.IO.File.GetLastWriteTime(obj.File2);
-            dispositions.ReadDate = System.IO.File.GetLastAccessTime(obj.File2);
-            // Add the file attachment to this e-mail message.
-            message.Attachments.Add(file2);
-
+            if (obj.File1 != null)
+            {
+                System.Net.Mail.Attachment file1 = new System.Net.Mail.Attachment(obj.File1, MediaTypeNames.Application.Octet);
+                // Add time stamp information for the file.
+                ContentDisposition disposition = file1.ContentDisposition;
+                disposition.CreationDate = System.IO.File.GetCreationTime(obj.File1);
+                disposition.ModificationDate = System.IO.File.GetLastWriteTime(obj.File1);
+                disposition.ReadDate = System.IO.File.GetLastAccessTime(obj.File1);
+                // Add the file attachment to this e-mail message.
+                message.Attachments.Add(file1);
+            }
+            if (obj.File2 != null)
+            {
+                System.Net.Mail.Attachment file2 = new System.Net.Mail.Attachment(obj.File2, MediaTypeNames.Application.Octet);
+                // Add time stamp information for the file.
+                ContentDisposition dispositions = file2.ContentDisposition;
+                dispositions.CreationDate = System.IO.File.GetCreationTime(obj.File2);
+                dispositions.ModificationDate = System.IO.File.GetLastWriteTime(obj.File2);
+                dispositions.ReadDate = System.IO.File.GetLastAccessTime(obj.File2);
+                // Add the file attachment to this e-mail message.
+                message.Attachments.Add(file2);
+            }
 
             using (var smtp = new SmtpClient())
             {

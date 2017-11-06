@@ -16,6 +16,8 @@ namespace Tsr.Core.Entities
         public TimeSpan? InterviewTime { get; set; }
         public string Venue { get; set; }
 
-       
+        public string FilePath { get; set; }
+
+
     }
 }

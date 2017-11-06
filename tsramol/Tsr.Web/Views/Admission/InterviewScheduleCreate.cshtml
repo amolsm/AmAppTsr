@@ -4,14 +4,14 @@
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
     <h4 class="modal-title" id="myModalLabel">Add New Interview</h4>
 </div>
+<div class="modal-body">
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
 
-    <div class="modal-body">
 
-        <div class="form-horizontal">
 
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="form-group">
@@ -26,7 +26,7 @@
                 @Html.LabelFor(model => model.CourseId, htmlAttributes: new { @class = "control-label col-md-3" })
                 <div class="col-md-8">
                     @Html.DropDownListFor(model => model.CourseId,
-                        (IEnumerable<SelectListItem>)ViewBag.Course, " ", new { @class = "form-control", @onchange = "FillBatch()" })
+                  (IEnumerable<SelectListItem>)ViewBag.Course, " ", new { @class = "form-control", @onchange = "FillBatch()" })
                     @Html.ValidationMessageFor(model => model.CourseId, "", new { @class = "text-danger" })
 
                 </div>
@@ -37,7 +37,7 @@
                 <div class="col-md-8">
 
                     @Html.DropDownList("BatchId",
-                                         (IEnumerable<SelectListItem>)ViewBag.Batches, "Select Batch", new { @class = "form-control" })
+                                   (IEnumerable<SelectListItem>)ViewBag.Batches, "Select Batch", new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.BatchId, "", new { @class = "text-danger" })
 
                 </div>
@@ -71,42 +71,87 @@
                     </div>
                 </div>
             </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.FileUpload, htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="col-md-6">
+                    @Html.TextBoxFor(m => m.FileUpload, new { type = "file", @onchange = "CheckValidation()" })
 
-        </div>
-    </div>
-    <div class="modal-footer">
-        <button class="btn" data-dismiss="modal">Cancel</button>
-        <input class="btn btn-primary" type="submit" data-loading-text="Processing"  value="Save" />
-    </div>
-}
-<script>
-    function FillBatch() {
-        debugger;
-        var CourseId = $('#CourseId').val();
-    $.ajax({
-        url: '/Admission/FillBatchForCet',
-        type: "GET",
-        dataType: "JSON",
-        data: { CourseId: CourseId },
-        success: function (Batches) {
-            $("#BatchId").html(""); // clear before appending new list
-            $.each(Batches, function (i, c) {
-                $("#BatchId").append(
-                    $('<option></option>').val(c.BatchId).html(c.BatchCode));
-            });
+                    @Html.ValidationMessageFor(m => m.FileUpload, string.Empty, new { id = "validationTxt", @class = "text-danger" })
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal">Cancel</button>
+                <input class="btn btn-primary" type="submit" data-loading-text="Processing" value="Save" />
+            </div>
         }
-    });
-  }
-</script>
-<script src="~/Scripts/js/plugins/bootstrap/bootstrap-select.js"></script>
-<script src="~/Scripts/ModalForm.js"></script>
-<script>
-$('.btn').on('click', function() {
-    var $this = $(this);
-  $this.button('loading');
-    setTimeout(function() {
-       $this.button('reset');
-   }, 8000);
-});
-</script>
+        </div>
 
+     
+      
+    </div>
+       
+        <script>
+            function FillBatch() {
+                debugger;
+                var CourseId = $('#CourseId').val();
+                $.ajax({
+                    url: '/Admission/FillBatchForCet',
+                    type: "GET",
+                    dataType: "JSON",
+                    data: { CourseId: CourseId },
+                    success: function (Batches) {
+                        $("#BatchId").html(""); // clear before appending new list
+                        $.each(Batches, function (i, c) {
+                            $("#BatchId").append(
+                                $('<option></option>').val(c.BatchId).html(c.BatchCode));
+                        });
+                    }
+                });
+            }
+            function CheckValidation() {
+                var file = getNameFromPath($('#FileUpload').val());
+                if (file != null) {
+                    var extension = file.substr((file.lastIndexOf('.') + 1));
+                    switch (extension) {
+                        case 'doc':
+                        case 'docx':
+
+                            flag = true;
+                            break;
+                        default:
+                            flag = false;
+                    }
+                }
+                if (flag == false) {
+                    $("#validationTxt").text("You can upload only doc,docx extension file");
+                    $("#FileUpload").html("")
+                    return false;
+                }
+
+            }
+
+
+            //get file path from client system
+            function getNameFromPath(strFilepath) {
+                var objRE = new RegExp(/([^\/\\]+)$/);
+                var strName = objRE.exec(strFilepath);
+
+                if (strName == null) {
+                    return null;
+                }
+                else {
+                    return strName[0];
+                }
+            }
+        </script>
+        <script src="~/Scripts/js/plugins/bootstrap/bootstrap-select.js"></script>
+        <script src="~/Scripts/ModalForm.js"></script>
+        <script>
+            $('.btn').on('click', function () {
+                var $this = $(this);
+                $this.button('loading');
+                setTimeout(function () {
+                    $this.button('reset');
+                }, 8000);
+            });
+        </script>

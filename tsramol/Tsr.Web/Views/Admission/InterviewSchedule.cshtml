@@ -1,7 +1,7 @@
 ﻿
-@model IEnumerable<Tsr.Core.Models.AdmissionInterviewScheduleVM>
+@model Tsr.Core.Models.AdmissionInterviewScheduleVM
 @{
-    ViewBag.Title = "InterviewList";
+    ViewBag.Title = "Interview Schedule";
 }
 
 <!-- START BREADCRUMB -->
@@ -18,90 +18,174 @@
         <div class="row">
             <div class="col-md-12">
 
-                <form class="form-horizontal">
+                <div class="form-horizontal">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Interview List</h3>
+                            <h3 class="panel-title">Interview Schedule</h3>
 
                         </div>
-
                         <div class="panel-body">
-                            <div class="row" style="padding-bottom:10px">
-                                @*<button class="btn btn-info btn-rounded" data-toggle="modal" data-target="#modal_basic" ng-click="modules = null">Add New</button>*@
-                                @Html.ActionLink("New Interview List", "InterviewScheduleCreate", "Admission", null, new { data_modal = "", id = "btnCreate", @class = "btn btn-info btn-rounded" })
-                            </div>
-
                             <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group pull-right">
+
+                                @using (Html.BeginForm("InterviewSchedule", "Admission", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.HiddenFor(model => model.InterviewMasterId)
+
+
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+                                    <div class="col-xs-6 form-group">
+                                        @Html.LabelFor(model => model.InterviewCode, htmlAttributes: new { @class = "control-label col-md-3" })
+                                        <div class="col-md-6">
+                                            @Html.EditorFor(model => model.InterviewCode, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.InterviewCode, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-6 form-group">
+                                        @Html.LabelFor(model => model.CourseId, htmlAttributes: new { @class = "control-label col-md-3" })
+                                        <div class="col-md-6">
+                                            @Html.DropDownListFor(model => model.CourseId,
+                        (IEnumerable<SelectListItem>)ViewBag.Course, "Select Course", new { @class = "form-control", @onchange = "FillBatchs()" })
+                                            @Html.ValidationMessageFor(model => model.CourseId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-6 form-group">
+                                        @Html.LabelFor(model => model.BatchId, htmlAttributes: new { @class = "control-label col-md-3" })
+                                        <div class="col-md-6">
+                                            @Html.DropDownListFor(model => model.BatchId, (IEnumerable<SelectListItem>)ViewBag.Batches, "Select Batch", new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.BatchId, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
 
 
 
-                                        <div class="col-md-3">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><span>Course</span></span>
-                                                @Html.DropDownList("CourseIds",
+                                    <div class="col-xs-6 form-group">
+                                        @Html.LabelFor(model => model.InterviewDates, htmlAttributes: new { @class = "control-label col-md-3" })
+                                        <div class="col-md-6">
+                                            @Html.TextBoxFor(model => model.InterviewDates, new { @class = "form-control", @type = "Date" })
+                                            @Html.ValidationMessageFor(model => model.InterviewDates, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                        <div class="col-xs-6 form-group">
+                                            @Html.LabelFor(model => model.InterviewTime, htmlAttributes: new { @class = "control-label col-md-3" })
+                                            <div class="col-md-6">
+                                                @Html.TextBoxFor(model => model.InterviewTime, new { @class = "form-control", @type = "time" })
+                                                @Html.ValidationMessageFor(model => model.InterviewTime, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6 form-group">
+                                            @Html.LabelFor(model => model.Venue, htmlAttributes: new { @class = "control-label col-md-3" })
+                                            <div class="col-md-6">
+                                                @Html.TextBoxFor(model => model.Venue, new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(model => model.Venue, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+
+
+
+
+                                        <div class="col-xs-6 form-group">
+                                            @Html.LabelFor(model => model.FileUpload, htmlAttributes: new { @class = "control-label col-md-3" })
+                                            <div class="col-md-6">
+                                                @Html.TextBoxFor(m => m.FileUpload, new { type = "file", @onchange = "CheckValidation()", @class = "form-control" })
+
+                                                @Html.ValidationMessageFor(m => m.FileUpload, string.Empty, new { id = "validationTxt", @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-xs-5 form-group pull-right">
+                                            <input class="btn btn-primary" type="submit" name="submit" />
+                                            &nbsp;&nbsp; <input type="button" class="btn btn-primary" value="Refresh Page" onClick="window.location.reload()">
+                                        </div>
+
+
+                                }
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Interview Schedule List</h3>
+
+                            </div>
+                            <div class="panel-body">
+
+
+
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group pull-right">
+
+
+
+                                            <div class="col-md-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><span>Course</span></span>
+                                                    @Html.DropDownList("CourseIds",
                                          (IEnumerable<SelectListItem>)ViewBag.Courses, "Select Course", new { @class = "form-control", @onchange = "FillBatch()" })
+                                                </div>
+
                                             </div>
 
-                                        </div>
-
-                                        <div class="col-md-3">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><span>Batch</span></span>
-                                                @Html.DropDownList("BatchIds",
+                                            <div class="col-md-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><span>Batch</span></span>
+                                                    @Html.DropDownList("BatchIds",
             new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "BatchCode"), " ", new { @class = "form-control" })
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="input-group">
+                                                    <input class="btn btn-primary" type="button" value="Search" onclick="Search()" />
+                                                    &nbsp;&nbsp; <input type="button" class="btn btn-primary" value="Refresh Page" onClick="window.location.reload()">
+                                                </div>
+
                                             </div>
 
                                         </div>
-
-                                        <div class="col-md-3">
-                                            <div class="input-group">
-                                                <input class="btn btn-primary" type="button" value="Search" onclick="Search()" />
-                                                &nbsp;&nbsp; <input type="button" class="btn btn-primary" value="Refresh Page" onClick="window.location.reload()">
-                                            </div>
-
+                                    </div>
+                                </div>
+                                <div class="panel">
+                                    <div>
+                                        <h3 class="panel-title">Interview Schedule List</h3>
+                                        <div id="dvResult">
+                                            @{Html.RenderPartial("_InterviewScheduleList", Model._AdmissionInterviewScheduleVM);}
+                                            <script src="~/Scripts/js/plugins/datatables/jquery.dataTables.min.js"></script>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
-                            <div id="dvResult">
-                                @{Html.RenderPartial("_InterviewScheduleList", Model);}
-                                <script src="~/Scripts/js/plugins/datatables/jquery.dataTables.min.js"></script>
-                            </div>
                         </div>
+
                     </div>
-                </form>
 
             </div>
         </div>
 
-
     </div>
 
-
 </div>
+    </div>
 <!-- END PAGE CONTENT WRAPPER -->
-<!-- MODALS -->
-<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="defModalHead" aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div id='myModalContent'></div>
-        </div>
-    </div>
-</div>
 
-<script src="~/Scripts/js/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="~/Scripts/js/plugins/bootstrap/bootstrap-select.js"></script>
 <script src="~/Scripts/ModalForm.js"></script>
+
 <script>
-function Search() {
-      var BatchId = $('#BatchIds').val();
+    function Search() {
+        var BatchId = $('#BatchIds').val();
 
-      $("#dvResult").load('@(Url.Action("GetInterviewScheduleList", "Admission", null, Request.Url.Scheme))?BatchId=' + BatchId);
+        $("#dvResult").load('@(Url.Action("GetInterviewScheduleList", "Admission", null, Request.Url.Scheme))?BatchId=' + BatchId);
 
-}
+    }
     function FillBatch() {
 
         var CourseId = $("#CourseIds").val();
@@ -119,5 +203,39 @@ function Search() {
             }
         });
     }
-</script>
+    function CheckValidation() {
+        var file = getNameFromPath($('#FileUpload').val());
+        if (file != null) {
+            var extension = file.substr((file.lastIndexOf('.') + 1));
+            switch (extension) {
+                case 'doc':
+                case 'docx':
 
+                    flag = true;
+                    break;
+                default:
+                    flag = false;
+            }
+        }
+        if (flag == false) {
+            $("#validationTxt").text("You can upload only doc,docx extension file");
+            $("#FileUpload").html("")
+            return false;
+        }
+
+    }
+
+
+    //get file path from client system
+    function getNameFromPath(strFilepath) {
+        var objRE = new RegExp(/([^\/\\]+)$/);
+        var strName = objRE.exec(strFilepath);
+
+        if (strName == null) {
+            return null;
+        }
+        else {
+            return strName[0];
+        }
+    }
+</script>
