@@ -10,6 +10,8 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 using Tsr.Core.Entities;
 using Tsr.Core.Models;
 using Tsr.Infra;
@@ -1390,7 +1392,27 @@ namespace Tsr.Web.Controllers
             var obj = new List<AdmissionConfirmListVM>();
             return View(obj);
         }
+       
+        public ActionResult ConfirmAdmissionsExportToExcel(int? id)
+        {
+            var gv = new GridView();
 
+
+            gv.DataSource = db.Applications.ToList();
+            gv.DataBind();
+            Response.ClearContent();
+            Response.Buffer = true;
+            Response.AddHeader("content-disposition", "attachment; filename=ConfrimAdmissions.xls");
+            Response.ContentType = "application/ms-excel";
+            Response.Charset = "";
+            StringWriter objStringWriter = new StringWriter();
+            HtmlTextWriter objHtmlTextWriter = new HtmlTextWriter(objStringWriter);
+            gv.RenderControl(objHtmlTextWriter);
+            Response.Output.Write(objStringWriter.ToString());
+            Response.Flush();
+            Response.End();
+            return View("Index");
+        }
         public ActionResult GetListConfirmedStudents(int? BatchId)
         {
             if (BatchId != null)

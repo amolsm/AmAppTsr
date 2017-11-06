@@ -1,0 +1,226 @@
+﻿@model Tsr.Core.Models.ApplicationNonCetVM
+
+@{
+    Layout = "~/Views/Shared/_LayoutOfflineApplication.cshtml";
+}
+
+@using (Html.BeginForm("OfflineNonCetApplication", "Application", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.CourseId)
+    @Html.HiddenFor(model => model.CategoryId)
+    @Html.HiddenFor(model => model.BatchId)
+    @Html.HiddenFor(model => model.PackageId)
+    if (Model.PackageBatchId != null)
+    {
+        for (int i = 0; i < Model.PackageBatchId.Count(); i++)
+        {
+            @Html.HiddenFor(model => Model.PackageBatchId[i].BatchId)
+            @Html.HiddenFor(model => Model.PackageBatchId[i].CourseId)
+            @*@Html.HiddenFor(model => Model.PackageBatchId[i].BatchId)
+                @Html.HiddenFor(model => Model.PackageBatchId[i].BatchId)*@
+        }
+    }
+    <div class="wizard-navigation">
+        <ul>
+
+            <li><a href="#basicDetails" data-toggle="tab">Basic Details</a></li>
+            <li><a href="#description" data-toggle="tab">Description</a></li>
+        </ul>
+    </div>
+
+    <div class="tab-content">
+
+        <div class="tab-pane" id="basicDetails">
+            @if (ViewBag.InfoFlag == "NonPackage")
+            {
+                <h4 class="info-text">Course: @Model.CourseName </h4>
+                <h4 class="info-text">Remaining Seats : @ViewBag.remain </h4>
+            }
+            @if (ViewBag.InfoFlag == "Package")
+            {
+                foreach (var item in Model.PackageBatchId)
+                {
+                    <h4 class="info-text">Course: @item.CourseName &nbsp; Remaining Seats: @item.RemainingSeats</h4>
+                }
+            }
+            <div class="row">
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating">
+                        <label class="control-label">First Name</label>
+                        @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control", @style = "text-transform:capitalize" } })
+                    </div>
+                </div>
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Middle Name</label>
+                        @Html.EditorFor(model => model.MiddleName, new { htmlAttributes = new { @class = "form-control", @style = "text-transform:capitalize" } })
+                    </div>
+                </div>
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Last Name</label>
+                        @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control", @style = "text-transform:capitalize" } })
+                    </div>
+                </div>
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Full Name as per Passport/Marksheet</label>
+                        @Html.EditorFor(model => model.FullName, new { htmlAttributes = new { @class = "form-control", @style = "text-transform:capitalize" } })
+                    </div>
+                </div>
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Email</label>
+                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Cell No</label>
+                        @Html.EditorFor(model => model.CellNo, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating is-focused">
+                        <label class="control-label">Date Of Birth</label>
+                        @Html.TextBoxFor(model => model.DateOfBirth, new { @class = "form-control", @type = "date", @onfocusout = "checkAge()" })
+                    </div>
+                </div>
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Place Of Birth</label>
+                        @Html.EditorFor(model => model.PlaceOfBirth, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Citizenship</label>
+                        @Html.EditorFor(model => model.Citizenship, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Select Gender</label>
+                        @Html.DropDownListFor(model => model.Gender, (IEnumerable<SelectListItem>)ViewBag.Gender, " ", new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="col-sm-5 col-sm-offset-1">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Select Preffered Meal</label>
+                        @Html.DropDownListFor(model => model.PreferredMeal, (IEnumerable<SelectListItem>)ViewBag.Meals, " ", new { @class = "form-control" })
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="tab-pane" id="description">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h6>Other Details </h6>
+                    <div class="row">
+
+                        <div class="col-sm-5 col-sm-offset-1">
+                            <div class="form-group label-floating">
+                                <label class="control-label">CDC No</label>
+                                @Html.EditorFor(model => model.CdcNo, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+
+                        <div class="col-sm-5 col-sm-offset-1">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Passport No</label>
+                                @Html.EditorFor(model => model.PassportNo, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                        <div class="col-sm-5 col-sm-offset-1">
+                            <div class="form-group label-floating">
+                                <label class="control-label">InDos no</label>
+                                @Html.EditorFor(model => model.InDosNo, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+
+                        <div class="col-sm-5 col-sm-offset-1">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Certificate of Competency Grade</label>
+                                @Html.EditorFor(model => model.GradeOfCompetencyNo, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                        <div class="col-sm-5 col-sm-offset-1">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Certificate of Competency No</label>
+                                @Html.EditorFor(model => model.CertOfCompetencyNo, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+
+                        <div class="col-sm-5 col-sm-offset-1">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Shipping Company</label>
+                                @Html.EditorFor(model => model.ShippingCompany, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+
+                        <div class="col-sm-5 col-sm-offset-1">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Course Attended In TSRahaman</label>
+                                @Html.DropDownListFor(model => model.CourseAttendedInTSR, (IEnumerable<SelectListItem>)ViewBag.YesNo, " ", new { @class = "form-control" })
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h6>Permenent Address </h6>
+                    <div class="col-sm-5 col-sm-offset-1">
+                        <div class="form-group label-floating">
+                            <label class="control-label">Address</label>
+                            @Html.TextAreaFor(model => model.PermenentAddress, new { @class = "form-control", @rows = "5" })
+                        </div>
+                    </div>
+                    <div class="col-sm-5 col-sm-offset-1">
+                        <div class="form-group label-floating">
+                            <label class="control-label">City</label>
+                            @Html.TextBoxFor(model => model.PermenentCity, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-sm-5 col-sm-offset-1">
+                        <div class="form-group label-floating">
+                            <label class="control-label">State</label>
+                            @Html.TextBoxFor(model => model.PermenentState, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-sm-5 col-sm-offset-1">
+                        <div class="form-group label-floating">
+                            <label class="control-label">PIN</label>
+                            @Html.TextBoxFor(model => model.PermenentPin, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-sm-5 col-sm-offset-1">
+                        <div class="form-group label-floating">
+                            <label class="control-label">ContactNo</label>
+                            @Html.TextBoxFor(model => model.PermenentContactNo, new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="wizard-footer">
+            <div class="pull-right">
+                <input type='button' class='btn btn-next btn-fill btn-primary btn-wd' name='next' value='Next' />
+
+                <input type='submit' class='btn btn-finish btn-fill btn-primary btn-wd' name='finish' value='Apply' />
+            </div>
+            <div class="pull-left">
+                <input type='button' class='btn btn-previous btn-fill btn-default btn-wd' name='previous' value='Previous' />
+            </div>
+            <div class="clearfix"></div>
+        </div>
+}

@@ -67,7 +67,17 @@
                                             <div class="input-group">
                                                 <input class="btn btn-primary" type="button" value="Search" onclick="Search()" />
 
-                                                &nbsp;&nbsp;&nbsp;<input class="btn btn-primary" type="button" value="View In Pdf" onclick="location.href='@Url.Action("ConformStudentListPdf", "Admission")?id=' + document.getElementById('BatchId').value" />
+                                                &nbsp;&nbsp;&nbsp;
+                                                @*<input class="btn btn-primary" type="button" value="View In Pdf" onclick="location.href='@Url.Action("ConformStudentListPdf", "Admission")?id=' + document.getElementById('BatchId').value" />*@
+                                                <div class="btn-group">
+                                                    <a href="#" data-toggle="dropdown" class="btn btn-success dropdown-toggle">Export <span class="caret"></span></a>
+                                                    <ul class="dropdown-menu" role="menu" style="background-color: #57a9a8">
+                                                        @*<li role="presentation" class="dropdown-header">Dropdown header</li>*@
+                                                        <li><input class="btn btn-primary" type="button" value="View In Pdf" onclick="location.href='@Url.Action("ConformStudentListPdf", "Admission")?id=' + document.getElementById('BatchId').value" /></li>
+                                                        <li><input class="btn btn-primary" type="button" value="View In Pdf" onclick="location.href='@Url.Action("ConfirmAdmissionsExportToExcel", "Admission")?id=' + document.getElementById('BatchId').value" /></li>
+                                                        
+                                                    </ul>
+                                                </div>
                                             </div>
 
                                         </div>

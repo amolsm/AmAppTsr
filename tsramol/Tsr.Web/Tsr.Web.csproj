@@ -48,12 +48,24 @@
       <HintPath>..\packages\Aspose.Email.17.10\lib\net40\Aspose.Email.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ClosedXML, Version=0.90.0.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
+      <HintPath>..\packages\ClosedXML.0.90.0\lib\net452\ClosedXML.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.7.2.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.7.2\lib\net40\DocumentFormat.OpenXml.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="DotNetZip, Version=1.10.1.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
       <HintPath>..\packages\DotNetZip.1.10.1\lib\net20\DotNetZip.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Elmah, Version=1.2.13605.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\elmah.corelibrary.1.2\lib\Elmah.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FastMember.Signed, Version=1.0.0.9, Culture=neutral, PublicKeyToken=9e8f22703bef9a29, processorArchitecture=MSIL">
+      <HintPath>..\packages\FastMember.Signed.1.1.0\lib\net40\FastMember.Signed.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Fluentx, Version=2.0.4.0, Culture=neutral, processorArchitecture=MSIL">
@@ -1032,6 +1044,12 @@
     <Content Include="Views\Shared\_SidebarAdmission.cshtml" />
     <Content Include="Views\Shared\_SidebarPrinting.cshtml" />
     <Content Include="Views\Certification\ViewResultFormat.cshtml" />
+    <Content Include="Views\Application\OfflineApplication.cshtml" />
+    <Content Include="Views\Shared\_LayoutOfflineApplication.cshtml" />
+    <Content Include="Views\Application\OfflineCetApplication.cshtml" />
+    <Content Include="Views\Application\OfflineNonCetApplication.cshtml" />
+    <Content Include="Views\Application\OfflineApplicationSummaryPre.cshtml" />
+    <Content Include="Views\Application\OfflineApplicationSummary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
