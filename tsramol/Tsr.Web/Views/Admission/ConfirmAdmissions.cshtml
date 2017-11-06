@@ -74,8 +74,8 @@
                                                     <ul class="dropdown-menu" role="menu" style="background-color: #57a9a8">
                                                         @*<li role="presentation" class="dropdown-header">Dropdown header</li>*@
                                                         <li><input class="btn btn-primary" type="button" value="View In Pdf" onclick="location.href='@Url.Action("ConformStudentListPdf", "Admission")?id=' + document.getElementById('BatchId').value" /></li>
-                                                        <li><input class="btn btn-primary" type="button" value="View In Pdf" onclick="location.href='@Url.Action("ConfirmAdmissionsExportToExcel", "Admission")?id=' + document.getElementById('BatchId').value" /></li>
-                                                        
+                                                        <li><input class="btn btn-primary" type="button" value="Excel Full List" onclick="location.href='@Url.Action("ConfirmAdmissionsExportToExcel", "Admission")?id=' + document.getElementById('BatchId').value" /></li>
+                                                        <li><input class="btn btn-primary" type="button" value="Excel DG Format" onclick="location.href='@Url.Action("ConfirmAdmissionsDGExcel", "Admission")?id=' + document.getElementById('BatchId').value" /></li>
                                                     </ul>
                                                 </div>
                                             </div>

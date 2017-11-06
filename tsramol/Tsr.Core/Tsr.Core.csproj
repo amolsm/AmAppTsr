@@ -117,6 +117,8 @@
     <Compile Include="Entities\StudentFeeDetail.cs" />
     <Compile Include="Models\AddmissionCetCreateVM.cs" />
     <Compile Include="Models\AddmissionCetListVM.cs" />
+    <Compile Include="Models\AdmissionConfirmDGExcelFormat.cs" />
+    <Compile Include="Models\AdmissionConfirmListExcelVM.cs" />
     <Compile Include="Models\AdmissionConfirmListVM.cs" />
     <Compile Include="Models\AdmissionInterviewListVM.cs" />
     <Compile Include="Models\AdmissionInterviewScheduleVM.cs" />

@@ -1397,12 +1397,151 @@ namespace Tsr.Web.Controllers
         {
             var gv = new GridView();
 
+            var list = from mt in db.Applied.AsEnumerable()
+                       join ap in db.Applications on mt.ApplicationId equals ap.ApplicationId
+                       join b in db.Batches on mt.BatchId equals b.BatchId
+                       join c in db.Courses on mt.CourseId equals c.CourseId
+                       join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
+                       join sfd in db.StudentFeeDetails on ap.ApplicationId equals sfd.ApplicationId
+                       where (mt.BatchId == id && mt.AdmissionStatus == true)
+                       select new AdmissionConfirmListExcelVM
+                       {
+                           AnnualIncome = ap.AnnualIncome,
+                           ApplicationCode = ap.ApplicationCode,
+                           StartDate = b.StartDate,
+                           Caste = ap.Caste,
+                           CategoryName = cc.CategoryName,
+                           CategoryOfCandidate = ap.CategoryOfCandidate,
+                           CdcNo = ap.CdcNo,
+                           CellNo = ap.CellNo,
+                           CertOfCompetencyNo = ap.CertOfCompetencyNo,
+                           Citizenship = ap.Citizenship,
+                           CourseAttendedInTSR = ap.CourseAttendedInTSR,
+                           CourseName = c.CourseName,
+                           DateOfBirth = ap.DateOfBirth,
+                           Email = ap.Email,
+                           FatherEmail = ap.FatherEmail,
+                           FatherFullName = ap.FatherFullName,
+                           FatherOccupation = ap.FatherOccupation,
+                           FirstName = ap.FirstName,
+                           FPFF_AFF_1995 = ap.FPFF_AFF_1995,
+                           FullName = ap.FullName,
+                           Gender = ap.Gender,
+                           GradAddress = ap.GradAddress,
+                           GradCity = ap.GradCity,
+                           GradCollegeName = ap.GradCollegeName,
+                           GradeOfCompetencyNo = ap.GradeOfCompetencyNo,
+                           GradPassAttempt = ap.GradPassAttempt,
+                           GradPassingYear = ap.GradPassingYear,
+                           GradPercentage = ap.GradPercentage,
+                           GradPin = ap.GradPin,
+                           GradState = ap.GradState,
+                           GradSubjects = ap.GradSubjects,
+                           GradUniversity = ap.GradUniversity,
+                           GuardianAddress = ap.GuardianAddress,
+                           GuardianCity = ap.GuardianCity,
+                           GuardianContact = ap.GuardianContact,
+                           GuardianEmail = ap.GuardianEmail,
+                           GuardianName = ap.GuardianName,
+                           GuardianPin = ap.GuardianPin,
+                           GuardianRelation = ap.GuardianRelation,
+                           GuardianState = ap.GuardianState,
+                           Height = ap.Height,
+                           IdentificationMark = ap.IdentificationMark,
+                           InDosNo = ap.InDosNo,
+                           InterAddress = ap.InterAddress,
+                           InterBoard = ap.InterBoard,
+                           InterChemistry = ap.InterChemistry,
+                           InterCity = ap.InterCity,
+                           InterEnglish = ap.InterEnglish,
+                           InterMath = ap.InterMath,
+                           InterPassingYear = ap.InterPassingYear,
+                            InterPercentage = ap.InterPercentage,
+                            InterPhysics = ap.InterPhysics,
+                            InterPin = ap.InterPin,
+                            InterRollNo = ap.InterRollNo,
+                            InterSchoolName = ap.InterSchoolName,
+                            InterState = ap.InterState,
+                            LastName = ap.LastName,
+                            MiddleName = ap.MiddleName,
+                            MotherName = ap.MotherName,
+                            PantSize = ap.PantSize,
+                            PassportNo = ap.PassportNo,
+                            PermenentAddress = ap.PermenentAddress,
+                            PermenentCity = ap.PermenentCity,
+                            PermenentContactNo = ap.PermenentContactNo,
+                            PermenentPin = ap.PermenentPin,
+                            PermenentState = ap.PermenentState,
+                            PlaceOfBirth = ap.PlaceOfBirth,
+                            PreferredMeal = ap.PreferredMeal,
+                            PresentAddress = ap.PresentAddress,
+                            PresentCity = ap.PresentCity,
+                            PresentContactNo = ap.PresentContactNo,
+                            PresentPin = ap.PresentPin,
+                            PresentState = ap.PresentState,
+                            RankOfCandidate = ap.RankOfCandidate,
+                            Religion = ap.Religion,
+                            SchoolAddress = ap.SchoolAddress,
+                            SchoolBoard = ap.SchoolBoard,
+                            SchoolCity = ap.SchoolCity,
+                            SchoolEnglish = ap.SchoolEnglish,
+                            SchoolMath = ap.SchoolMath,
+                            SchoolName = ap.SchoolName,
+                            SchoolPassingYear = ap.SchoolPassingYear,
+                            SchoolPercentage = ap.SchoolPercentage,
+                            SchoolPin = ap.SchoolPin,
+                            SchoolScience = ap.SchoolScience,
+                            SchoolState = ap.SchoolState,
+                            ShippingCompany = ap.ShippingCompany,
+                            ShirtSize = ap.ShirtSize,
+                            ShoeSize = ap.ShoeSize,
+                            Weight = ap.Weight
+                       };
 
-            gv.DataSource = db.Applications.ToList();
+            gv.DataSource = list.ToList();
             gv.DataBind();
             Response.ClearContent();
             Response.Buffer = true;
-            Response.AddHeader("content-disposition", "attachment; filename=ConfrimAdmissions.xls");
+            Response.AddHeader("content-disposition", "attachment; filename=ConfirmAdmissions.xls");
+            Response.ContentType = "application/ms-excel";
+            Response.Charset = "";
+            StringWriter objStringWriter = new StringWriter();
+            HtmlTextWriter objHtmlTextWriter = new HtmlTextWriter(objStringWriter);
+            gv.RenderControl(objHtmlTextWriter);
+            Response.Output.Write(objStringWriter.ToString());
+            Response.Flush();
+            Response.End();
+            return View("Index");
+        }
+
+        public ActionResult ConfirmAdmissionsDGExcel(int? id)
+        {
+            var gv = new GridView();
+
+            var list = (from mt in db.Applied.AsEnumerable()
+                       join ap in db.Applications on mt.ApplicationId equals ap.ApplicationId
+                       join b in db.Batches on mt.BatchId equals b.BatchId
+                       join c in db.Courses on mt.CourseId equals c.CourseId
+                       join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
+                       join sfd in db.StudentFeeDetails on ap.ApplicationId equals sfd.ApplicationId
+                       where (mt.BatchId == id && mt.AdmissionStatus == true)
+                       select new 
+                       {
+                           CandidateName = ap.FullName,
+                           CDC_No = ap.CdcNo,
+                           DateOfBirth = ap.DateOfBirth.ToString(),
+                           DateOfJoining = b.StartDate.ToString(),
+                           INDoS = ap.InDosNo,
+                           PassportNo = ap.PassportNo
+                           
+                       }).ToList();
+            //var Batches = C.ToList().Select(x => new BatchDropdown { BatchId = x.BatchId, BatchCode = Convert.ToDateTime(x.Name).ToString("dd-MM-yyyy") });
+            var list2 = list.Select(x => new AdmissionConfirmDGExcelFormat { CandidateName= x.CandidateName, CDC_No = x.CDC_No, DateOfBirth = Convert.ToDateTime(x.DateOfBirth).ToString("dd-MM-yyyy"), DateOfJoining = Convert.ToDateTime(x.DateOfJoining).ToString("dd-MM-yyyy"),INDoS = x.INDoS,PassportNo = x.PassportNo });
+            gv.DataSource = list2.ToList();
+            gv.DataBind();
+            Response.ClearContent();
+            Response.Buffer = true;
+            Response.AddHeader("content-disposition", "attachment; filename=ConfirmAdmissions.xls");
             Response.ContentType = "application/ms-excel";
             Response.Charset = "";
             StringWriter objStringWriter = new StringWriter();
