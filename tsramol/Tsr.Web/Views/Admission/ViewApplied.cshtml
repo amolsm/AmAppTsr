@@ -64,7 +64,8 @@
                                             <div class="input-group">
                                                 <input class="btn btn-primary" type="button" value="Search" onclick="Search()" />
 
-                                                &nbsp;&nbsp;&nbsp;<input class="btn btn-primary" type="button" value="View In Pdf" onclick="location.href='@Url.Action("GetAdmissionApplicantList", "Report")?id=' + document.getElementById('BatchId').value" />
+                                                &nbsp;&nbsp;<input class="btn btn-primary" type="button" value="View In Pdf" onclick="location.href='@Url.Action("GetAdmissionApplicantList", "Report")?id=' + document.getElementById('BatchId').value" />
+                                                &nbsp;&nbsp; <input type="button" class="btn btn-primary" value="Refresh Page" onClick="window.location.reload()">
                                             </div>
 
                                         </div>

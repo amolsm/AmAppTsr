@@ -54,13 +54,16 @@
 
     </tr>
     </table>
-<table style="width:100%;">
+<table style="width:100%;border:none">
     <tr>
-        <td>No.</td>
-        <td>NAME OF THE CANDIDATES</td>
-
-        <td>RANK</td>
-        <td>RESULTS</td>
+        <td>SrNo</td>
+        <td>CandidatesName</td>
+        <td>DateOfBirth</td>
+        <td>IndosNo</td>
+        <td>PassportNo</td>
+        <td>CdcNo</td>
+        <td>CertificateNo</td>
+        <td>Signature</td>
      
     </tr>
  @{int i = 0;}
@@ -68,12 +71,16 @@
     {
         i++;
         <tr>
-            <td style="border-top: 0.5px solid black; border-bottom: 0.5px solid black;">@i</td>
-            <td style="border-top: 0.5px solid black; border-bottom: 0.5px solid black;">@item.ApplicantName</td>
-            <td style="border-top: 0.5px solid black; border-bottom: 0.5px solid black;">@item.Rank</td>
-            <td style="border-top: 0.5px solid black; border-bottom: 0.5px solid black;">@item.Results</td>
-          
-        </tr>
+            <td style="border-top: 0.5px solid black;">@i</td>
+            <td style="border-top: 0.5px solid black;">@item.ApplicantName</td>
+            <td style="border-top: 0.5px solid black;">@(item.DateOfBirth == null ? "" : @Convert.ToDateTime(item.DateOfBirth).ToString("dd-MM-yyyy"))</td>
+            <td style="border-top: 0.5px solid black;">@item.IndosNo</td>
+            <td style="border-top: 0.5px solid black;">@item.PassportNo</td>
+            <td style="border-top: 0.5px solid black;">@item.CdcNo</td>
+            <td style="border-top: 0.5px solid black;">@item.CertificateNo</td>
+            <td style="border-top: 0.5px solid black;">&nbsp;&nbsp;&nbsp;</td>
+
+</tr>
     }
 </table>
 <table style="width:100%;">

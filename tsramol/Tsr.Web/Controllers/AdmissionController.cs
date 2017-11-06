@@ -403,7 +403,7 @@ namespace Tsr.Web.Controllers
 
                     cb.BeginText();
                     cb.SetFontAndSize(bf_arial3, 10f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, /*app.CourseName == null ? "" : app.CourseName*/ "Saturday", 185f, 620f, 0);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.CetDate == null ? "" : Convert.ToDateTime(app.CetDate).DayOfWeek.ToString(), 185f, 620f, 0);
                     cb.EndText();
 
                     cb.BeginText();
@@ -680,7 +680,7 @@ namespace Tsr.Web.Controllers
                             CetMasterId = cm.CetMasterId,
                             ApplicationCode = ap.ApplicationCode,
                             ApplicationId = ap.ApplicationId,
-                            CourseName = cr.CourseName,
+                            CourseName = cr.ShortName,
                             BatchName = b.BatchCode,
                             CetDate = cm.CetDate,
                             CetTime = cm.CetTime,
@@ -784,7 +784,7 @@ namespace Tsr.Web.Controllers
 
                     cb.BeginText();
                     cb.SetFontAndSize(bf_arial3, 10f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, /*app.CourseName == null ? "" : app.CourseName*/ "Saturday", 185f, 620f, 0);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.CetDate == null ? "" : Convert.ToDateTime(app.CetDate).DayOfWeek.ToString(), 185f, 620f, 0);
                     cb.EndText();
 
                     cb.BeginText();

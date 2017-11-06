@@ -29,7 +29,7 @@
                             <div style="width:85%;float:right;font-family: Arial;font-size:12px">
                                 Nhava,Panvel Taluka Dist. Raigad-410206,Maharashtra<br />
 
-                                <b>Tel : 022-27212800/900 Fax: 0222272112495</b><br />
+                                <b>Tel : 022-27212800/900 Fax: 022-27212459</b><br />
                                 Email ID: tsrahaman@tsrahaman.org<br />
                                 www.tsrahaman.org<br />
                                 INDOS No.009<br />
@@ -62,41 +62,56 @@
 
             </tr>
             <tr>
-                <td colspan="2">Date of Birth</td>
-                <td colspan="3">
-                    <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" value="@(c.DateofBirth == null ? "" : @Convert.ToDateTime(c.DateofBirth).ToString("dd-MM-yyyy"))" />
+                <td colspan="15">
+                   
+                        <span style="padding-right: 10px;">Date of Birth</span>
 
-                </td>
-                <td colspan="10">Holder of C.D.C.No.  <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:180px" value="@(c.CDCNo == null ? "" : c.CDCNo)" /></td>
+                        <span style="padding-right:10px;">
+                            <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:120px" value="@(c.DateofBirth == null ? "" : @Convert.ToDateTime(c.DateofBirth).ToString("dd-MM-yyyy"))" />
+                        </span>
+                        <span style="padding-right: 10px;">
+                            Holder of C.D.C.No.
+                        </span>
+                        <span>
+                            <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:245px" value="@(c.CDCNo == null ? "" : c.CDCNo)" />
+                        </span>
+                   </td>
 
             </tr>
             <tr>
-                <td colspan="2">Passport No.</td>
-                <td colspan="3">
-                    <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" value="@(c.PassportNo == null ? "" : c.PassportNo)" />
+                <td colspan="15">
+                    <span style="padding-right: 10px;">
+                        Passport No.</span>
+                    <span style="padding-right:10px;"><input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:120px" value="@(c.PassportNo == null ? "" : c.PassportNo)" /></span>
+                    <span>
 
-                </td>
-                <td colspan="10">Certificate of Competency,(if any)</td>
+                        Certificate of Competency,(if any)
+                        </span>
+</td>
 
             </tr>
 
             <tr>
 
-                <td colspan="1">Grade:</td>
-                <td colspan="6">
-                    <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" value="@(c.Grade == null ? "" : c.Grade)" />
-                </td>
-                <td colspan="1">No.</td>
-                <td colspan="3">
-                    <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" value="@(c.Number == null ? "" : c.Number)" />
-                </td>
-                <td colspan="4">Indian National Database</td>
+                <td colspan="15">
+                    <span style="padding-right: 10px;">
+                        Grade:
+                    </span>
+                    <span style="padding-right: 10px;">
+                        <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:220px" value="@(c.Grade == null ? "" : c.Grade)" />
+                       </span> No.
+                    <span style="padding-right: 10px;">
+                        <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:120px" value="@(c.Number == null ? "" : c.Number)" />
+                      </span> 
+                    <span> Indian National Database</span>
+</td>
             </tr>
             <tr>
-                <td colspan="3">of Seafarers(INDoS No.)</td>
-                <td colspan="12">
-                    <input readonly style="font-family:'Times New Roman';font-size:15px; font-weight:bold" value="@(c.Indosno == null ? "" : c.Indosno)" />
-                </td>
+                <td colspan="15"><span style="padding-right: 10px;">
+    of Seafarers(INDoS No.)</span>
+                    <span>
+                        <input readonly style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:440px" value="@(c.Indosno == null ? "" : c.Indosno)" />
+</span></td>
             </tr>
             <tr>
                 <td colspan="15">@(c.LineOfCertificate == null ? "" : c.LineOfCertificate)</td>
@@ -110,10 +125,10 @@
                 <td colspan="5">
                     <input readonly style="font-family:'Times New Roman';font-size:15px; font-weight:bold" value="@(c.StartDate == null ? "" : @Convert.ToDateTime(c.StartDate).ToString("dd-MM-yyyy"))" />
                 </td>
-                <td align="center">to</td>
+                <td align="center">to  </td>
                 <td colspan="7">
-                    <input readonly style="font-family:'Times New Roman';font-size:15px; font-weight:bold" value="@(c.EndDate == null ? "" : @Convert.ToDateTime(c.EndDate).ToString("dd-MM-yyyy"))" />
-                </td>
+    <input readonly style="font-family:'Times New Roman';font-size:15px; font-weight:bold" value="@(c.EndDate == null ? "" : @Convert.ToDateTime(c.EndDate).ToString("dd-MM-yyyy"))" />
+</td>
             </tr>
             <tr>
                 <td colspan="15"><p>@(c.Paragraph1 == null ? "" : c.Paragraph1)</p></td>
@@ -124,20 +139,21 @@
             <tr>
                 <td colspan="15"><p>@(c.Paragraph3 == null ? "" : c.Paragraph3)</p></td>
             </tr>
-            <tr>
+            <tr style="padding-top: 20px;">
                 <td colspan="9">Signature of Candidate:__________________</td>
 
-                <td align="center" colspan="6">_____________________________<br>Course Incharge<br>(@(c.CourseInCharge == null ? "" : c.CourseInCharge))</td>
+                <td  colspan="6"><input readonly type="text"/><br>
+                <center>Course Incharge<br>(@(c.CourseInCharge == null ? "" : c.CourseInCharge))</center></td>
 
             </tr>
             <tr>
-                <td colspan="2">Date of Issue: </td>
-                <td colspan="5">
-                    <input readonly style="font-family:'Times New Roman';font-size:15px; font-weight:bold" value="@(c.DateOfIssue == null ? "" : Convert.ToDateTime(c.DateOfIssue).ToString("dd-MM-yyyy"))" />
-                </td>
+                <td colspan="7">Date of Issue: 
+                    <span style="padding-right:5px;">
+                        <input readonly style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:120px" value="@(c.DateOfIssue == null ? "" : Convert.ToDateTime(c.DateOfIssue).ToString("dd-MM-yyyy"))" />
+</span></td>
                 <td rowspan="2" colspan="10" style="text-align:center">
 
-                    @Html.Image(c.PrincipalSign, "No Signature Available", "100", "180")
+                    @Html.Image(c.PrincipalSign, "No Signature Available", "75", "180")
 
                 </td>
             </tr>
@@ -148,8 +164,8 @@
             </tr>
             <tr>
                 <td  colspan="8">
-                    <div style="padding-left:40px">
-                        <div style="width:125px;height:140px;border:1px solid #000; display: flex;align-items: center;justify-content: center;"><p style="text-align:center;vertical-align:middle">Photograph</p></div>
+                    <div>
+                        <div style="width:100px;height:125px;border:1px solid #000; display: flex;align-items: center;justify-content: center;"><p style="text-align:center;vertical-align:middle">Photograph</p></div>
                     </div></td>
 
                 <td align="center" colspan="7">
@@ -158,6 +174,8 @@
                         <br />
                         <div style="padding-left:50%">
                             <img src="~/Img/DNV LOGO.jpg" style="width:50px;height:85px;" />
+                        
+                          
                         </div>
                     </div>
                        </td>

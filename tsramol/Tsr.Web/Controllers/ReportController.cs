@@ -64,7 +64,7 @@ namespace Tsr.Web.Controllers
                                revno = "00",
                                revdate = DateTime.Now,
                                ApplicationNo = ap.ApplicationId.ToString(),
-                               CourseName = c.CourseName,
+                               CourseName = c.ShortName,
                                CourseDate = DateTime.Now,
                                BatchNo = b.BatchCode,
                                NameOfApplicant=ap.FirstName + " "+ap.MiddleName  + " "+ap.LastName,

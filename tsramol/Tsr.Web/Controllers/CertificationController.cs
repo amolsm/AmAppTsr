@@ -687,7 +687,8 @@ namespace Tsr.Web.Controllers
 
                                      };
                
-                ccvm._CertificateList = CertifcatesList.ToList();
+                ccvm._CertificateList = CertifcatesList.OrderBy(x=>x.CertificateNo).ToList();
+                ViewBag.batchId = obj.BatchId;
                 return View(ccvm);
             }
             ViewBag.Categories = new SelectList(db.CourseCategories.Where(x => x.IsActive == true).ToList(), "CourseCategoryId", "CategoryName");
@@ -720,13 +721,19 @@ namespace Tsr.Web.Controllers
                               select new CertificateApplicantList
                               {
                                   ApplicantId=app.ApplicationId,
-                                  ApplicantName=app.FullName,
-                                  Rank=app.RankOfCandidate
+                                  ApplicantName=app.FullName.ToUpper(),
+                                  Rank=app.RankOfCandidate.ToUpper(),
+                                  DateOfBirth=app.DateOfBirth,
+                                  IndosNo=app.InDosNo.ToUpper(),
+                                  PassportNo=app.PassportNo.ToUpper(),
+                                  CdcNo=app.CdcNo.ToUpper(),
+                                  CertificateNo=appld.CertificateCode
                                    
                               };
             var batchdetails = db.Batches.Where(x => x.BatchId == id).FirstOrDefault();
             var coursedetails = db.Courses.Where(x => x.CourseId == batchdetails.CourseId).FirstOrDefault();
             CertificateViewResultFormat cvrf = new CertificateViewResultFormat();
+            cvrf.CourseName = coursedetails.CourseName;
             cvrf.BatchCode = batchdetails.BatchCode;
             cvrf.From = batchdetails.StartDate;
             cvrf.To = batchdetails.EndDate;

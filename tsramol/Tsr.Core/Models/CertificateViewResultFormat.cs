@@ -36,6 +36,16 @@ namespace Tsr.Core.Models
 
         public string Results { get; set; }
 
+        public string IndosNo  { get; set; }
+
+        public string PassportNo { get; set; }
+
+        public string CdcNo  { get; set; }
+
+        public string CertificateNo    { get; set; }
+
+        public DateTime? DateOfBirth { get; set; }
+
     }
 }
     

@@ -35,7 +35,7 @@
 
                                         <div class="col-md-3">
                                             <div class="input-group">
-                                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                <span class="input-group-addon">Course</span>
                                                 @Html.DropDownList("CourseId", (IEnumerable<SelectListItem>)ViewBag.Course, " ", new { @class = "form-control", @onchange = "FillBatch()" })
                                             </div>
 
@@ -43,7 +43,7 @@
 
                                         <div class="col-md-3">
                                             <div class="input-group">
-                                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                <span class="input-group-addon">Batch</span>
                                                 @Html.DropDownList("BatchId",
                    new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "BatchCode"), " ", new { @class = "form-control", @onchange = "FillCet()" })
                                             </div>
@@ -63,7 +63,8 @@
                                             <div class="input-group">
                                                 <input class="btn btn-primary" type="button" value="Search" onclick="Search()" />
                                                 @*&nbsp;&nbsp;&nbsp;&nbsp;<input class="btn btn-primary" type="button" value="Save All" onclick="location.href='@Url.Action("Export", "Admission")?id=' + document.getElementById('ApplicationId').value"   />*@
-                                                &nbsp;&nbsp;&nbsp;<input class="btn btn-primary" type="button" value="View Pdf" onclick="location.href='@Url.Action("Export", "Admission")?id=' + document.getElementById('BatchId').value" />
+                                                &nbsp;&nbsp;<input class="btn btn-primary" type="button" value="View Pdf" onclick="location.href='@Url.Action("Export", "Admission")?id=' + document.getElementById('BatchId').value" />
+                                                &nbsp;&nbsp; <input type="button" class="btn btn-primary" value="Refresh Page" onClick="window.location.reload()">
                                             </div>
 
                                         </div>

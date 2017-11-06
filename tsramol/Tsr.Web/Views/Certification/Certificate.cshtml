@@ -73,13 +73,19 @@
                                         <input class="btn btn-primary" type="submit" style="width:150px" value="Generate Certificate" />
                                        
                                            &nbsp; <input type="button" class="btn btn-primary" style="width:60px" value="Print" id="btnPrint" />
-                                        &nbsp;  <input class="btn btn-primary" type="button" value="Result" style="width:60px" onclick="window.open('@Url.Action("ViewResultFormat", "Certification")?id=' + document.getElementById('BatchId').value,'_blank')" />
-                                       
+                                        &nbsp;  <input class="btn btn-primary" type="button" value="Result" style="width:60px" onclick="window.open('@Url.Action("ViewResultFormat", "Certification")?id=' + @ViewBag.batchId,'_blank')" />
+                                        
 
                                     </div>
                                 </div>
 
+                                        <div class="col-lg-3 pull-right">
 
+                                    <div class="input-group">
+                                        <br/>
+                                        <input type="button" class="btn btn-primary" value="Refresh Page" onClick="window.location.href=window.location.href">
+                                  </div>
+                                </div>
 
                             }
                         </div>

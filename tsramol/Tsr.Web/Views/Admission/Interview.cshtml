@@ -35,7 +35,7 @@
 
                                         <div class="col-md-3">
                                             <div class="input-group">
-                                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                <span class="input-group-addon">Course</span>
                                                 @Html.DropDownList("CourseId",
                                                 (IEnumerable<SelectListItem>)ViewBag.Course, "Select Course", new { @class = "form-control", @onchange = "FillBatch()" })
                                             </div>
@@ -46,7 +46,7 @@
 
                                         <div class="col-md-3">
                                             <div class="input-group">
-                                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                <span class="input-group-addon">Batch</span>
                                                 @Html.DropDownList("BatchId",
                    new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "BatchCode"),
               " ", new { @class = "form-control"})
@@ -57,6 +57,7 @@
                                         <div class="col-md-3">
                                             <div class="input-group">
                                                 <input class="btn btn-primary" type="button" value="Search" onclick="Search()" />
+                                                &nbsp;&nbsp; <input type="button" class="btn btn-primary" value="Refresh Page" onClick="window.location.reload()">
                                             </div>
 
                                         </div>
