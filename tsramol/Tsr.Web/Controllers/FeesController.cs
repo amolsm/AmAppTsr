@@ -245,8 +245,28 @@ namespace Tsr.Web.Controllers
                 db.FeeReceipts.Add(fr);
                 db.SaveChanges();
 
-                  return Json(new { success = true });
+                return Json(new { success = true });
 
+            }
+            else
+            {
+                StudentFeeDetail sfd = db.StudentFeeDetails.FirstOrDefault(x => x.ApplicationId == obj.ApplicationId);
+                sfd.FeePaid = sfd.FeePaid + obj.Amount;
+                sfd.FeeBal = sfd.FeeBal - obj.Amount;
+
+                //feeReceipt
+                FeeReceipt fr = new FeeReceipt
+                {
+                    Amount = Convert.ToDecimal(obj.Amount),
+                    ApplicationId = Convert.ToInt32(ap.ApplicationId),
+                    PaymentMode = obj.PaymentMode,
+                    PrintStatus = false,
+                    FeesType = "CourseFee"
+                };
+                db.FeeReceipts.Add(fr);
+                db.SaveChanges();
+
+                return Json(new { success = true });
             }
             return View();
         }
@@ -265,16 +285,23 @@ namespace Tsr.Web.Controllers
                 var app = db.Applications.Find(id);
                 if (app.IsPackage == null || app.IsPackage == false)
                 {
-                    var list = (from ap in db.Applications.AsEnumerable()
-                                join b in db.Batches on ap.BatchId equals b.BatchId
-                                join fr in db.FeeReceipts on ap.ApplicationId equals fr.ApplicationId
-                                join sd in db.StudentFeeDetails on ap.ApplicationId equals sd.ApplicationId
-                                into sdf
-                                from sd in sdf.DefaultIfEmpty()
-                                join cr in db.Courses on ap.CourseId equals cr.CourseId
-                                //join op in db.OnlinePaymentInfos on ap.ApplicationId equals op.ApplicationId
+                    var list1 = (
+                                 //from fr in db.FeeReceipts
+                                 //         join ap in db.Applications on fr.ApplicationId equals ap.ApplicationId
+                                 //         join b in db.Batches on ap.BatchId equals b.BatchId
+                                 //         join sd in db.StudentFeeDetails on fr.ApplicationId equals sd.ApplicationId
+                                 //         into sdf
+                                 //         from sd in sdf.DefaultIfEmpty()
+                                 //         join cr in db.Courses on ap.CourseId equals cr.CourseId
+                                 from ap in db.Applications.AsEnumerable()
+                                 join b in db.Batches on ap.BatchId equals b.BatchId
+                                 join fr in db.FeeReceipts on ap.ApplicationId equals fr.ApplicationId
+                                 join sd in db.StudentFeeDetails on ap.ApplicationId equals sd.ApplicationId
+                                 into sdf
+                                 from sd in sdf.DefaultIfEmpty()
+                                 join cr in db.Courses on ap.CourseId equals cr.CourseId
 
-                                where (ap.ApplicationId == id)
+                                 where (ap.ApplicationId == id)
 
                                 select new FeesViewPaymentDetailsVM
                                 {
@@ -297,6 +324,8 @@ namespace Tsr.Web.Controllers
 
 
                                 }).ToList();
+
+                    var list = list1.OrderByDescending(x => x.FeeReceiptId).Take(1).ToList();
                     foreach (var l in list)
                     {
                         FeeReceipt fr = db.FeeReceipts.Find(l.FeeReceiptId);
@@ -329,7 +358,7 @@ namespace Tsr.Web.Controllers
                 }
                 else
                 {
-                    var list = (from ap in db.Applications.AsEnumerable()
+                    var list1 = (from ap in db.Applications.AsEnumerable()
                                 join pk in db.packages on ap.PackageId equals pk.PackageId
                                 join fr in db.FeeReceipts on ap.ApplicationId equals fr.ApplicationId
                                 join sd in db.StudentFeeDetails on ap.ApplicationId equals sd.ApplicationId
@@ -355,7 +384,7 @@ namespace Tsr.Web.Controllers
 
 
                                 }).ToList();
-
+                    var list = list1.OrderByDescending(x => x.FeeReceiptId).Take(1).ToList();
                     foreach (var l in list)
                     {
                         FeeReceipt fr = db.FeeReceipts.Find(l.FeeReceiptId);

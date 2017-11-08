@@ -34,6 +34,8 @@ namespace Tsr.Web.Common
                 smtp.Credentials = credential;
                 smtp.Host = "smtp.gmail.com";
                 smtp.Port = 587;
+                //smtp.Host = "smtp.siteprotect.com";
+                //smtp.Port = 587;
                 smtp.EnableSsl = true;
                 try
                 {
