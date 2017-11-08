@@ -2,10 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Net.Mime;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Tsr.Core.Models;
@@ -136,21 +139,66 @@ namespace Tsr.Web.Common
 
         public System.Threading.Tasks.Task SendSmsAsync(string msg, string mobileno)
         {
-            String message = HttpUtility.UrlEncode(msg);
-            using (var wb = new WebClient())
-            {
+            string message = HttpUtility.UrlEncode(msg);
+            string user = ConfigurationManager.AppSettings["SMSUSER"];
+            string key = ConfigurationManager.AppSettings["AuthenticationKey"];
+            string senderid=ConfigurationManager.AppSettings["SenderId"];
+            string accusage=ConfigurationManager.AppSettings["Accusage"];
+         
 
-                byte[] response = wb.UploadValues("http://api.textlocal.in/send/", new NameValueCollection()
+            //Prepare you post parameters
+            StringBuilder sbPostData = new StringBuilder();
+            sbPostData.AppendFormat("user={0}", user);
+            sbPostData.AppendFormat("&key={0}", key);
+            sbPostData.AppendFormat("&mobile={0}", mobileno);
+            sbPostData.AppendFormat("&message={0}", message);
+            sbPostData.AppendFormat("&senderid={0}", senderid);
+            sbPostData.AppendFormat("&accusage={0}", accusage);
+
+            try
+            {
+                //Call Send SMS API
+                string sendSMSUri = "http://103.233.79.246/submitsms.jsp?";
+                //Create HTTPWebrequest
+                HttpWebRequest httpWReq = (HttpWebRequest)WebRequest.Create(sendSMSUri);
+                //Prepare and Add URL Encoded data
+                UTF8Encoding encoding = new UTF8Encoding();
+                byte[] data = encoding.GetBytes(sbPostData.ToString());
+                //Specify post method
+                httpWReq.Method = "POST";
+                httpWReq.ContentType = "application/x-www-form-urlencoded";
+                httpWReq.ContentLength = data.Length;
+                using (Stream stream = httpWReq.GetRequestStream())
                 {
-                {"username" , "ranjithkumar01@gmail.com"},
-                {"hash" , "e399e1b41bbe615c57453488771c9ac83e102d9b87f3b7ae41654d2a8e3c4cb1"},
-                {"numbers" , mobileno},
-                {"message" , message},
-                {"sender" , "TXTLCL"}
-                });
-                string result = System.Text.Encoding.UTF8.GetString(response);
-                //return result;
+                    stream.Write(data, 0, data.Length);
+                }
+                //Get the response
+                HttpWebResponse response = (HttpWebResponse)httpWReq.GetResponse();
+                StreamReader reader = new StreamReader(response.GetResponseStream());
+                string responseString = reader.ReadToEnd();
+
+                //Close the response
+                reader.Close();
+                response.Close();
             }
+            catch (SystemException ex)
+            {
+                string errormsg=ex.Message.ToString();
+            }
+            //using (var wb = new WebClient())
+            //{
+
+            //    byte[] response = wb.UploadValues("http://api.textlocal.in/send/", new NameValueCollection()
+            //    {
+            //    {"username" , "ranjithkumar01@gmail.com"},
+            //    {"hash" , "e399e1b41bbe615c57453488771c9ac83e102d9b87f3b7ae41654d2a8e3c4cb1"},
+            //    {"numbers" , mobileno},
+            //    {"message" , message},
+            //    {"sender" , "TXTLCL"}
+            //    });
+            //    string result = System.Text.Encoding.UTF8.GetString(response);
+            //    //return result;
+            //}
             return System.Threading.Tasks.Task.FromResult(0);
         }
     }

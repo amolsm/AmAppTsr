@@ -244,7 +244,8 @@ namespace Tsr.Web.Controllers
                 };
                 db.FeeReceipts.Add(fr);
                 db.SaveChanges();
-
+               
+                
                 return Json(new { success = true });
 
             }

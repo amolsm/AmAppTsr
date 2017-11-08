@@ -13,6 +13,7 @@ using Tsr.Web.Common;
 using Aspose.Email.Clients.Exchange.WebService;
 using Aspose.Email;
 using Aspose.Email.Clients.Exchange;
+using System.Threading.Tasks;
 
 namespace Tsr.Web.Controllers
 {
@@ -593,18 +594,22 @@ namespace Tsr.Web.Controllers
                 return new PdfActionResult(list);
             }
 
-        public ActionResult Test1()
+        public async Task<ActionResult>  Test1()
         {
+            MessageService ms = new MessageService();
+            string msg = "Dear " + "Santosh" + ", with the reference to your Enrolment ID " + "TEST" + " you are selected for the Interview Date " + "  Thanking you T.S.Rahaman";
+            string mobileno = "8369668508";
+            await ms.SendSmsAsync(msg, mobileno);
 
-            string MailUser = "onlinebooking@tsrahaman.org";
-            string MailPass = "OB2017tsr";
-            string MailTo = "amolmurkute@gmail.com";
+           // string MailUser = "onlinebooking@tsrahaman.org";
+           // string MailPass = "OB2017tsr";
+           // string MailTo = "amolmurkute@gmail.com";
 
-           try
-            {
-                IEWSClient client = EWSClient.GetEWSClient("https://outlook.office365.com/ews/exchange.asmx", "onlinebooking@tsrahaman.org", "OB2017tsr", "tsrahaman.org");
+           //try
+           // {
+           //     IEWSClient client = EWSClient.GetEWSClient("https://outlook.office365.com/ews/exchange.asmx", "onlinebooking@tsrahaman.org", "OB2017tsr", "tsrahaman.org");
 
-                //Microsoft.Exchange.WebServices.Data.ExchangeService service = new Microsoft.Exchange.WebServices.Data.ExchangeService(Microsoft.Exchange.WebServices.Data.ExchangeVersion.Exchange2010_SP1);
+           //     //Microsoft.Exchange.WebServices.Data.ExchangeService service = new Microsoft.Exchange.WebServices.Data.ExchangeService(Microsoft.Exchange.WebServices.Data.ExchangeVersion.Exchange2010_SP1);
                 //service.Credentials = new System.Net.NetworkCredential(MailUser, MailPass, "tsrahaman.org");
                 //service.AutodiscoverUrl(MailUser, RedirectionUrlValidationCallback);
                 //Microsoft.Exchange.WebServices.Data.EmailMessage emailMessage = new Microsoft.Exchange.WebServices.Data.EmailMessage(service);
@@ -614,14 +619,14 @@ namespace Tsr.Web.Controllers
                 //emailMessage.Save();
                 //emailMessage.SendAndSaveCopy();
                 //Create instance of type MailMessage
-               MailMessage msg = new MailMessage();
-                msg.From = "onlinebooking@tsrahaman.org";
-                msg.To = "skygroup1402@gmail.com";
-                msg.Subject = "Sending message from exchange server";
-                msg.HtmlBody = "<h3>sending message from exchange server</h3>";
+               //MailMessage msg = new MailMessage();
+               // msg.From = "onlinebooking@tsrahaman.org";
+               // msg.To = "skygroup1402@gmail.com";
+               // msg.Subject = "Sending message from exchange server";
+               // msg.HtmlBody = "<h3>sending message from exchange server</h3>";
 
-                // Send the message
-                client.Send(msg);
+               // // Send the message
+               // client.Send(msg);
                 //IEWSClient client = EWSClient.GetEWSClient("https://outlook.office365.com/ews/exchange.asmx", "onlinebooking@tsrahaman.org", "OB2017tsr", "tsrahaman.org");
 
                 // Call ListMessages method to list messages info from Inbox
@@ -641,11 +646,11 @@ namespace Tsr.Web.Controllers
                 //}
 
                 ViewData["Message"] = "Msg Send";
-            }
-            catch (Exception ex)
-            {
-                ViewData["Message"] = ex.ToString();
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    ViewData["Message"] = ex.ToString();
+            //}
            
             return View();
         }
@@ -665,6 +670,8 @@ namespace Tsr.Web.Controllers
             }
             return result;
         }
+
+        
     }
 
     
