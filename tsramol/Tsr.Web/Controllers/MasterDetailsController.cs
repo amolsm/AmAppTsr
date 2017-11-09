@@ -1218,7 +1218,7 @@ namespace Tsr.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                Batch b = await db.Batches.FindAsync(obj.BatchId);
+                Batch b = db.Batches.Find(obj.BatchId);
                 b.BatchCode = obj.BatchCode;
                 b.CoordinatorId = obj.CoordinatorId;
                 b.StartDate = obj.StartDate;
@@ -1230,11 +1230,19 @@ namespace Tsr.Web.Controllers
                 b.Remark = obj.Remark;
                 b.ReserveSeats = obj.ReserveSeats;
                 b.CourseExpiryDate = obj.CourseExpiryDate;
-                db.Entry(b).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                b.CreatedDate = obj.CreatedDate;
+               // db.Entry(b).State = EntityState.Modified;
+                try { await db.SaveChangesAsync(); }
+                catch
+                (Exception e)
+                {
+                    string s = e.ToString();
+                }
+                
                 return Json(new { success = true });
             }
             return PartialView("BatchEdit", obj);
+           
         }
         #endregion
 

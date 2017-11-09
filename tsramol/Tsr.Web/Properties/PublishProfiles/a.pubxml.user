@@ -199,16 +199,16 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/28/2015 04:04:30</publishTime>
     </File>
     <File Include="bin/Tsr.Core.dll">
-      <publishTime>11/07/2017 13:10:24</publishTime>
+      <publishTime>11/09/2017 12:35:29</publishTime>
     </File>
     <File Include="bin/Tsr.Infra.dll">
-      <publishTime>11/07/2017 13:10:26</publishTime>
+      <publishTime>11/09/2017 12:35:30</publishTime>
     </File>
     <File Include="bin/Tsr.ToPdf.dll">
-      <publishTime>11/07/2017 13:10:24</publishTime>
+      <publishTime>11/09/2017 12:35:29</publishTime>
     </File>
     <File Include="bin/Tsr.Web.dll">
-      <publishTime>11/07/2017 14:26:10</publishTime>
+      <publishTime>11/09/2017 12:35:44</publishTime>
     </File>
     <File Include="bin/TugberkUg.MVC.dll">
       <publishTime>10/06/2017 14:10:31</publishTime>
@@ -2002,7 +2002,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/07/2017 10:15:15</publishTime>
     </File>
     <File Include="Views/Admission/ConfirmAdmissions.cshtml">
-      <publishTime>11/07/2017 10:32:57</publishTime>
+      <publishTime>11/08/2017 12:57:06</publishTime>
     </File>
     <File Include="Views/Admission/ConfirmAdmissionsList.cshtml">
       <publishTime>10/13/2017 20:17:41</publishTime>
@@ -2275,7 +2275,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/25/2017 14:31:07</publishTime>
     </File>
     <File Include="Views/MasterDetails/BatchEdit.cshtml">
-      <publishTime>10/25/2017 14:31:07</publishTime>
+      <publishTime>11/09/2017 12:31:42</publishTime>
     </File>
     <File Include="Views/MasterDetails/BatchList.cshtml">
       <publishTime>09/15/2017 09:29:58</publishTime>
@@ -2467,7 +2467,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/12/2017 09:23:24</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>11/07/2017 14:26:14</publishTime>
+      <publishTime>11/09/2017 12:35:48</publishTime>
     </File>
   </ItemGroup>
 </Project>
