@@ -265,7 +265,7 @@ namespace Tsr.Web.Controllers
                            ApplicationCode = ap.ApplicationCode,
                            ApplicationId = ap.ApplicationId,
                            BatchName = b.BatchCode,
-                           Name = ap.FirstName + " " + ap.LastName,
+                           Name = ap.FullName,
                            BatchId = b.BatchId,
 
                            //PaidAmount = opi.amount,
@@ -305,7 +305,7 @@ namespace Tsr.Web.Controllers
                             BatchName = b.BatchCode,
                             CetDate = cm.CetDate,
                             CetTime = cm.CetTime,
-                            Name = ap.FirstName + " " + ap.MiddleName + " " + ap.LastName,
+                            Name =ap.FullName,
                             Fathername = ap.MiddleName,
                             Mothername = ap.MotherName
                         });
@@ -655,6 +655,7 @@ namespace Tsr.Web.Controllers
                 }
 
                 await db.SaveChangesAsync();
+                return RedirectToAction("HallTickets");
             }
           
             var a = from c in db.Courses
@@ -686,7 +687,7 @@ namespace Tsr.Web.Controllers
                             BatchName = b.BatchCode,
                             CetDate = cm.CetDate,
                             CetTime = cm.CetTime,
-                            Name = ap.FirstName + " " + ap.MiddleName + " " + ap.LastName,
+                            Name = ap.FullName,
                             Fathername = ap.MiddleName,
                             Mothername = ap.MotherName
                         });
@@ -963,7 +964,9 @@ namespace Tsr.Web.Controllers
                 var path = HttpContext.Server.MapPath(root);
                 if ((System.IO.File.Exists(path)))
                 {
-                    System.IO.File.Delete(path);
+                   
+                        System.IO.File.Delete(path);
+                    
                 }
                 byte[] content = stream.ToArray();
                 using (FileStream file = new FileStream(path, FileMode.Create, FileAccess.Write))
@@ -994,7 +997,7 @@ namespace Tsr.Web.Controllers
                      //where (ap.AdmissionStatus == true)
                      select new AdmissionViewApplicantsVM
                      {
-                         ApplicantName = a.FirstName.ToString() + " " + a.MiddleName.ToString() + " " + a.LastName.ToString(),
+                         ApplicantName = a.FullName,
                          ApplicationCode = a.ApplicationCode,
                          ApplicationId = a.ApplicationId,
                          BatchCode = b.BatchCode,
@@ -1026,7 +1029,7 @@ namespace Tsr.Web.Controllers
                            ApplicationCode = a.ApplicationCode,
                            ApplicationId = ap.ApplicationId,
                            BatchName = b.BatchCode,
-                           Name = a.FirstName + " " + a.LastName,
+                           Name = a.FullName,
                            //PaidAmount = opi.amount,
                            Email = a.Email,
                            Cell = a.CellNo
@@ -1094,7 +1097,7 @@ namespace Tsr.Web.Controllers
                            ApplicationCode = ap.ApplicationCode,
                            ApplicationId = ap.ApplicationId,
                            //BatchName = b.BatchCode,
-                           Name = ap.FirstName + " " + ap.LastName,
+                           Name = ap.FullName,
                            Marks1 = sm.Marks1,
                            Marks2 = sm.Marks2,
                            Marks3 = sm.Marks3,
@@ -1187,7 +1190,7 @@ namespace Tsr.Web.Controllers
                                ApplicationCode = ap.ApplicationCode,
                                ApplicationId = ap.ApplicationId,
                                //BatchName = b.BatchCode,
-                               Name = ap.FirstName + " " + ap.LastName,
+                               Name = ap.FullName,
                                Marks1 = sm.Marks1,
                                Marks2 = sm.Marks2,
                                Marks3 = sm.Marks3,
@@ -1274,7 +1277,7 @@ namespace Tsr.Web.Controllers
                                ApplicationCode = ap.ApplicationCode,
                                Cell = ap.CellNo,
                                Email = ap.Email,
-                               Name = ap.FirstName + " " + ap.LastName
+                               Name = ap.FullName
                            };
                 ViewBag.Flag = "1";
                 var ims = db.MedicalMasters.Where(x => x.BatchId == BatchId)
@@ -1365,7 +1368,7 @@ namespace Tsr.Web.Controllers
                                ApplicationCode = ap.ApplicationCode,
                                Cell = ap.CellNo,
                                Email = ap.Email,
-                               Name = ap.FirstName + " " + ap.LastName
+                               Name = ap.FullName
                            };
                 ViewBag.Flag = "1";
                 ViewBag.MedicalMaster = new SelectList(db.MedicalMasters.ToList(), "MedicalMasterId", "MedicalCode");
@@ -1942,8 +1945,8 @@ namespace Tsr.Web.Controllers
         {
             var ap = db.Applications.Where(x => x.ApplicationId == applicationid).FirstOrDefault();
             var cet=db.CetMasters.Where(x => x.CetMasterId == cetmasterid).FirstOrDefault();
-            var File1path = HttpContext.Server.MapPath(HallticketFile);
-            var File2path = HttpContext.Server.MapPath(cet.FilePath);
+            var File1path = HallticketFile==null?null:HttpContext.Server.MapPath(HallticketFile);
+            var File2path = cet.FilePath==null?null:HttpContext.Server.MapPath(cet.FilePath);
             EmailModel em = new EmailModel
             {
                 From = ConfigurationManager.AppSettings["admsmail"],

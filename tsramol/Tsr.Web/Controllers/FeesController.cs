@@ -148,7 +148,7 @@ namespace Tsr.Web.Controllers
                                 PaymentMode = fr.PaymentMode,
                                 FeesType = fr.FeesType,
                                 ReceiptDate = fr.ReceiptDate,
-                                Name = ap.FirstName + " " + ap.LastName,
+                                Name = ap.FullName,
                                 Course = cr.ShortName,
                                 Batch = b.BatchCode,
                                 StudentId = ap.ApplicationId,
@@ -310,7 +310,7 @@ namespace Tsr.Web.Controllers
                                     PaymentMode = fr.PaymentMode,
                                     FeesType = fr.FeesType,
                                     ReceiptDate = fr.ReceiptDate,
-                                    Name = ap.FirstName + " " + ap.LastName,
+                                    Name = ap.FullName,
                                     Course = cr.ShortName,
                                     Batch = b.BatchCode,
                                     StudentId = ap.ApplicationId,
@@ -648,7 +648,7 @@ namespace Tsr.Web.Controllers
                         FromPass = ConfigurationManager.AppSettings["admsps"],
                         To = ap.Email,
                         Subject = "Course Registration with TSR",
-                        Body = "Dear " + ap.FirstName + " " + ap.LastName + ", with the reference to your Enrolment ID " + ap.ApplicationCode + " This is to confirm that your Application has been reached for " + c.CourseName + " starting BATCH on " + Convert.ToDateTime(b.StartDate).ToString("dd-MM-yyyy") + "  Thanking you T.S.Rahaman"
+                        Body = "Dear " + ap.FullName + ", with the reference to your Enrolment ID " + ap.ApplicationCode + " This is to confirm that your Application has been reached for " + c.CourseName + " starting BATCH on " + Convert.ToDateTime(b.StartDate).ToString("dd-MM-yyyy") + "  Thanking you T.S.Rahaman"
                     };
 
                     var res = await MessageService.sendEmail(em);
@@ -829,7 +829,7 @@ namespace Tsr.Web.Controllers
                                     PaymentMode = fr.PaymentMode,
                                     FeesType = fr.FeesType,
                                     ReceiptDate = fr.ReceiptDate,
-                                    Name = ap.FirstName + " " + ap.LastName,
+                                    Name = ap.FullName,
                                     Course = cr.ShortName,
                                     Batch = b.BatchCode,
                                     StudentId = ap.ApplicationId,
@@ -886,7 +886,7 @@ namespace Tsr.Web.Controllers
                                     PaymentMode = fr.PaymentMode,
                                     FeesType = fr.FeesType,
                                     ReceiptDate = fr.ReceiptDate,
-                                    Name = ap.FirstName + " " + ap.LastName,
+                                    Name = ap.FullName,
                                     Course = pk.PackageName + " (Package)",
                                     Batch = "",
                                     StudentId = ap.ApplicationId,

@@ -68,7 +68,7 @@ namespace Tsr.Web.Controllers
                                CourseName = c.ShortName,
                                CourseDate = DateTime.Now,
                                BatchNo = b.BatchCode,
-                               NameOfApplicant=ap.FirstName + " "+ap.MiddleName  + " "+ap.LastName,
+                               NameOfApplicant=ap.FullName,
                                Nationality=ap.Citizenship,
                                DateOfBirth=ap.DateOfBirth,
                                CDCNo=ap.CdcNo,
@@ -562,7 +562,7 @@ namespace Tsr.Web.Controllers
                            ApplicationCode = a.ApplicationCode,
                            ApplicationId = ap.ApplicationId,
                            BatchName = b.BatchCode,
-                           Name = a.FirstName + " " + a.LastName,
+                           Name = a.FullName,
                            //PaidAmount = opi.amount,
                            Email = a.Email,
                            Cell = a.CellNo
@@ -586,7 +586,7 @@ namespace Tsr.Web.Controllers
                                ApplicationCode = ap.ApplicationCode,
                                ApplicationId = ap.ApplicationId,
                                BatchName = b.BatchCode,
-                               Name = ap.FirstName + " " + ap.LastName,
+                               Name = ap.FullName,
                                PaymentStatus = (opi == null) ? "Pending" : "Success",
                                Email = ap.Email,
                                Cell = ap.CellNo
