@@ -33,7 +33,7 @@
                             <div style="width:85%;float:right">
                                 Nhava,Panvel Taluka Dist. Raigad-410206,Maharashtra<br />
 
-                                <b>Tel : 022-27212800/900 Fax: 022-27212459</b><br />
+                                <b>Tel : 022-27212800/900 Fax: 022-27212495</b><br />
                                 Email ID: tsrahaman@tsrahaman.org<br />
                                 www.tsrahaman.org<br />
                                 INDOS No.009<br />
@@ -103,7 +103,7 @@
             </tr>
 
             <tr>
-                <td colspan="15">@(c.LineOfCertificate == null ? "" : c.LineOfCertificate)</td>
+                <td colspan="15">@Html.Raw(c.LineOfCertificate == null ? "" : c.LineOfCertificate)</td>
 
             </tr>
 
@@ -112,7 +112,7 @@
 
             <tr>
                 <td colspan="15">
-                    @(c.Paragraph1 == null ? "" : c.Paragraph1) <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:150px" value="@(c.StartDate == null ? "" : @Convert.ToDateTime(c.StartDate).ToString("dd-MM-yyyy"))" /> to
+                    @Html.Raw(c.Paragraph1 == null ? "" : c.Paragraph1) <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:150px" value="@(c.StartDate == null ? "" : @Convert.ToDateTime(c.StartDate).ToString("dd-MM-yyyy"))" /> to
                     <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:150px" value="@(c.EndDate == null ? "" : @Convert.ToDateTime(c.EndDate).ToString("dd-MM-yyyy"))" />
                     at Training Ship "Rahaman"
                 </td>
@@ -121,10 +121,10 @@
 
 
             <tr>
-                <td colspan="15"><p>@(c.Paragraph2 == null ? "" : c.Paragraph2)</p></td>
+                <td colspan="15"><p>@Html.Raw(c.Paragraph2 == null ? "" : c.Paragraph2)</p></td>
             </tr>
             <tr>
-                <td colspan="15"><p>@(c.Paragraph3 == null ? "" : c.Paragraph3)</p></td>
+                <td colspan="15"><p>@Html.Raw(c.Paragraph3 == null ? "" : c.Paragraph3)</p></td>
             </tr>
 
             <tr>
@@ -170,7 +170,7 @@
 
             <tr>
                 <td colspan="15">
-                    <span style="font-weight:normal;font-size:xx-small"> @(c.Topic5 == null ? "" : c.Topic5)</span>
+                    <span style="font-weight:normal;font-size:xx-small"> @Html.Raw(c.Topic5 == null ? "" : c.Topic5)</span>
                 </td>
             </tr>
 

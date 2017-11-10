@@ -31,7 +31,7 @@
                             <div style="width:85%;float:right">
                                 Nhava,Panvel Taluka Dist. Raigad-410206,Maharashtra<br />
 
-                                <b>Tel : 022-27212800/900 Fax: 022-27212459</b><br />
+                                <b>Tel : 022-27212800/900 Fax: 022-27212495</b><br />
                                 Email ID: tsrahaman@tsrahaman.org<br />
                                 www.tsrahaman.org<br />
                                 INDOS No.009<br />
@@ -118,19 +118,19 @@
             </tr>
 
             <tr>
-                <td colspan="15"><p><b>Part A</b>&nbsp;&nbsp;<span style="font-size:x-small"> @(c.LineOfCertificate == null ? "" : c.LineOfCertificate)</span></p></td>
+                <td colspan="15"><p><b>Part A</b>&nbsp;&nbsp;<span style="font-size:x-small"> @Html.Raw(c.LineOfCertificate == null ? "" : c.LineOfCertificate)</span></p></td>
             </tr>
             <tr>
-                <td colspan="15"><p><b>Part B</b>&nbsp;&nbsp;<span style="font-size:x-small">@(c.Paragraph1 == null ? "" : c.Paragraph1)</span></p></td>
+                <td colspan="15"><p><b>Part B</b>&nbsp;&nbsp;<span style="font-size:x-small">@Html.Raw(c.Paragraph1 == null ? "" : c.Paragraph1)</span></p></td>
             </tr>
             <tr>
-                <td colspan="15"><p><b>Part C</b>&nbsp;&nbsp;<span style="font-size:x-small">@(c.Paragraph2 == null ? "" : c.Paragraph2)</span></p></td>
+                <td colspan="15"><p><b>Part C</b>&nbsp;&nbsp;<span style="font-size:x-small">@Html.Raw(c.Paragraph2 == null ? "" : c.Paragraph2)</span></p></td>
             </tr>
             <tr>
-                <td colspan="15"><p><b>Part D</b>&nbsp;&nbsp;<span style="font-size:x-small">  @(c.Paragraph3 == null ? "" : c.Paragraph3)</span></p></td>
+                <td colspan="15"><p><b>Part D</b>&nbsp;&nbsp;<span style="font-size:x-small">@Html.Raw(c.Paragraph3 == null ? "" : c.Paragraph3)</span></p></td>
             </tr>
             <tr>
-                <td colspan="15"><p><b>Part E</b>&nbsp;&nbsp;<span style="font-size:x-small">  @(c.Topic4 == null ? "" : c.Topic4)</span></p></td>
+                <td colspan="15"><p><b>Part E</b>&nbsp;&nbsp;<span style="font-size:x-small">@Html.Raw(c.Topic4 == null ? "" : c.Topic4)</span></p></td>
             </tr>
             <tr>
                 <td colspan="15">This Certificate is issued under the authority of the Directorate General of Shipping, Ministry of Shipping, Govt. of India.</td>
@@ -178,7 +178,7 @@
 
             <tr>
                 <td colspan="15">
-                    <span style="font-weight:normal;font-size:xx-small"> @(c.Topic5 == null ? "" : c.Topic5)</span>
+                    <span style="font-weight:normal;font-size:xx-small"> @Html.Raw(c.Topic5 == null ? "" : c.Topic5)</span>
                 </td>
             </tr>
 

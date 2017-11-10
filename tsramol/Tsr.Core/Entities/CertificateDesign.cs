@@ -5,27 +5,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Tsr.Core.Entities
 {
     public class CertificateDesign
     {
 
         public int CertificateDesignId { get; set; }
-
+    
         public string LineOfCertificate { get; set; }
 
         public int CourseId { get; set; }
 
         public string CourseName { get; set; }
-
+      
         public string Paragraph1 { get; set; }
-
+       
         public string Paragraph2 { get; set; }
-
+      
         public string Paragraph3 { get; set; }
-
+       
         public string Topic4 { get; set; }
-
+       
         public string Topic5 { get; set; }
 
 

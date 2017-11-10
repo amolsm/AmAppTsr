@@ -32,7 +32,7 @@
                             <div style="width:85%;float:right;font-family: Arial;font-size:12px">
                                 Nhava,Panvel Taluka Dist. Raigad-410206,Maharashtra<br />
 
-                                <b>Tel : 022-27212800/900 Fax: 022-27212459</b><br />
+                                <b>Tel : 022-27212800/900 Fax: 022-27212495</b><br />
                                 Email ID: tsrahaman@tsrahaman.org<br />
                                 www.tsrahaman.org<br />
                                 INDOS No.009<br />
@@ -100,7 +100,7 @@
                 <td colspan="15">approved by the Directorate General of Shipping as per the requirement laid down in</td>
             </tr>
             <tr>
-                <td colspan="15">@(c.LineOfCertificate == null ? "" : c.LineOfCertificate)</td>
+                <td colspan="15">@Html.Raw(c.LineOfCertificate == null ? "" : c.LineOfCertificate)</td>
             </tr>
 
             <tr>
@@ -115,13 +115,13 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="15"><p>@(c.Paragraph1 == null ? "" : c.Paragraph1)</p></td>
+                <td colspan="15"><p>@Html.Raw(c.Paragraph1 == null ? "" : c.Paragraph1)</p></td>
             </tr>
             <tr>
-                <td colspan="15"><p>@(c.Paragraph2 == null ? "" : c.Paragraph2)</p></td>
+                <td colspan="15"><p>@Html.Raw(c.Paragraph2 == null ? "" : c.Paragraph2)</p></td>
             </tr>
             <tr>
-                <td colspan="15"><p>@(c.Paragraph3 == null ? "" : c.Paragraph3)</p></td>
+                <td colspan="15"><p>@Html.Raw(c.Paragraph3 == null ? "" : c.Paragraph3)</p></td>
             </tr>
             <tr>
                 <td colspan="9">Signature of Candidate:__________________</td>
@@ -142,7 +142,7 @@
             </tr>
             <tr>
                 <td colspan="7">
-                    @(c.Topic4 == null ? "" : c.Topic4)<input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" value="@(c.DateofExpiry == null ? "" : Convert.ToDateTime(c.DateofExpiry).ToString("dd-MM-yyyy"))" />
+                    @Html.Raw(c.Topic4 == null ? "" : c.Topic4)<input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" value="@(c.DateofExpiry == null ? "" : Convert.ToDateTime(c.DateofExpiry).ToString("dd-MM-yyyy"))" />
                 </td>
             </tr>
             <tr>
@@ -169,7 +169,7 @@
             </tr>
             <tr>
                 <td colspan="15">
-                    <span style="font-weight:normal;font-size:xx-small"> @(c.Topic5 == null ? "" : c.Topic5)</span>
+                    <span style="font-weight:normal;font-size:xx-small"> @Html.Raw(c.Topic5 == null ? "" : c.Topic5)</span>
                 </td>
             </tr>
 

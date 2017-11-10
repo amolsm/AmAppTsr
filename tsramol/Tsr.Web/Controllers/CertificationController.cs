@@ -15,6 +15,7 @@ using Tsr.Infra;
 using Tsr.ToPdf;
 using Tsr.Web.Common;
 using System.Web;
+using System.Web.UI;
 
 namespace Tsr.Web.Controllers
 {
@@ -611,7 +612,7 @@ namespace Tsr.Web.Controllers
                                          CourseInCharge = e.FirstName  +" "+ e.MiddleName +" " + e.LastName,
                                          Topic4 = cd.Topic4 == null ? "" : cd.Topic4,
                                          Topic5=cd.Topic5==null?"":cd.Topic5,
-                                         DateOfIssue = DateTime.Now,
+                                         DateOfIssue = b.EndDate,
                                          PrincipalName = pr.PricipalName,
                                          PrincipalSign = pr.SignatureImgUrl,
                                          DateofExpiry=b.CourseExpiryDate
@@ -679,7 +680,7 @@ namespace Tsr.Web.Controllers
                                          CourseInCharge = e.FirstName +" "+ e.MiddleName +" "+ e.LastName,
                                          Topic4 = cd.Topic4 == null ? "" : cd.Topic4,
                                          Topic5 = cd.Topic5 == null ? "" : cd.Topic5,
-                                         DateOfIssue = db.Certificates.Where(x => (x.ApplicationId == app.ApplicationId && x.BatchId == b.BatchId)).Select(x => x.CreateDate).FirstOrDefault(),
+                                         DateOfIssue = b.EndDate,
                                          PrincipalName = pr.PricipalName,
                                          PrincipalSign = pr.SignatureImgUrl,
                                          DateofExpiry = b.CourseExpiryDate

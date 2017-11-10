@@ -31,7 +31,7 @@
                             <div style="width:85%;float:right">
                                 Nhava,Panvel Taluka Dist. Raigad-410206,Maharashtra<br />
 
-                                <b>Tel : 022-27212800/900 Fax: 022-27212459</b><br />
+                                <b>Tel : 022-27212800/900 Fax: 022-27212495</b><br />
                                 Email ID: tsrahaman@tsrahaman.org<br />
                                 www.tsrahaman.org<br />
                                 INDOS No.009<br />
@@ -111,7 +111,7 @@
                     <span style="font-family:Calibri;font-size:20px; font-weight:bold">
                         Affiliated to Indian Maritime University
                     </span><br />
-                    <span style="font-family:Calibri;font-size:20px; font-weight:bold">@(c.LineOfCertificate == null ? "" : c.LineOfCertificate)</span><br />
+                    <span style="font-family:Calibri;font-size:20px; font-weight:bold">@Html.Raw(c.LineOfCertificate == null ? "" : c.LineOfCertificate)</span><br />
                     <span style="font-family:Calibri;font-size:20px; font-weight:bold">Leading to B.Sc(Applied Nautical Science)</span>
                 </td>
 
@@ -129,13 +129,13 @@
             </tr>
 
             <tr>
-                <td colspan="15"><p> @(c.Paragraph1 == null ? "" : c.Paragraph1)</p></td>
+                <td colspan="15"><p> @Html.Raw(c.Paragraph1 == null ? "" : c.Paragraph1)</p></td>
             </tr>
             <tr>
-                <td colspan="15"><p> @(c.Paragraph2 == null ? "" : c.Paragraph2)</p></td>
+                <td colspan="15"><p> @Html.Raw(c.Paragraph2 == null ? "" : c.Paragraph2)</p></td>
             </tr>
             <tr>
-                <td colspan="15"><p> @(c.Paragraph3 == null ? "" : c.Paragraph3)</p></td>
+                <td colspan="15"><p> @Html.Raw(c.Paragraph3 == null ? "" : c.Paragraph3)</p></td>
             </tr>
 
 
@@ -180,7 +180,7 @@
             </tr>
             <tr>
                 <td colspan="15">
-                    <span style="font-weight:normal;font-size:xx-small">@(c.Topic5 == null ? "" : c.Topic5)</span>
+                    <span style="font-weight:normal;font-size:xx-small">@Html.Raw(c.Topic5 == null ? "" : c.Topic5)</span>
                 </td>
             </tr>
 
