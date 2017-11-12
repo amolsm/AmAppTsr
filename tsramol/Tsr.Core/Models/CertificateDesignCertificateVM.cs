@@ -19,6 +19,7 @@ namespace Tsr.Core.Models
         [Display(Name = "Course")]
         public int CourseId { get; set; }
         [Display(Name = "Course Title")]
+        [AllowHtml]
         public string CourseName { get; set; }
         [DataType(DataType.MultilineText)]
         [AllowHtml]

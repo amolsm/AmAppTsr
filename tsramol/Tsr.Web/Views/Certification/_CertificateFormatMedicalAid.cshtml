@@ -61,86 +61,77 @@
 
             </tr>
             <tr>
-                <td colspan="2">
-
-                    Date of Birth
-                </td>
-                <td colspan="2">
-                    <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" value="@(c.DateofBirth == null ? "" : @Convert.ToDateTime(c.DateofBirth).ToString("dd-MM-yyyy"))" />
-                </td>
-                <td colspan="6">
+                <td colspan="15">
+                    <span style="padding-right:10px;">
+                        Date of Birth</span>
+                    <span style="padding-right:10px;">
+                        <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:120px" value="@(c.DateofBirth == null ? "" : @Convert.ToDateTime(c.DateofBirth).ToString("dd-MM-yyyy"))" />
+</span>
+                <span style="padding-right:10px;">
 
                     Holder of C.D.C .No.
-                </td>
-                <td colspan="5">
-                    <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100%" value="@(c.CDCNo == null ? "" : c.CDCNo)" />
-                </td>
-            </tr>
+                   </span>
+                <span>
+                    <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:240px" value="@(c.CDCNo == null ? "" : c.CDCNo)" />
+                   </span> </td>
+</tr>
             <tr>
-                <td colspan="2">
-                    Passport No.
-                </td>
-                <td colspan="2">
-                    <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" value="@(c.PassportNo == null ? "" : c.PassportNo)" />
-                </td>
-                <td colspan="11">
+                <td colspan="15">
+                    <span style="padding-right:10px;">
+                        Passport No.</span>
+                    <span style="padding-right:10px;">
+                        <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:120px" value="@(c.PassportNo == null ? "" : c.PassportNo)" />
+                      </span>
                     Certificate of Competency if any (Grade)
                 </td>
 
 
             </tr>
             <tr>
-                <td colspan="4">
-                    <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100%" value="@(c.Grade == null ? "" : c.Grade)" />
-                </td>
-                <td>
-                    No.
-                </td>
-                <td colspan="2">
-                    <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:120px" value="@(c.Number == null ? "" : c.Number)" />
-                </td>
-                <td colspan="8" style="text-align:right">
-                    Indian National Database
-                </td>
+                <td colspan="15">
+                    <span style="padding-right:10px;">
+                        <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:220px" value="@(c.Grade == null ? "" : c.Grade)" />
+                        </span>
+                    <span style="padding-right:10px;"> No.
+                   </span>
+                    <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:160px" value="@(c.Number == null ? "" : c.Number)" />
+                    <span>
+                        Indian National Database
+                    </span></td>
 
 
             </tr>
             <tr>
-                <td colspan="3">
-                    (INDoS No.)
-                </td>
-                <td>
-                    <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" value="@(c.Indosno == null ? "" : c.Indosno)" />
-                </td>
-                <td colspan="4">
-                    holding Certificate No.
-                </td>
-                <td colspan="7" style="text-align:right">
-                    <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100%" value="" />
-                </td>
+                <td colspan="15"><span style="padding-right:10px;">
+    (INDoS No.)
+</span><span style="padding-right:10px;">
+    <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:120px" value="@(c.Indosno == null ? "" : c.Indosno)" />
+</span><span style="padding-right:10px;">
+    holding Certificate No.
+</span><span>
+    <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:225px" value="" />
+</span></td>
 
 
             </tr>
-            <tr>
-                <td colspan="2">
-                    dated
-                </td>
-                <td colspan="2">
-                    <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" value="" />
-                </td>
-                <td colspan="11">
-                    For Medical First Aid
-                </td>
+            <tr><td colspan="15">
+                <span style="padding-right:10px;">
+                    dated</span>
+                <span style="padding-right:10px;">
+                    <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:120px" value="" />
+                   </span>
+                        For Medical First Aid
+                    </td>
 
 
-            </tr>
+</tr>
             <tr>
-                <td colspan="2">
-                    Issued by
-                </td>
-                <td colspan="13">
-                    <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100%" value="" />
-                </td>
+                <td colspan="15">
+                    <span style="padding-right:10px;">
+                        Issued by</span>
+
+                        <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:525px" value="" />
+</td>
 
 
 
@@ -157,7 +148,7 @@
 
 
             <tr>
-                <td colspan="15"><p>on <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:150px" value="@(c.StartDate == null ? "" : @Convert.ToDateTime(c.StartDate).ToString("dd-MM-yyyy"))" />@Html.Raw(c.Paragraph1 == null ? "" : c.Paragraph1)</p></td>
+                <td colspan="15"><p>on <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:250px" value="@(c.StartDate == null ? "" : @Convert.ToDateTime(c.StartDate).ToString("dd-MM-yyyy"))" />@Html.Raw(c.Paragraph1 == null ? "" : c.Paragraph1)</p></td>
             </tr>
             <tr>
                 <td colspan="15"><p>@Html.Raw(c.Paragraph2 == null ? "" : c.Paragraph2)</p></td>
@@ -172,13 +163,12 @@
 
             </tr>
             <tr>
-                <td colspan="2">Date of Issue: </td>
-                <td colspan="6">
+                <td colspan="8">Date of Issue: 
                     <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:150px" value="@(c.DateOfIssue == null ? "" : Convert.ToDateTime(c.DateOfIssue).ToString("dd-MM-yyyy"))" />
                 </td>
                 <td rowspan="2" colspan="10" style="text-align:center">
 
-                    @Html.Image(c.PrincipalSign, "No Signature Available", "100", "180")
+                    @Html.Image(c.PrincipalSign, "No Signature Available", "75", "180")
 
                 </td>
             </tr>
@@ -190,7 +180,7 @@
             <tr>
                 <td colspan="8">
                     <div>
-                        <div style="width:125px;height:140px;border:1px solid #000; display: flex;align-items: center;justify-content: center;"><p style="text-align:center;vertical-align:middle">Photograph</p></div>
+                        <div style="width:100px;height:125px;border:1px solid #000; display: flex;align-items: center;justify-content: center;"><p style="text-align:center;vertical-align:middle">Photograph</p></div>
                  </div></td>
 
                 <td align="center" colspan="7">

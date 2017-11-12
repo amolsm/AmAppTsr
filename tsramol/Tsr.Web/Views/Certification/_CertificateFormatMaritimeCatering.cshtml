@@ -67,34 +67,34 @@
 
             </tr>
             <tr>
-                <td colspan="2">
+                <td colspan="15">
 
-                    Roll No
-                </td>
-                <td colspan="2">
-                    <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" value="@(c.CDCNo == null ? "" : c.CDCNo)" />
+                    <span style="padding-right: 10px;">
+                        Roll No</span>
+                    <span style="padding-right:10px;">
+                        <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:120px" value="@(c.CDCNo == null ? "" : c.CDCNo)" />
+                        </span>
+                    <span style="padding-right:10px;">
 
-                </td>
-                <td colspan="8">
-                    Date of Birth
-                </td>
-                <td colspan="3">
-                    <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100%" value="@(c.DateofBirth == null ? "" : @Convert.ToDateTime(c.DateofBirth).ToString("dd-MM-yyyy"))" />
-                </td>
+                        Date of Birth
+                        </span>
+                    <span>
+                        <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:250px" value="@(c.DateofBirth == null ? "" : @Convert.ToDateTime(c.DateofBirth).ToString("dd-MM-yyyy"))" />
+                    </span></td>
             </tr>
             <tr>
-                <td colspan="11">
-                    Indian National Database(INDoS No.)
+                <td colspan="15">
+                    <span style="padding-right:10px;">
+                        Indian National Database(INDoS No.)
+                        </span>
+                    <span style="padding-right:10px;">
 
-                </td>
-                <td colspan="2">
-                    <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" value="@(c.Indosno == null ? "" : c.Indosno)" />
-                </td>
-                <td colspan="2">
-                    has successfully
+                        <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:180px" value="@(c.Indosno == null ? "" : c.Indosno)" />
+                        </span>
+                        has successfully
 
 
-                </td>
+</td>
 
             </tr>
 
@@ -108,10 +108,11 @@
 
             <tr>
                 <td colspan="15">
-                    from <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:150px" value="@(c.StartDate == null ? "" : @Convert.ToDateTime(c.StartDate).ToString("dd-MM-yyyy"))" /> to
-                    <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:150px" value="@(c.EndDate == null ? "" : @Convert.ToDateTime(c.EndDate).ToString("dd-MM-yyyy"))" />
-                    at Training Ship "Rahaman"
-                </td>
+                    <span style="padding-right:10px;">
+                        from</span><input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:160px;padding-right:10px" value="@(c.StartDate == null ? "" : @Convert.ToDateTime(c.StartDate).ToString("dd-MM-yyyy"))" /> to
+                        <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:160px;padding-right:10px;" value="@(c.EndDate == null ? "" : @Convert.ToDateTime(c.EndDate).ToString("dd-MM-yyyy"))" />
+                        at Training Ship "Rahaman"
+</td>
             </tr>
             <tr>
                 <td colspan="15">The Course consists of basic and professional training as elaborated below:</td>
@@ -135,10 +136,13 @@
             <tr>
                 <td colspan="15">This Certificate is issued under the authority of the Directorate General of Shipping, Ministry of Shipping, Govt. of India.</td>
             </tr>
-            <tr>
-                <td colspan="9">Signature of Rating:<input readonly style="width:100px" type="text" /></td>
+            <tr style="padding-top: 20px;">
+                <td colspan="9">Signature of Rating:__________________</td>
 
-                <td align="center" colspan="6"><input readonly type="text" /><br>Course Incharge<br>(@(c.CourseInCharge == null ? "" : c.CourseInCharge))</td>
+                <td colspan="6">
+                    <input readonly type="text" style="padding-top: 25px;" /><br>
+                    <center>Course Incharge<br>(@(c.CourseInCharge == null ? "" : c.CourseInCharge))</center>
+                </td>
 
             </tr>
 
@@ -149,28 +153,28 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="2">
-                    Date of Issue:
-                </td>
-                <td colspan="2">
-                    <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" value="@(c.DateOfIssue == null ? "" : Convert.ToDateTime(c.DateOfIssue).ToString("dd-MM-yyyy"))" />
-                </td>
-                <td style="text-align:center" colspan="9">
-                    Principal <br />(@(c.PrincipalName == null ? "" : c.PrincipalName))
+                <td colspan="4">
+                    
+                        Date of Issue:
+                        
+                        <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:80px" value="@(c.DateOfIssue == null ? "" : Convert.ToDateTime(c.DateOfIssue).ToString("dd-MM-yyyy"))" />
+</td>
+                <td  colspan="9">
+                    <center> Principal <br />(@(c.PrincipalName == null ? "" : c.PrincipalName))</center>
                 </td>
                 <td colspan="2" style="text-align:center">
-                    @Html.Image(c.PrincipalSign, "No Signature Available", "100", "180")
+                    @Html.Image(c.PrincipalSign, "No Signature Available", "75", "180")
                 </td>
             </tr>
             <tr>
                 <td colspan="8">
-                    <div style="width:125px;height:135px;border:1px solid #000; display: flex;align-items: center;justify-content: center;"><p style="text-align:center;vertical-align:middle">Photograph</p></div>
+                    <div style="width:100px;height:125px;border:1px solid #000; display: flex;align-items: center;justify-content: center;"><p style="text-align:center;vertical-align:middle">Photograph</p></div>
                 </td>
 
                 <td align="right" colspan="7">
 
 
-                    <img src="~/Img/DNV LOGO.jpg" style="width:50px;height:80px;" />
+                    <img src="~/Img/DNV LOGO.jpg" style="width:50px;height:85px;" />
 
                 </td>
 
