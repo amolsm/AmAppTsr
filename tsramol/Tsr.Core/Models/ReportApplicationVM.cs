@@ -46,7 +46,7 @@ namespace Tsr.Core.Models
 
         public string Date { get; set; }
 
-
+        public string CellNo { get; set; }
 
 
     }

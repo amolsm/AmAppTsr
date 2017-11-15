@@ -54,19 +54,20 @@ namespace Tsr.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                var list = from ap in db.Applications
-                           join b in db.Batches on ap.BatchId equals b.BatchId
-                         
-                           join c in db.Courses on ap.CourseId equals c.CourseId
-                           join c_c in db.CourseCategories on ap.CategoryId equals c_c.CourseCategoryId
-                           where (ap.CategoryId == vm.CategoryId && ap.CourseId == vm.CourseId && ap.BatchId == vm.BatchId)
+                DateTime ? revdate= Convert.ToDateTime("15-05-2017");
+                var list = from apl in db.Applied
+                           join b in db.Batches on apl.BatchId equals b.BatchId
+                           join c in db.Courses on apl.CourseId equals c.CourseId
+                           join c_c in db.CourseCategories on apl.CategoryId equals c_c.CourseCategoryId
+                           join ap in db.Applications on apl.ApplicationId equals ap.ApplicationId
+                           where (apl.CategoryId == vm.CategoryId && apl.CourseId == vm.CourseId && apl.BatchId == vm.BatchId)
                            select new ReportApplicationVM
                            {
                                revno = "00",
-                               revdate = DateTime.Now,
-                               ApplicationNo = ap.ApplicationId.ToString(),
+                               revdate = revdate/*DateTime.Now*/,
+                               ApplicationNo = "01"/*ap.ApplicationId.ToString()*/,
                                CourseName = c.ShortName,
-                               CourseDate = DateTime.Now,
+                               CourseDate = b.StartDate,
                                BatchNo = b.BatchCode,
                                NameOfApplicant=ap.FullName,
                                Nationality=ap.Citizenship,
@@ -75,8 +76,14 @@ namespace Tsr.Web.Controllers
                                PassportNo=ap.PassportNo,
                                INDOSNo=ap.InDosNo,
                                EnrollNo=ap.ApplicationCode,
-                               Address=ap.InterAddress,
-                               EmailId=ap.Email
+                               Address=ap.PermenentAddress,
+                               EmailId=ap.Email,
+                               CertificateofCompetency=ap.GradeOfCompetencyNo,
+                               COCNo=ap.CertOfCompetencyNo,
+                               ShippingCompany=ap.ShippingCompany,
+                               CellNo=ap.CellNo
+                               
+                              
 
 
 
@@ -169,15 +176,15 @@ namespace Tsr.Web.Controllers
                             cb.EndText();
                             cb.BeginText();
                             cb.SetFontAndSize(bf_arial3, 7.5f);
-                            cb.ShowTextAligned(Element.ALIGN_LEFT, app.BatchNo, 150f, 740f, 0);
+                            cb.ShowTextAligned(Element.ALIGN_LEFT, app.CourseName == null ? "" : app.CourseName, 150f, 740f, 0);
                             cb.EndText();
                             cb.BeginText();
                             cb.SetFontAndSize(bf_arial3, 7.5f);
-                            cb.ShowTextAligned(Element.ALIGN_LEFT, Convert.ToDateTime(app.DateOfBirth).ToString("dd-MM-yyyy"), 380f, 740f, 0);
+                            cb.ShowTextAligned(Element.ALIGN_LEFT, Convert.ToDateTime(app.CourseDate).ToString("dd-MM-yyyy"), 380f, 740f, 0);
                             cb.EndText();
                             cb.BeginText();
                             cb.SetFontAndSize(bf_arial3, 7.5f);
-                            cb.ShowTextAligned(Element.ALIGN_LEFT, "136", 460f, 740f, 0);
+                            cb.ShowTextAligned(Element.ALIGN_LEFT, app.BatchNo==null?"":app.BatchNo, 460f, 740f, 0);
                             cb.EndText();
                             string imageURL = Server.MapPath("~/Img/avatar.png");
                             iTextSharp.text.Image png = iTextSharp.text.Image.GetInstance(imageURL);
@@ -195,7 +202,7 @@ namespace Tsr.Web.Controllers
                             cb.EndText();
                             cb.BeginText();
                             cb.SetFontAndSize(bf_arial5, 11.5f);
-                            cb.ShowTextAligned(Element.ALIGN_LEFT, app.NameOfApplicant, 170f, 610f, 0);
+                            cb.ShowTextAligned(Element.ALIGN_LEFT, app.NameOfApplicant == null ? "" : app.NameOfApplicant, 170f, 610f, 0);
                             cb.EndText();
                             cb.SetLineWidth(1.0f);
                             cb.SetColorStroke(BaseColor.BLACK);
@@ -288,7 +295,7 @@ namespace Tsr.Web.Controllers
                             cb.EndText();
                             cb.BeginText();
                             cb.SetFontAndSize(bf_arial5, 11.5f);
-                            cb.ShowTextAligned(Element.ALIGN_LEFT, "", 170f, 505f, 0);
+                            cb.ShowTextAligned(Element.ALIGN_LEFT, app.CertificateofCompetency == null ? "" : app.CertificateofCompetency, 170f, 505f, 0);
                             cb.EndText();
                             cb.SetLineWidth(1.0f);
                             cb.SetColorStroke(BaseColor.BLACK);
@@ -301,7 +308,7 @@ namespace Tsr.Web.Controllers
                             cb.EndText();
                             cb.BeginText();
                             cb.SetFontAndSize(bf_arial5, 11.5f);
-                            cb.ShowTextAligned(Element.ALIGN_LEFT, "", 370f, 505f, 0);
+                            cb.ShowTextAligned(Element.ALIGN_LEFT, app.COCNo == null ? "" : app.COCNo, 370f, 505f, 0);
                             cb.EndText();
                             cb.SetLineWidth(1.0f);
                             cb.SetColorStroke(BaseColor.BLACK);
@@ -314,7 +321,7 @@ namespace Tsr.Web.Controllers
                             cb.EndText();
                             cb.BeginText();
                             cb.SetFontAndSize(bf_arial5, 11.5f);
-                            cb.ShowTextAligned(Element.ALIGN_LEFT, "", 170f, 480f, 0);
+                            cb.ShowTextAligned(Element.ALIGN_LEFT, app.ShippingCompany == null ? "" : app.ShippingCompany, 170f, 480f, 0);
                             cb.EndText();
                             cb.SetLineWidth(1.0f);
                             cb.SetColorStroke(BaseColor.BLACK);
@@ -391,6 +398,21 @@ namespace Tsr.Web.Controllers
                             cb.MoveTo(100f, 275f);
                             cb.LineTo(300f, 275f);
                             cb.Stroke();
+                            //
+                            cb.BeginText();
+                            cb.SetFontAndSize(bf_arial3, 10f);
+                            cb.ShowTextAligned(Element.ALIGN_LEFT, "TEL.No.", 350f, 280f, 0);
+                            cb.EndText();
+                            cb.BeginText();
+                            cb.SetFontAndSize(bf_arial3, 10f);
+                            cb.ShowTextAligned(Element.ALIGN_LEFT, app.CellNo == null ? "" : app.CellNo, 400f, 280f, 0);
+                            cb.EndText();
+                            cb.SetLineWidth(1.0f);
+                            cb.SetColorStroke(BaseColor.BLACK);
+                            cb.MoveTo(400f, 275f);
+                            cb.LineTo(550f, 275f);
+                            cb.Stroke();
+                            //
                             cb.BeginText();
                             cb.SetFontAndSize(bf_arial3, 10f);
                             cb.ShowTextAligned(Element.ALIGN_LEFT, "ADDRESS", 35f, 260f, 0);
@@ -540,8 +562,10 @@ namespace Tsr.Web.Controllers
                         return File(stream.ToArray(), "application/pdf");
                     }
                 }
-                catch
+                catch(Exception ex)
                 {
+
+                    string msg = ex.ToString();
                     ViewBag.Categories = new SelectList(db.CourseCategories.Where(x => x.IsActive == true).ToList(), "CourseCategoryId", "CategoryName");
                 }
 
