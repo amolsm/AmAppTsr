@@ -72,6 +72,8 @@ namespace Tsr.Core.Models
 
             public string Topic4 { get; set; }
 
+            public string ApplicationCode { get; set; }
+
 
 
 

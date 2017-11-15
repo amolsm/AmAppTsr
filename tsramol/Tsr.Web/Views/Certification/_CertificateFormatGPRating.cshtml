@@ -63,29 +63,30 @@
 
             </tr>
             <tr>
-                <td colspan="2">
-                    RollNo
-                </td>
-                <td colspan="2">
-                    <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" value="" />
-                </td>
-                <td colspan="6">
-                    Date of Birth
-                </td>
-                <td colspan="5">
-                    <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100%" value="@(c.DateofBirth == null ? "" : @Convert.ToDateTime(c.DateofBirth).ToString("dd-MM-yyyy"))" />
-                </td>
+                <td colspan="15">
+                    <span style="padding-right:10px"> RollNo</span>
+                   
+                
+                    <span style="padding-right:10px">
+                        <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:120px" value="@(c.ApplicationCode == null ? "" : c.ApplicationCode)" />
+                        </span>
+                    <span style="padding-right:10px">
+                        Date of Birth
+                        </span>
+                    <span style="padding-right:10px">
+                        <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:240px" value="@(c.DateofBirth == null ? "" : @Convert.ToDateTime(c.DateofBirth).ToString("dd-MM-yyyy"))" />
+                   </span></td>
             </tr>
             <tr>
-                <td colspan="7">
-                    Indian National Database(*INDoS No.)
-                </td>
-                <td colspan="4">
-                    <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" value="@(c.Indosno == null ? "" : c.Indosno)" />
-                </td>
-                <td colspan="4">
-                    has successfully
-                </td>
+                <td colspan="15">
+                    <span style="padding-right:10px">
+                        Indian National Database(*INDoS No.)
+                    </span>
+                    <span style="padding-right:10px">
+                        <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:150px" value="@(c.Indosno == null ? "" : c.Indosno)" />
+                        </span>
+                        has successfully
+                   </td>
 
 
             </tr>
@@ -96,7 +97,7 @@
             </tr>
             <tr>
                 <td colspan="15">
-                    Engineering watch from <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" /> to <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:100px" />
+                   <span style="padding-right:10px">Engineering watch from</span>  <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:120px" value="@(c.StartDate==null?"":Convert.ToDateTime(c.StartDate).ToString("dd-MM-yyyy"))" /> to <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:120px" value="@(c.EndDate==null?"":Convert.ToDateTime(c.EndDate).ToString("dd-MM-yyyy"))"/>
                 </td>
             </tr>
 
@@ -109,14 +110,14 @@
 
 
             <tr>
-                <td colspan="15"><p>@Html.Raw(c.Paragraph1 == null ? "" : c.Paragraph1)</p></td>
+                <td colspan="15"><p style="text-align:justify">@Html.Raw(c.Paragraph1 == null ? "" : c.Paragraph1)</p></td>
             </tr>
 
             <tr>
-                <td colspan="15"><p>@Html.Raw(c.Paragraph2 == null ? "" : c.Paragraph2)</p></td>
+                <td colspan="15"><p style="text-align:justify">@Html.Raw(c.Paragraph2 == null ? "" : c.Paragraph2)</p></td>
             </tr>
             <tr>
-                <td colspan="15"><p>@Html.Raw(c.Paragraph3 == null ? "" : c.Paragraph3)</p></td>
+                <td colspan="15"><p style="text-align:justify">@Html.Raw(c.Paragraph3 == null ? "" : c.Paragraph3)</p></td>
             </tr>
             <tr>
                 <td colspan="15">
@@ -124,16 +125,16 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="3" style="text-align:center">
+                <td colspan="3" style="text-align:center;padding-top:20px">
                     <br />
                     <b>Rating's Signature</b>
                 </td>
-                <td colspan="4" style="text-align:center">
+                <td colspan="4" style="text-align:center;padding-top:20px">
                     <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"> @(c.DateOfIssue == null ? "" : Convert.ToDateTime(c.DateOfIssue).ToString("dd-MM-yyyy"))</span>
                     <br />
                     <b>Date of Issue</b>
                 </td>
-                <td colspan="8" style="text-align:center">
+                <td colspan="8" style="text-align:center;padding-top:20px">
                     <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"> @(c.PrincipalName == null ? "" : c.PrincipalName)</span>
                     <br />
                     <b>PRINCIPAL</b>
@@ -145,7 +146,7 @@
                 <td align="right" colspan="15">
 
 
-                    <img src="~/Img/DNV LOGO.jpg" style="width:50px;height:85px;" />
+                    <img src="~/Img/DNV LOGO.jpg" style="width:50px;height:90px;" />
 
                 </td>
 
