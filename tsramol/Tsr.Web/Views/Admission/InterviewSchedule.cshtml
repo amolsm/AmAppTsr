@@ -48,7 +48,7 @@
                                         @Html.LabelFor(model => model.CourseId, htmlAttributes: new { @class = "control-label col-md-3" })
                                         <div class="col-md-6">
                                             @Html.DropDownListFor(model => model.CourseId,
-                        (IEnumerable<SelectListItem>)ViewBag.Course, "Select Course", new { @class = "form-control", @onchange = "FillBatchs()" })
+                        (IEnumerable<SelectListItem>)ViewBag.Course, "Select Course", new { @class = "form-control", @onchange = "FillBatch()" })
                                             @Html.ValidationMessageFor(model => model.CourseId, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
@@ -128,7 +128,7 @@
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><span>Course</span></span>
                                                     @Html.DropDownList("CourseIds",
-                                         (IEnumerable<SelectListItem>)ViewBag.Courses, "Select Course", new { @class = "form-control", @onchange = "FillBatch()" })
+                                         (IEnumerable<SelectListItem>)ViewBag.Courses, "Select Course", new { @class = "form-control", @onchange = "FillBatchs()" })
                                                 </div>
 
                                             </div>
@@ -186,7 +186,7 @@
         $("#dvResult").load('@(Url.Action("GetInterviewScheduleList", "Admission", null, Request.Url.Scheme))?BatchId=' + BatchId);
 
     }
-    function FillBatch() {
+    function FillBatchs() {
 
         var CourseId = $("#CourseIds").val();
         $.ajax({
@@ -198,6 +198,23 @@
                 $("#BatchIds").html(""); // clear before appending new list
                 $.each(Batches, function (i, c) {
                     $("#BatchIds").append(
+                        $('<option></option>').val(c.BatchId).html(c.BatchCode));
+                });
+            }
+        });
+    }
+    function FillBatch() {
+
+        var CourseId = $("#CourseId").val();
+        $.ajax({
+            url: '/Admission/FillBatchForCet',
+            type: "GET",
+            dataType: "JSON",
+            data: { CourseId: CourseId },
+            success: function (Batches) {
+                $("#BatchId").html(""); // clear before appending new list
+                $.each(Batches, function (i, c) {
+                    $("#BatchId").append(
                         $('<option></option>').val(c.BatchId).html(c.BatchCode));
                 });
             }
