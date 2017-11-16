@@ -1,0 +1,94 @@
+﻿@model Tsr.Core.Models.ApplicationPaymentSuccess
+
+@{
+    Layout = "~/Views/Shared/_LayoutApplication.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+
+    <div class="wizard-navigation">
+        <ul>
+
+            <li><a href="#basicDetails" data-toggle="tab">Payment Failure</a></li>
+
+        </ul>
+    </div>
+
+    <div class="tab-content">
+
+        <div class="tab-pane" id="basicDetails">
+            <h4 class="info-text">Transation ID : @Model.txnid</h4>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="col-sm-11 col-sm-offset-1">
+                        <div class="form-group label-floating" style="font-size:large">
+                            <label class="control-label">Application ID</label>
+                            &nbsp; @Html.DisplayFor(model => model.udf2)
+                        </div>
+                    </div>
+                    <div class="col-sm-11 col-sm-offset-1">
+                        <div class="form-group label-floating" style="font-size:large">
+                            <label class="control-label">Name</label>
+                            &nbsp; @Html.DisplayFor(model => model.Firstname) &nbsp; @Html.DisplayFor(model => model.Lastname)
+                        </div>
+                    </div>
+                    <div class="col-sm-11 col-sm-offset-1">
+                        <div class="form-group label-floating" style="font-size:large">
+                            <label class="control-label">Email</label>
+                            &nbsp; @Html.Display("0.00")
+                        </div>
+                    </div>
+                    <div class="col-sm-11 col-sm-offset-1">
+                        <div class="form-group label-floating" style="font-size:large">
+                            <label class="control-label">Cell No</label>
+                            &nbsp; @Html.DisplayFor(model => model.Phone)
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="col-sm-6">
+                    <div class="col-sm-11 col-sm-offset-1">
+                        <div class="form-group label-floating" style="font-size:large">
+                            <label class="control-label">Batch</label>
+                            &nbsp;@Html.DisplayFor(model => model.Productinfo)
+                        </div>
+                    </div>
+
+                    <div class="col-sm-11 col-sm-offset-1">
+                        <div class="form-group label-floating" style="font-size:large">
+                            <label class="control-label">Course</label>
+                            &nbsp; @Html.DisplayFor(model => model.CourseName)
+                        </div>
+                    </div>
+
+
+                    @*<div class="col-sm-11 col-sm-offset-1">
+                        <div class="form-group label-floating" style="font-size:large">
+                            <label class="control-label">Amount Paid</label>
+                            &nbsp; @Html.DisplayFor(model => model.amount)
+                        </div>
+                    </div>*@
+
+
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <div class="wizard-footer">
+        <div class="pull-right">
+
+            @*<input type='button' class='btn btn-next btn-fill btn-primary ' name='next' value='Go to tsrahaman.org'  />*@
+            <a class="btn btn-next btn-fill btn-primary " href="www.tsrahaman.org">Exit</a>
+
+        </div>
+
+        <div class="clearfix"></div>
+    </div>
+}

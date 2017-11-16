@@ -1169,6 +1169,344 @@ namespace Tsr.Web.Controllers
         }
 
         [HttpPost]
+        public async Task<ActionResult> PaymentStatus(ApplicationPaymentSuccess obj)
+        {
+            if (obj.status == "success")
+            {
+                if (obj.udf4 == "0") //Single COurse, NonPackage
+                {
+
+                    //Course c, Batch b, Caategory cc CourseFee cf 
+                    int bid = Convert.ToInt32(obj.udf1);
+                    var b = db.Batches.FirstOrDefault(x => x.BatchId == bid);
+                    var cid = b.CourseId;
+                    var c = db.Courses.FirstOrDefault(x => x.CourseId == cid);
+                    var ccId = c.CategoryId;
+                    obj.CourseName = c.CourseName;
+                    var cc = db.CourseCategories.FirstOrDefault(x => x.CourseCategoryId == ccId);
+                    var cf = db.CourseFees.FirstOrDefault(x => x.CourseId == cid);
+
+                    OnlinePaymentInfo opi = new OnlinePaymentInfo
+                    {
+                        BatchId = bid,
+                        amount = obj.amount,
+                        ApplicationId = Convert.ToInt32(obj.udf3),
+                        bank_ref_num = obj.bank_ref_num,
+                        CategoryId = ccId,
+                        CourseId = cid,
+                        Hash = obj.Hash,
+                        key = obj.key,
+                        mihpayid = obj.mihpayid,
+                        mode = obj.mode,
+                        Productinfo = obj.Productinfo,
+                        status = obj.status,
+                        txnid = obj.txnid,
+                        PaymentDate = DateTime.Now,
+                        udf1 = obj.udf1,//BatchId
+                        udf2 = obj.udf2,//ApplicationCode
+                        udf3 = obj.udf3,//ApplicationId
+                        udf4 = obj.udf4, //PackageId 0 if single
+                        udf5 = obj.udf5
+                    };
+
+                    db.OnlinePaymentInfos.Add(opi);
+                    await db.SaveChangesAsync();
+
+                    var apcode = Convert.ToInt32(obj.udf3);
+                    Application ap = await db.Applications.FindAsync(apcode);
+                    Batch bs = await db.Batches.FindAsync(bid);
+                    if (cc.CetRequired == true)
+                    {
+                        //Cet
+
+                        //Applied
+                        Applied nca = new Applied
+                        {
+                            AdmissionStatus = false,
+                            ApplicationId = Convert.ToInt32(obj.udf3),
+                            BatchId = Convert.ToInt32(obj.udf1),
+                            CategoryId = (int)ccId,
+                            CourseId = (int)cid
+                        };
+                        db.Applied.Add(nca);
+                        await db.SaveChangesAsync();
+
+                        //feeReceipt
+                        FeeReceipt fr = new FeeReceipt
+                        {
+                            Amount = Convert.ToDecimal(obj.amount),
+                            ApplicationId = Convert.ToInt32(obj.udf3),
+                            PaymentMode = "Online",
+                            PrintStatus = false,
+                            FeesType = "ApplicationFee"
+                        };
+                        db.FeeReceipts.Add(fr);
+                        await db.SaveChangesAsync();
+
+                        EmailModel em = new EmailModel
+                        {
+                            From = ConfigurationManager.AppSettings["admsmail"],
+                            FromPass = ConfigurationManager.AppSettings["admsps"],
+                            To = obj.Email,
+                            Subject = "Course Registration with TSR",
+                            Body = "Dear " + obj.Firstname + " " + obj.Lastname + ", with the reference to your Enrolment ID " + obj.udf2 + " This is to confirm that your Application has been reached for " + obj.CourseName + " starting BATCH on " + Convert.ToDateTime(bs.StartDate).ToString("dd-MM-yyyy") + "  Thanking you T.S.Rahaman"
+                        };
+
+                        var res = await MessageService.sendEmail(em);
+
+                        MessageService ms = new MessageService();
+                        string msg = "Dear " + ap.FullName + ", with the reference to your Enrolment ID " + ap.ApplicationCode + " This is to confirm that your Application Fee " + obj.amount + "recieved for " + obj.CourseName + " starting BATCH on " + Convert.ToDateTime(b.StartDate).ToString("dd-MM-yyyy") + "  Thanking you T.S.Rahaman";
+                        string mobileno = ap.CellNo;
+                        await ms.SendSmsAsync(msg, mobileno);
+
+                        return View("PaymentSuccessNC", obj);
+                    }
+                    else
+                    {
+                        //NonCet
+
+                        bs.BookedSeats = bs.BookedSeats + 1;
+                        await db.SaveChangesAsync();
+
+                        //Applied
+                        Applied nca = new Applied
+                        {
+                            AdmissionStatus = true,
+                            ApplicationId = Convert.ToInt32(obj.udf3),
+                            BatchId = Convert.ToInt32(obj.udf1),
+                            CategoryId = (int)ccId,
+                            CourseId = (int)cid
+                        };
+                        db.Applied.Add(nca);
+                        await db.SaveChangesAsync();
+
+                        //feeReceipt
+                        FeeReceipt fr = new FeeReceipt
+                        {
+                            Amount = Convert.ToDecimal(obj.amount),
+                            ApplicationId = Convert.ToInt32(obj.udf3),
+                            PaymentMode = "Online",
+                            PrintStatus = false,
+                            FeesType = "CourseFee"
+                        };
+                        db.FeeReceipts.Add(fr);
+                        await db.SaveChangesAsync();
+
+                        //Student Payment Details
+                        decimal tax;
+                        if (cf.GstPercentage > 0)
+                            tax = (((decimal)cf.ActualFee / 100) * (decimal)cf.GstPercentage);
+                        else
+                            tax = 0;
+                        var totalFee = (decimal)cf.ActualFee + tax;
+                        StudentFeeDetail sfd = new StudentFeeDetail
+                        {
+                            ApplicationId = Convert.ToInt32(obj.udf3),
+                            TotalFee = totalFee,
+                            FeePaid = Convert.ToDecimal(obj.amount),
+                            FeeBal = totalFee - Convert.ToDecimal(obj.amount),
+                            BatchId = bid
+                        };
+                        db.StudentFeeDetails.Add(sfd);
+                        await db.SaveChangesAsync();
+
+                        EmailModel em = new EmailModel
+                        {
+                            From = ConfigurationManager.AppSettings["admsmail"],
+                            FromPass = ConfigurationManager.AppSettings["admsps"],
+                            To = obj.Email,
+                            Subject = "Course Registration with TSR",
+                            Body = "Dear " + obj.Firstname + " " + obj.Lastname + ", with the reference to your Enrolment ID " + obj.udf2 + " This is to confirm that your seat has been confirmed for " + obj.CourseName + " starting BATCH on " + Convert.ToDateTime(bs.StartDate).ToString("dd-MM-yyyy") + "  Thanking you T.S.Rahaman"
+                        };
+
+                        var res = await MessageService.sendEmail(em);
+
+                        MessageService ms = new MessageService();
+                        string msg = "Dear " + obj.Firstname + " " + obj.Lastname + ", with the reference to your Enrolment ID " + obj.udf2 + " This is to confirm that your seat has been confirmed for " + obj.CourseName + " starting BATCH on " + Convert.ToDateTime(bs.StartDate).ToString("dd-MM-yyyy") + "  Thanking you T.S.Rahaman";
+                        string mobileno = ap.CellNo;
+                        await ms.SendSmsAsync(msg, mobileno);
+
+                        return View("PaymentSuccessNC", obj);
+                    }
+
+                }
+                else //Package
+                {
+                    OnlinePaymentInfo opi = new OnlinePaymentInfo
+                    {
+                        PackageId = Convert.ToInt32(obj.udf4),
+                        IsPackage = true,
+                        //BatchId = 0,
+                        amount = obj.amount,
+                        ApplicationId = Convert.ToInt32(obj.udf3),
+                        bank_ref_num = obj.bank_ref_num,
+                        //CategoryId = 0,
+                        //CourseId = 0,
+                        Hash = obj.Hash,
+                        key = obj.key,
+                        mihpayid = obj.mihpayid,
+                        mode = obj.mode,
+                        Productinfo = obj.Productinfo,
+                        status = obj.status,
+                        txnid = obj.txnid,
+                        PaymentDate = DateTime.Now,
+                        udf1 = obj.udf1,//BatchId
+                        udf2 = obj.udf2,//ApplicationCode
+                        udf3 = obj.udf3,//ApplicationId
+                        udf4 = obj.udf4, //PackageId 0 if single
+                        udf5 = obj.udf5
+                    };
+
+                    db.OnlinePaymentInfos.Add(opi);
+                    await db.SaveChangesAsync();
+
+                    //feeReceipt
+                    FeeReceipt fr = new FeeReceipt
+                    {
+                        Amount = Convert.ToDecimal(obj.amount),
+                        ApplicationId = Convert.ToInt32(obj.udf3),
+                        PaymentMode = "Online",
+                        PrintStatus = false,
+                        FeesType = "PackageFee"
+                    };
+                    db.FeeReceipts.Add(fr);
+                    await db.SaveChangesAsync();
+
+                    var aps = db.ApplicationPackageDetails
+                         .Where(x => x.ApplicationId.ToString() == obj.udf3)
+                         .ToList();
+
+                    decimal totalFee = 0;
+                    foreach (var item in aps)
+                    {
+                        //fee
+                        var cf = db.CourseFees.FirstOrDefault(x => x.CourseId == item.CourseId);
+                        totalFee = totalFee + (decimal)cf.PackageFee + (((decimal)cf.PackageFee / 100) * (decimal)cf.GstPercentage);
+
+                        //seatStock
+                        Batch bs = await db.Batches.FindAsync(item.BatchId);
+                        bs.BookedSeats = bs.BookedSeats + 1;
+
+                        //Applied
+                        Applied nca = new Applied
+                        {
+                            AdmissionStatus = true,
+                            ApplicationId = Convert.ToInt32(obj.udf3),
+                            BatchId = Convert.ToInt32(item.BatchId),
+                            CategoryId = (int)db.Courses.Find(item.CourseId).CategoryId,
+                            CourseId = Convert.ToInt32(item.CourseId)
+                        };
+
+                        db.Applied.Add(nca);
+                        await db.SaveChangesAsync();
+                    }
+
+                    //Student Payment Details                   
+                    StudentFeeDetail sfd = new StudentFeeDetail
+                    {
+                        ApplicationId = Convert.ToInt32(obj.udf3),
+                        TotalFee = totalFee,
+                        FeePaid = Convert.ToDecimal(obj.amount),
+                        FeeBal = totalFee - Convert.ToDecimal(obj.amount),
+                        PackageId = Convert.ToInt32(obj.udf4)
+                    };
+                    db.StudentFeeDetails.Add(sfd);
+                    await db.SaveChangesAsync();
+                    //send mail
+                    //Application ap = await db.Applications.FindAsync(obj.udf3);
+                    EmailModel em = new EmailModel
+                    {
+                        From = ConfigurationManager.AppSettings["admsmail"],
+                        FromPass = ConfigurationManager.AppSettings["admsps"],
+                        To = obj.Email,
+                        Subject = "Course Registration with TSR",
+                        Body = "Dear " + obj.Firstname + " " + obj.Lastname + ", with the reference to your Enrolment ID " + obj.udf2 + " This is to confirm that your seat has been confirmed for " + db.packages.Find(obj.udf4).PackageName + "  Thanking you T.S.Rahaman"
+                    };
+
+                    var res = await MessageService.sendEmail(em);
+
+                    MessageService ms = new MessageService();
+                    string msg = "Dear " + obj.Firstname + " " + obj.Lastname + ", with the reference to your Enrolment ID " + obj.udf2 + " This is to confirm that your seat has been confirmed for " + db.packages.Find(obj.udf4).PackageName + "  Thanking you T.S.Rahaman";
+                    string mobileno = obj.Phone;
+                    await ms.SendSmsAsync(msg, mobileno);
+
+                    return View("PaymentSuccessNC", obj);
+                }
+            }
+            else
+            {
+                if (obj.udf4 == "0") //Single COurse, NonPackage
+                {
+                    int bid = Convert.ToInt32(obj.udf1);
+                    var b = db.Batches.FirstOrDefault(x => x.BatchId == bid);
+                    var cid = b.CourseId;
+                    var c = db.Courses.FirstOrDefault(x => x.CourseId == cid);
+                    var ccId = c.CategoryId;
+                    obj.CourseName = c.CourseName;
+                    var cc = db.CourseCategories.FirstOrDefault(x => x.CourseCategoryId == ccId);
+                    var cf = db.CourseFees.FirstOrDefault(x => x.CourseId == cid);
+
+                    OnlinePaymentInfo opi = new OnlinePaymentInfo
+                    {
+                        BatchId = bid,
+                        amount = obj.amount,
+                        ApplicationId = Convert.ToInt32(obj.udf3),
+                        bank_ref_num = obj.bank_ref_num,
+                        CategoryId = ccId,
+                        CourseId = cid,
+                        Hash = obj.Hash,
+                        key = obj.key,
+                        mihpayid = obj.mihpayid,
+                        mode = obj.mode,
+                        Productinfo = obj.Productinfo,
+                        status = obj.status,
+                        txnid = obj.txnid,
+                        PaymentDate = DateTime.Now,
+                        udf1 = obj.udf1,//BatchId
+                        udf2 = obj.udf2,//ApplicationCode
+                        udf3 = obj.udf3,//ApplicationId
+                        udf4 = obj.udf4, //PackageId 0 if single
+                        udf5 = obj.udf5
+                    };
+
+                    db.OnlinePaymentInfos.Add(opi);
+                    await db.SaveChangesAsync();
+                }
+                else
+                {
+                    OnlinePaymentInfo opi = new OnlinePaymentInfo
+                    {
+                        PackageId = Convert.ToInt32(obj.udf4),
+                        IsPackage = true,
+                        //BatchId = 0,
+                        amount = obj.amount,
+                        ApplicationId = Convert.ToInt32(obj.udf3),
+                        bank_ref_num = obj.bank_ref_num,
+                        //CategoryId = 0,
+                        //CourseId = 0,
+                        Hash = obj.Hash,
+                        key = obj.key,
+                        mihpayid = obj.mihpayid,
+                        mode = obj.mode,
+                        Productinfo = obj.Productinfo,
+                        status = obj.status,
+                        txnid = obj.txnid,
+                        PaymentDate = DateTime.Now,
+                        udf1 = obj.udf1,//BatchId
+                        udf2 = obj.udf2,//ApplicationCode
+                        udf3 = obj.udf3,//ApplicationId
+                        udf4 = obj.udf4, //PackageId 0 if single
+                        udf5 = obj.udf5
+                    };
+
+                    db.OnlinePaymentInfos.Add(opi);
+                    await db.SaveChangesAsync();
+                }
+                return View("PaymentFailNC", obj);
+            }
+            //return View();
+        }
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult MakePaymentNonCet11(ApplicationSumPayNonCetVM obj)
         {

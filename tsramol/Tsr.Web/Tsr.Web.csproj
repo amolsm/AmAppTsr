@@ -1050,6 +1050,7 @@
     <Content Include="Views\Application\OfflineNonCetApplication.cshtml" />
     <Content Include="Views\Application\OfflineApplicationSummaryPre.cshtml" />
     <Content Include="Views\Application\OfflineApplicationSummary.cshtml" />
+    <Content Include="Views\Application\PaymentFailNC.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
