@@ -38,7 +38,7 @@
                     <div class="col-sm-11 col-sm-offset-1">
                         <div class="form-group label-floating" style="font-size:large">
                             <label class="control-label">Email</label>
-                            &nbsp; @Html.Display("0.00")
+                            &nbsp; @Html.DisplayFor(model => model.Email)
                         </div>
                     </div>
                     <div class="col-sm-11 col-sm-offset-1">
@@ -66,12 +66,12 @@
                     </div>
 
 
-                    @*<div class="col-sm-11 col-sm-offset-1">
+                    <div class="col-sm-11 col-sm-offset-1">
                         <div class="form-group label-floating" style="font-size:large">
                             <label class="control-label">Amount Paid</label>
-                            &nbsp; @Html.DisplayFor(model => model.amount)
+                            &nbsp; 0.00
                         </div>
-                    </div>*@
+                    </div>
 
 
 
