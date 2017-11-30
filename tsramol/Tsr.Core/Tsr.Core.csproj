@@ -86,6 +86,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\ApplAmt.cs" />
     <Compile Include="Entities\Application.cs" />
     <Compile Include="Entities\ApplicationPackageDetail.cs" />
     <Compile Include="Entities\Batch.cs" />
@@ -161,6 +162,7 @@
     <Compile Include="Models\MasterPackageCreateVM.cs" />
     <Compile Include="Models\MasterPackageListVM.cs" />
     <Compile Include="Models\MastersCourseFeeCreateVM.cs" />
+    <Compile Include="Models\PaymentStatusSearchVM.cs" />
     <Compile Include="Models\ReportApplicationVM.cs" />
     <Compile Include="Models\ScrutineeMakePaymentVM.cs" />
     <Compile Include="Models\UserlistViewModel.cs" />

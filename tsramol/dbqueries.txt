@@ -3,3 +3,14 @@ ALTER TABLE [dbo].[AspNetUsers] ADD [EmployeeId] [int] NOT NULL DEFAULT 0
 
 -- 07/11/2017
 ALTER TABLE [dbo].[InterviewMasters] ADD [FilePath] [nvarchar](max)
+
+--21/11/2017
+ALTER TABLE [dbo].[Applications] ADD [TransactionId] [nvarchar](max)
+
+--22/11/2017
+CREATE TABLE [dbo].[ApplAmts] (
+    [ApplAmtId] [int] NOT NULL IDENTITY,
+    [ApplicationId] [int],
+    [Amount] [decimal](18, 2),
+    CONSTRAINT [PK_dbo.ApplAmts] PRIMARY KEY ([ApplAmtId])
+)

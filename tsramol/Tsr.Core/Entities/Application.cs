@@ -105,6 +105,6 @@ namespace Tsr.Core.Entities
         public string FPFF_AFF_1995 { get; set; }
         public bool? Scrutinee { get; set; }
 
-
+        public  string  TransactionId { get; set; }
     }
 }

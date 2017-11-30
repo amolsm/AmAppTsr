@@ -1,9 +1,14 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -935,6 +940,106 @@ namespace Tsr.Web.Controllers
                 }
             }
             return View();
+        }
+        #endregion
+
+        #region checkStatus
+        public ActionResult checkPaymentStatus()
+        {
+            ViewBag.Students = new SelectList(db.Applications.ToList(), "ApplicationId", "FullName");
+            return View();
+        }
+        public ActionResult PaymentStatusSearch(int ApplicationId)
+        {
+            var obj = new List<PaymentStatusSearchVM>();
+            PaymentStatusSearchVM vm = new PaymentStatusSearchVM();
+            Application app = db.Applications.Find(ApplicationId);
+
+            //string trxid = ;
+            vm.Status = GetTxnStatus(app.TransactionId);
+            if (app.IsPackage == true)
+            {
+                vm.ApplicationId = app.ApplicationId;
+                vm.ApplicationCode = app.ApplicationCode;
+                vm.CourseName = db.packages.Find(app.PackageId).PackageName;
+                vm.Batch = "Package";
+                vm.Email = app.Email;
+                vm.Phone = app.CellNo;
+                vm.FullName = app.FullName;
+                
+            }
+            else
+            {
+                vm.ApplicationId = app.ApplicationId;
+                vm.ApplicationCode = app.ApplicationCode;
+                vm.CourseName = db.Courses.Find(app.CourseId).CourseName;
+                vm.Batch = db.Batches.Find(app.BatchId).StartDate.ToString();
+                vm.Email = app.Email;
+                vm.Phone = app.CellNo;
+                vm.FullName = app.FullName;
+            }
+            obj.Add(vm);
+            return PartialView("PaymentStatusList", obj.ToList());
+        }
+        public string action1 = string.Empty;
+        public string hash1 = string.Empty;
+        public string txnid1 = string.Empty;
+
+        public string Generatehash512(string text)
+        {
+
+            byte[] message = Encoding.UTF8.GetBytes(text);
+
+            UnicodeEncoding UE = new UnicodeEncoding();
+            byte[] hashValue;
+            SHA512Managed hashString = new SHA512Managed();
+            string hex = "";
+            hashValue = hashString.ComputeHash(message);
+            foreach (byte x in hashValue)
+            {
+                hex += String.Format("{0:x2}", x);
+            }
+            return hex;
+            //return hashValue.ToString();
+
+        }
+        private string GetTxnStatus(string txtid)
+        {
+            string Url = ConfigurationManager.AppSettings["checkStatus"];
+
+            string method = "verify_payment";
+            string salt = ConfigurationManager.AppSettings["SALT"];
+            string key = ConfigurationManager.AppSettings["MERCHANT_KEY"];
+            string var1 = txtid; //Transaction ID of the merchant
+
+            string toHash = key + "|" + method + "|" + var1 + "|" + salt;
+
+            string Hashed = Generatehash512(toHash);
+
+            string postString = "key=" + key +
+                "&command=" + method +
+                "&hash=" + Hashed +
+                "&var1=" + var1;
+
+            WebRequest myWebRequest = WebRequest.Create(Url);
+            myWebRequest.Method = "POST";
+            myWebRequest.ContentType = "application/x-www-form-urlencoded";
+            myWebRequest.Timeout = 180000;
+            StreamWriter requestWriter = new StreamWriter(myWebRequest.GetRequestStream());
+            requestWriter.Write(postString);
+            requestWriter.Close();
+
+            StreamReader responseReader = new StreamReader(myWebRequest.GetResponse().GetResponseStream());
+            WebResponse myWebResponse = myWebRequest.GetResponse();
+            Stream ReceiveStream = myWebResponse.GetResponseStream();
+            Encoding encode = System.Text.Encoding.GetEncoding("utf-8");
+            StreamReader readStream = new StreamReader(ReceiveStream, encode);
+
+            string response = readStream.ReadToEnd();
+            JObject account = JObject.Parse(response);
+            string status = (string)account.SelectToken("transaction_details." + var1 + ".status");
+
+            return status;
         }
         #endregion
     }

@@ -48,6 +48,8 @@ namespace Tsr.Infra
 
         public DbSet<Certificate> Certificates { get; set; }
 
+        public DbSet<ApplAmt> ApplAmts { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             //modelBuilder.Entity<Course>()

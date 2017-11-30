@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Tsr.Core.Models.PaymentStatusSearchVM>
+
+<table id="customers2" class="table ">
+    <thead>
+        <tr>
+
+            <th>Application Code</th>
+            <th>Course/Package</th>
+            <th>Batch</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Cell</th>
+            <th>PaymentStatus</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.ApplicationCode)</td>
+                <td>@Html.DisplayFor(modelItem => item.CourseName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Batch)</td>
+                <td>@Html.DisplayFor(modelItem => item.FullName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                <td>@Html.DisplayFor(modelItem => item.Phone)</td>
+                <td>@Html.DisplayFor(modelItem => item.Status)</td>
+               
+            </tr>
+        }
+
+    </tbody>
+
+</table>
+
+<!-- MODALS -->
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="defModalHead" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/js/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/js/plugins/bootstrap/bootstrap-select.js"></script>
+<script src="~/Scripts/ModalForm.js"></script>
