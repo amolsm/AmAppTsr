@@ -54,7 +54,7 @@ namespace Tsr.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                DateTime ? revdate= Convert.ToDateTime("15-05-2017");
+                DateTime ? revdate= Convert.ToDateTime("2017-05-15");
                 var list = from apl in db.Applied
                            join b in db.Batches on apl.BatchId equals b.BatchId
                            join c in db.Courses on apl.CourseId equals c.CourseId
