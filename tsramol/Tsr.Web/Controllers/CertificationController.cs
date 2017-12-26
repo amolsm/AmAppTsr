@@ -637,7 +637,7 @@ namespace Tsr.Web.Controllers
                         string year = DateTime.Now.Year.ToString();
                         Certificate c = new Certificate
                         {
-                            CertificateCode = item.BatchCode + count.ToString().PadLeft(3, '0') + year,
+                            CertificateCode = item.CourseCode + item.BatchCode + count.ToString().PadLeft(3, '0') + year,
                             ApplicationId = item.ApplicationID,
                             BatchId = item.BatchId,
                             CreateDate = DateTime.Now,

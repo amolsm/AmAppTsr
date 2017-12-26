@@ -561,6 +561,18 @@ namespace Tsr.Web.Controllers
                     };
                     db.ApplAmts.Add(aa);
                     await db.SaveChangesAsync();
+
+                    EmailModel em = new EmailModel
+                    {
+                        From = ConfigurationManager.AppSettings["admsmail"],
+                        FromPass = ConfigurationManager.AppSettings["admsps"],
+                        To = obj.Email,
+                        Subject = "Course Registration with TSR",
+                        Body = "Dear " + ap.FirstName + " " + ap.LastName + ", with the reference to your Enrolment ID " + ap.ApplicationCode + " This is to confirm that your Application has been submitted for " + obj.CourseName + " starting BATCH on " + Convert.ToDateTime(b.StartDate).ToString("dd-MM-yyyy") + "  Thanking you T.S.Rahaman"
+                    };
+
+                    var res = await MessageService.sendEmail(em);
+
                     MessageService ms = new MessageService();
                     string msg = "Dear " + ap.FirstName + " " + ap.LastName + ", with the reference to your Enrolment ID " + ap.ApplicationCode + " This is to confirm that your Application has been submitted for " + obj.CourseName + " starting BATCH on " + Convert.ToDateTime(b.StartDate).ToString("dd-MM-yyyy") + "  Thanking you T.S.Rahaman";
                     string mobileno = ap.CellNo;
@@ -676,6 +688,17 @@ namespace Tsr.Web.Controllers
                     };
                     db.ApplAmts.Add(aa);
                     await db.SaveChangesAsync();
+
+                    EmailModel em = new EmailModel
+                    {
+                        From = ConfigurationManager.AppSettings["admsmail"],
+                        FromPass = ConfigurationManager.AppSettings["admsps"],
+                        To = obj.Email,
+                        Subject = "Course Registration with TSR",
+                        Body = "Dear " + ap.FullName + ", with the reference to your Enrolment ID " + ap.ApplicationCode + " This is to confirm that your Application has been submitted for " + db.packages.Find(ap.PackageId).PackageName + "  Thanking you T.S.Rahaman"
+                    };
+
+                    var res = await MessageService.sendEmail(em);
 
                     MessageService ms = new MessageService();
                     string msg = "Dear " + ap.FullName + ", with the reference to your Enrolment ID " + ap.ApplicationCode + " This is to confirm that your Application has been submitted for " + db.packages.Find(ap.PackageId).PackageName + "  Thanking you T.S.Rahaman";
@@ -1214,9 +1237,11 @@ namespace Tsr.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> PaymentStatus(ApplicationPaymentSuccess obj)
         {
-            int applicatid = Convert.ToInt32(obj.amount);
-            var aa = await db.ApplAmts.FirstOrDefaultAsync(x => x.ApplicationId == applicatid);
-            if (aa.Amount == applicatid)
+            decimal amt1 = Convert.ToDecimal(obj.amount);
+            int appid = Convert.ToInt32(obj.udf3);
+
+            var aa = await db.ApplAmts.FirstOrDefaultAsync(x => x.ApplicationId == appid);
+            if (aa.Amount == amt1)
             {
                 if (obj.status == "success")
                 {
@@ -1376,9 +1401,9 @@ namespace Tsr.Web.Controllers
                             return View("PaymentSuccessNC", obj);
                         }
 
-                    }
-                    else //Package
-                    {
+                    } //single course success close
+                    else //Package success start
+                    { 
                         OnlinePaymentInfo opi = new OnlinePaymentInfo
                         {
                             PackageId = Convert.ToInt32(obj.udf4),
@@ -1460,28 +1485,30 @@ namespace Tsr.Web.Controllers
                         db.StudentFeeDetails.Add(sfd);
                         await db.SaveChangesAsync();
                         //send mail
-                        //Application ap = await db.Applications.FindAsync(obj.udf3);
+                        //Application ap1 = await db.Applications.FindAsync(obj.udf3);
+                        int pid = Convert.ToInt32(obj.udf4);
+                        var pname = db.packages.Find(pid).PackageName;
                         EmailModel em = new EmailModel
                         {
                             From = ConfigurationManager.AppSettings["admsmail"],
                             FromPass = ConfigurationManager.AppSettings["admsps"],
                             To = obj.Email,
                             Subject = "Course Registration with TSR",
-                            Body = "Dear " + obj.Firstname + " " + obj.Lastname + ", with the reference to your Enrolment ID " + obj.udf2 + " This is to confirm that your seat has been confirmed for " + db.packages.Find(obj.udf4).PackageName + "  Thanking you T.S.Rahaman"
+                            Body = "Dear " + obj.Firstname + " " + obj.Lastname + ", with the reference to your Enrolment ID " + obj.udf2 + " This is to confirm that your seat has been confirmed for " + pname + "  Thanking you T.S.Rahaman"
                         };
 
                         var res = await MessageService.sendEmail(em);
 
                         MessageService ms = new MessageService();
-                        string msg = "Dear " + obj.Firstname + " " + obj.Lastname + ", with the reference to your Enrolment ID " + obj.udf2 + " This is to confirm that your seat has been confirmed for " + db.packages.Find(obj.udf4).PackageName + "  Thanking you T.S.Rahaman";
+                        string msg = "Dear " + obj.Firstname + " " + obj.Lastname + ", with the reference to your Enrolment ID " + obj.udf2 + " This is to confirm that your seat has been confirmed for " + pname + "  Thanking you T.S.Rahaman";
                         string mobileno = obj.Phone;
                         await ms.SendSmsAsync(msg, mobileno);
 
                         return View("PaymentSuccessNC", obj);
                     }
-                }
+                } //success payment close
                 else
-                {
+                { //fail payment
                     if (obj.udf4 == "0") //Single COurse, NonPackage
                     {
                         int bid = Convert.ToInt32(obj.udf1);
@@ -1555,7 +1582,7 @@ namespace Tsr.Web.Controllers
             else
             {
                 //AMOUNT TAMPERED
-                if (obj.udf4 == "0") //Single COurse, NonPackage
+                if (obj.udf4 == "0") //Single COurse, NonPackage Tampered
                 {
                     int bid = Convert.ToInt32(obj.udf1);
                     var b = db.Batches.FirstOrDefault(x => x.BatchId == bid);
