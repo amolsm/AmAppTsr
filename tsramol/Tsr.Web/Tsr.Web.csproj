@@ -1061,6 +1061,8 @@
     <Content Include="Views\Fees\PaymentStatusList.cshtml" />
     <Content Include="Uploads\InterviewFile\0001.docx" />
     <Content Include="Uploads\Policy.pdf" />
+    <Content Include="Views\Certification\ResultSheet.cshtml" />
+    <Content Include="Views\Certification\ViewResultSheet.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
