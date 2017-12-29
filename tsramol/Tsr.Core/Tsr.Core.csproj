@@ -164,6 +164,7 @@
     <Compile Include="Models\MastersCourseFeeCreateVM.cs" />
     <Compile Include="Models\PaymentStatusSearchVM.cs" />
     <Compile Include="Models\ReportApplicationVM.cs" />
+    <Compile Include="Models\ReportPaymentVM.cs" />
     <Compile Include="Models\ScrutineeMakePaymentVM.cs" />
     <Compile Include="Models\UserlistViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,0 +1,88 @@
+﻿@model Tsr.Core.Models.ReportPaymentVM
+@{
+    ViewBag.Title = "PaymentDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<ul class="breadcrumb push-down-0">
+    <li><a href="#">Payment Details</a></li>
+    <li class="active"> View Payment Details</li>
+
+</ul>
+<!-- END BREADCRUMB -->
+
+<div class="page-content-wrap">
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="form-horizontal">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">View Payment Details</h3>
+
+                        </div>
+
+
+                        <div class="panel-body">
+                            @using (Html.BeginForm("PaymentDetails", "Report", FormMethod.Post, new { enctype = "multipart/form-data", target = "_blank" }))
+                            {
+                                @Html.AntiForgeryToken()
+
+
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            Start Date
+                                        </div>
+                                        @Html.TextBoxFor(model => model.StartDate, new { @class = "form-control",@type="Date" })
+                                      
+                                     </div>
+                                    @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+                                </div>
+
+
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                           End Date
+                                        </div>
+                                        @Html.TextBoxFor(model => model.EndDate, new { @class = "form-control", @type = "Date" })
+                                      
+                                         </div>
+                                    @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+                                </div>
+
+
+                             
+
+                                <div class="col-lg-3">
+
+                                    <div class="input-group">
+
+                                        <input class="btn btn-primary" type="submit" value="Payment Details"  />
+
+
+                                    </div>
+                                </div>
+
+
+
+                            }
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>

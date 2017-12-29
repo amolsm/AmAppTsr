@@ -1,0 +1,79 @@
+﻿@model IEnumerable<Tsr.Core.Models.ReportPaymentVM>
+@{
+    ViewBag.Title = "PaymentInfo Report";
+    Layout = "~/Views/Shared/_PdfLayoutForCertificate.cshtml";
+}
+<style>
+    table {
+        border: 0.1px solid black;
+        border-spacing: 0px;
+        font-size: 12px;
+    }
+
+
+
+        table tr td {
+            margin: 0px;
+            padding: 5px;
+        }
+</style>
+
+
+<table style="width:100%;">
+    <tr>
+        <td colspan="8" style="font:bold;text-align:center">TRAINING SHIP RAHAMAN<br />Candidates Payment Info</td>
+
+
+
+    </tr>
+    <tr>
+        <td colspan="4" style="font:bold;text-align:left">Start Date :@(ViewBag.StartDate == null ? "" : @Convert.ToDateTime(ViewBag.StartDate).ToString("dd-MM-yyyy")) </td>
+        <td colspan="4" style="font:bold;text-align:left">End Date :  @(ViewBag.EndDate == null ? "" : @Convert.ToDateTime(ViewBag.EndDate).ToString("dd-MM-yyyy"))</td>
+
+
+
+    </tr>
+   
+    <tr>
+        <td colspan="8" style="font:bold">FOLLOWING IS THE LIST OF CANDIDATES PAYMENTINFO WITHIN SPECIFIED DATE RANGE</td>
+
+      
+
+    </tr>
+    <tr>
+        <td style="border: 0.1px solid black;font:bold">No.</td>
+        <td style="border: 0.1px solid black;font:bold">NAME OF THE CANDIDATES</td>
+        <td style="border: 0.1px solid black;font:bold">COURSE / PACKAGE</td>
+        <td style="border: 0.1px solid black;font:bold">BATCH</td>
+        <td style="border: 0.1px solid black;font:bold">BATCH START DATE</td>
+        <td style="border: 0.1px solid black;font:bold">BATCH END DATE</td>
+        <td style="border: 0.1px solid black;font:bold">PAID AMOUNT</td>
+        <td style="border: 0.1px solid black;font:bold">PAYMENT MODE</td>
+
+
+    </tr>
+    @{int i = 0;}
+   @foreach (var item in Model)
+   {
+       i++;
+        <tr>
+            <td style="border: 0.1px solid black;">@i</td>
+            <td style="border: 0.1px solid black;">@item.ApplicantName</td>
+
+            <td style="border: 0.1px solid black;">@item.CourseOrPackageName</td>
+            <td style="border: 0.1px solid black;">@(item.BatchCode==null?"":item.BatchCode)</td>
+            <td style="border: 0.1px solid black;">@(item.BatchStartDate == null ? "" : @Convert.ToDateTime(item.BatchStartDate).ToString("dd-MM-yyyy"))</td>
+
+            <td style="border: 0.1px solid black;">@(item.BatchEndDate == null ? "" : @Convert.ToDateTime(item.BatchEndDate).ToString("dd-MM-yyyy"))</td>
+            <td style="border: 0.1px solid black;">@(item.PaymentAmount.ToString() == null ? "" : item.PaymentAmount.ToString())</td>
+            <td style="border: 0.1px solid black;">@item.PaymentMode</td>
+        </tr>
+    }
+
+   
+</table>
+
+
+
+
+

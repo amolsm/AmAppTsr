@@ -9,6 +9,7 @@ namespace Tsr.Core.Models
 {
     public class ReportApplicationVM
     {
+      
         [Required]
         public int CategoryId { get; set; }
         [Required]
@@ -20,10 +21,10 @@ namespace Tsr.Core.Models
         public string revno { get; set; }
         public DateTime? revdate { get; set; }
         public string ApplicationNo { get; set; }
-        public string CourseName { get; set; }
-        public DateTime? CourseDate { get; set; }
 
-        public string BatchNo { get; set; }
+        public int  ApplicationId { get; set; }
+
+
         public string NameOfApplicant { get; set; }
 
         public string Nationality { get; set; }
@@ -48,6 +49,18 @@ namespace Tsr.Core.Models
 
         public string CellNo { get; set; }
 
+        public List<ListVarApplicationVM> _ListVar { get; set; }
+        public class ListVarApplicationVM
+        {
 
+
+            public string CourseName { get; set; }
+
+            public DateTime? CourseDate { get; set; }
+
+            public string BatchNo { get; set; }
+        }
     }
+
+  
 }
