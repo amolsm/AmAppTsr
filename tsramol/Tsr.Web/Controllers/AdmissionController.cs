@@ -1,9 +1,13 @@
 ﻿using iTextSharp.text;
 using iTextSharp.text.pdf;
+using LinqToExcel;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Validation;
+using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -2058,6 +2062,282 @@ namespace Tsr.Web.Controllers
             var Students = s.ToList().Where(x => x.check == true);
             return Json(Students, JsonRequestBehavior.AllowGet);
         }
+        #endregion
+
+        #region CompanyReservation
+        public ActionResult CompanyReservation()
+        {
+            var a = from c in db.Courses
+                    join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
+                    where (c.IsActive == true && cc.CetRequired == true)
+                    select new { c.CourseId, c.CourseName };
+            ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
+
+            ViewBag.Categories = new SelectList(db.CourseCategories.ToList(), "CourseCategoryId", "CategoryName");
+            //var obj = new List<ApplicationNonCetVM>();
+            return View();
+        }
+
+        public ActionResult DownloadExcelForCompanyReserv(int id)
+        {
+            var gv = new GridView();
+            var b = db.Batches.Find(id);
+            var seats = b.TotalSeats;
+            var cc = db.CourseCategories.Find(b.CategoryId);
+            //if (cc.CetRequired == true)
+            //{ //CET course
+            //    List<CompReservNonCetVM> list = new List<CompReservNonCetVM>();
+            //}
+            //else
+            //{//Non-Cet Course
+            //    List<CompReservNonCetVM> list = new List<CompReservNonCetVM>();
+            //}
+            List<CompReservNonCetVM> list = new List<CompReservNonCetVM>();
+            for (int i = 0; i < seats; i++)
+            {
+                CompReservNonCetVM ob = new CompReservNonCetVM
+                {
+                    BatchId = b.BatchId,
+                    CategoryId = b.CategoryId,
+                    FirstName = "",
+                    MiddleName="",
+                    LastName="",
+                    FullName="",
+                    Email="",
+                    CellNo = "",
+                    DateOfBirth = "YYYY-MM-DD",
+                    PlaceOfBirth = "",
+                    Citizenship = "",
+                    Gender = "",
+                    PreferredMeal="",
+                    CdcNo="",
+                    PassportNo="",
+                    InDosNo="",
+                    GradeOfCompetencyNo="",
+                    CertOfCompetencyNo="",
+                    ShippingCompany="",
+                    //CourseAttendedInTSR=false,
+                    PermenentAddress="",
+                    PermenentCity="",
+                    PermenentState="",
+                    PermenentPin="",
+                    PermenentContactNo=""
+
+                };
+                list.Add(ob);
+            }
+
+            gv.DataSource = list.ToList();
+            gv.DataBind();
+            Response.ClearContent();
+            Response.Buffer = true;
+            Response.AddHeader("content-disposition", "attachment; filename=ConfirmAdmissions.xls");
+            Response.ContentType = "application/ms-excel";
+            Response.Charset = "";
+            StringWriter objStringWriter = new StringWriter();
+            HtmlTextWriter objHtmlTextWriter = new HtmlTextWriter(objStringWriter);
+            gv.RenderControl(objHtmlTextWriter);
+            Response.Output.Write(objStringWriter.ToString());
+            Response.Flush();
+            Response.End();
+            return View("Index");
+        }
+
+        [HttpPost]
+        public JsonResult UploadExcel(HttpPostedFileBase FileUpload)
+        {
+
+            List<string> data = new List<string>();
+            if (FileUpload != null)
+            {
+
+                if (FileUpload.ContentType == "application/vnd.ms-excel" || FileUpload.ContentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                {
+
+
+                    string filename = FileUpload.FileName;
+                    string targetpath = Server.MapPath("~/Uploads/");
+                    FileUpload.SaveAs(targetpath + filename);
+                    string pathToExcelFile = targetpath + filename;
+                    var connectionString = "";
+                    if (filename.EndsWith(".xls"))
+                    {
+                        connectionString = string.Format("Provider=Microsoft.Jet.OLEDB.4.0; data source={0}; Extended Properties=Excel 8.0;", pathToExcelFile);
+                    }
+                    else if (filename.EndsWith(".xlsx"))
+                    {
+                        connectionString = string.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=\"Excel 12.0 Xml;HDR=YES;IMEX=1\";", pathToExcelFile);
+                    }
+
+                    var adapter = new OleDbDataAdapter("SELECT * FROM [Sheet1$]", connectionString);
+                    var ds = new DataSet();
+
+                    adapter.Fill(ds, "ExcelTable");
+
+                    DataTable dtable = ds.Tables["ExcelTable"];
+
+                    string sheetName = "Sheet1";
+
+                    var excelFile = new ExcelQueryFactory(pathToExcelFile);
+                    var artistAlbums = from a in excelFile.Worksheet<CompReservNonCetVM>(sheetName) select a;
+
+                    foreach (var a in artistAlbums)
+                    {
+                        try
+                        {
+                            //User TU = new User();
+                            //TU.Name = a.Name;
+                            //TU.Address = a.Address;
+                            //TU.ContactNo = a.ContactNo;
+                            //db.Users.Add(TU);
+
+                            //db.SaveChanges();
+                            if (a.BatchId == 0 || a.BatchId == null)
+                            {
+
+                            }
+                            else
+                            {
+                                var b = db.Batches.Find(a.BatchId);
+                                var c = db.Courses.Find(b.CourseId);
+                                var n = db.Applications.Count(x => x.BatchId == a.BatchId);
+                                n = n + 1;
+                                Application ap = new Application();
+                                ap.ApplicationCode = c.CourseCode.ToString() + b.BatchCode.ToString() + n.ToString().PadLeft(4, '0');
+                                ap.FirstName = a.FirstName;
+                                ap.MiddleName = a.MiddleName;
+                                ap.LastName = a.LastName;
+                                ap.FullName = a.FullName;
+                                ap.Email = a.Email;
+                                ap.CellNo = a.CellNo;
+                                ap.DateOfBirth = Convert.ToDateTime(a.DateOfBirth);
+                                ap.PlaceOfBirth = a.PlaceOfBirth;
+                                ap.Citizenship = a.Citizenship;
+                                ap.Gender = a.Gender;
+                                ap.PreferredMeal = a.PreferredMeal;
+                                ap.CdcNo = a.CdcNo;
+                                ap.PassportNo = a.PassportNo;
+                                ap.InDosNo = a.InDosNo;
+                                ap.GradeOfCompetencyNo = a.GradeOfCompetencyNo;
+                                ap.CertOfCompetencyNo = a.CertOfCompetencyNo;
+                                ap.ShippingCompany = a.ShippingCompany;
+                                //ap.CourseAttendedInTSR = a.CourseAttendedInTSR;
+                                ap.PermenentAddress = a.PermenentAddress;
+                                ap.PermenentCity = a.PermenentCity;
+                                ap.PermenentContactNo = a.PermenentContactNo;
+                                ap.PermenentPin = a.PermenentPin;
+                                ap.PermenentState = a.PermenentState;
+
+                                ap.BatchId = a.BatchId;
+                                ap.CategoryId = a.CategoryId;
+                                
+                                ap.CourseId = b.CourseId;
+
+                                db.Applications.Add(ap);
+                                b.BookedSeats = b.BookedSeats + 1;
+                                db.SaveChanges();
+
+                                //Applied
+                                Applied nca = new Applied
+                                {
+                                    AdmissionStatus = true,
+                                    ApplicationId = ap.ApplicationId,
+                                    BatchId = b.BatchId,
+                                    CategoryId =(int) b.CategoryId,
+                                    CourseId = (int)b.CourseId
+                                };
+                                db.Applied.Add(nca);
+
+                                var cf = db.CourseFees.FirstOrDefault(x => x.CourseId == b.CourseId);
+                                decimal tax;
+                                if (cf.GstPercentage > 0)
+                                    tax = (((decimal)cf.ActualFee / 100) * (decimal)cf.GstPercentage);
+                                else
+                                    tax = 0;
+                                var totalFee = (decimal)cf.ActualFee + tax;
+                                //feeReceipt
+                                //FeeReceipt fr = new FeeReceipt
+                                //{
+                                //    Amount = Convert.ToDecimal(totalFee),
+                                //    ApplicationId = ap.ApplicationId,
+                                //    PaymentMode = "Cash",
+                                //    PrintStatus = false,
+                                //    FeesType = "CourseFee"
+                                //};
+                                //db.FeeReceipts.Add(fr);
+                                //student fee details
+                                StudentFeeDetail sfd = new StudentFeeDetail
+                                {
+                                    ApplicationId = Convert.ToInt32(ap.ApplicationId),
+                                    TotalFee = totalFee,
+                                    FeePaid = 0,
+                                    FeeBal =  Convert.ToDecimal(totalFee),
+                                    BatchId = b.BatchId
+                                };
+                                db.StudentFeeDetails.Add(sfd);
+                                db.SaveChanges();
+
+                                
+                                EmailModel em = new EmailModel
+                                {
+                                    From = ConfigurationManager.AppSettings["admsmail"],
+                                    FromPass = ConfigurationManager.AppSettings["admsps"],
+                                    To = ap.Email,
+                                    Subject = "Course Registration with TSR",
+                                    Body = "Dear " + ap.FirstName + " " + ap.LastName + ", with the reference to your Enrolment ID " + ap.ApplicationCode + " This is to confirm that your seat has been confirmed for " + c.CourseName + " starting BATCH on " + Convert.ToDateTime(b.StartDate).ToString("dd-MM-yyyy") + "  Thanking you T.S.Rahaman"
+                                };
+
+                                var res =  MessageService.sendEmail(em);
+
+                                MessageService ms = new MessageService();
+                                string msg = "Dear " + ap.FirstName + " " + ap.LastName + ", with the reference to your Enrolment ID " + ap.ApplicationCode + " This is to confirm that your seat has been confirmed for " + c.CourseName + " starting BATCH on " + Convert.ToDateTime(b.StartDate).ToString("dd-MM-yyyy") + "  Thanking you T.S.Rahaman";
+                                string mobileno = ap.CellNo;
+                                 ms.SendSmsAsync(msg, mobileno);
+                            }
+                        }
+
+                        catch (DbEntityValidationException ex)
+                        {
+                            foreach (var entityValidationErrors in ex.EntityValidationErrors)
+                            {
+
+                                foreach (var validationError in entityValidationErrors.ValidationErrors)
+                                {
+
+                                    Response.Write("Property: " + validationError.PropertyName + " Error: " + validationError.ErrorMessage);
+
+                                }
+
+                            }
+                        }
+                    }
+                    //deleting excel file from folder  
+                    if ((System.IO.File.Exists(pathToExcelFile)))
+                    {
+                        System.IO.File.Delete(pathToExcelFile);
+                    }
+                    return Json("success", JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    //alert message for invalid file format  
+                    data.Add("<ul>");
+                    data.Add("<li>Only Excel file format is allowed</li>");
+                    data.Add("</ul>");
+                    data.ToArray();
+                    return Json(data, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                data.Add("<ul>");
+                if (FileUpload == null) data.Add("<li>Please choose Excel file</li>");
+                data.Add("</ul>");
+                data.ToArray();
+                return Json(data, JsonRequestBehavior.AllowGet);
+    }
+    //return Json("", JsonRequestBehavior.AllowGet);
+}
         #endregion
     }
 }

@@ -202,16 +202,16 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/28/2015 04:04:30</publishTime>
     </File>
     <File Include="bin/Tsr.Core.dll">
-      <publishTime>12/07/2017 15:21:01</publishTime>
+      <publishTime>12/28/2017 10:33:51</publishTime>
     </File>
     <File Include="bin/Tsr.Infra.dll">
-      <publishTime>12/07/2017 15:21:05</publishTime>
+      <publishTime>12/28/2017 10:33:51</publishTime>
     </File>
     <File Include="bin/Tsr.ToPdf.dll">
-      <publishTime>12/07/2017 15:21:01</publishTime>
+      <publishTime>12/27/2017 09:47:39</publishTime>
     </File>
     <File Include="bin/Tsr.Web.dll">
-      <publishTime>12/21/2017 17:36:30</publishTime>
+      <publishTime>12/28/2017 10:34:08</publishTime>
     </File>
     <File Include="bin/TugberkUg.MVC.dll">
       <publishTime>10/06/2017 14:10:31</publishTime>
@@ -2010,6 +2010,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Views/Admission/CETSchedule.cshtml">
       <publishTime>11/07/2017 10:15:15</publishTime>
     </File>
+    <File Include="Views/Admission/CompanyReservation.cshtml">
+      <publishTime>12/27/2017 12:36:41</publishTime>
+    </File>
     <File Include="Views/Admission/ConfirmAdmissions.cshtml">
       <publishTime>11/08/2017 12:57:06</publishTime>
     </File>
@@ -2179,43 +2182,43 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/13/2017 19:55:07</publishTime>
     </File>
     <File Include="Views/Certification/_CertificateDRLeoGME.cshtml">
-      <publishTime>11/30/2017 13:24:23</publishTime>
+      <publishTime>12/27/2017 08:48:22</publishTime>
     </File>
     <File Include="Views/Certification/_CertificateFormat1.cshtml">
-      <publishTime>11/30/2017 13:24:23</publishTime>
+      <publishTime>12/28/2017 10:27:15</publishTime>
     </File>
     <File Include="Views/Certification/_CertificateFormat2.cshtml">
-      <publishTime>11/11/2017 09:04:26</publishTime>
+      <publishTime>12/28/2017 10:28:08</publishTime>
     </File>
     <File Include="Views/Certification/_CertificateFormat3.cshtml">
-      <publishTime>11/30/2017 13:24:23</publishTime>
+      <publishTime>12/28/2017 10:28:35</publishTime>
     </File>
     <File Include="Views/Certification/_CertificateFormatCadetcourse.cshtml">
-      <publishTime>11/30/2017 13:24:23</publishTime>
+      <publishTime>12/28/2017 10:28:53</publishTime>
     </File>
     <File Include="Views/Certification/_CertificateFormatGOC.cshtml">
-      <publishTime>11/15/2017 09:53:26</publishTime>
+      <publishTime>12/27/2017 08:48:22</publishTime>
     </File>
     <File Include="Views/Certification/_CertificateFormatGPRating.cshtml">
-      <publishTime>11/16/2017 14:40:24</publishTime>
+      <publishTime>12/27/2017 08:48:22</publishTime>
     </File>
     <File Include="Views/Certification/_CertificateFormatGPTraining.cshtml">
-      <publishTime>11/30/2017 13:24:23</publishTime>
+      <publishTime>12/28/2017 10:30:34</publishTime>
     </File>
     <File Include="Views/Certification/_CertificateFormatMaritimeCatering.cshtml">
-      <publishTime>11/30/2017 13:24:23</publishTime>
+      <publishTime>12/28/2017 10:30:49</publishTime>
     </File>
     <File Include="Views/Certification/_CertificateFormatMedicalAid.cshtml">
-      <publishTime>11/30/2017 13:24:23</publishTime>
+      <publishTime>12/28/2017 10:31:31</publishTime>
     </File>
     <File Include="Views/Certification/_CertificateFormatWorkshopskills.cshtml">
-      <publishTime>11/30/2017 13:24:23</publishTime>
+      <publishTime>12/28/2017 10:31:46</publishTime>
     </File>
     <File Include="Views/Certification/_CertificateList.cshtml">
-      <publishTime>11/11/2017 09:04:26</publishTime>
+      <publishTime>12/27/2017 08:48:22</publishTime>
     </File>
     <File Include="Views/Certification/_RefresherTraining.cshtml">
-      <publishTime>11/30/2017 13:24:23</publishTime>
+      <publishTime>12/27/2017 08:48:22</publishTime>
     </File>
     <File Include="Views/Fees/ApplicantsList.cshtml">
       <publishTime>08/30/2017 21:04:28</publishTime>
@@ -2488,7 +2491,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/12/2017 09:23:24</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>12/21/2017 17:36:33</publishTime>
+      <publishTime>12/28/2017 10:34:12</publishTime>
     </File>
   </ItemGroup>
 </Project>

@@ -485,7 +485,7 @@ namespace Tsr.Web.Controllers
                         DateOfBirth = obj.DateOfBirth,
                         Email = obj.Email,
                         FirstName = obj.FirstName,
-                        Gender = obj.FirstName,
+                        Gender = obj.Gender,
                         InDosNo = obj.InDosNo,
                         LastName = obj.LastName,
                         MiddleName = obj.MiddleName,
