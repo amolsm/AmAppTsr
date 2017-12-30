@@ -1,0 +1,98 @@
+﻿@model Tsr.Core.Models.CertificationCertificateVM
+@{
+    ViewBag.Title = "ViewResultSheet";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/commonjs/commondropdown.js"></script>
+
+
+<ul class="breadcrumb push-down-0">
+    <li><a href="#">View Result Sheet</a></li>
+    <li class="active">Result Sheet</li>
+
+</ul>
+<!-- END BREADCRUMB -->
+
+<div class="page-content-wrap">
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="form-horizontal">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">View Result Sheet</h3>
+
+                        </div>
+
+
+                        <div class="panel-body">
+                            @using (Html.BeginForm("Certificate", "Certification", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                            {
+                                @Html.AntiForgeryToken()
+
+
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            Category
+                                        </div>
+                                        @Html.DropDownListFor(model => model.CategoryId
+           , (IEnumerable<SelectListItem>)ViewBag.Categories, " ", new { @class = "form-control", @onchange = "FillCourse()" })
+                                    </div>
+                                </div>
+
+
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            Course
+                                        </div>
+                                        @Html.DropDownListFor(model => model.CourseId,
+                                         new SelectList(Enumerable.Empty<SelectListItem>(), "CourseId", "CourseName"), " ", new { @class = "form-control", @onchange = "FillBatch()" })
+                                    </div>
+                                </div>
+
+
+                                <div class="col-lg-3">
+
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            Batch
+                                        </div>
+                                        @Html.DropDownListFor(model => model.BatchId,
+                                         new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "Name"), " ", new { @class = "form-control" })
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3">
+
+                                    <div class="input-group">
+                                       
+                                        <input class="btn btn-primary" type="button" value="View Result Sheet"  onclick="window.open('@Url.Action("ResultSheet", "Certification")?id=' + document.getElementById('BatchId').value,'_blank')" />
+
+
+                                    </div>
+                                </div>
+
+                            
+
+                            }
+                        </div>
+
+                       
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>

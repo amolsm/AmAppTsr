@@ -28,7 +28,7 @@
             <a href="#"><span class="fa fa-files-o"></span> <span class="xn-text">Users</span></a>
             <ul>
                 <li><a href="@Url.Action("UserLists", "ManageUsers")"><span class="fa fa-indent"></span> Users Lists</a></li>
-                
+
             </ul>
         </li>
 
@@ -37,7 +37,7 @@
             <ul>
                 <li><a href="@Url.Action("OrganisationList", "MasterDetails")"><span class="fa fa-indent"></span> Organisation</a></li>
                 <li><a href="@Url.Action("CourseCategoryList", "MasterDetails")"><span class="fa fa-circle-o"></span> Course Category</a></li>
-                
+
                 <li><a href="@Url.Action("EmployeeList", "MasterDetails")"><span class="fa fa-dot-circle-o"></span> Employee</a></li>
                 <li><a href="@Url.Action("DocumentList", "MasterDetails")"><span class="fa fa-dot-circle-o"></span> Documents</a></li>
                 <li><a href="@Url.Action("DepartmentList", "MasterDetails")"><span class="fa fa-dot-circle-o"></span> Departments</a></li>
@@ -45,28 +45,28 @@
                 <li><a href="@Url.Action("FeesPatternList", "MasterDetails")"><span class="fa fa-dot-circle-o"></span> Fees Pattern</a></li>
 
                 @*<li><a href="@Url.Action("InterviewList", "MasterDetails")"><span class="fa fa-dot-circle-o"></span> Interview</a></li>
-                <li><a href="@Url.Action("MedicalList", "MasterDetails")"><span class="fa fa-dot-circle-o"></span> Medical</a></li>*@
+                    <li><a href="@Url.Action("MedicalList", "MasterDetails")"><span class="fa fa-dot-circle-o"></span> Medical</a></li>*@
                 <li><a href="@Url.Action("CertificateFormatList", "MasterDetails")"><span class="fa fa-circle-o"></span>Certificate Format</a></li>
 
 
-                 @*<li class="xn-openable">
-                    <a href="#"><span class="fa fa-clock-o"></span> Address</a>
-                    <ul>
-                        <li> <a href="@Url.Action("CountryList", "MasterDetails")"><span class="fa fa-image"></span> Countries</a></li>
-                        <li> <a href="@Url.Action("StateList","MasterDetails")"><span class="fa fa-image"></span> States</a></li>
-                        <li> <a href="@Url.Action("DistrictList","MasterDetails")"><span class="fa fa-image"></span> District</a></li>
-                    </ul>
-                </li>*@
+                @*<li class="xn-openable">
+                        <a href="#"><span class="fa fa-clock-o"></span> Address</a>
+                        <ul>
+                            <li> <a href="@Url.Action("CountryList", "MasterDetails")"><span class="fa fa-image"></span> Countries</a></li>
+                            <li> <a href="@Url.Action("StateList","MasterDetails")"><span class="fa fa-image"></span> States</a></li>
+                            <li> <a href="@Url.Action("DistrictList","MasterDetails")"><span class="fa fa-image"></span> District</a></li>
+                        </ul>
+                    </li>*@
 
                 @*<li>@Html.ActionLink("Organisation", "OrganisationList", "MasterDetails") <span class="fa fa-image"></span> </li>*@
-                
+
             </ul>
         </li>
 
         <li class="xn-openable ">
             <a href="#"><span class="fa fa-files-o"></span> <span class="xn-text">Course</span></a>
             <ul>
-                
+
                 <li><a href="@Url.Action("CourseList", "MasterDetails")"><span class="fa fa-circle-o"></span> Course</a></li>
                 <li><a href="@Url.Action("PackageList", "MasterDetails")"><span class="fa fa-dot-circle-o"></span> Package</a></li>
                 <li><a href="@Url.Action("CourseFeeList", "MasterDetails")"><span class="fa fa-dot-circle-o"></span> Course Fee</a></li>
@@ -80,8 +80,8 @@
             <ul>
 
                 @*<li><a href="@Url.Action("FeeReciept", "Fees")"><span class="fa fa-circle-o"></span> Reciepts</a></li>*@
-               <li><a href="@Url.Action("Scrutinee", "Fees")"><span class="fa fa-dot-circle-o"></span>Scrutinee Payments</a></li>
-                 <li><a href="@Url.Action("coursepayments", "Fees")"><span class="fa fa-dot-circle-o"></span> Course Payments</a></li>
+                <li><a href="@Url.Action("Scrutinee", "Fees")"><span class="fa fa-dot-circle-o"></span>Scrutinee Payments</a></li>
+                <li><a href="@Url.Action("coursepayments", "Fees")"><span class="fa fa-dot-circle-o"></span> Course Payments</a></li>
                 <li><a href="@Url.Action("checkPaymentStatus", "Fees")"><span class="fa fa-dot-circle-o"></span> Online Payment Status</a></li>
 
 
@@ -98,8 +98,8 @@
                 <li><a href="@Url.Action("ApplicationForm", "Report")"><span class="fa fa-circle-o"></span>Application Form</a></li>
 
                 @*<li><a href="@Url.Action("NonCetApplication", "Application")"><span class="fa fa-dot-circle-o"></span> Non-CET Dev</a></li>
-                <li><a href="@Url.Action("CetApplication", "Application")"><span class="fa fa-dot-circle-o"></span> CET Dev</a></li>*@
-                
+                    <li><a href="@Url.Action("CetApplication", "Application")"><span class="fa fa-dot-circle-o"></span> CET Dev</a></li>*@
+
 
             </ul>
         </li>
@@ -121,19 +121,27 @@
                 <li><a href="@Url.Action("ConfirmAdmissions", "Admission")"><span class="fa fa-dot-circle-o"></span> Confirmed Students</a></li>
             </ul>
         </li>
-        
         <li class="xn-openable ">
-            <a href="#"><span class="fa fa-files-o"></span> <span class="xn-text">Certification</span></a>
+            <a href="#"><span class="fa fa-files-o"></span> <span class="xn-text">Payment Info</span></a>
             <ul>
-
-                <li><a href="@Url.Action("DesignCertificate", "Certification")"><span class="fa fa-circle-o"></span>Design Certificate</a></li>
-                <li><a href="@Url.Action("PrincipalSignImage", "Certification")"><span class="fa fa-circle-o"></span>Principal Sign</a></li>
-                <li><a href="@Url.Action("CheckList", "Certification")"><span class="fa fa-circle-o"></span>Check List</a></li>
-                <li><a href="@Url.Action("CheckListEdit", "Certification")"><span class="fa fa-circle-o"></span>Check List Edit</a></li>
-                <li><a href="@Url.Action("Certificate", "Certification")"><span class="fa fa-circle-o"></span>Certificate</a></li>
-
+                <li><a href="@Url.Action("PaymentDetails", "Report")"><span class="fa fa-circle-o"></span>Payment Details</a></li>
             </ul>
         </li>
+
+    
+    <li class="xn-openable ">
+        <a href="#"><span class="fa fa-files-o"></span> <span class="xn-text">Certification</span></a>
+        <ul>
+
+            <li><a href="@Url.Action("DesignCertificate", "Certification")"><span class="fa fa-circle-o"></span>Design Certificate</a></li>
+            <li><a href="@Url.Action("PrincipalSignImage", "Certification")"><span class="fa fa-circle-o"></span>Principal Sign</a></li>
+            <li><a href="@Url.Action("CheckList", "Certification")"><span class="fa fa-circle-o"></span>Check List</a></li>
+            <li><a href="@Url.Action("CheckListEdit", "Certification")"><span class="fa fa-circle-o"></span>Check List Edit</a></li>
+            <li><a href="@Url.Action("ViewResultSheet", "Certification")"><span class="fa fa-circle-o"></span>View Result Sheet</a></li>
+            <li><a href="@Url.Action("Certificate", "Certification")"><span class="fa fa-circle-o"></span>Certificate</a></li>
+
+        </ul>
+    </li>
 
     </ul>
     <!-- END X-NAVIGATION -->

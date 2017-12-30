@@ -54,22 +54,23 @@ namespace Tsr.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                
                 DateTime ? revdate= Convert.ToDateTime("2017-05-15");
-                var list = from apl in db.Applied
-                           join b in db.Batches on apl.BatchId equals b.BatchId
-                           join c in db.Courses on apl.CourseId equals c.CourseId
-                           join c_c in db.CourseCategories on apl.CategoryId equals c_c.CourseCategoryId
-                           join ap in db.Applications on apl.ApplicationId equals ap.ApplicationId
-                           where (apl.CategoryId == vm.CategoryId && apl.CourseId == vm.CourseId && apl.BatchId == vm.BatchId)
+                var applied = db.Applied.ToList();
+                var batches = db.Batches.ToList();
+                var courses = db.Courses.ToList();
+                var list = from apl in applied.Where(x=>x.CategoryId == vm.CategoryId && x.CourseId == vm.CourseId && x.BatchId == vm.BatchId).Select(x=>x.ApplicationId).Distinct()
+                           join ap in db.Applications on apl equals ap.ApplicationId
                            select new ReportApplicationVM
-                           {
+
+                            {
+                              
+                                
                                revno = "00",
                                revdate = revdate/*DateTime.Now*/,
                                ApplicationNo = "01"/*ap.ApplicationId.ToString()*/,
-                               CourseName = c.ShortName,
-                               CourseDate = b.StartDate,
-                               BatchNo = b.BatchCode,
-                               NameOfApplicant=ap.FullName,
+                               ApplicationId=ap.ApplicationId,
+                               NameOfApplicant =ap.FullName,
                                Nationality=ap.Citizenship,
                                DateOfBirth=ap.DateOfBirth,
                                CDCNo=ap.CdcNo,
@@ -170,22 +171,41 @@ namespace Tsr.Web.Controllers
                             cb.SetFontAndSize(bf_arial2, 11);
                             cb.ShowTextAligned(Element.ALIGN_LEFT, "Batch No:", 460f, 760f, 0);
                             cb.EndText();
-                            cb.BeginText();
-                            cb.SetFontAndSize(bf_arial3, 7.5f);
-                            cb.ShowTextAligned(Element.ALIGN_LEFT, "1", 110f, 740f, 0);
-                            cb.EndText();
-                            cb.BeginText();
-                            cb.SetFontAndSize(bf_arial3, 7.5f);
-                            cb.ShowTextAligned(Element.ALIGN_LEFT, app.CourseName == null ? "" : app.CourseName, 150f, 740f, 0);
-                            cb.EndText();
-                            cb.BeginText();
-                            cb.SetFontAndSize(bf_arial3, 7.5f);
-                            cb.ShowTextAligned(Element.ALIGN_LEFT, Convert.ToDateTime(app.CourseDate).ToString("dd-MM-yyyy"), 380f, 740f, 0);
-                            cb.EndText();
-                            cb.BeginText();
-                            cb.SetFontAndSize(bf_arial3, 7.5f);
-                            cb.ShowTextAligned(Element.ALIGN_LEFT, app.BatchNo==null?"":app.BatchNo, 460f, 740f, 0);
-                            cb.EndText();
+                         
+                            
+                                var courselist = (from a in applied
+                                                  join bs in batches on a.BatchId equals bs.BatchId
+                                                  join cs in courses on a.CourseId equals cs.CourseId
+                                                  where (a.ApplicationId == app.ApplicationId)
+                                                  select new { cs.ShortName, bs.StartDate, bs.BatchCode }).ToList();
+                            var y = 750f;
+                            int i = 0;
+                            foreach (var cdata in courselist)
+                            {
+                                i++;
+                                y = y - 10;
+
+                                cb.BeginText();
+                                cb.SetFontAndSize(bf_arial3, 7.5f);
+                                cb.ShowTextAligned(Element.ALIGN_LEFT, i.ToString(), 110f, y, 0);
+                                cb.EndText();
+                              
+                                cb.BeginText();
+                                cb.SetFontAndSize(bf_arial3, 7.5f);
+                                cb.ShowTextAligned(Element.ALIGN_LEFT, cdata.ShortName == null ? "" : cdata.ShortName, 115f, y, 0);
+                                cb.EndText();
+                                cb.BeginText();
+                                cb.SetFontAndSize(bf_arial3, 7.5f);
+                                cb.ShowTextAligned(Element.ALIGN_LEFT, cdata.StartDate==null?"": Convert.ToDateTime(cdata.StartDate).ToString("dd-MM-yyyy"), 380f, y, 0);
+                                cb.EndText();
+                                cb.BeginText();
+                                cb.SetFontAndSize(bf_arial3, 7.5f);
+                                cb.ShowTextAligned(Element.ALIGN_LEFT, cdata.BatchCode == null ? "" : cdata.BatchCode, 460f, y, 0);
+                                cb.EndText();
+                            }
+                           
+                           
+                          
                             string imageURL = Server.MapPath("~/Img/avatar.png");
                             iTextSharp.text.Image png = iTextSharp.text.Image.GetInstance(imageURL);
                             png.ScaleToFit(90f, 90f);
@@ -695,8 +715,53 @@ namespace Tsr.Web.Controllers
             return result;
         }
 
-        
+
+        public ActionResult PaymentDetails()
+        {
+            ReportPaymentVM pr = new ReportPaymentVM();
+            return View(pr);
+        }
+
+        [HttpPost]
+        public ActionResult PaymentDetails(ReportPaymentVM pr)
+        {
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction("PayInfoReport", new { StartDate = pr.StartDate, EndDate = pr.EndDate });
+            }
+            return View();
+        }
+
+        public ActionResult PayInfoReport(DateTime? StartDate,DateTime? EndDate)
+        {
+            var data = from fr in db.FeeReceipts
+                       join ap in db.Applications on fr.ApplicationId equals ap.ApplicationId
+                       join c in db.Courses on ap.CourseId equals c.CourseId into pi1
+                       from c in pi1.DefaultIfEmpty()
+                       join b in db.Batches on ap.BatchId equals b.BatchId into pi2
+                       from b in pi2.DefaultIfEmpty()
+                       join p in db.packages on ap.PackageId equals p.PackageId into pi3
+                       from p in pi3.DefaultIfEmpty()
+                       where (fr.ReceiptDate >= StartDate && fr.ReceiptDate <= EndDate)
+                       select new ReportPaymentVM
+                       {
+                           ApplicantName=ap.FullName,
+                           CourseOrPackageName= (c == null) ? p.PackageName : c.CourseName,
+                           BatchCode=(b==null)?String.Empty:b.BatchCode,
+                           BatchStartDate=(b==null)?null:b.StartDate,
+                           BatchEndDate=(b==null)?null:b.EndDate,
+                           PaymentAmount=fr.Amount,
+                           PaymentMode=fr.PaymentMode
+
+                       };
+
+            ViewBag.StartDate = StartDate;
+            ViewBag.EndDate = EndDate;
+            return new PdfActionResult(data);
+        }
     }
+
+   
 
     
 

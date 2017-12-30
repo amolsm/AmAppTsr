@@ -1077,7 +1077,14 @@
     <Content Include="Views\Fees\PaymentStatusList.cshtml" />
     <Content Include="Uploads\InterviewFile\0001.docx" />
     <Content Include="Uploads\Policy.pdf" />
+
     <Content Include="Views\Admission\CompanyReservation.cshtml" />
+
+    <Content Include="Views\Certification\ResultSheet.cshtml" />
+    <Content Include="Views\Certification\ViewResultSheet.cshtml" />
+    <Content Include="Views\Report\PaymentDetails.cshtml" />
+    <Content Include="Views\Report\PayInfoReport.cshtml" />
+
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

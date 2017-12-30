@@ -627,7 +627,8 @@ namespace Tsr.Web.Controllers
                 ccvm.PerformAction = performaction;
                
                 ViewBag.Categories = new SelectList(db.CourseCategories.Where(x => x.IsActive == true).ToList(), "CourseCategoryId", "CategoryName");
-                int count = 0;
+                int count = db.Certificates.Where(x=>x.BatchId==obj.BatchId).Count();
+
                 foreach (var item in CertifcateList.ToList())
                 {
                     var existingitem = db.Certificates.Where(c => (c.ApplicationId == item.ApplicationID && c.BatchId == item.BatchId)).Select(m => m.CertificateId).ToList();
@@ -748,6 +749,52 @@ namespace Tsr.Web.Controllers
                              
            return new PdfActionResult(cvrf);
         }
+        #endregion
+
+        #region ResultSheet
+        public ActionResult ResultSheet(int? id)
+        {
+            var studentlist = from appld in db.Applied
+                              join app in db.Applications on appld.ApplicationId equals app.ApplicationId
+                              join b in db.Batches on appld.BatchId equals b.BatchId
+                              join c in db.Courses on appld.CourseId equals c.CourseId
+                              where appld.AdmissionStatus == true && appld.BatchId == id
+                              select new CertificateApplicantList
+                              {
+                                  ApplicantId = app.ApplicationId,
+                                  ApplicantName = app.FullName.ToUpper(),
+                                  Rank = app.RankOfCandidate.ToUpper(),
+                                  DateOfBirth = app.DateOfBirth,
+                                  IndosNo = app.InDosNo.ToUpper(),
+                                  PassportNo = app.PassportNo.ToUpper(),
+                                  CdcNo = app.CdcNo.ToUpper()
+                                  
+                              };
+            var batchdetails = db.Batches.Where(x => x.BatchId == id).FirstOrDefault();
+            var coursedetails = db.Courses.Where(x => x.CourseId == batchdetails.CourseId).FirstOrDefault();
+            CertificateViewResultFormat cvrf = new CertificateViewResultFormat();
+            cvrf.CourseName = coursedetails.CourseName;
+            cvrf.BatchCode = batchdetails.BatchCode;
+            cvrf.From = batchdetails.StartDate;
+            cvrf.To = batchdetails.EndDate;
+            cvrf.Date = batchdetails.StartDate;
+            cvrf.CurrentDate = DateTime.Now;
+            cvrf._CertificateApplicantList = studentlist.ToList();
+
+
+
+            return new PdfActionResult(cvrf);
+        }
+        #endregion
+
+        #region ViewResultSheet
+        public ActionResult ViewResultSheet()
+        {
+            ViewBag.Categories = new SelectList(db.CourseCategories.Where(x => x.IsActive == true).ToList(), "CourseCategoryId", "CategoryName");
+            CertificationCertificateVM ccvm = new CertificationCertificateVM();
+            return View(ccvm);
+        }
+
         #endregion
 
     }
