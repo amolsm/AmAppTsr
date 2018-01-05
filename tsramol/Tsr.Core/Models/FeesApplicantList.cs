@@ -8,6 +8,7 @@ namespace Tsr.Core.Models
 {
     public class FeesApplicantList
     {
+        public int? BatchId { get; set; }
         public int? ApplicationId { get; set; }
         public string ApplicationCode { get; set; }
         public string Name { get; set; }

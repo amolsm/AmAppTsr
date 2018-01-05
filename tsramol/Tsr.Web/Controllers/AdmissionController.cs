@@ -2093,7 +2093,7 @@ namespace Tsr.Web.Controllers
             //    List<CompReservNonCetVM> list = new List<CompReservNonCetVM>();
             //}
             List<CompReservNonCetVM> list = new List<CompReservNonCetVM>();
-            for (int i = 0; i < seats; i++)
+            for (int i = 0; i < 1; i++)
             {
                 CompReservNonCetVM ob = new CompReservNonCetVM
                 {
@@ -2131,7 +2131,7 @@ namespace Tsr.Web.Controllers
             gv.DataBind();
             Response.ClearContent();
             Response.Buffer = true;
-            Response.AddHeader("content-disposition", "attachment; filename=ConfirmAdmissions.xls");
+            Response.AddHeader("content-disposition", "attachment; filename=CompanyReservation.xls");
             Response.ContentType = "application/ms-excel";
             Response.Charset = "";
             StringWriter objStringWriter = new StringWriter();
@@ -2316,6 +2316,8 @@ namespace Tsr.Web.Controllers
                     {
                         System.IO.File.Delete(pathToExcelFile);
                     }
+                   
+                     RedirectToAction("CompanyReservation");
                     return Json("success", JsonRequestBehavior.AllowGet);
                 }
                 else
@@ -2339,6 +2341,76 @@ namespace Tsr.Web.Controllers
     //return Json("", JsonRequestBehavior.AllowGet);
 }
         #endregion
+
+        #region DiscontinueStudent
+        public ActionResult DiscontinueStudent()
+        {
+            ViewBag.Categories = new SelectList(db.CourseCategories.ToList(), "CourseCategoryId", "CategoryName");
+            ViewBag.Packages = new SelectList(db.packages.ToList(), "PackageId", "PackageName");
+            return View();
+        }
+        public ActionResult FillStudentsForDiscontinue(int BatchId)
+        {
+            var s = from ap in db.Applications
+                    join apd in db.Applied on ap.ApplicationId equals apd.ApplicationId
+                    into aps
+                    from apd in aps.DefaultIfEmpty()
+                    where (ap.BatchId == BatchId && ap.Scrutinee != true)
+                    select new { ApplicationId = ap.ApplicationId, Name = ap.FullName, check = (apd == null) ? true : false };
+
+            var Students = s.ToList().Where(x => x.check == true);
+            return Json(Students, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult DiscontinueSearch(int? BatchId)
+        {
+            var list = from apl in db.Applied
+                       join ap in db.Applications on apl.ApplicationId equals ap.ApplicationId
+
+                       where (apl.BatchId == BatchId && apl.AdmissionStatus == true)
+
+                       select new FeesApplicantList
+                       {
+                           ApplicationCode = ap.ApplicationCode,
+                           ApplicationId = ap.ApplicationId,
+                           BatchId = apl.BatchId,
+                           Name = ap.FullName,
+
+                           Email = ap.Email,
+                           Cell = ap.CellNo,
+                           Flag = ap.Scrutinee
+                       };
+
+            //List<FeesApplicantList> obj = new List<FeesApplicantList>();
+            //obj.Add(list.FirstOrDefault());
+            return PartialView("DiscontinueList", list);
+        }
+
+        public async Task<ActionResult> DiscontinueAction(int? id, int? bid = null)
+        {
+
+            if (id == null || bid == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            //Application ap = await db.Applications.FindAsync(id);
+            Applied apl = await db.Applied.FirstOrDefaultAsync(x => x.ApplicationId == id && x.BatchId == bid);
+            Batch b = await db.Batches.FindAsync(bid);
+            if (apl == null)
+            {
+                return HttpNotFound();
+            }
+
+            apl.AdmissionStatus = false;
+            b.BookedSeats = b.BookedSeats - 1;
+
+            db.SaveChanges();
+            //if(ap.IsPackage==false)
+            return RedirectToAction("DiscontinueStudent");
+            //else
+            //return RedirectToAction("PackageScrutinee");
+        }
+        #endregion
+
     }
 }
 

@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Tsr.Core.Models.FeesApplicantList>
+
+<table id="customers2" class="table datatable">
+    <thead>
+        <tr>
+
+            <th>Application Code</th>
+
+            <th>Name</th>
+            <th>Email</th>
+            <th>Cell</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.ApplicationCode)</td>
+
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                <td>@Html.DisplayFor(modelItem => item.Cell)</td>
+                <td>
+                    @Html.ActionLink("Discontinue", "DiscontinueAction", new { id = item.ApplicationId, bid = item.BatchId }, new { onclick = "return confirm('Are you sure you wish to Discontinue Student?');" })
+                    @*|
+                    @Html.ActionLink(" Reject", "ScrutineeAction", new { id = item.ApplicationId, flag1 = "R" }, new { onclick = "return confirm('Are you sure you wish to make Reject?');" })*@
+                </td>
+
+            </tr>
+        }
+
+    </tbody>
+
+</table>
+
+

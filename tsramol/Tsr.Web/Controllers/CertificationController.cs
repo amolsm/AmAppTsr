@@ -14,7 +14,7 @@ using Tsr.Core.Models;
 using Tsr.Infra;
 using Tsr.ToPdf;
 using Tsr.Web.Common;
-using System.Web;
+
 using System.Web.UI;
 
 namespace Tsr.Web.Controllers
