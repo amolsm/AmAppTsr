@@ -281,6 +281,7 @@
     <Compile Include="Common\DropdownData.cs" />
     <Compile Include="Common\ImageHelper.cs" />
     <Compile Include="Common\MessageService.cs" />
+    <Compile Include="Common\MulitipleButtonAttribute.cs" />
     <Compile Include="Common\Others.cs" />
     <Compile Include="Common\RemotePost.cs" />
     <Compile Include="Common\SmsService.cs" />
@@ -1082,8 +1083,12 @@
     <Content Include="Views\Certification\ViewResultSheet.cshtml" />
     <Content Include="Views\Report\PaymentDetails.cshtml" />
     <Content Include="Views\Report\PayInfoReport.cshtml" />
+
     <Content Include="Views\Admission\DiscontinueStudent.cshtml" />
     <Content Include="Views\Admission\DiscontinueList.cshtml" />
+
+    <Content Include="Views\Report\PrintReceipts.cshtml" />
+
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

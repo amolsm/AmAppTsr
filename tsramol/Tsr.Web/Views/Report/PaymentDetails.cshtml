@@ -27,7 +27,7 @@
 
 
                         <div class="panel-body">
-                            @using (Html.BeginForm("PaymentDetails", "Report", FormMethod.Post, new { enctype = "multipart/form-data", target = "_blank" }))
+                            @using (Html.BeginForm("", "Report", FormMethod.Post, new { enctype = "multipart/form-data", target = "_blank" }))
                             {
                                 @Html.AntiForgeryToken()
 
@@ -62,7 +62,8 @@
 
                                     <div class="input-group">
 
-                                        <input class="btn btn-primary" type="submit" value="Payment Details"  />
+                                        <input class="btn btn-primary" type="submit" value="Payment Details" name="action:PayInfoReport"  />
+                                        &nbsp;&nbsp;&nbsp;<input class="btn btn-primary" type="submit" value="Print Receipts" name="action:PrintReceipts" />
 
 
                                     </div>
