@@ -1,57 +1,54 @@
 ﻿
-@model IEnumerable<Tsr.Core.Models.CheckListVM>
-<table id="customers2" class="table datatable">
-    <thead>
-        <tr>
+@model ICollection<Tsr.Core.Models.CheckListVM >
 
-            <th>Sr.No</th>
-            <th>Student Id</th>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script src="~/Scripts/commonjs/EditApplicantListjs.js"></script>
+<div id="ajaxgrid">
+    @{
+        WebGrid grid = new WebGrid(Model, canPage: true,  selectionFieldName: "selectedRow", ajaxUpdateContainerId: "ajaxgrid");
+        grid.Pager(WebGridPagerModes.NextPrevious);
 
-            <th>Name</th>
-            <th>DOB</th>
-            <th>Cdcno</th>
-            <th>Passport No</th>
-            <th>Rank</th>
+    }
+</div>
+<h2>Applicant List</h2>
 
-            <th>Grade</th>
-            <th>Indos No</th>
-            <th>Sign</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @{int count = 0;}
+<div id="ajaxid">
+    @grid.GetHtml(tableStyle:
+    "table table-responsive table-bordered",
+    headerStyle: "header",
+    alternatingRowStyle: "webgrid-alternating-row",
+    selectedRowStyle: "webgrid-row-style",
+    mode: WebGridPagerModes.FirstLast,
+    columns: grid.Columns
+    (grid.Column("ApplicationId", "ApplicationId", canSort: false),
+  grid.Column("Student Id", style: "col2",  canSort: false, format: @<text><span id="StudentId" class="display-mode">@item.StudentId</span>@Html.TextBox("StudentId-Edit", (string)item.StudentId, new { @class = "edit-mode form-control", id = "@item.ApplicationId" })</text>),
+  grid.Column("Name", style: "col2", canSort: false, format: @<text><span id="Name" class="display-mode">@item.Name</span>@Html.TextBox("Name-Edit", (string)item.Name, new { @class = "edit-mode form-control", id = "@item.ApplicationId" })</text>),
+  grid.Column("DOB", style: "col2", canSort: false, format: @<text><span id="DOB" class="display-mode date">@(Convert.ToDateTime(item.DOB).ToString("dd-MM-yyyy"))</span>@Html.TextBox("DOB-Edit", (DateTime)item.DOB, new { @class = "edit-mode form-control date", id = "@item.ApplicationId" })</text>),
+  grid.Column("CDCNo.", style: "col2", canSort: false, format: @<text><span id="Cdcno" class="display-mode">@item.Cdcno</span>@Html.TextBox("Cdcno-Edit", (string)item.Cdcno, new { @class = "edit-mode form-control", id = "@item.ApplicationId" })</text>),
+  grid.Column("PassportNo.", style: "col2", canSort: false, format: @<text><span id="PassportNo" class="display-mode">@item.PassportNo</span>@Html.TextBox("PassportNo-Edit", (string)item.PassportNo, new { @class = "edit-mode form-control", id = "@item.ApplicationId" })</text>),
+  grid.Column("Rank", style: "col2", canSort: false, format: @<text><span id="Rank" class="display-mode">@item.Rank</span>@Html.TextBox("Rank-Edit", (string)item.Rank, new { @class = "edit-mode form-control", id = "@item.ApplicationId" })</text>),
+  grid.Column("Grade", style: "col2", canSort: false, format: @<text><span id="Grade" class="display-mode">@item.Grade</span>@Html.TextBox("Grade-Edit", (string)item.Grade, new { @class = "edit-mode form-control", id = "@item.ApplicationId" })</text>),
+  grid.Column("IndosNo", style: "col2", canSort: false, format: @<text><span id="IndosNo" class="display-mode">@item.IndosNo</span>@Html.TextBox("IndosNo-Edit", (string)item.IndosNo, new { @class = "edit-mode form-control", id = "@item.ApplicationId" })</text>),
+        grid.Column("Action", canSort: false, style: "col2", format: @<text>
+            <div>
+                <div style="padding-left:20px;">
+                    <button class="btn btn-default display-mode edit-item" id="@item.ApplicationId">Edit</button>
+                    @*<button class="btn btn-default display-mode delete-item" id="@item.ApplicationId">Delete</button>*@
+                    <button class="btn btn-default save-item edit-mode" id="@item.ApplicationId">Save</button>
+                    <button class="btn btn-default cancel-item edit-mode" id="@item.ApplicationId">Cancel</button>
+                </div>
 
-        @foreach (var item in Model)
-        {
-            count++;
-            var dob = Convert.ToDateTime(item.DOB).ToString("dd-MM-yyyy");
+            </div>
 
-            <tr>
-                <td>@Html.DisplayFor(modelItem => count)</td>
-                <td>@Html.DisplayFor(modelItem => item.StudentId)</td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>@Html.DisplayFor(modelItem => dob)</td>
-                <td>@Html.DisplayFor(modelItem => item.Cdcno)</td>
-                <td>@Html.DisplayFor(modelItem => item.PassportNo)</td>
-                <td>@Html.DisplayFor(modelItem => item.Rank)</td>
-                <td>@Html.DisplayFor(modelItem => item.Grade)</td>
-                <td>@Html.DisplayFor(modelItem => item.IndosNo)</td>
-                <td></td>
-                <td> @Html.ActionLink("Edit", "CheckListEditModal", new { id = item.ApplicationId }, new { data_modal = "" }) |</td>
+</text>))
 
-            </tr>
-        }
-
-    </tbody>
-
-</table>
+            )
+</div>
+   
 
 <!-- MODALS -->
 
-<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="defModalHead" aria-hidden="true" data-backdrop="static">
+@*<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="defModalHead" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div id='myModalContent'></div>
@@ -61,6 +58,6 @@
 
 <script src="~/Scripts/js/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="~/Scripts/js/plugins/bootstrap/bootstrap-select.js"></script>
-<script src="~/Scripts/ModalForm.js"></script>
+<script src="~/Scripts/ModalForm.js"></script>*@
 
 

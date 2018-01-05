@@ -441,6 +441,7 @@
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\chosen.jquery.js" />
     <Content Include="Scripts\commonjs\commondropdown.js" />
+    <Content Include="Scripts\commonjs\EditApplicantListjs.js" />
     <Content Include="Scripts\dropzone\basic.css" />
     <Content Include="Scripts\dropzone\basic.min.css" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.js" />
@@ -453,6 +454,8 @@
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.bootstrap.wizard.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -1083,12 +1086,9 @@
     <Content Include="Views\Certification\ViewResultSheet.cshtml" />
     <Content Include="Views\Report\PaymentDetails.cshtml" />
     <Content Include="Views\Report\PayInfoReport.cshtml" />
-
     <Content Include="Views\Admission\DiscontinueStudent.cshtml" />
     <Content Include="Views\Admission\DiscontinueList.cshtml" />
-
     <Content Include="Views\Report\PrintReceipts.cshtml" />
-
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

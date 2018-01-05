@@ -264,15 +264,12 @@ namespace Tsr.Web.Controllers
         [HttpGet]
         public ActionResult GetCheckListEdit(int? BatchId)
         {
-            var list = (from apd in db.Applied
-                        join ap in db.Applications on apd.ApplicationId equals ap.ApplicationId
-                        where (apd.BatchId == BatchId && apd.AdmissionStatus == true)
+            var list = (from apd in db.Applied.Where(x=>x.BatchId == BatchId && x.AdmissionStatus == true).Select(x => x.ApplicationId).Distinct()
+                        join ap in db.Applications on apd equals ap.ApplicationId
+                        
                         select new CheckListVM
                         {
                             ApplicationId = ap.ApplicationId,
-                            //Course = cr.CourseName,
-                            //Batchfrom = b.StartDate,
-                            //Batchto = b.EndDate,
                             StudentId = ap.ApplicationCode,
                             Name = ap.FullName,
                             DOB = ap.DateOfBirth,
@@ -286,54 +283,53 @@ namespace Tsr.Web.Controllers
                         }).ToList();
             return PartialView("_ApplicantsListEdit", list.ToList());
         }
-        [HttpGet]
-        public async Task<ActionResult> CheckListEditModal(int? id)
-        {
-            Application ap = await db.Applications.FindAsync(id);
+        //[HttpGet]
+        //public async Task<ActionResult> CheckListEditModal(int? id)
+        //{
+        //    Application ap = await db.Applications.FindAsync(id);
 
-            var obj = new CheckListVM
-            {
-                ApplicationId = ap.ApplicationId,
-                Name = ap.FullName,
+        //    var obj = new CheckListVM
+        //    {
+        //        ApplicationId = ap.ApplicationId,
+        //        Name = ap.FullName,
                 
-                DOB = ap.DateOfBirth,
-                Cdcno = ap.CdcNo,
-                PassportNo = ap.PassportNo,
-                Rank = ap.RankOfCandidate,
-                Grade = ap.GradeOfCompetencyNo,
-                IndosNo = ap.InDosNo
+        //        DOB = ap.DateOfBirth,
+        //        Cdcno = ap.CdcNo,
+        //        PassportNo = ap.PassportNo,
+        //        Rank = ap.RankOfCandidate,
+        //        Grade = ap.GradeOfCompetencyNo,
+        //        IndosNo = ap.InDosNo
 
 
-            };
+        //    };
 
-            return PartialView("CheckListEditModal", obj);
-        }
+        //    return PartialView("CheckListEditModal", obj);
+        //}
 
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CheckListEditModal(CheckListVM obj)
+        public JsonResult CheckListEdit(CheckListVM obj)
         {
 
-            if (ModelState.IsValid)
-            {
-
-                Application c = db.Applications.FirstOrDefault(i => i.ApplicationId == obj.ApplicationId);
+           
+                Application c = db.Applications.Find(obj.ApplicationId);
                 c.FullName = obj.Name;
-                
                 c.DateOfBirth = obj.DOB;
                 c.CdcNo = obj.Cdcno;
                 c.PassportNo = obj.PassportNo;
                 c.RankOfCandidate = obj.Rank;
                 c.GradeOfCompetencyNo = obj.Grade;
                 c.InDosNo = obj.IndosNo;
-                await db.SaveChangesAsync();
 
-                return Json(new { success = true });
-            }
+               
+                db.SaveChanges();
+                var list = db.Applications.Where(x => x.ApplicationId == obj.ApplicationId);
+               
+                return Json(list);
 
 
-            return PartialView("CheckListEditModal", obj);
+
+
         }
         #endregion
 
