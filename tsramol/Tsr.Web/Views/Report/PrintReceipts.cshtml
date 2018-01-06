@@ -17,17 +17,17 @@
 
 
 
-    <div style="height:80px">
+    <div style="height:50px">
         <table style="width:100%;">
             <tr>
-                <td colspan="8" style="font:bold;text-align:center">TRAINING SHIP RAHAMAN<br />Candidates Payment Receipts</td>
+                <td colspan="8" style="font:bold;text-align:center;font-size:10px;">TRAINING SHIP RAHAMAN<br />Candidates Payment Receipts</td>
 
 
 
             </tr>
             <tr>
-                <td colspan="4" style="font:bold;text-align:left">Start Date :@(ViewBag.StartDate == null ? "" : @Convert.ToDateTime(ViewBag.StartDate).ToString("dd-MM-yyyy")) </td>
-                <td colspan="4" style="font:bold;text-align:left">End Date :  @(ViewBag.EndDate == null ? "" : @Convert.ToDateTime(ViewBag.EndDate).ToString("dd-MM-yyyy"))</td>
+                <td colspan="4" style="font:bold;text-align:left;font-size:10px;">Start Date :@(ViewBag.StartDate == null ? "" : @Convert.ToDateTime(ViewBag.StartDate).ToString("dd-MM-yyyy")) </td>
+                <td colspan="4" style="font:bold;text-align:left;font-size:10px;">End Date :  @(ViewBag.EndDate == null ? "" : @Convert.ToDateTime(ViewBag.EndDate).ToString("dd-MM-yyyy"))</td>
 
 
 
@@ -37,9 +37,9 @@
         </table>
     </div>
     @foreach (var item in Model)
-            {
+    {
         <div style="height:10px"></div>
-            var batchdate = (@item.BatchStartDate == null) ? String.Empty : Convert.ToDateTime(@item.BatchStartDate).ToString("dd-MM-yyyy");
+        var batchdate = (@item.BatchStartDate == null) ? String.Empty : Convert.ToDateTime(@item.BatchStartDate).ToString("dd-MM-yyyy");
             <table style="width:100%;page-break-inside:avoid">
 
                 <tr>
@@ -58,7 +58,8 @@
                 </tr>
                 <tr><td class="mystyle" colspan="15"></td></tr>
                 <tr>
-                    <td align="center" colspan="15"><u>FEE RECEIPT</u></td>
+                    <td  colspan="5" align="right"><u>FEE RECEIPT</u></td>
+                    <td colspan="9" align="right" style="font-size:12px;">GST No.27AAATS0215K1ZN</td>
                 </tr>
                 <tr><td class="mystyle" colspan="15"></td></tr>
                 <tr style="border-bottom-style:hidden">
@@ -128,7 +129,7 @@
                     <td class="hide_right" colspan="5" style="text-align:left">
                         @Html.LabelFor(modelItem => item.Course, "Description")
                     </td>
-                    <td class="hide_top_left_right" colspan="5" style="text-align:left">
+                    <td class="hide_top_left_right" colspan="5" style="text-align:right">
                         @Html.LabelFor(modelItem => item.FeePaid, "Paid Amount Rs")
                     </td>
                     <td class="hide_left" colspan="5" style="text-align:right">
@@ -138,10 +139,25 @@
                 <tr><td class="mystyle" colspan="15"></td></tr>
                 <tr>
                     <td class="hide_right" colspan="5" style="text-align:left">
-                        @Html.DisplayFor(modelItem => item.Course)
+                        @Html.DisplayFor(modelItem => item.Course)<br />
+                        @if (item.GST != 0)
+                        {
+                        <text>SGST<br />CGST</text>
+   
+                        }
                     </td>
-                    <td class="hide_top_left_right" colspan="5" style="text-align:left">
-                        @Html.DisplayFor(modelItem => item.FeePaid)
+                    <td class="hide_top_left_right" colspan="5" style="text-align:right">
+                       @{var amount = item.FeePaid - (item.FeePaid * item.GST);
+                          @Html.DisplayFor(modelItem => amount)<br />
+                           if (item.GST != 0)
+                           {
+                               item.SGST = (item.FeePaid * item.GST) / 2;
+                               item.CGST = (item.FeePaid * item.GST) / 2;
+                               <text>@string.Format("{0:n2}",item.SGST)<br/>@string.Format("{0:n2}",item.CGST)</text>
+    }
+}
+                        
+
                     </td>
                     <td class="hide_left" colspan="5" style="text-align:right">
                         @Html.DisplayFor(modelItem => item.FeeBal)
@@ -156,7 +172,7 @@
                     <td class="hide_right" colspan="4" style="text-align:left">
                         @Html.DisplayFor(modelItem => item.AmountInRs)
                     </td>
-                    <td class="hide_top_left_right" colspan="5" style="text-align:left">
+                    <td class="hide_top_left_right" colspan="5" style="text-align:right">
                         @Html.DisplayFor(modelItem => item.FeePaid)
                     </td>
                     <td class="hide_left" colspan="5" style="text-align:right">

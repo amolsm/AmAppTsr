@@ -33,14 +33,12 @@ namespace Tsr.Web.Controllers
         [HttpGet]
         public ActionResult GetCheckList(int? BatchId)
         {
-            var list = from apd in db.Applied
-                       join ap in db.Applications on apd.ApplicationId equals ap.ApplicationId
-                       where (apd.BatchId == BatchId && apd.AdmissionStatus == true)
+            var list = from apd in db.Applied.Where(x => x.BatchId == BatchId && x.AdmissionStatus == true).Select(x => x.ApplicationId).Distinct()
+                       join ap in db.Applications on apd equals ap.ApplicationId
+                     
                         select new CheckListVM
                         {
-                            //Course = cr.CourseName,
-                           // Batchfrom = b.StartDate,
-                            //Batchto = b.EndDate,
+                            
                             StudentId = ap.ApplicationCode,
                             Name = ap.FullName,
                             DOB = ap.DateOfBirth,
@@ -69,16 +67,11 @@ namespace Tsr.Web.Controllers
                             join c in db.Courses on b.CourseId equals c.CourseId
                             where b.BatchId == id
                             select new { c.CourseName, b.StartDate, b.EndDate, b.BatchCode };
-                var list = (from apd in db.Applied
-                            join ap in db.Applications on apd.ApplicationId equals ap.ApplicationId
-                            join cr in db.Courses on apd.CourseId equals cr.CourseId
-                            join b in db.Batches on apd.BatchId equals b.BatchId
-                            where (apd.BatchId == id && apd.AdmissionStatus == true)
-                            select new CheckListVM
+                var list = (from apd in db.Applied.Where(x => x.BatchId == id && x.AdmissionStatus == true).Select(x => x.ApplicationId).Distinct()
+                            join ap in db.Applications on apd equals ap.ApplicationId
+                           select new CheckListVM
                             {
-                                Course = cr.CourseName,
-                                Batchfrom = b.StartDate,
-                                Batchto = b.EndDate,
+                               
                                 StudentId = ap.ApplicationCode,
                                 Name = ap.FullName,
                                 DOB = ap.DateOfBirth,
@@ -283,29 +276,7 @@ namespace Tsr.Web.Controllers
                         }).ToList();
             return PartialView("_ApplicantsListEdit", list.ToList());
         }
-        //[HttpGet]
-        //public async Task<ActionResult> CheckListEditModal(int? id)
-        //{
-        //    Application ap = await db.Applications.FindAsync(id);
-
-        //    var obj = new CheckListVM
-        //    {
-        //        ApplicationId = ap.ApplicationId,
-        //        Name = ap.FullName,
-                
-        //        DOB = ap.DateOfBirth,
-        //        Cdcno = ap.CdcNo,
-        //        PassportNo = ap.PassportNo,
-        //        Rank = ap.RankOfCandidate,
-        //        Grade = ap.GradeOfCompetencyNo,
-        //        IndosNo = ap.InDosNo
-
-
-        //    };
-
-        //    return PartialView("CheckListEditModal", obj);
-        //}
-
+      
 
         [HttpPost]
         public JsonResult CheckListEdit(CheckListVM obj)

@@ -30,6 +30,11 @@ namespace Tsr.Core.Models
         public DateTime? BatchStartDate { get; set; }
         public DateTime? PaymentDate { get; set; }
 
+        public decimal? GST { get; set; }
+
+        public decimal? CGST { get; set; }
+
+        public decimal? SGST { get; set; }
         public string AmountInRs { get; set; }
     }
 }

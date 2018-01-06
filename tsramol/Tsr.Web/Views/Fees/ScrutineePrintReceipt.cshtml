@@ -40,7 +40,9 @@
             </tr>
             <tr><td class="mystyle" colspan="15"></td></tr>
             <tr>
-                <td align="center" colspan="15"><u>FEE RECEIPT</u></td>
+            <tr>
+                <td colspan="5" align="right"><u>FEE RECEIPT</u></td>
+                <td colspan="9" align="right" style="font-size:12px;">GST No.27AAATS0215K1ZN</td>
             </tr>
             <tr><td class="mystyle" colspan="15"></td></tr>
             <tr style="border-bottom-style:hidden">
@@ -110,7 +112,7 @@
                 <td class="hide_right" colspan="5" style="text-align:left">
                     @Html.LabelFor(modelItem => item.Course, "Description")
                 </td>
-                <td class="hide_top_left_right" colspan="5" style="text-align:left">
+                <td class="hide_top_left_right" colspan="5" style="text-align:right">
                     @Html.LabelFor(modelItem => item.FeePaid, "Paid Amount Rs")
                 </td>
                 <td class="hide_left" colspan="5" style="text-align:right">
@@ -120,10 +122,25 @@
             <tr><td class="mystyle" colspan="15"></td></tr>
             <tr>
                 <td class="hide_right" colspan="5" style="text-align:left">
-                    @Html.DisplayFor(modelItem => item.Course)
+                    @Html.DisplayFor(modelItem => item.Course)<br />
+                    @if (item.GST != 0)
+                    {
+                        <text>SGST<br />CGST</text>
+
+                    }
                 </td>
-                <td class="hide_top_left_right" colspan="5" style="text-align:left">
-                    @Html.DisplayFor(modelItem => item.FeePaid)
+                <td class="hide_top_left_right" colspan="5" style="text-align:right">
+                    @{var amount = item.FeePaid - (item.FeePaid * item.GST);
+                        @Html.DisplayFor(modelItem => amount)<br />
+                        if (item.GST != 0)
+                        {
+                            item.SGST = (item.FeePaid * item.GST) / 2;
+                            item.CGST = (item.FeePaid * item.GST) / 2;
+                            <text>@string.Format("{0:n2}", item.SGST)<br />@string.Format("{0:n2}", item.CGST)</text>
+                        }
+                    }
+
+
                 </td>
                 <td class="hide_left" colspan="5" style="text-align:right">
                     @Html.DisplayFor(modelItem => item.FeeBal)
@@ -138,7 +155,7 @@
                 <td class="hide_right" colspan="4" style="text-align:left">
                     @Html.DisplayFor(modelItem => item.AmountInRs)
                 </td>
-                <td class="hide_top_left_right" colspan="5" style="text-align:left">
+                <td class="hide_top_left_right" colspan="5" style="text-align:right">
                     @Html.DisplayFor(modelItem => item.FeePaid)
                 </td>
                 <td class="hide_left" colspan="5" style="text-align:right">

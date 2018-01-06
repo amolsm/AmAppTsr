@@ -1161,7 +1161,11 @@ namespace Tsr.Web.Controllers
                 b.ModifiedDate = DateTime.Now;
                 db.Batches.Add(b);
 
-                await db.SaveChangesAsync();
+                try { await db.SaveChangesAsync(); }
+                catch(Exception e)
+                {
+                    string s = e.ToString();
+                }
                 return Json(new { success = true });
             }
 

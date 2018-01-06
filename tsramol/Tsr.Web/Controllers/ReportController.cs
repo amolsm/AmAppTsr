@@ -778,6 +778,8 @@ namespace Tsr.Web.Controllers
                             from b in pi2.DefaultIfEmpty()
                             join p in db.packages on ap.PackageId equals p.PackageId into pi3
                             from p in pi3.DefaultIfEmpty()
+                            join gst in db.CourseFees on ap.CourseId equals gst.CourseId into pi4
+                            from gst in pi4.DefaultIfEmpty()
                             where (fr.ReceiptDate >= StartDate && fr.ReceiptDate <= EndDate)
                             select new FeesViewPaymentDetailsVM
                             {
@@ -796,10 +798,11 @@ namespace Tsr.Web.Controllers
                                 AmountInRs = Common.AmountInWords.ConvertNumbertoWords(Convert.ToInt64(fr.Amount)),
                                 BatchStartDate = (b == null) ? null : b.StartDate,
                                 PaymentDate = fr.ReceiptDate,
-                                FeeReceiptId = fr.FeeReceiptId
-
-
-                            }).ToList();
+                                FeeReceiptId = fr.FeeReceiptId,
+                                GST=(gst==null)?0:Convert.ToDecimal(gst.GstPercentage/100)
+                              
+                                
+                          }).ToList();
                 ViewBag.StartDate = StartDate;
                 ViewBag.EndDate = EndDate;
                 return new PdfActionResult(data);

@@ -292,13 +292,7 @@ namespace Tsr.Web.Controllers
                 if (app.IsPackage == null || app.IsPackage == false)
                 {
                     var list1 = (
-                                 //from fr in db.FeeReceipts
-                                 //         join ap in db.Applications on fr.ApplicationId equals ap.ApplicationId
-                                 //         join b in db.Batches on ap.BatchId equals b.BatchId
-                                 //         join sd in db.StudentFeeDetails on fr.ApplicationId equals sd.ApplicationId
-                                 //         into sdf
-                                 //         from sd in sdf.DefaultIfEmpty()
-                                 //         join cr in db.Courses on ap.CourseId equals cr.CourseId
+                              
                                  from ap in db.Applications.AsEnumerable()
                                  join b in db.Batches on ap.BatchId equals b.BatchId
                                  join fr in db.FeeReceipts on ap.ApplicationId equals fr.ApplicationId
@@ -306,6 +300,8 @@ namespace Tsr.Web.Controllers
                                  into sdf
                                  from sd in sdf.DefaultIfEmpty()
                                  join cr in db.Courses on ap.CourseId equals cr.CourseId
+                                 join gst in db.CourseFees on ap.CourseId equals gst.CourseId into pi4
+                                 from gst in pi4.DefaultIfEmpty()
 
                                  where (ap.ApplicationId == id)
 
@@ -326,8 +322,8 @@ namespace Tsr.Web.Controllers
                                     AmountInRs = Common.AmountInWords.ConvertNumbertoWords(Convert.ToInt64(fr.Amount)),
                                     BatchStartDate = b.StartDate,
                                     PaymentDate = DateTime.Now,
-                                    FeeReceiptId = fr.FeeReceiptId
-
+                                    FeeReceiptId = fr.FeeReceiptId,
+                                    GST = (gst == null) ? 0 : Convert.ToDecimal(gst.GstPercentage / 100)
 
                                 }).ToList();
 
@@ -358,35 +354,37 @@ namespace Tsr.Web.Controllers
                             AmountInRs = list[0].AmountInRs,
                             BatchStartDate = list[0].BatchStartDate,
                             PaymentDate = list[0].PaymentDate,
-                            FeeReceiptId = list[0].FeeReceiptId
+                            FeeReceiptId = list[0].FeeReceiptId,
+                            GST = list[0].GST
                         }));
                     return new PdfActionResult(list);
                 }
                 else
                 {
                     var list1 = (from ap in db.Applications.AsEnumerable()
-                                join pk in db.packages on ap.PackageId equals pk.PackageId
-                                join fr in db.FeeReceipts on ap.ApplicationId equals fr.ApplicationId
-                                join sd in db.StudentFeeDetails on ap.ApplicationId equals sd.ApplicationId
-                                where (ap.ApplicationId == id)
-                                select new FeesViewPaymentDetailsVM
-                                {
-                                    FeeReceiptNo = fr.FeeReceiptId.ToString(),//fr.FeeReceiptNo,
-                                    PaymentMode = fr.PaymentMode,
-                                    FeesType = fr.FeesType,
-                                    ReceiptDate = fr.ReceiptDate,
-                                    Name = ap.FirstName + " " + ap.LastName,
-                                    Course = pk.PackageName + " (Package)",
-                                    Batch = "",
-                                    StudentId = ap.ApplicationId,
-                                    ApplicationId = ap.ApplicationId,
-                                    ApplicationCode = ap.ApplicationCode,
-                                    FeePaid = fr.Amount,
-                                    FeeBal = sd.FeeBal,
-                                    AmountInRs = Common.AmountInWords.ConvertNumbertoWords(Convert.ToInt64(fr.Amount)),
-                                    BatchStartDate = null,
-                                    PaymentDate = DateTime.Now,
-                                    FeeReceiptId = fr.FeeReceiptId
+                                 join pk in db.packages on ap.PackageId equals pk.PackageId
+                                 join fr in db.FeeReceipts on ap.ApplicationId equals fr.ApplicationId
+                                 join sd in db.StudentFeeDetails on ap.ApplicationId equals sd.ApplicationId
+                                 where (ap.ApplicationId == id)
+                                 select new FeesViewPaymentDetailsVM
+                                 {
+                                     FeeReceiptNo = fr.FeeReceiptId.ToString(),//fr.FeeReceiptNo,
+                                     PaymentMode = fr.PaymentMode,
+                                     FeesType = fr.FeesType,
+                                     ReceiptDate = fr.ReceiptDate,
+                                     Name = ap.FirstName + " " + ap.LastName,
+                                     Course = pk.PackageName + " (Package)",
+                                     Batch = "",
+                                     StudentId = ap.ApplicationId,
+                                     ApplicationId = ap.ApplicationId,
+                                     ApplicationCode = ap.ApplicationCode,
+                                     FeePaid = fr.Amount,
+                                     FeeBal = sd.FeeBal,
+                                     AmountInRs = Common.AmountInWords.ConvertNumbertoWords(Convert.ToInt64(fr.Amount)),
+                                     BatchStartDate = null,
+                                     PaymentDate = DateTime.Now,
+                                     FeeReceiptId = fr.FeeReceiptId,
+                                     GST = 0
 
 
                                 }).ToList();
@@ -417,7 +415,8 @@ namespace Tsr.Web.Controllers
                           AmountInRs = list[0].AmountInRs,
                           BatchStartDate = list[0].BatchStartDate,
                           PaymentDate = list[0].PaymentDate,
-                          FeeReceiptId = list[0].FeeReceiptId
+                          FeeReceiptId = list[0].FeeReceiptId,
+                          GST = list[0].GST
                       }));
 
                     return new PdfActionResult(list);
@@ -818,16 +817,17 @@ namespace Tsr.Web.Controllers
                 var app = db.Applications.Find(id);
                 if (app.IsPackage == null || app.IsPackage==false)
                 {
-                     var list = (from ap in db.Applications.AsEnumerable()
+                    var list = (from ap in db.Applications.AsEnumerable()
                                 join b in db.Batches on ap.BatchId equals b.BatchId
                                 join fr in db.FeeReceipts on ap.ApplicationId equals fr.ApplicationId
                                 join sd in db.StudentFeeDetails on ap.ApplicationId equals sd.ApplicationId
                                 into sdf from sd in sdf.DefaultIfEmpty()
-                                 join cr in db.Courses on ap.CourseId equals cr.CourseId
-                                //join op in db.OnlinePaymentInfos on ap.ApplicationId equals op.ApplicationId
+                                join cr in db.Courses on ap.CourseId equals cr.CourseId
+                                join gst in db.CourseFees on ap.CourseId equals gst.CourseId into pi4
+                                from gst in pi4.DefaultIfEmpty()
 
                                 where (ap.ApplicationId == id)
-                               
+
                                 select new FeesViewPaymentDetailsVM
                                 {
                                     FeeReceiptNo = fr.FeeReceiptId.ToString(),//fr.FeeReceiptNo,
@@ -841,11 +841,12 @@ namespace Tsr.Web.Controllers
                                     ApplicationId = ap.ApplicationId,
                                     ApplicationCode = ap.ApplicationCode,
                                     FeePaid = fr.Amount,
-                                    FeeBal = (sd==null) ? 0: sd.FeeBal ,
+                                    FeeBal = (sd == null) ? 0 : sd.FeeBal,
                                     AmountInRs = Common.AmountInWords.ConvertNumbertoWords(Convert.ToInt64(fr.Amount)),
                                     BatchStartDate = b.StartDate,
                                     PaymentDate = DateTime.Now,
-                                    FeeReceiptId = fr.FeeReceiptId
+                                    FeeReceiptId = fr.FeeReceiptId,
+                                    GST = (gst == null) ? 0 : Convert.ToDecimal(gst.GstPercentage / 100)
 
 
                                 }).ToList();
@@ -874,7 +875,8 @@ namespace Tsr.Web.Controllers
                           AmountInRs = list[0].AmountInRs,
                           BatchStartDate = list[0].BatchStartDate,
                           PaymentDate = list[0].PaymentDate,
-                          FeeReceiptId = list[0].FeeReceiptId
+                          FeeReceiptId = list[0].FeeReceiptId,
+                          GST= list[0].GST
                         }));
                     return new PdfActionResult(list);
                 }
@@ -902,7 +904,8 @@ namespace Tsr.Web.Controllers
                                     AmountInRs = Common.AmountInWords.ConvertNumbertoWords(Convert.ToInt64( fr.Amount)),
                                     BatchStartDate = null,
                                     PaymentDate = DateTime.Now,
-                                    FeeReceiptId = fr.FeeReceiptId
+                                    FeeReceiptId = fr.FeeReceiptId,
+                                    GST=0
 
 
                                 }).ToList();
@@ -933,7 +936,8 @@ namespace Tsr.Web.Controllers
                           AmountInRs = list[0].AmountInRs,
                           BatchStartDate = list[0].BatchStartDate,
                           PaymentDate = list[0].PaymentDate,
-                          FeeReceiptId = list[0].FeeReceiptId
+                          FeeReceiptId = list[0].FeeReceiptId,
+                          GST = list[0].GST
                       }));
 
                     return new PdfActionResult(list);
