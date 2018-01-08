@@ -783,7 +783,7 @@ namespace Tsr.Web.Controllers
                             where (fr.ReceiptDate >= StartDate && fr.ReceiptDate <= EndDate)
                             select new FeesViewPaymentDetailsVM
                             {
-                                FeeReceiptNo = fr.FeeReceiptId.ToString(),//fr.FeeReceiptNo,
+                                FeeReceiptNo = Common.FeeReceiptNumber.GetReceiptNo(fr.FeeReceiptId,fr.PaymentMode),//fr.FeeReceiptNo,
                                 PaymentMode = fr.PaymentMode,
                                 FeesType = fr.FeesType,
                                 ReceiptDate = fr.ReceiptDate,

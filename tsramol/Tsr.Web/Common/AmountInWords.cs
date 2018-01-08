@@ -49,4 +49,25 @@ namespace Tsr.Web.Common
             return words;
         }
     }
+
+    public static class FeeReceiptNumber
+    {
+        public static string GetReceiptNo(int FeeReceiptId,string PaymentMode)
+        {
+            string receiptno = string.Empty;
+            if (PaymentMode == null)
+            {
+                receiptno = FeeReceiptId.ToString();
+            }
+            else if (PaymentMode == "Cheque")
+            {
+                receiptno = "Q" + FeeReceiptId.ToString();
+            }
+            else
+            {
+                receiptno= PaymentMode[0] + FeeReceiptId.ToString();
+            }
+            return receiptno;
+        }
+    }
 }

@@ -108,7 +108,7 @@ namespace Tsr.Web.Controllers
                             
                             select new FeesViewPaymentDetailsVM
                             {
-                                FeeReceiptNo = fr.FeeReceiptNo,
+                                FeeReceiptNo = Common.FeeReceiptNumber.GetReceiptNo(fr.FeeReceiptId, fr.PaymentMode),
                                 PaymentMode = fr.PaymentMode,
                                 FeesType = fr.FeesType,
                                 ReceiptDate = fr.ReceiptDate,
@@ -149,7 +149,7 @@ namespace Tsr.Web.Controllers
                             where (ap.BatchId == Id)
                             select new FeesViewPaymentDetailsVM
                             {
-                                FeeReceiptNo = fr.FeeReceiptNo,
+                                FeeReceiptNo = Common.FeeReceiptNumber.GetReceiptNo(fr.FeeReceiptId, fr.PaymentMode),
                                 PaymentMode = fr.PaymentMode,
                                 FeesType = fr.FeesType,
                                 ReceiptDate = fr.ReceiptDate,
@@ -307,7 +307,7 @@ namespace Tsr.Web.Controllers
 
                                 select new FeesViewPaymentDetailsVM
                                 {
-                                    FeeReceiptNo = fr.FeeReceiptId.ToString(),//fr.FeeReceiptNo,
+                                    FeeReceiptNo = Common.FeeReceiptNumber.GetReceiptNo(fr.FeeReceiptId, fr.PaymentMode),//fr.FeeReceiptNo,
                                     PaymentMode = fr.PaymentMode,
                                     FeesType = fr.FeesType,
                                     ReceiptDate = fr.ReceiptDate,
@@ -368,7 +368,7 @@ namespace Tsr.Web.Controllers
                                  where (ap.ApplicationId == id)
                                  select new FeesViewPaymentDetailsVM
                                  {
-                                     FeeReceiptNo = fr.FeeReceiptId.ToString(),//fr.FeeReceiptNo,
+                                     FeeReceiptNo = Common.FeeReceiptNumber.GetReceiptNo(fr.FeeReceiptId, fr.PaymentMode),//fr.FeeReceiptNo,
                                      PaymentMode = fr.PaymentMode,
                                      FeesType = fr.FeesType,
                                      ReceiptDate = fr.ReceiptDate,
@@ -830,7 +830,7 @@ namespace Tsr.Web.Controllers
 
                                 select new FeesViewPaymentDetailsVM
                                 {
-                                    FeeReceiptNo = fr.FeeReceiptId.ToString(),//fr.FeeReceiptNo,
+                                    FeeReceiptNo = Common.FeeReceiptNumber.GetReceiptNo(fr.FeeReceiptId, fr.PaymentMode),//fr.FeeReceiptNo,
                                     PaymentMode = fr.PaymentMode,
                                     FeesType = fr.FeesType,
                                     ReceiptDate = fr.ReceiptDate,
@@ -889,7 +889,7 @@ namespace Tsr.Web.Controllers
                                 where (ap.ApplicationId == id)
                                 select new FeesViewPaymentDetailsVM
                                 {
-                                    FeeReceiptNo = fr.FeeReceiptId.ToString(),//fr.FeeReceiptNo,
+                                    FeeReceiptNo = Common.FeeReceiptNumber.GetReceiptNo(fr.FeeReceiptId, fr.PaymentMode),//fr.FeeReceiptNo,
                                     PaymentMode = fr.PaymentMode,
                                     FeesType = fr.FeesType,
                                     ReceiptDate = fr.ReceiptDate,
