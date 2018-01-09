@@ -245,7 +245,8 @@ namespace Tsr.Web.Controllers
                     ApplicationId = Convert.ToInt32(ap.ApplicationId),
                     PaymentMode = obj.PaymentMode,
                     PrintStatus = false,
-                    FeesType = "CourseFee"
+                    FeesType = "CourseFee",
+                    ReceiptDate = DateTime.Now
                 };
                 db.FeeReceipts.Add(fr);
                 db.SaveChanges();
@@ -267,14 +268,15 @@ namespace Tsr.Web.Controllers
                     ApplicationId = Convert.ToInt32(ap.ApplicationId),
                     PaymentMode = obj.PaymentMode,
                     PrintStatus = false,
-                    FeesType = "CourseFee"
+                    FeesType = "CourseFee",
+                    ReceiptDate = DateTime.Now
                 };
                 db.FeeReceipts.Add(fr);
                 db.SaveChanges();
 
                 return Json(new { success = true });
             }
-            return View();
+            //return View();
         }
         #endregion
 
@@ -332,7 +334,7 @@ namespace Tsr.Web.Controllers
                     {
                         FeeReceipt fr = db.FeeReceipts.Find(l.FeeReceiptId);
                         fr.PrintStatus = true;
-                        fr.ReceiptDate = DateTime.Now;
+                        //fr.ReceiptDate = DateTime.Now;
                         db.SaveChanges();
 
                     }
@@ -393,7 +395,7 @@ namespace Tsr.Web.Controllers
                     {
                         FeeReceipt fr = db.FeeReceipts.Find(l.FeeReceiptId);
                         fr.PrintStatus = true;
-                        fr.ReceiptDate = DateTime.Now;
+                        //fr.ReceiptDate = DateTime.Now;
                         db.SaveChanges();
 
                     }
@@ -426,6 +428,7 @@ namespace Tsr.Web.Controllers
             return View("CoursePayments");
         }
         #endregion
+
         #region Scrutinee
         public ActionResult Scrutinee()
         {
@@ -641,7 +644,8 @@ namespace Tsr.Web.Controllers
                         ApplicationId = Convert.ToInt32(ap.ApplicationId),
                         PaymentMode = obj.PaymentMode,
                         PrintStatus = false,
-                        FeesType = "ApplicationFee"
+                        FeesType = "ApplicationFee",
+                        ReceiptDate = DateTime.Now
                     };
                     db.FeeReceipts.Add(fr);
                     await db.SaveChangesAsync();
@@ -688,7 +692,8 @@ namespace Tsr.Web.Controllers
                         ApplicationId = Convert.ToInt32(ap.ApplicationId),
                         PaymentMode = obj.PaymentMode,
                         PrintStatus = false,
-                        FeesType = "CourseFee"
+                        FeesType = "CourseFee",
+                        ReceiptDate = DateTime.Now
                     };
                     db.FeeReceipts.Add(fr);
                     await db.SaveChangesAsync();
@@ -741,7 +746,8 @@ namespace Tsr.Web.Controllers
                     ApplicationId = Convert.ToInt32(obj.ApplicationId),
                     PaymentMode = obj.PaymentMode,
                     PrintStatus = false,
-                    FeesType = "PackageFee"
+                    FeesType = "PackageFee",
+                    ReceiptDate = DateTime.Now
                 };
                 db.FeeReceipts.Add(fr);
                 await db.SaveChangesAsync();
@@ -854,7 +860,7 @@ namespace Tsr.Web.Controllers
                     {
                         FeeReceipt fr = db.FeeReceipts.Find(l.FeeReceiptId);
                         fr.PrintStatus = true;
-                        fr.ReceiptDate = DateTime.Now;
+                        //fr.ReceiptDate = DateTime.Now;
                         db.SaveChanges();
 
                     }
@@ -914,7 +920,7 @@ namespace Tsr.Web.Controllers
                     {
                         FeeReceipt fr = db.FeeReceipts.Find(l.FeeReceiptId);
                         fr.PrintStatus = true;
-                        fr.ReceiptDate = DateTime.Now;
+                        //fr.ReceiptDate = DateTime.Now;
                         db.SaveChanges();
 
                     }

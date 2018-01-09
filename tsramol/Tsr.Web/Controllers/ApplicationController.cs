@@ -1310,7 +1310,8 @@ namespace Tsr.Web.Controllers
                                 ApplicationId = Convert.ToInt32(obj.udf3),
                                 PaymentMode = "Online",
                                 PrintStatus = false,
-                                FeesType = "ApplicationFee"
+                                FeesType = "ApplicationFee",
+                                ReceiptDate = DateTime.Now
                             };
                             db.FeeReceipts.Add(fr);
                             await db.SaveChangesAsync();
@@ -1359,7 +1360,8 @@ namespace Tsr.Web.Controllers
                                 ApplicationId = Convert.ToInt32(obj.udf3),
                                 PaymentMode = "Online",
                                 PrintStatus = false,
-                                FeesType = "CourseFee"
+                                FeesType = "CourseFee",
+                                ReceiptDate = DateTime.Now
                             };
                             db.FeeReceipts.Add(fr);
                             await db.SaveChangesAsync();
@@ -1439,7 +1441,8 @@ namespace Tsr.Web.Controllers
                             ApplicationId = Convert.ToInt32(obj.udf3),
                             PaymentMode = "Online",
                             PrintStatus = false,
-                            FeesType = "PackageFee"
+                            FeesType = "PackageFee",
+                            ReceiptDate = DateTime.Now
                         };
                         db.FeeReceipts.Add(fr);
                         await db.SaveChangesAsync();
