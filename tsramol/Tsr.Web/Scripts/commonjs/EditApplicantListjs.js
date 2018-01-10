@@ -32,31 +32,29 @@ $(function () {
          
             var tr = $(this).parents('tr:first');  
             var ApplicationId = $(this).prop('id');
-            var StudentId = tr.find('[name=StudentId-Edit]').val();
             var Name = tr.find('[name=Name-Edit]').val();
             var DOB = tr.find('[name=DOB-Edit]').val();
             var Cdcno = tr.find('[name=Cdcno-Edit]').val();
             var PassportNo = tr.find('[name=PassportNo-Edit]').val();
-            var Rank = tr.find('[name=Rank-Edit]').val();
             var Grade = tr.find('[name=Grade-Edit]').val();
+            var CompetencyNo = tr.find('[name=CompetencyNo-Edit]').val();
             var IndosNo = tr.find('[name=IndosNo-Edit]').val();
             $.ajax({  
                 type: "POST",  
                 url: "/Certification/CheckListEdit/",
-                data: { ApplicationId: ApplicationId, Name: Name, DOB: DOB, Cdcno: Cdcno, PassportNo: PassportNo, Rank: Rank, Grade: Grade,IndosNo:IndosNo },
+                data: { ApplicationId: ApplicationId, Name: Name, DOB: DOB, Cdcno: Cdcno, PassportNo: PassportNo, Grade: Grade, CompetencyNo: CompetencyNo, IndosNo: IndosNo },
                 success: function (item) {  
                   if (item != null) {  
                      debugger;
                         $('#pro').hide();
                         alert("Record Update Successfully");
                         var id = tr.find('span').attr('id');
-                        id.find('#StudentId').text(item.ApplicationCode);
                         id.find('#Name').text(item.FullName);
                         id.find('#DOB').text(item.DateOfBirth);
                         id.find('#Cdcno').text(item.CdcNo);
                         id.find('#PassportNo').text(item.PassportNo);
-                        id.find('#Rank').text(item.RankOfCandidate);
                         id.find('#Grade').text(item.GradeOfCompetencyNo);
+                        id.find('#CompetencyNo').text(item.CertOfCompetencyNo);
                         id.find('#IndosNo').text(item.InDosNo);
                         
                     }  

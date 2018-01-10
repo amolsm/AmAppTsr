@@ -39,13 +39,14 @@ namespace Tsr.Web.Controllers
                         select new CheckListVM
                         {
                             
-                            StudentId = ap.ApplicationCode,
+                            ApplicationCode = ap.ApplicationCode,
                             Name = ap.FullName,
                             DOB = ap.DateOfBirth,
                             Cdcno = ap.CdcNo,
                             PassportNo = ap.PassportNo,
                             Rank = ap.RankOfCandidate,
                             Grade = ap.GradeOfCompetencyNo,
+                            CompetencyNo=ap.CertOfCompetencyNo,
                             IndosNo = ap.InDosNo
 
 
@@ -72,13 +73,14 @@ namespace Tsr.Web.Controllers
                            select new CheckListVM
                             {
                                
-                                StudentId = ap.ApplicationCode,
+                                ApplicationCode = ap.ApplicationCode,
                                 Name = ap.FullName,
                                 DOB = ap.DateOfBirth,
                                 Cdcno = ap.CdcNo,
                                 PassportNo = ap.PassportNo,
                                 Rank = ap.RankOfCandidate,
                                 Grade = ap.GradeOfCompetencyNo,
+                                CompetencyNo = ap.CertOfCompetencyNo,
                                 IndosNo = ap.InDosNo
                             });
                 foreach (var s in batch)
@@ -123,7 +125,7 @@ namespace Tsr.Web.Controllers
                 thead1.Border = Rectangle.LEFT_BORDER;
                 thead1.BackgroundColor = BaseColor.WHITE;
                 table.AddCell(thead1);
-                Chunk cthead2 = new Chunk("Student Id", f);
+                Chunk cthead2 = new Chunk("ApplicationCode", f);
                 PdfPCell thead2 = new PdfPCell(new Phrase(cthead2));
                 thead2.Border = Rectangle.NO_BORDER;
                 thead2.BackgroundColor = BaseColor.WHITE;
@@ -153,12 +155,12 @@ namespace Tsr.Web.Controllers
                 thead6.Colspan = 2;
                 thead6.BackgroundColor = BaseColor.WHITE;
                 table.AddCell(thead6);
-                Chunk cthead7 = new Chunk("Rank", f);
+                Chunk cthead7 = new Chunk("Grade", f);
                 PdfPCell thead7 = new PdfPCell(new Phrase(cthead7));
                 thead7.Border = Rectangle.NO_BORDER;
                 thead7.BackgroundColor = BaseColor.WHITE;
                 table.AddCell(thead7);
-                Chunk cthead8 = new Chunk("Grade", f);
+                Chunk cthead8 = new Chunk("Number", f);
                 PdfPCell thead8 = new PdfPCell(new Phrase(cthead8));
                 thead8.Border = Rectangle.NO_BORDER;
                 thead8.BackgroundColor = BaseColor.WHITE;
@@ -201,7 +203,7 @@ namespace Tsr.Web.Controllers
                     PdfPCell cell1 = new PdfPCell(new Phrase(i.ToString()));
                     cell1.Border = Rectangle.LEFT_BORDER | Rectangle.BOTTOM_BORDER;
                     table.AddCell(cell1);
-                    PdfPCell cell2 = new PdfPCell(new Phrase(s.StudentId.ToString()));
+                    PdfPCell cell2 = new PdfPCell(new Phrase(s.ApplicationCode.ToString()));
                     cell2.Border = Rectangle.BOTTOM_BORDER;
                     cell2.Colspan = 2;
                     table.AddCell(cell2);
@@ -221,10 +223,10 @@ namespace Tsr.Web.Controllers
                     cell6.Border = Rectangle.BOTTOM_BORDER;
                     cell6.Colspan = 2;
                     table.AddCell(cell6);
-                    PdfPCell cell7 = new PdfPCell(new Phrase(""));
+                    PdfPCell cell7 = new PdfPCell(new Phrase(s.Grade == null ? "" : s.Grade.ToString()));
                     cell7.Border = Rectangle.BOTTOM_BORDER;
                     table.AddCell(cell7);
-                    PdfPCell cell8 = new PdfPCell(new Phrase(""));
+                    PdfPCell cell8 = new PdfPCell(new Phrase(s.CompetencyNo == null ? "" : s.CompetencyNo.ToString()));
                     cell8.Border = Rectangle.BOTTOM_BORDER;
                     table.AddCell(cell8);
                     PdfPCell cell9 = new PdfPCell(new Phrase(s.IndosNo == null ? "" : s.IndosNo.ToString()));
@@ -263,13 +265,14 @@ namespace Tsr.Web.Controllers
                         select new CheckListVM
                         {
                             ApplicationId = ap.ApplicationId,
-                            StudentId = ap.ApplicationCode,
+                            ApplicationCode = ap.ApplicationCode,
                             Name = ap.FullName,
                             DOB = ap.DateOfBirth,
                             Cdcno = ap.CdcNo,
                             PassportNo = ap.PassportNo,
                             Rank = ap.RankOfCandidate,
                             Grade = ap.GradeOfCompetencyNo,
+                            CompetencyNo=ap.CertOfCompetencyNo,
                             IndosNo = ap.InDosNo
 
 
@@ -288,8 +291,8 @@ namespace Tsr.Web.Controllers
                 c.DateOfBirth = obj.DOB;
                 c.CdcNo = obj.Cdcno;
                 c.PassportNo = obj.PassportNo;
-                c.RankOfCandidate = obj.Rank;
                 c.GradeOfCompetencyNo = obj.Grade;
+                c.CertOfCompetencyNo = obj.CompetencyNo;
                 c.InDosNo = obj.IndosNo;
 
                
@@ -546,14 +549,14 @@ namespace Tsr.Web.Controllers
             {
 
                  
-                var CertifcateList = from appld in db.Applied
+                var CertifcateList = from appld in db.Applied.Where(x => x.BatchId == obj.BatchId && x.AdmissionStatus == true).Select(m => new { m.ApplicationId, m.CourseId,m.BatchId }).Distinct()
                                      join app in db.Applications on appld.ApplicationId equals app.ApplicationId
                                      join cd in db.CertificateDesigns on appld.CourseId equals cd.CourseId
                                      join c in db.Courses on appld.CourseId equals c.CourseId
                                      join pr in db.Principals on cd.PrincipalId equals pr.PrincipalId
                                      join b in db.Batches on appld.BatchId equals b.BatchId
                                      join e in db.Employees on b.CoordinatorId equals e.EmployeeId
-                                     where appld.AdmissionStatus == true && appld.BatchId == obj.BatchId
+                                    
                                      select new CertificationCertificateVM.Certificate
                                      { 
                                          
@@ -616,14 +619,14 @@ namespace Tsr.Web.Controllers
                     }
                 }
                 
-                var CertifcatesList = from appld in db.Applied
-                                     join app in db.Applications on appld.ApplicationId equals app.ApplicationId
+                var CertifcatesList = from appld in db.Applied.Where(x => x.BatchId == obj.BatchId && x.AdmissionStatus == true).Select(m => new { m.ApplicationId, m.CourseId, m.BatchId }).Distinct()
+                                      join app in db.Applications on appld.ApplicationId equals app.ApplicationId
                                      join cd in db.CertificateDesigns on appld.CourseId equals cd.CourseId
                                      join c in db.Courses on appld.CourseId equals c.CourseId
                                      join pr in db.Principals on cd.PrincipalId equals pr.PrincipalId
                                      join b in db.Batches on appld.BatchId equals b.BatchId
                                      join e in db.Employees on b.CoordinatorId equals e.EmployeeId
-                                     where appld.AdmissionStatus == true && appld.BatchId == obj.BatchId
+                                   
                                      select new CertificationCertificateVM.Certificate
                                      {
 
@@ -721,11 +724,11 @@ namespace Tsr.Web.Controllers
         #region ResultSheet
         public ActionResult ResultSheet(int? id)
         {
-            var studentlist = from appld in db.Applied
+            var studentlist = from appld in db.Applied.Where(x => x.BatchId == id && x.AdmissionStatus == true).Select(m => new { m.ApplicationId, m.CourseId, m.BatchId }).Distinct()
                               join app in db.Applications on appld.ApplicationId equals app.ApplicationId
                               join b in db.Batches on appld.BatchId equals b.BatchId
                               join c in db.Courses on appld.CourseId equals c.CourseId
-                              where appld.AdmissionStatus == true && appld.BatchId == id
+                           
                               select new CertificateApplicantList
                               {
                                   ApplicantId = app.ApplicationId,
