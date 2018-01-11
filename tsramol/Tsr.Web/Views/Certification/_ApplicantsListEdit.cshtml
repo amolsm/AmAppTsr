@@ -5,9 +5,8 @@
 <script src="~/Scripts/commonjs/EditApplicantListjs.js"></script>
 <div id="ajaxgrid">
     @{
-        WebGrid grid = new WebGrid(Model, canPage: true,  selectionFieldName: "selectedRow", ajaxUpdateContainerId: "ajaxgrid");
-        grid.Pager(WebGridPagerModes.NextPrevious);
-
+        WebGrid grid = new WebGrid(Model, canPage: false,  selectionFieldName: "selectedRow", ajaxUpdateContainerId: "ajaxgrid");
+      
     }
 </div>
 <h2>Applicant List</h2>
@@ -20,14 +19,14 @@
     selectedRowStyle: "webgrid-row-style",
     mode: WebGridPagerModes.FirstLast,
     columns: grid.Columns
-    (grid.Column("ApplicationId", "ApplicationId", canSort: false),
-  grid.Column("Student Id", style: "col2",  canSort: false, format: @<text><span id="StudentId" class="display-mode">@item.StudentId</span>@Html.TextBox("StudentId-Edit", (string)item.StudentId, new { @class = "edit-mode form-control", id = "@item.ApplicationId" })</text>),
+    (
+  grid.Column("ApplicationCode", style: "col2",  canSort: false),
   grid.Column("Name", style: "col2", canSort: false, format: @<text><span id="Name" class="display-mode">@item.Name</span>@Html.TextBox("Name-Edit", (string)item.Name, new { @class = "edit-mode form-control", id = "@item.ApplicationId" })</text>),
   grid.Column("DOB", style: "col2", canSort: false, format: @<text><span id="DOB" class="display-mode date">@(Convert.ToDateTime(item.DOB).ToString("dd-MM-yyyy"))</span>@Html.TextBox("DOB-Edit", (DateTime)item.DOB, new { @class = "edit-mode form-control date", id = "@item.ApplicationId" })</text>),
   grid.Column("CDCNo.", style: "col2", canSort: false, format: @<text><span id="Cdcno" class="display-mode">@item.Cdcno</span>@Html.TextBox("Cdcno-Edit", (string)item.Cdcno, new { @class = "edit-mode form-control", id = "@item.ApplicationId" })</text>),
   grid.Column("PassportNo.", style: "col2", canSort: false, format: @<text><span id="PassportNo" class="display-mode">@item.PassportNo</span>@Html.TextBox("PassportNo-Edit", (string)item.PassportNo, new { @class = "edit-mode form-control", id = "@item.ApplicationId" })</text>),
-  grid.Column("Rank", style: "col2", canSort: false, format: @<text><span id="Rank" class="display-mode">@item.Rank</span>@Html.TextBox("Rank-Edit", (string)item.Rank, new { @class = "edit-mode form-control", id = "@item.ApplicationId" })</text>),
-  grid.Column("Grade", style: "col2", canSort: false, format: @<text><span id="Grade" class="display-mode">@item.Grade</span>@Html.TextBox("Grade-Edit", (string)item.Grade, new { @class = "edit-mode form-control", id = "@item.ApplicationId" })</text>),
+  grid.Column("Grade", style: "col2", canSort: false, format: @<text><span id="Rank" class="display-mode">@item.Grade</span>@Html.TextBox("Grade-Edit", (string)item.Rank, new { @class = "edit-mode form-control", id = "@item.ApplicationId" })</text>),
+  grid.Column("Competency No.", style: "col2", canSort: false, format: @<text><span id="CompetencyNo" class="display-mode">@item.CompetencyNo</span>@Html.TextBox("CompetencyNo-Edit", (string)item.CompetencyNo, new { @class = "edit-mode form-control", id = "@item.ApplicationId" })</text>),
   grid.Column("IndosNo", style: "col2", canSort: false, format: @<text><span id="IndosNo" class="display-mode">@item.IndosNo</span>@Html.TextBox("IndosNo-Edit", (string)item.IndosNo, new { @class = "edit-mode form-control", id = "@item.ApplicationId" })</text>),
         grid.Column("Action", canSort: false, style: "col2", format: @<text>
             <div>
@@ -46,18 +45,6 @@
 </div>
    
 
-<!-- MODALS -->
 
-@*<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="defModalHead" aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div id='myModalContent'></div>
-        </div>
-    </div>
-</div>
-
-<script src="~/Scripts/js/plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="~/Scripts/js/plugins/bootstrap/bootstrap-select.js"></script>
-<script src="~/Scripts/ModalForm.js"></script>*@
 
 
