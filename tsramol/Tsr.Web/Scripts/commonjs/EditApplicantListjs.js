@@ -1,10 +1,9 @@
 ﻿
 $(function () {
-    $('.date').datepicker({ format: 'dd-MM-yyyy' });
-        $('.edit-mode').hide();  
-        $('.edit-item').on('click', function () {  
+   $('.edit-mode').hide();  
+        $('.edit-item').on('click', function () {
             $('.edit-mode').hide();  
-            $('.delete-mode').hide();  
+            $('.delete-mode').hide();   
             $('.display-mode').show();  
             var tr = $(this).parents('tr:first');  
             tr.find('.edit-mode, .display-mode').toggle();  

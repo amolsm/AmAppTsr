@@ -22,7 +22,7 @@
     (
   grid.Column("ApplicationCode", style: "col2",  canSort: false),
   grid.Column("Name", style: "col2", canSort: false, format: @<text><span id="Name" class="display-mode">@item.Name</span>@Html.TextBox("Name-Edit", (string)item.Name, new { @class = "edit-mode form-control", id = "@item.ApplicationId" })</text>),
-  grid.Column("DOB", style: "col2", canSort: false, format: @<text><span id="DOB" class="display-mode date">@(Convert.ToDateTime(item.DOB).ToString("dd-MM-yyyy"))</span>@Html.TextBox("DOB-Edit", (DateTime)item.DOB, new { @class = "edit-mode form-control date", id = "@item.ApplicationId" })</text>),
+  grid.Column("DOB", style: "col2", canSort: false, format: @<text><span id="DOB" class="display-mode date">@(Convert.ToDateTime(item.DOB).ToString("dd-MM-yyyy"))</span>@Html.TextBox("DOB-Edit", (string)item.DateOfBirth, new { @class = "edit-mode form-control", id = "@item.ApplicationId",type="Date"})</text>),
   grid.Column("CDCNo.", style: "col2", canSort: false, format: @<text><span id="Cdcno" class="display-mode">@item.Cdcno</span>@Html.TextBox("Cdcno-Edit", (string)item.Cdcno, new { @class = "edit-mode form-control", id = "@item.ApplicationId" })</text>),
   grid.Column("PassportNo.", style: "col2", canSort: false, format: @<text><span id="PassportNo" class="display-mode">@item.PassportNo</span>@Html.TextBox("PassportNo-Edit", (string)item.PassportNo, new { @class = "edit-mode form-control", id = "@item.ApplicationId" })</text>),
   grid.Column("Grade", style: "col2", canSort: false, format: @<text><span id="Rank" class="display-mode">@item.Grade</span>@Html.TextBox("Grade-Edit", (string)item.Rank, new { @class = "edit-mode form-control", id = "@item.ApplicationId" })</text>),

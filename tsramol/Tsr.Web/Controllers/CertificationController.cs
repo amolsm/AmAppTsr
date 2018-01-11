@@ -259,7 +259,7 @@ namespace Tsr.Web.Controllers
         [HttpGet]
         public ActionResult GetCheckListEdit(int? BatchId)
         {
-            var list = (from apd in db.Applied.Where(x=>x.BatchId == BatchId && x.AdmissionStatus == true).Select(x => x.ApplicationId).Distinct()
+            var list = (from apd in db.Applied.Where(x=>x.BatchId == BatchId && x.AdmissionStatus == true).Select(x => x.ApplicationId).Distinct().AsEnumerable()
                         join ap in db.Applications on apd equals ap.ApplicationId
                         
                         select new CheckListVM
@@ -273,7 +273,8 @@ namespace Tsr.Web.Controllers
                             Rank = ap.RankOfCandidate,
                             Grade = ap.GradeOfCompetencyNo,
                             CompetencyNo=ap.CertOfCompetencyNo,
-                            IndosNo = ap.InDosNo
+                            IndosNo = ap.InDosNo,
+                            DateOfBirth=Convert.ToDateTime(ap.DateOfBirth).ToString("yyyy-MM-dd")
 
 
                         }).ToList();

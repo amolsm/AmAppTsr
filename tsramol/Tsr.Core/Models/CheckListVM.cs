@@ -33,6 +33,8 @@ namespace Tsr.Core.Models
         public string IndosNo { get; set; }
         public string Sign { get; set; }
 
+        public string DateOfBirth { get; set; }
+
         public string CompetencyNo { get; set; }
 
         public string ApplicationCode { get; set; }
