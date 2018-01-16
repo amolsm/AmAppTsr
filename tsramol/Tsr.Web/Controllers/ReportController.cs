@@ -799,7 +799,7 @@ namespace Tsr.Web.Controllers
                                 BatchStartDate = (b == null) ? null : b.StartDate,
                                 PaymentDate = fr.ReceiptDate,
                                 FeeReceiptId = fr.FeeReceiptId,
-                                GST=(gst==null)?0:Convert.ToDecimal(gst.GstPercentage/100)
+                                GST=(gst==null)?0:Convert.ToDecimal(gst.GstPercentage)
                               
                                 
                           }).ToList();

@@ -142,20 +142,22 @@
                         @Html.DisplayFor(modelItem => item.Course)<br />
                         @if (item.GST != 0)
                         {
-                        <text>SGST<br />CGST</text>
+                        <text>SGST 9%<br />CGST 9%</text>
    
                         }
                     </td>
                     <td class="hide_top_left_right" colspan="5" style="text-align:right">
-                       @{var amount = item.FeePaid - (item.FeePaid * item.GST);
-                          @Html.DisplayFor(modelItem => amount)<br />
-                           if (item.GST != 0)
-                           {
-                               item.SGST = (item.FeePaid * item.GST) / 2;
-                               item.CGST = (item.FeePaid * item.GST) / 2;
-                               <text>@string.Format("{0:n2}",item.SGST)<br/>@string.Format("{0:n2}",item.CGST)</text>
-    }
-}
+                        @{var gstamount = (((item.FeePaid * 100) / (100 + item.GST)) * (item.GST / 100));
+                            var netprice = item.FeePaid - gstamount;
+
+                            @Html.DisplayFor(modelItem => netprice)<br />
+                            if (item.GST != 0)
+                            {
+                                item.SGST = gstamount / 2;
+                                item.CGST = gstamount / 2;
+                                <text>@string.Format("{0:n2}", item.SGST)<br />@string.Format("{0:n2}", item.CGST)</text>
+                            }
+                        }
                         
 
                     </td>

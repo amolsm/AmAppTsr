@@ -325,7 +325,7 @@ namespace Tsr.Web.Controllers
                                     BatchStartDate = b.StartDate,
                                     PaymentDate = DateTime.Now,
                                     FeeReceiptId = fr.FeeReceiptId,
-                                    GST = (gst == null) ? 0 : Convert.ToDecimal(gst.GstPercentage / 100)
+                                    GST = (gst == null) ? 0 : Convert.ToDecimal(gst.GstPercentage)
 
                                 }).ToList();
 
@@ -852,7 +852,7 @@ namespace Tsr.Web.Controllers
                                     BatchStartDate = b.StartDate,
                                     PaymentDate = DateTime.Now,
                                     FeeReceiptId = fr.FeeReceiptId,
-                                    GST = (gst == null) ? 0 : Convert.ToDecimal(gst.GstPercentage / 100)
+                                    GST = (gst == null) ? 0 : Convert.ToDecimal(gst.GstPercentage)
 
 
                                 }).ToList();
