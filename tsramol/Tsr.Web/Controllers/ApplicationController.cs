@@ -502,7 +502,10 @@ namespace Tsr.Web.Controllers
                         PermenentContactNo = obj.PermenentContactNo,
                         PermenentPin = obj.PermenentPin,
                         PermenentState = obj.PermenentState,
-                        FullName = obj.FullName
+                        FullName = obj.FullName,
+                        OldCertificateDate = obj.OldCertificateDate,
+                        OldCertificateIssuedBy = obj.OldCertificateIssuedBy,
+                        OldCertificateNo = obj.OldCertificateNo
                     };
                     db.Applications.Add(ap);
                     await db.SaveChangesAsync();
@@ -617,7 +620,10 @@ namespace Tsr.Web.Controllers
                         RankOfCandidate = obj.RankOfCandidate,
                         CourseAttendedInTSR = obj.CourseAttendedInTSR,
                         FPFF_AFF_1995 = obj.FPFF_AFF_1995,
-                        FullName = obj.FullName
+                        FullName = obj.FullName,
+                        OldCertificateNo = obj.OldCertificateNo,
+                        OldCertificateIssuedBy = obj.OldCertificateIssuedBy,
+                        OldCertificateDate = obj.OldCertificateDate
                     };
                     db.Applications.Add(ap);
                     await db.SaveChangesAsync();

@@ -44,5 +44,9 @@ namespace Tsr.Core.Models
         public string PermenentPin { get; set; }
         public string PermenentContactNo { get; set; }
 
+        public string OldCertificateNo { get; set; }
+        public DateTime? OldCertificateDate { get; set; }
+        public string OldCertificateIssuedBy { get; set; }
+
     }
 }
