@@ -74,6 +74,12 @@ namespace Tsr.Core.Models
 
             public string ApplicationCode { get; set; }
 
+            public string OldCertificateNo { get; set; }
+
+            public DateTime? OldCertificateDate { get; set; }
+
+            public string OldCertificateIssuedBy { get; set; }
+
 
 
 

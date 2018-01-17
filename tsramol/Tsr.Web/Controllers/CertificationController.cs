@@ -587,7 +587,10 @@ namespace Tsr.Web.Controllers
                                          DateOfIssue = b.EndDate,
                                          PrincipalName = pr.PricipalName,
                                          PrincipalSign = pr.SignatureImgUrl,
-                                         DateofExpiry=b.CourseExpiryDate
+                                         DateofExpiry=b.CourseExpiryDate,
+                                         OldCertificateNo=app.OldCertificateNo,
+                                         OldCertificateDate=app.OldCertificateDate,
+                                         OldCertificateIssuedBy=app.OldCertificateIssuedBy
 
 
                                      };
@@ -657,7 +660,10 @@ namespace Tsr.Web.Controllers
                                          DateOfIssue = b.EndDate,
                                          PrincipalName = pr.PricipalName,
                                          PrincipalSign = pr.SignatureImgUrl,
-                                         DateofExpiry = b.CourseExpiryDate
+                                         DateofExpiry = b.CourseExpiryDate,
+                                         OldCertificateNo = app.OldCertificateNo,
+                                         OldCertificateDate = app.OldCertificateDate,
+                                         OldCertificateIssuedBy = app.OldCertificateIssuedBy
 
 
                                      };

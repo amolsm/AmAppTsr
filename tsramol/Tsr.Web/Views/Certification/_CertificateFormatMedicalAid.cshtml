@@ -109,7 +109,7 @@
 </span><span style="padding-right:10px;">
     holding Certificate No.
 </span><span>
-    <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:225px" value="" />
+    <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:225px" value="@(c.OldCertificateNo == null ? "" : c.OldCertificateNo)" />
 </span></td>
 
 
@@ -118,7 +118,7 @@
                 <span style="padding-right:10px;">
                     dated</span>
                 <span style="padding-right:10px;">
-                    <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:120px" value="" />
+                    <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:120px" value="@(c.OldCertificateDate == null ? "" : @Convert.ToDateTime(c.OldCertificateDate).ToString("dd-MM-yyyy"))" />
                    </span>
                         For Medical First Aid
                     </td>
@@ -130,7 +130,7 @@
                     <span style="padding-right:10px;">
                         Issued by</span>
 
-                        <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:525px" value="" />
+                        <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:525px" value="@(c.OldCertificateIssuedBy == null ? "" : c.OldCertificateIssuedBy)" />
 </td>
 
 
