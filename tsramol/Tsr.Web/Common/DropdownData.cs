@@ -129,10 +129,25 @@ namespace Tsr.Web.Common
             public string BatchCode { get; set; }
         }
 
+        public static SelectList PaymentModeList()
+        {
+            return
+                new SelectList(new List<SelectListItem>
+            {   new SelectListItem { Value = "All", Text= "All"},
+                new SelectListItem { Value = "Online", Text= "Online"},
+                new SelectListItem {Value = "Cash", Text="Cash" },
+                new SelectListItem {Value = "DD", Text="DD" },
+                new SelectListItem {Value = "Cheque", Text="Cheque" }
+            }, "Value", "Text");
+        }
+
     }
     public class BatchDropdownlist
     {
         public int BatchId { get; set; }
         public string BatchCode { get; set; }
     }
+
+  
+
 }

@@ -14,6 +14,7 @@ namespace Tsr.Core.Models
 
         [Required]
         public DateTime? EndDate { get; set; }
+       
 
         public string ApplicantName { get; set; }
 
@@ -29,4 +30,6 @@ namespace Tsr.Core.Models
 
         public string PaymentMode { get; set; }
     }
+
+   
 }

@@ -719,6 +719,7 @@ namespace Tsr.Web.Controllers
         public ActionResult PaymentDetails()
         {
             ReportPaymentVM pr = new ReportPaymentVM();
+            ViewBag.PaymentMode = DropdownData.PaymentModeList();
             return View(pr);
         }
 
@@ -726,11 +727,11 @@ namespace Tsr.Web.Controllers
 
         [HttpPost]
         [MulitipleButton(Name = "action", Argument = "PayInfoReport")]
-        public ActionResult PayInfoReport(DateTime? StartDate, DateTime? EndDate)
+        public ActionResult PayInfoReport(DateTime? StartDate, DateTime? EndDate,string PaymentMode)
         {
             if(ModelState.IsValid)
             { 
-            var data = from fr in db.FeeReceipts
+           IQueryable<ReportPaymentVM> q = from fr in db.FeeReceipts
                        join ap in db.Applications on fr.ApplicationId equals ap.ApplicationId
                        join c in db.Courses on ap.CourseId equals c.CourseId into pi1
                        from c in pi1.DefaultIfEmpty()
@@ -750,7 +751,11 @@ namespace Tsr.Web.Controllers
                            PaymentMode = fr.PaymentMode
 
                        };
-
+                if (PaymentMode != "All")
+                {
+                    q = q.Where(p => p.PaymentMode == PaymentMode);
+                }
+                var data = q.ToList(); 
             ViewBag.StartDate = StartDate;
             ViewBag.EndDate = EndDate;
             return new PdfActionResult(data);
@@ -758,51 +763,57 @@ namespace Tsr.Web.Controllers
              else
             {
                 ReportPaymentVM pr = new ReportPaymentVM();
+                ViewBag.PaymentMode = DropdownData.PaymentModeList();
                 return View("PaymentDetails",pr);
             }
         }
 
         [HttpPost]
         [MulitipleButton(Name = "action", Argument = "PrintReceipts")]
-        public ActionResult PrintReceipts(DateTime? StartDate, DateTime? EndDate)
+        public ActionResult PrintReceipts(DateTime? StartDate, DateTime? EndDate, string PaymentMode)
         {
             if (ModelState.IsValid)
             {
                 var data = (from fr in db.FeeReceipts.AsEnumerable()
-                            join ap in db.Applications on fr.ApplicationId equals ap.ApplicationId
-                            join sd in db.StudentFeeDetails on ap.ApplicationId equals sd.ApplicationId into sdf
-                            from sd in sdf.DefaultIfEmpty()
-                            join c in db.Courses on ap.CourseId equals c.CourseId into pi1
-                            from c in pi1.DefaultIfEmpty()
-                            join b in db.Batches on ap.BatchId equals b.BatchId into pi2
-                            from b in pi2.DefaultIfEmpty()
-                            join p in db.packages on ap.PackageId equals p.PackageId into pi3
-                            from p in pi3.DefaultIfEmpty()
-                            join gst in db.CourseFees on ap.CourseId equals gst.CourseId into pi4
-                            from gst in pi4.DefaultIfEmpty()
-                            where (fr.ReceiptDate >= StartDate && fr.ReceiptDate <= EndDate)
-                            select new FeesViewPaymentDetailsVM
-                            {
-                                FeeReceiptNo = Common.FeeReceiptNumber.GetReceiptNo(fr.FeeReceiptId,fr.PaymentMode),//fr.FeeReceiptNo,
-                                PaymentMode = fr.PaymentMode,
-                                FeesType = fr.FeesType,
-                                ReceiptDate = fr.ReceiptDate,
-                                Name = ap.FullName,
-                                Course = (c == null) ? p.PackageName + " (Package)" : c.ShortName,
-                                Batch = (b == null) ? String.Empty : b.BatchCode,
-                                StudentId = ap.ApplicationId,
-                                ApplicationId = ap.ApplicationId,
-                                ApplicationCode = ap.ApplicationCode,
-                                FeePaid = fr.Amount,
-                                FeeBal = (sd == null) ? 0 : sd.FeeBal,
-                                AmountInRs = Common.AmountInWords.ConvertNumbertoWords(Convert.ToInt64(fr.Amount)),
-                                BatchStartDate = (b == null) ? null : b.StartDate,
-                                PaymentDate = fr.ReceiptDate,
-                                FeeReceiptId = fr.FeeReceiptId,
-                                GST=(gst==null)?0:Convert.ToDecimal(gst.GstPercentage)
-                              
-                                
-                          }).ToList();
+                                                          join ap in db.Applications on fr.ApplicationId equals ap.ApplicationId
+                                                          join sd in db.StudentFeeDetails on ap.ApplicationId equals sd.ApplicationId into sdf
+                                                          from sd in sdf.DefaultIfEmpty()
+                                                          join c in db.Courses on ap.CourseId equals c.CourseId into pi1
+                                                          from c in pi1.DefaultIfEmpty()
+                                                          join b in db.Batches on ap.BatchId equals b.BatchId into pi2
+                                                          from b in pi2.DefaultIfEmpty()
+                                                          join p in db.packages on ap.PackageId equals p.PackageId into pi3
+                                                          from p in pi3.DefaultIfEmpty()
+                                                          join gst in db.CourseFees on ap.CourseId equals gst.CourseId into pi4
+                                                          from gst in pi4.DefaultIfEmpty()
+                                                          where (fr.ReceiptDate >= StartDate && fr.ReceiptDate <= EndDate)
+                                                          select new FeesViewPaymentDetailsVM
+                                                          {
+                                                              FeeReceiptNo = Common.FeeReceiptNumber.GetReceiptNo(fr.FeeReceiptId, fr.PaymentMode),//fr.FeeReceiptNo,
+                                                              PaymentMode = fr.PaymentMode,
+                                                              FeesType = fr.FeesType,
+                                                              ReceiptDate = fr.ReceiptDate,
+                                                              Name = ap.FullName,
+                                                              Course = (c == null) ? p.PackageName + " (Package)" : c.ShortName,
+                                                              Batch = (b == null) ? String.Empty : b.BatchCode,
+                                                              StudentId = ap.ApplicationId,
+                                                              ApplicationId = ap.ApplicationId,
+                                                              ApplicationCode = ap.ApplicationCode,
+                                                              FeePaid = fr.Amount,
+                                                              FeeBal = (sd == null) ? 0 : sd.FeeBal,
+                                                              AmountInRs = Common.AmountInWords.ConvertNumbertoWords(Convert.ToInt64(fr.Amount)),
+                                                              BatchStartDate = (b == null) ? null : b.StartDate,
+                                                              PaymentDate = fr.ReceiptDate,
+                                                              FeeReceiptId = fr.FeeReceiptId,
+                                                              GST = (gst == null) ? 0 : Convert.ToDecimal(gst.GstPercentage)
+
+
+                                                          });
+                if (PaymentMode != "All")
+                {
+                    data = data.Where(p => p.PaymentMode == PaymentMode);
+                }
+               
                 ViewBag.StartDate = StartDate;
                 ViewBag.EndDate = EndDate;
                 return new PdfActionResult(data);
@@ -810,6 +821,7 @@ namespace Tsr.Web.Controllers
             else
             {
                 ReportPaymentVM pr = new ReportPaymentVM();
+                ViewBag.PaymentMode = DropdownData.PaymentModeList();
                 return View("PaymentDetails",pr);
             }
         }
