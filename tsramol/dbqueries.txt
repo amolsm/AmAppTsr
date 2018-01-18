@@ -14,3 +14,8 @@ CREATE TABLE [dbo].[ApplAmts] (
     [Amount] [decimal](18, 2),
     CONSTRAINT [PK_dbo.ApplAmts] PRIMARY KEY ([ApplAmtId])
 )
+
+--17/01/2018
+ALTER TABLE [dbo].[Applications] ADD [OldCertificateNo] [nvarchar](max)
+ALTER TABLE [dbo].[Applications] ADD [OldCertificateDate] [datetime]
+ALTER TABLE [dbo].[Applications] ADD [OldCertificateIssuedBy] [nvarchar](max)
