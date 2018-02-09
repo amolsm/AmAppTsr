@@ -76,9 +76,9 @@ namespace Tsr.Web.Controllers
         {
             var C = db.Batches
                 .Where(c => c.CourseId == CourseId && c.IsActive == true)
-                .Select(x => new { BatchId = x.BatchId, Name = x.StartDate });
+                .Select(x => new { BatchId = x.BatchId, StartDate = x.StartDate , BatchCode = x.BatchCode});
 
-            var Batches = C.ToList().Select(x => new BatchDropdown { BatchId = x.BatchId, Name = Convert.ToDateTime(x.Name).ToString("dd-MM-yyyy") });
+            var Batches = C.ToList().Select(x => new BatchDropdown { BatchId = x.BatchId, Name = Convert.ToDateTime(x.StartDate).ToString("dd-MM-yyyy") +" "+x.BatchCode });
 
             return Json(Batches, JsonRequestBehavior.AllowGet);
         }
@@ -153,6 +153,8 @@ namespace Tsr.Web.Controllers
             if (cc.CetRequired == false)
             {
                 var r = b.TotalSeats - b.ReserveSeats - b.BookedSeats;
+                if (r < 0)
+                    r = 0;
                 rem = r.ToString();
             }
             else

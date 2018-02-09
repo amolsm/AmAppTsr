@@ -38,10 +38,13 @@ $(function () {
             var Grade = tr.find('[name=Grade-Edit]').val();
             var CompetencyNo = tr.find('[name=CompetencyNo-Edit]').val();
             var IndosNo = tr.find('[name=IndosNo-Edit]').val();
+            var OldCertificateIssuedBy = tr.find('[name=OldCertificateIssuedBy-Edit]').val();
+            var OldCertificateDate = tr.find('[name=OldCertificateDate-Edit]').val();
+            var OldCertificateNo = tr.find('[name=OldCertificateNo-Edit]').val();
             $.ajax({  
                 type: "POST",  
                 url: "/Certification/CheckListEdit/",
-                data: { ApplicationId: ApplicationId, Name: Name, DOB: DOB, Cdcno: Cdcno, PassportNo: PassportNo, Grade: Grade, CompetencyNo: CompetencyNo, IndosNo: IndosNo },
+                data: { ApplicationId: ApplicationId, Name: Name, DOB: DOB, Cdcno: Cdcno, PassportNo: PassportNo, Grade: Grade, CompetencyNo: CompetencyNo, IndosNo: IndosNo, OldCertificateNo: OldCertificateNo, OldCertificateIssuedBy: OldCertificateIssuedBy, OldCertificateDate: OldCertificateDate },
                 success: function (item) {  
                   if (item != null) {  
                      debugger;
@@ -55,7 +58,9 @@ $(function () {
                         id.find('#Grade').text(item.GradeOfCompetencyNo);
                         id.find('#CompetencyNo').text(item.CertOfCompetencyNo);
                         id.find('#IndosNo').text(item.InDosNo);
-                        
+                        id.find('#OldCertificateIssuedBy').text(item.OldCertificateIssuedBy);
+                        id.find('#OldCertificateDate').text(item.OldCertificateDateStr);
+                        id.find('#OldCertificateNo').text(item.OldCertificateNo);
                     }  
                     else  
                       alert('Error!');

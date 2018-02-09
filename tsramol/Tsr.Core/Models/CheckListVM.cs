@@ -9,6 +9,7 @@ namespace Tsr.Core.Models
 {
     public class CheckListVM
     {
+        //public int SrNo { get; set; }
         public int ApplicationId { get; set; }
         public string Course { get; set; }
         public DateTime? Batchfrom { get; set; }
@@ -40,6 +41,10 @@ namespace Tsr.Core.Models
         public string ApplicationCode { get; set; }
 
         public string App { get; set; }
+        public string OldCertificateNo { get; set; }
+        public DateTime? OldCertificateDate { get; set; }
+        public string OldCertificateDateStr { get; set; }
+        public string OldCertificateIssuedBy { get; set; }
 
     }
 }

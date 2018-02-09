@@ -4,7 +4,7 @@
         <tr>
 
             <th>Sr.No</th>
-            <th>ApplicationCode</th>
+            @*<th>ApplicationCode</th>*@
 
             <th>Name</th>
             <th>DOB</th>
@@ -14,6 +14,9 @@
 
             <th>Competency No.</th>
             <th>Indos No</th>
+            <th>Cert. No</th>
+            <th>Cert. Date</th>
+            <th>Cert. Issue By</th>
             <th>Sign</th>
           
         </tr>
@@ -25,7 +28,7 @@
             count++;
             <tr>
                 <td>@Html.DisplayFor(modelItem => count)</td>
-                <td>@Html.DisplayFor(modelItem => item.ApplicationCode)</td>
+                @*<td>@Html.DisplayFor(modelItem => item.ApplicationCode)</td>*@
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
@@ -36,6 +39,9 @@
                 <td>@Html.DisplayFor(modelItem => item.Grade)</td>
                 <td>@Html.DisplayFor(modelItem => item.CompetencyNo)</td>
                 <td>@Html.DisplayFor(modelItem => item.IndosNo)</td>
+                <td>@Html.DisplayFor(modelItem => item.OldCertificateNo)</td>
+                <td>@Html.DisplayFor(modelItem => item.OldCertificateDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.OldCertificateIssuedBy)</td>
                 <td></td>
             </tr>
         }

@@ -20,7 +20,7 @@
     mode: WebGridPagerModes.FirstLast,
     columns: grid.Columns
     (
-  grid.Column("ApplicationCode", style: "col2",  canSort: false),
+  grid.Column("SrNo", style: "col2",  canSort: false),
   grid.Column("Name", style: "col2", canSort: false, format: @<text><span id="Name" class="display-mode">@item.Name</span>@Html.TextBox("Name-Edit", (string)item.Name, new { @class = "edit-mode form-control", id = "@item.ApplicationId" })</text>),
   grid.Column("DOB", style: "col2", canSort: false, format: @<text><span id="DOB" class="display-mode date">@(Convert.ToDateTime(item.DOB).ToString("dd-MM-yyyy"))</span>@Html.TextBox("DOB-Edit", (string)item.DateOfBirth, new { @class = "edit-mode form-control", id = "@item.ApplicationId",type="Date"})</text>),
   grid.Column("CDCNo.", style: "col2", canSort: false, format: @<text><span id="Cdcno" class="display-mode">@item.Cdcno</span>@Html.TextBox("Cdcno-Edit", (string)item.Cdcno, new { @class = "edit-mode form-control", id = "@item.ApplicationId" })</text>),
@@ -28,6 +28,10 @@
   grid.Column("Grade", style: "col2", canSort: false, format: @<text><span id="Rank" class="display-mode">@item.Grade</span>@Html.TextBox("Grade-Edit", (string)item.Rank, new { @class = "edit-mode form-control", id = "@item.ApplicationId" })</text>),
   grid.Column("Competency No.", style: "col2", canSort: false, format: @<text><span id="CompetencyNo" class="display-mode">@item.CompetencyNo</span>@Html.TextBox("CompetencyNo-Edit", (string)item.CompetencyNo, new { @class = "edit-mode form-control", id = "@item.ApplicationId" })</text>),
   grid.Column("IndosNo", style: "col2", canSort: false, format: @<text><span id="IndosNo" class="display-mode">@item.IndosNo</span>@Html.TextBox("IndosNo-Edit", (string)item.IndosNo, new { @class = "edit-mode form-control", id = "@item.ApplicationId" })</text>),
+        
+        grid.Column("Cert.No", style: "col2", canSort: false, format: @<text><span id="OldCertificateNo" class="display-mode">@item.OldCertificateNo</span>@Html.TextBox("OldCertificateNo-Edit", (string)item.OldCertificateNo, new { @class = "edit-mode form-control", id = "@item.ApplicationId" })</text>),
+  grid.Column("Cert.Date", style: "col2", canSort: false, format: @<text><span id="OldCertificateDate" class="display-mode date">@(Convert.ToDateTime(item.OldCertificateDate).ToString("dd-MM-yyyy"))</span>@Html.TextBox("OldCertificateDate-Edit", (string)item.OldCertificateDateStr, new { @class = "edit-mode form-control", id = "@item.ApplicationId", type = "Date" })</text>),
+        grid.Column("IssuedBy", style: "col2", canSort: false, format: @<text><span id="OldCertificateIssuedBy" class="display-mode">@item.OldCertificateIssuedBy</span>@Html.TextBox("OldCertificateIssuedBy-Edit", (string)item.OldCertificateIssuedBy, new { @class = "edit-mode form-control", id = "@item.ApplicationId" })</text>),
         grid.Column("Action", canSort: false, style: "col2", format: @<text>
             <div>
                 <div style="padding-left:20px;">

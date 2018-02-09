@@ -33,12 +33,13 @@ namespace Tsr.Web.Controllers
         [HttpGet]
         public ActionResult GetCheckList(int? BatchId)
         {
+            
             var list = from apd in db.Applied.Where(x => x.BatchId == BatchId && x.AdmissionStatus == true).Select(x => x.ApplicationId).Distinct()
                        join ap in db.Applications on apd equals ap.ApplicationId
-                     
-                        select new CheckListVM
-                        {
-                            
+
+                       select new CheckListVM
+                       {
+                           
                             ApplicationCode = ap.ApplicationCode,
                             Name = ap.FullName,
                             DOB = ap.DateOfBirth,
@@ -47,10 +48,14 @@ namespace Tsr.Web.Controllers
                             Rank = ap.RankOfCandidate,
                             Grade = ap.GradeOfCompetencyNo,
                             CompetencyNo=ap.CertOfCompetencyNo,
-                            IndosNo = ap.InDosNo
+                            IndosNo = ap.InDosNo,
+                            OldCertificateDate = ap.OldCertificateDate,
+                            OldCertificateIssuedBy = ap.OldCertificateIssuedBy,
+                            OldCertificateNo = ap.OldCertificateNo
 
 
                         };
+
             return PartialView("_ApplicantsList", list.ToList());
         }
 
@@ -81,8 +86,11 @@ namespace Tsr.Web.Controllers
                                 Rank = ap.RankOfCandidate,
                                 Grade = ap.GradeOfCompetencyNo,
                                 CompetencyNo = ap.CertOfCompetencyNo,
-                                IndosNo = ap.InDosNo
-                            });
+                                IndosNo = ap.InDosNo,
+                               OldCertificateDate = ap.OldCertificateDate,
+                               OldCertificateIssuedBy = ap.OldCertificateIssuedBy,
+                               OldCertificateNo = ap.OldCertificateNo
+                           });
                 foreach (var s in batch)
                 {
                     BatchCode = s.BatchCode;
@@ -259,11 +267,13 @@ namespace Tsr.Web.Controllers
         [HttpGet]
         public ActionResult GetCheckListEdit(int? BatchId)
         {
-            var list = (from apd in db.Applied.Where(x=>x.BatchId == BatchId && x.AdmissionStatus == true).Select(x => x.ApplicationId).Distinct().AsEnumerable()
+            int i = 1;
+            var list = (from apd in db.Applied.Where(x => x.BatchId == BatchId && x.AdmissionStatus == true).Select(x => x.ApplicationId).Distinct().AsEnumerable()
                         join ap in db.Applications on apd equals ap.ApplicationId
-                        
+                        let sno = i++
                         select new CheckListVM
                         {
+                            SrNo = sno,
                             ApplicationId = ap.ApplicationId,
                             ApplicationCode = ap.ApplicationCode,
                             Name = ap.FullName,
@@ -274,10 +284,15 @@ namespace Tsr.Web.Controllers
                             Grade = ap.GradeOfCompetencyNo,
                             CompetencyNo=ap.CertOfCompetencyNo,
                             IndosNo = ap.InDosNo,
-                            DateOfBirth=Convert.ToDateTime(ap.DateOfBirth).ToString("yyyy-MM-dd")
+                            DateOfBirth=Convert.ToDateTime(ap.DateOfBirth).ToString("yyyy-MM-dd"),
+                            OldCertificateDateStr = Convert.ToDateTime(ap.OldCertificateDate).ToString("yyyy-MM-dd"),
+                            OldCertificateDate = ap.OldCertificateDate,
+                            OldCertificateIssuedBy = ap.OldCertificateIssuedBy,
+                            OldCertificateNo = ap.OldCertificateNo
 
 
                         }).ToList();
+
             return PartialView("_ApplicantsListEdit", list.ToList());
         }
       
@@ -295,6 +310,9 @@ namespace Tsr.Web.Controllers
                 c.GradeOfCompetencyNo = obj.Grade;
                 c.CertOfCompetencyNo = obj.CompetencyNo;
                 c.InDosNo = obj.IndosNo;
+            c.OldCertificateDate = obj.OldCertificateDate;
+            c.OldCertificateIssuedBy = obj.OldCertificateIssuedBy;
+            c.OldCertificateNo = obj.OldCertificateNo;
 
                
                 db.SaveChanges();
