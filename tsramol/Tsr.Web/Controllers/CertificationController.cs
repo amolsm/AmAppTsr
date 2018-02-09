@@ -620,14 +620,14 @@ namespace Tsr.Web.Controllers
                
                 ViewBag.Categories = new SelectList(db.CourseCategories.Where(x => x.IsActive == true).ToList(), "CourseCategoryId", "CategoryName");
                 int count = db.Certificates.Where(x=>x.BatchId==obj.BatchId).Count();
-
+                string year = DateTime.Now.Year.ToString();
                 foreach (var item in CertifcateList.ToList())
                 {
                     var existingitem = db.Certificates.Where(c => (c.ApplicationId == item.ApplicationID && c.BatchId == item.BatchId)).Select(m => m.CertificateId).ToList();
                    
                     if (existingitem.Count == 0)
                     {   count++;
-                        string year = DateTime.Now.Year.ToString();
+                      
                         Certificate c = new Certificate
                         {
                             CertificateCode = item.CourseCode + item.BatchCode + count.ToString().PadLeft(3, '0') + year,
@@ -640,19 +640,20 @@ namespace Tsr.Web.Controllers
                         db.SaveChanges();
                     }
                 }
-                
-                var CertifcatesList = from appld in db.Applied.Where(x => x.BatchId == obj.BatchId && x.AdmissionStatus == true).Select(m => new { m.ApplicationId, m.CourseId, m.BatchId }).Distinct()
+                int indexcount = 0;
+               
+                var CertifcatesList = from appld in db.Applied.Where(x => x.BatchId == obj.BatchId && x.AdmissionStatus == true).Select(m => new { m.ApplicationId, m.CourseId, m.BatchId }).Distinct().AsEnumerable()
                                       join app in db.Applications on appld.ApplicationId equals app.ApplicationId
-                                     join cd in db.CertificateDesigns on appld.CourseId equals cd.CourseId
-                                     join c in db.Courses on appld.CourseId equals c.CourseId
-                                     join pr in db.Principals on cd.PrincipalId equals pr.PrincipalId
-                                     join b in db.Batches on appld.BatchId equals b.BatchId
-                                     join e in db.Employees on b.CoordinatorId equals e.EmployeeId
-                                   
-                                     select new CertificationCertificateVM.Certificate
-                                     {
+                                      join cd in db.CertificateDesigns on appld.CourseId equals cd.CourseId
+                                      join c in db.Courses on appld.CourseId equals c.CourseId
+                                      join pr in db.Principals on cd.PrincipalId equals pr.PrincipalId
+                                      join b in db.Batches on appld.BatchId equals b.BatchId
+                                      join e in db.Employees on b.CoordinatorId equals e.EmployeeId
 
-                                         CertificateNo = db.Certificates.Where(x=>(x.ApplicationId==app.ApplicationId && x.BatchId==b.BatchId)).Select(x=>x.CertificateCode).FirstOrDefault(),
+                                      select new CertificationCertificateVM.Certificate
+                                     {
+                                        
+                                         CertificateNo = c.CourseCode+b.BatchCode+(indexcount++).ToString().PadLeft(3, '0') + year,
                                          BatchCode = b.BatchCode,
                                          CourseCode = c.CourseCode,
                                          ApplicationID = app.ApplicationId,

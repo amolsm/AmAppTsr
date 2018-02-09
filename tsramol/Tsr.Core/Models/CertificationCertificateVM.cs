@@ -24,6 +24,7 @@ namespace Tsr.Core.Models
     
         public class Certificate
         {
+         
             public int ApplicationID { get; set; }
 
             public string CourseCode { get; set; }
