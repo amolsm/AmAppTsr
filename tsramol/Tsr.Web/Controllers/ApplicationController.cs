@@ -244,6 +244,14 @@ namespace Tsr.Web.Controllers
                     }).ToList()
                 };
                 ViewBag.Gender = Common.DropdownData.Gender();
+                foreach (var item in vm.PackageBatchId)
+                {
+                    if (item.RemainingSeats <= 0)
+                    {
+                        ViewBag.BatchCode = db.Courses.Find(item.CourseId).CourseName;
+                        return View("NonCetApplicationFull", vm);
+                    }
+                }
                 ViewBag.Meals = Common.DropdownData.Meals();
                 ViewBag.YesNo = Common.DropdownData.YesNo();
                 ViewBag.InfoFlag = "Package";
