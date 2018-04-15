@@ -31,5 +31,30 @@ namespace Tsr.Core.Models
         public string PaymentMode { get; set; }
     }
 
-   
+    public class ReportDatewiseTrainedVM
+    {
+        public int Id { get; set; }
+        public int CourseId { get; set; }
+        public int pcnt { get; set; }
+        public decimal tax { get; set; }
+        public int rcnt { get; set; }
+        public string CourseName { get; set; }
+        public decimal PackageAmt { get; set; }
+        public int PackageCand { get; set; }
+        public int RegularCand { get; set; }
+        public bool? IsPackage { get; set; }
+        public decimal RegularAmt { get; set; }
+    }
+
+    public class ReportDatewiseTrainedVM2
+    {
+        public int Id { get; set; }
+        public int CourseId { get; set; }
+        public string CourseName { get; set; }
+        public decimal PackageAmt { get; set; }
+        public int PackageCand { get; set; }
+        public int RegularCand { get; set; }
+        public bool? IsPackage { get; set; }
+        public decimal RegularAmt { get; set; }
+    }
 }

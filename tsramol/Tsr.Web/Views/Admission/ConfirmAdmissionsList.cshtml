@@ -6,7 +6,7 @@
     <table id="customers2" class="table ">
         <thead>
             <tr>
-
+                <th>Sr No</th>
                 <th>Application Code</th>
                 <th>Name</th>
                 <th>Course</th>
@@ -21,6 +21,7 @@
             {
                 <tr>
                     @Html.Hidden("obj[" + @i + "].ApplicationId", Model[i].ApplicationId)
+                    <td>@{int z = i + 1;} @z</td>
                     <td>
                         @Html.Hidden("obj[" + @i + "].ApplicationCode", Model[i].ApplicationCode)
                         @Model[i].ApplicationCode

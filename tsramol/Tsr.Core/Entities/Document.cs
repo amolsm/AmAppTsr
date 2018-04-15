@@ -15,7 +15,7 @@ namespace Tsr.Core.Entities
         public int DocumentsListId { get; set; }
 
         [Required]
-        [StringLength(50)]
+        //[StringLength()]
         public string DocumentName { get; set; }
 
         [StringLength(50)]

@@ -18,7 +18,7 @@ namespace Tsr.Core.Models
         public string CourseName { get; set; }
         public string BatchName { get; set; }
         public DateTime? CetDate { get; set; }
-        public TimeSpan? CetTime { get; set; }
+        public TimeSpan CetTime { get; set; }
         public string PaidAmount { get; set; }
         public string Fathername { get; set; }
         public string Mothername { get; set; }

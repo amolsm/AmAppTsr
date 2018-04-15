@@ -116,6 +116,7 @@
     <Compile Include="Entities\PackageCourse.cs" />
     <Compile Include="Entities\Principal.cs" />
     <Compile Include="Entities\StudentFeeDetail.cs" />
+    <Compile Include="Entities\UserMenu.cs" />
     <Compile Include="Models\AddmissionCetCreateVM.cs" />
     <Compile Include="Models\AddmissionCetListVM.cs" />
     <Compile Include="Models\AdmissionConfirmDGExcelFormat.cs" />
@@ -169,6 +170,7 @@
     <Compile Include="Models\ReportPaymentVM.cs" />
     <Compile Include="Models\ScrutineeMakePaymentVM.cs" />
     <Compile Include="Models\UserlistViewModel.cs" />
+    <Compile Include="Models\ValidApplication.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

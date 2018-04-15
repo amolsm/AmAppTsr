@@ -50,6 +50,10 @@ namespace Tsr.Infra
 
         public DbSet<ApplAmt> ApplAmts { get; set; }
 
+        public DbSet<MainMenu> MainMenus { get; set; }
+        public DbSet<SubMenu> SubMenus { get; set; }
+        public DbSet<UserMenu> UserMenus { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             //modelBuilder.Entity<Course>()

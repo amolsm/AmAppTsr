@@ -1,0 +1,114 @@
+﻿
+@model List<Tsr.Core.Models.ReportDatewiseTrainedVM>
+@{
+    ViewBag.Title = "Trained Candidates";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<ul class="breadcrumb push-down-0">
+    <li><a href="#">Reports</a></li>
+    <li class="active"> Datewise Trained Candidates</li>
+
+</ul>
+<!-- END BREADCRUMB -->
+
+<div class="page-content-wrap">
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="form-horizontal">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Datewise Trained Candidates</h3>
+
+                        </div>
+
+
+                        <div class="panel-body">
+                            <div class="row">
+
+                                <div class="col-md-12">
+
+                                    <div class="form-group">
+
+                                        <div class="col-lg-3">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    Start Date
+                                                </div>
+                                                @*@Html.TextBox("StartDate", new  { @class = "form-control", @type = "Date" })*@
+                                                <input type="date" id="StartDate" class="form-control" />
+                                            </div>
+                                            
+                                        </div>
+
+
+                                        <div class="col-lg-3">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    End Date
+                                                </div>
+                                                @*@Html.TextBox("EndDate", new { @class = "form-control", @type = "Date" })*@
+                                                <input type="date" id="EndDate" class="form-control" />
+                                            </div>
+                                           
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <input class="btn btn-primary" type="button" value="Search" onclick="Search()" />
+
+                                                &nbsp;&nbsp; <input type="button" class="btn btn-primary" value="Refresh" onClick="window.location.reload()">
+                                                &nbsp;&nbsp;
+                                                @*<input class="btn btn-primary" type="button" value="View In Pdf" onclick="location.href='@Url.Action("ConformStudentListPdf", "Admission")?id=' + document.getElementById('BatchId').value" />*@
+                                                <div class="btn-group">
+                                                    <a href="#" data-toggle="dropdown" class="btn btn-success dropdown-toggle">Export <span class="caret"></span></a>
+                                                    <ul class="dropdown-menu" role="menu" style="background-color: #57a9a8">
+                                                       
+                                                        <li><input class="btn btn-primary" type="button" value="Excel" onclick="location.href='@Url.Action("ExportToExcelTrainedCandidates", "Report")?StartDate=' + document.getElementById('StartDate').value + '&EndDate='+document.getElementById('EndDate').value" /></li>
+                                                        @*<li><input class="btn btn-primary" type="button" value="Excel Full List" onclick="location.href='@Url.Action("ConfirmAdmissionsExportToExcel", "Admission")?id=' + document.getElementById('BatchId').value" /></li>
+                                                        <li><input class="btn btn-primary" type="button" value="Excel DG Format" onclick="location.href='@Url.Action("ConfirmAdmissionsDGExcel", "Admission")?id=' + document.getElementById('BatchId').value" /></li>*@
+                                                    </ul>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    
+
+                                </div>
+
+
+                            </div>
+
+                          
+                        </div>
+
+                        <div id="dvResult">
+                            @{Html.RenderPartial("TrainedCandidatesList", Model);}
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>
+<script>
+     function Search() {
+         var StartDate = $('#StartDate').val();
+         var EndDate = $('#EndDate').val();
+         $("#dvResult").load('@(Url.Action("GetListTrainedCandidates", "Report",null, Request.Url.Scheme))?StartDate=' + StartDate + '&EndDate=' + EndDate);
+      //$('#customers2').DataTable();
+  }
+</script>

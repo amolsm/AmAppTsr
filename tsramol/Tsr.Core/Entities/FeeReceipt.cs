@@ -19,7 +19,9 @@ namespace Tsr.Core.Entities
 
         public string ChequeNo { get; set; }
         public string DDNo { get; set; }
+        public string BankName { get; set; }
+        public string Location { get; set; }
+        public string Fy { get; set; }
 
-       
     }
 }

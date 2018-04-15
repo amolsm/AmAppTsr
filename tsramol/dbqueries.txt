@@ -19,3 +19,35 @@ CREATE TABLE [dbo].[ApplAmts] (
 ALTER TABLE [dbo].[Applications] ADD [OldCertificateNo] [nvarchar](max)
 ALTER TABLE [dbo].[Applications] ADD [OldCertificateDate] [datetime]
 ALTER TABLE [dbo].[Applications] ADD [OldCertificateIssuedBy] [nvarchar](max)
+
+--30/03
+CREATE TABLE [dbo].[MainMenus] (
+    [Id] [int] NOT NULL IDENTITY,
+    [Name] [nvarchar](max),
+    [IsActive] [bit] NOT NULL,
+    CONSTRAINT [PK_dbo.MainMenus] PRIMARY KEY ([Id])
+)
+CREATE TABLE [dbo].[SubMenus] (
+    [Id] [int] NOT NULL IDENTITY,
+    [MainMenuId] [int] NOT NULL,
+    [Name] [nvarchar](max),
+    [Controller] [nvarchar](max),
+    [Action] [nvarchar](max),
+    [IsActive] [bit] NOT NULL,
+    CONSTRAINT [PK_dbo.SubMenus] PRIMARY KEY ([Id])
+)
+CREATE TABLE [dbo].[UserMenus] (
+    [Id] [int] NOT NULL IDENTITY,
+    [RoleId] [nvarchar](max),
+    [MainMenuId] [int] NOT NULL,
+    [SubMenuId] [int] NOT NULL,
+    CONSTRAINT [PK_dbo.UserMenus] PRIMARY KEY ([Id])
+)
+
+--
+ALTER TABLE [dbo].[FeeReceipts] ADD [BankName] [nvarchar](max)
+ALTER TABLE [dbo].[FeeReceipts] ADD [Location] [nvarchar](max)
+ALTER TABLE [dbo].[FeeReceipts] ADD [Fy] [nvarchar](max)
+
+--10/04
+ALTER TABLE [dbo].[Document] ALTER COLUMN [DocumentName] [nvarchar](max) NOT NULL

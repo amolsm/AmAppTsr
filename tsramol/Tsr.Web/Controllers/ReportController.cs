@@ -14,6 +14,8 @@ using Aspose.Email.Clients.Exchange.WebService;
 using Aspose.Email;
 using Aspose.Email.Clients.Exchange;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls;
+using System.Web.UI;
 
 namespace Tsr.Web.Controllers
 {
@@ -22,6 +24,167 @@ namespace Tsr.Web.Controllers
         // GET: Report
         AppContext db = new AppContext();
 
+        #region trainedReport
+        public ActionResult TrainedCandidates()
+        {
+            var obj = new List<ReportDatewiseTrainedVM>();
+            return View(obj);
+        }
+        public ActionResult GetListTrainedCandidates(DateTime? StartDate, DateTime? EndDate)
+        {
+            if (StartDate != null && EndDate != null)
+            {
+                int pcnt = 0, rcnt = 0;
+                var list = (from mt in db.Applied.AsEnumerable()
+                           join ap in db.Applications on mt.ApplicationId equals ap.ApplicationId
+                           join b in db.Batches on mt.BatchId equals b.BatchId
+                           join c in db.Courses on mt.CourseId equals c.CourseId
+                           //join sfd in db.StudentFeeDetails on ap.ApplicationId equals sfd.ApplicationId
+                           join cf in db.CourseFees on c.CourseId equals cf.CourseId
+                           where (b.StartDate >= StartDate && b.StartDate <= EndDate && mt.AdmissionStatus == true)
+                           orderby (c.CategoryId)
+                           select new
+                           {
+                               CourseId = c.CourseId,
+                               //CatetoryId = c.CategoryId,
+                               CourseName = c.CourseName,
+                               IsPackage = ap.IsPackage,
+                               //PackageAmt = sfd.FeePaid
+                               //PackageAmt = (Convert.ToBoolean(ap.IsPackage)) ? cf.PackageFee : 0,
+                               //RegularAmt = (Convert.ToBoolean(!ap.IsPackage)) ? cf.ActualFee : 0,
+                               PackageAmt = cf.PackageFee + ((decimal)cf.PackageFee / 100 * (decimal)cf.GstPercentage),
+                               RegularAmt = cf.ActualFee + ((decimal)cf.ActualFee / 100 * (decimal)cf.GstPercentage),
+                               tax = cf.GstPercentage,
+                              pcnt = (Convert.ToBoolean(ap.IsPackage)) ? ++pcnt : pcnt,
+                               rcnt = (Convert.ToBoolean(!ap.IsPackage)) ? ++rcnt : rcnt
+                           }).ToList();
+
+
+                var list2 = list.GroupBy(l => l.CourseId)
+                            .Select(x => new ReportDatewiseTrainedVM
+                            {
+                                CourseName = x.First().CourseName,
+                                IsPackage = x.First().IsPackage,
+                                //PackageAmt = Convert.ToDecimal(x.Sum(p => p.PackageAmt)),
+                                // RegularAmt = Convert.ToDecimal(x.Sum(p=>p.RegularAmt)),
+                                PackageAmt = Convert.ToDecimal(x.First().PackageAmt), 
+                                RegularAmt = Convert.ToDecimal(x.First().RegularAmt),
+                                //tax = Convert.ToDecimal( x.First().tax),
+                                pcnt = x.Count(p=>p.IsPackage == true),
+                                rcnt = x.Count(p => p.IsPackage != true)
+                            }
+                            ).ToList();
+
+                return PartialView("TrainedCandidatesList", list2.ToList());
+            }
+           
+            var obj = new List<ReportDatewiseTrainedVM>();
+            return PartialView("TrainedCandidatesList",obj);
+        }
+        public ActionResult ExportToExcelTrainedCandidates(DateTime? StartDate, DateTime? EndDate)
+        {
+            var gv = new GridView();
+
+            int pcnt = 0, rcnt = 0;
+            var list = from mt in db.Applied.AsEnumerable()
+                       join ap in db.Applications on mt.ApplicationId equals ap.ApplicationId
+                       join b in db.Batches on mt.BatchId equals b.BatchId
+                       join c in db.Courses on mt.CourseId equals c.CourseId
+                       //join sfd in db.StudentFeeDetails on ap.ApplicationId equals sfd.ApplicationId
+                       join cf in db.CourseFees on c.CourseId equals cf.CourseId
+                       where (b.StartDate >= StartDate && b.StartDate <= EndDate && mt.AdmissionStatus == true)
+                       orderby (c.CategoryId)
+                       select new
+                       {
+                           CourseId = c.CourseId,
+                           //CatetoryId = c.CategoryId,
+                           CourseName = c.CourseName,
+                           IsPackage = ap.IsPackage,
+                           
+                           PackageAmt = cf.PackageFee + ((decimal)cf.PackageFee / 100 * (decimal)cf.GstPercentage),
+                           RegularAmt = cf.ActualFee + ((decimal)cf.ActualFee / 100 * (decimal)cf.GstPercentage),
+                           tax = cf.GstPercentage,
+                           pcnt = (ap.IsPackage.ToString()=="true") ? ++pcnt : pcnt,
+                           rcnt = (ap.IsPackage.ToString()!="true") ? ++rcnt : rcnt
+                       };
+
+            int cnt = 1;
+            var list2 = list.GroupBy(l => l.CourseId)
+                        .Select(x => new 
+                        {
+                            SrNo = cnt++,
+                            CourseName = x.First().CourseName,
+                           
+                                PackageAmount = x.First().PackageAmt,
+                            PackageCandidates = x.Count(p => p.IsPackage == true),
+                            RegularAmount = x.First().RegularAmt,
+                            RegularCandidates = x.Count(p => p.IsPackage != true),
+                            TotalCandidates = x.Count(p => p.IsPackage == true) + x.Count(p => p.IsPackage != true),
+                            TotalAmount = (x.First().PackageAmt * x.Count(p => p.IsPackage == true)) + (x.First().RegularAmt * x.Count(p => p.IsPackage != true))
+                        }
+                        ).ToList();
+
+            gv.DataSource = list2.ToList();
+            gv.DataBind();
+            Response.ClearContent();
+            Response.Buffer = true;
+            Response.AddHeader("content-disposition", "attachment; filename=ConfirmAdmissions.xls");
+            Response.ContentType = "application/ms-excel";
+            Response.Charset = "";
+            StringWriter objStringWriter = new StringWriter();
+            HtmlTextWriter objHtmlTextWriter = new HtmlTextWriter(objStringWriter);
+            gv.RenderControl(objHtmlTextWriter);
+            Response.Output.Write(objStringWriter.ToString());
+            Response.Flush();
+            Response.End();
+            return View("Index");
+        }
+        public ActionResult GetListTrainedCandidates2(DateTime? StartDate, DateTime? EndDate)
+        {
+            if (StartDate != null && EndDate != null)
+            {
+                int pcnt = 0, rcnt = 0;
+                var list = from mt in db.Applied.AsEnumerable()
+                           join ap in db.Applications on mt.ApplicationId equals ap.ApplicationId
+                           join b in db.Batches on mt.BatchId equals b.BatchId
+                           join c in db.Courses on mt.CourseId equals c.CourseId
+                           join sfd in db.StudentFeeDetails on ap.ApplicationId equals sfd.ApplicationId
+                           join cf in db.CourseFees on c.CourseId equals cf.CourseId
+                           where (b.StartDate >= StartDate && b.EndDate <= EndDate && mt.AdmissionStatus == true)
+                           orderby (c.CategoryId)
+                           select new
+                           {
+                               CourseId = c.CourseId,
+                               //CatetoryId = c.CategoryId,
+                               CourseName = c.CourseName,
+                               IsPackage = ap.IsPackage,
+                               //PackageAmt = sfd.FeePaid
+                               PackageAmt = (Convert.ToBoolean(ap.IsPackage)) ? cf.PackageFee : 0,
+                               RegularAmt = (Convert.ToBoolean(!ap.IsPackage)) ? sfd.FeePaid : 0,
+                               pcnt = (Convert.ToBoolean(ap.IsPackage)) ? ++pcnt : pcnt,
+                               rcnt = (Convert.ToBoolean(!ap.IsPackage)) ? ++rcnt : rcnt
+                           };
+
+
+                var list2 = list.GroupBy(l => l.CourseId)
+                            .Select(x => new ReportDatewiseTrainedVM
+                            {
+                                CourseName = x.First().CourseName,
+                                IsPackage = x.First().IsPackage,
+                                PackageAmt = Convert.ToDecimal(x.Sum(p => p.PackageAmt)),
+                                RegularAmt = Convert.ToDecimal(x.Sum(p => p.RegularAmt)),
+                                pcnt = x.Count(p => p.IsPackage == true),
+                                rcnt = x.Count(p => p.IsPackage == false)
+                            }
+                            ).ToList();
+
+                return PartialView("TrainedCandidatesList", list2.ToList());
+            }
+
+            var obj = new List<ReportDatewiseTrainedVM>();
+            return PartialView("TrainedCandidatesList", obj);
+        }
+        #endregion
         public ActionResult test()
         {
             EmailModel em = new EmailModel
@@ -789,7 +952,8 @@ namespace Tsr.Web.Controllers
                                                           where (fr.ReceiptDate >= StartDate && fr.ReceiptDate <= EndDate)
                                                           select new FeesViewPaymentDetailsVM
                                                           {
-                                                              FeeReceiptNo = Common.FeeReceiptNumber.GetReceiptNo(fr.FeeReceiptId, fr.PaymentMode),//fr.FeeReceiptNo,
+                                                              //FeeReceiptNo = Common.FeeReceiptNumber.GetReceiptNo(fr.FeeReceiptId, fr.PaymentMode),//fr.FeeReceiptNo,
+                                                              FeeReceiptNo = fr.FeeReceiptNo,
                                                               PaymentMode = fr.PaymentMode,
                                                               FeesType = fr.FeesType,
                                                               ReceiptDate = fr.ReceiptDate,

@@ -1,0 +1,50 @@
+﻿@model List<Tsr.Core.Models.ReportDatewiseTrainedVM>
+
+<table id="customers2" class="table ">
+    <thead>
+        <tr>
+           <th>Sr No</th>
+            <th>Course</th>
+            <th>Package amount</th>
+            <th>Package candidates</th>
+            <th>Regular amount</th>
+            <th>Regular candidates</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ int cnt = 1; decimal tot = 0;}
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+            <tr>
+                <th> @cnt </th> 
+                <td>                   
+                    @Model[i].CourseName
+                </td>
+                <td>                   
+                    @Model[i].PackageAmt.ToString("0.00")
+                </td>
+                <td>
+                    @Model[i].pcnt
+                </td>
+                <td>                    
+                    @Model[i].RegularAmt.ToString("0.00")
+                </td>
+                <td>
+                    @Model[i].rcnt
+                </td>
+                <td>
+                   
+                    @{var t = Convert.ToDecimal((Model[i].PackageAmt * Model[i].pcnt) +( Model[i].RegularAmt * Model[i].rcnt));}
+                    @t.ToString("0.00")
+                </td>
+               @{cnt++; tot = tot + t;}
+
+            </tr>
+                    }
+
+        <tr><td colspan="5"></td><td>Total</td><td>@tot.ToString("0.00")</td></tr>
+
+    </tbody>
+
+</table>

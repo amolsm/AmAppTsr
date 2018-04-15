@@ -41,7 +41,7 @@ namespace Tsr.Web.Controllers
         public JsonResult FillBatchForCet(int? CourseId)
         {
             var C = db.Batches
-                .Where(c => c.CourseId == CourseId && c.IsActive == true && c.OnlineBookingStatus == true)
+                .Where(c => c.CourseId == CourseId && c.IsActive == true )
                 .Select(x => new { BatchId = x.BatchId, Name = x.StartDate });
 
             var Batches = C.ToList().Select(x => new BatchDropdown { BatchId = x.BatchId, BatchCode = Convert.ToDateTime(x.Name).ToString("dd-MM-yyyy") });
@@ -308,7 +308,7 @@ namespace Tsr.Web.Controllers
                             CourseName = cr.ShortName,
                             BatchName = b.BatchCode,
                             CetDate = cm.CetDate,
-                            CetTime = cm.CetTime,
+                            CetTime = (TimeSpan)cm.CetTime,
                             Name =ap.FullName,
                             Fathername = ap.MiddleName,
                             Mothername = ap.MotherName
@@ -357,7 +357,7 @@ namespace Tsr.Web.Controllers
 
                     cb.BeginText();
                     cb.SetFontAndSize(bf_verdanabold, 10);
-                    cb.ShowTextAligned(Element.ALIGN_CENTER, "ENTRANCE EXAM October 2017", 313f, 730f, 0);
+                    cb.ShowTextAligned(Element.ALIGN_CENTER, "ENTRANCE EXAM", 313f, 730f, 0);
                     cb.EndText();
 
                     cb.BeginText();
@@ -414,7 +414,7 @@ namespace Tsr.Web.Controllers
 
                     cb.BeginText();
                     cb.SetFontAndSize(bf_arial3, 10f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.CetTime == null ? "" : Convert.ToString(app.CetTime), 380f, 620f, 0);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.CetTime == null ? "" : app.CetTime.ToString("hh:mm tt"), 380f, 620f, 0);
                     cb.EndText();
 
                     cb.SetLineWidth(1.0f);
@@ -525,7 +525,7 @@ namespace Tsr.Web.Controllers
 
                     cb.BeginText();
                     cb.SetFontAndSize(bf_verdanabold, 10f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Admission to Pre-Sea Course is subject to qualifying in entrance exam October 2017 and the", 38f, 350f, 0);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Admission to Pre-Sea Course is subject to qualifying in entrance exam and the", 38f, 350f, 0);
                     cb.EndText();
 
                     cb.BeginText();

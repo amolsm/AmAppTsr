@@ -118,11 +118,23 @@ namespace Tsr.Web.Common
             {
                 new SelectListItem { Value = "Online", Text= "Online"},
                 new SelectListItem {Value = "Cash", Text="Cash" },
+                new SelectListItem {Value = "Card", Text="Card" },
                 new SelectListItem {Value = "DD", Text="DD" },
                 new SelectListItem {Value = "Cheque", Text="Cheque" }
+                
             }, "Value", "Text");
         }
 
+        public static SelectList PaymentLocation()
+        {
+            return
+                new SelectList(new List<SelectListItem>
+            {
+                new SelectListItem { Value = "Nhava", Text= "Nhava"},
+                new SelectListItem {Value = "Worli", Text="Worli" },
+               
+            }, "Value", "Text");
+        }
         public class BatchDropdownlist
         {
             public int BatchId { get; set; }
@@ -136,6 +148,7 @@ namespace Tsr.Web.Common
             {   new SelectListItem { Value = "All", Text= "All"},
                 new SelectListItem { Value = "Online", Text= "Online"},
                 new SelectListItem {Value = "Cash", Text="Cash" },
+                new SelectListItem {Value = "Card", Text="Card" },
                 new SelectListItem {Value = "DD", Text="DD" },
                 new SelectListItem {Value = "Cheque", Text="Cheque" }
             }, "Value", "Text");

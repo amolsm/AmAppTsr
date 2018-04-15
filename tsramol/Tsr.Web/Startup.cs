@@ -73,6 +73,13 @@ namespace Tsr.Web
                 roleManager.Create(role);
 
             }
+            if (!roleManager.RoleExists("Fees Worli"))
+            {
+                var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
+                role.Name = "Fees";
+                roleManager.Create(role);
+
+            }
             // creating Creating Tester role     
             if (!roleManager.RoleExists("Printing"))
             {

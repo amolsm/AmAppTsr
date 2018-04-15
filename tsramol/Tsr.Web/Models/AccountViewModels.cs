@@ -3,6 +3,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Tsr.Web.Models
 {
+    public class CreateRoleVM
+    {
+        [Required]
+        [Display(Name = "Role")]
+        public string Roles { get; set; }
+    }
     public class ExternalLoginConfirmationViewModel
     {
         [Required]

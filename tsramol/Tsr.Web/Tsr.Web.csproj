@@ -310,6 +310,9 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Common\CSS\Certificate.css" />
+    <Content Include="Common\CSS\FeeReciept.css" />
+    <Content Include="Common\Img\border.png" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\chosen-sprite.png" />
@@ -442,6 +445,8 @@
     <Content Include="Scripts\chosen.jquery.js" />
     <Content Include="Scripts\commonjs\commondropdown.js" />
     <Content Include="Scripts\commonjs\EditApplicantListjs.js" />
+    <Content Include="Scripts\commonjs\FeesCoursePayments.js" />
+    <Content Include="Scripts\commonjs\FeesScrutinee.js" />
     <Content Include="Scripts\dropzone\basic.css" />
     <Content Include="Scripts\dropzone\basic.min.css" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.js" />
@@ -1089,6 +1094,11 @@
     <Content Include="Views\Admission\DiscontinueStudent.cshtml" />
     <Content Include="Views\Admission\DiscontinueList.cshtml" />
     <Content Include="Views\Report\PrintReceipts.cshtml" />
+    <Content Include="Views\ManageUsers\RolesList.cshtml" />
+    <Content Include="Views\ManageUsers\_RoleCreate.cshtml" />
+    <Content Include="Views\ManageUsers\RoleMenu.cshtml" />
+    <Content Include="Views\Report\TrainedCandidates.cshtml" />
+    <Content Include="Views\Report\TrainedCandidatesList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

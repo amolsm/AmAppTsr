@@ -640,7 +640,7 @@ namespace Tsr.Web.Controllers
                         db.SaveChanges();
                     }
                 }
-                int indexcount = 0;
+                int indexcount = 1;
                
                 var CertifcatesList = from appld in db.Applied.Where(x => x.BatchId == obj.BatchId && x.AdmissionStatus == true).Select(m => new { m.ApplicationId, m.CourseId, m.BatchId }).Distinct().AsEnumerable()
                                       join app in db.Applications on appld.ApplicationId equals app.ApplicationId
@@ -649,12 +649,13 @@ namespace Tsr.Web.Controllers
                                       join pr in db.Principals on cd.PrincipalId equals pr.PrincipalId
                                       join b in db.Batches on appld.BatchId equals b.BatchId
                                       join e in db.Employees on b.CoordinatorId equals e.EmployeeId
-
+                                      //join temp in db.Certificates on app.ApplicationId equals temp.ApplicationId
                                       select new CertificationCertificateVM.Certificate
                                      {
-                                        
-                                         CertificateNo = c.CourseCode+b.BatchCode+(indexcount++).ToString().PadLeft(3, '0') + year,
-                                         BatchCode = b.BatchCode,
+
+                                          CertificateNo = c.CourseCode+b.BatchCode+(indexcount++).ToString().PadLeft(3, '0') + year,
+                                          //CertificateNo = temp.CertificateCode,
+                                          BatchCode = b.BatchCode,
                                          CourseCode = c.CourseCode,
                                          ApplicationID = app.ApplicationId,
                                          ApplicationCode=app.ApplicationCode,
@@ -713,25 +714,35 @@ namespace Tsr.Web.Controllers
         #region ResultFormat
         public ActionResult ViewResultFormat(int? id)
         {
-            var studentlist = from appld in db.Certificates
-                              join app in db.Applications on appld.ApplicationId equals app.ApplicationId
-                              join b in db.Batches on appld.BatchId equals b.BatchId
-                              join c in db.Courses on b.CourseId equals c.CourseId
-                              where  appld.BatchId == id
-                              select new CertificateApplicantList
+            int indexcount = 1;
+            string year = DateTime.Now.Year.ToString();
+            var studentlist =
+
+                from appld in db.Applied
+                join app in db.Applications on appld.ApplicationId equals app.ApplicationId
+                join b in db.Batches on appld.BatchId equals b.BatchId
+                join c in db.Courses on b.CourseId equals c.CourseId
+                where appld.BatchId == id && appld.AdmissionStatus == true
+                orderby appld.ApplicationId
+                select new CertificateApplicantList
                               {
-                                  ApplicantId=app.ApplicationId,
-                                  ApplicantName=app.FullName.ToUpper(),
-                                  Rank=app.RankOfCandidate.ToUpper(),
-                                  DateOfBirth=app.DateOfBirth,
-                                  IndosNo=app.InDosNo.ToUpper(),
-                                  PassportNo=app.PassportNo.ToUpper(),
-                                  CdcNo=app.CdcNo.ToUpper(),
-                                  CertificateNo=appld.CertificateCode
-                                   
+                                  ApplicantId = app.ApplicationId,
+                                  ApplicantName = app.FullName.ToUpper(),
+                                  Rank = app.RankOfCandidate.ToUpper(),
+                                  DateOfBirth = app.DateOfBirth,
+                                  IndosNo = app.InDosNo.ToUpper(),
+                                  PassportNo = app.PassportNo.ToUpper(),
+                                  CdcNo = app.CdcNo.ToUpper(),
+                                  CertificateNo = ""
+
                               };
             var batchdetails = db.Batches.Where(x => x.BatchId == id).FirstOrDefault();
             var coursedetails = db.Courses.Where(x => x.CourseId == batchdetails.CourseId).FirstOrDefault();
+            var ob = studentlist.ToList();
+            foreach (var item in ob)
+            {
+                item.CertificateNo = coursedetails.CourseCode + batchdetails.BatchCode + (indexcount++).ToString().PadLeft(3, '0') + year;
+            }
             CertificateViewResultFormat cvrf = new CertificateViewResultFormat();
             cvrf.CourseName = coursedetails.CourseName;
             cvrf.BatchCode = batchdetails.BatchCode;
@@ -739,7 +750,7 @@ namespace Tsr.Web.Controllers
             cvrf.To = batchdetails.EndDate;
             cvrf.Date = batchdetails.StartDate;
             cvrf.CurrentDate = DateTime.Now;
-            cvrf._CertificateApplicantList = studentlist.ToList();
+            cvrf._CertificateApplicantList = ob.ToList();
 
                               
                              

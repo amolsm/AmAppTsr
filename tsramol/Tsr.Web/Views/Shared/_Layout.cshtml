@@ -63,10 +63,17 @@
         {
             @Html.Partial("_SidebarFees");
         }
+        else if (User.IsInRole("Fees Worli"))
+        {
+            @Html.Partial("_SidebarFees");
+        }
         else if (User.IsInRole("Printing"))
         {
             @Html.Partial("_SidebarPrinting");
         }
+
+
+
 
 
 
