@@ -264,6 +264,29 @@ namespace Tsr.Web.Controllers
             return View();
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangePassword(ChangePasswordvm vm)
+        {
+            if (!ModelState.IsValid)
+            {
+                return PartialView("_changePassword",vm);
+            }
+           
+            //var current = model.OldPassword;
+            var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(),vm.OldPassword,vm.NewPassword);
+            if (result.Succeeded)
+            {
+                return View("Index", "MasterDetails");
+            }
+            AddErrors(result);
+            return PartialView("_changePassword");
+        }
+        public ActionResult ChangePassword()
+        {
+            return PartialView("_changePassword");
+        }
         //
         // GET: /Account/ResetPasswordConfirmation
         [AllowAnonymous]

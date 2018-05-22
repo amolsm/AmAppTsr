@@ -36,19 +36,19 @@
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                                 @Html.DropDownList("CourseId",
-                                                (IEnumerable<SelectListItem>)ViewBag.Course, "Select Course", new { @class = "form-control", @onchange = "FillBatch()" })
+                 (IEnumerable<SelectListItem>)ViewBag.Course, "Select Course", new { @class = "form-control", @onchange = "FillBatch()" })
                                             </div>
 
                                         </div>
 
-                                        
+
 
                                         <div class="col-md-3">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                                 @Html.DropDownList("BatchId",
-                   new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "BatchCode"),
-              " ", new { @class = "form-control", @onchange ="FillCet()" })
+new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "BatchCode"),
+" ", new { @class = "form-control", @onchange = "FillCet()" })
                                             </div>
 
                                         </div>
@@ -57,16 +57,34 @@
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                                 @Html.DropDownList("CetMasterId",
-                   new SelectList(Enumerable.Empty<SelectListItem>(), "CetMasterId", "CetCode"),
-              " ", new { @class = "form-control" })
+new SelectList(Enumerable.Empty<SelectListItem>(), "CetMasterId", "CetCode"),
+" ", new { @class = "form-control" })
                                             </div>
 
                                         </div>
 
-                                        <div class="col-md-3">
+                                        @*<div class="col-md-3">
                                             <div class="input-group">
                                                 <input class="btn btn-primary" type="button" value="Search" onclick="Search()" />
                                                 &nbsp;&nbsp; <input type="button" class="btn btn-primary" value="Refresh Page" onClick="window.location.reload()">
+                                            </div>
+
+                                        </div>*@
+
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <input class="btn btn-primary" type="button" value="Search" onclick="Search()" />
+                                                @*&nbsp;&nbsp;&nbsp;&nbsp;<input class="btn btn-primary" type="button" value="Save All" onclick="location.href='@Url.Action("Export", "Admission")?id=' + document.getElementById('ApplicationId').value"   />*@
+                                                &nbsp;<input type="button" class="btn btn-primary" value="Refresh" onClick="window.location.reload()">
+                                                &nbsp;
+                                                <div class="btn-group">
+                                                    <a href="#" data-toggle="dropdown" class="btn btn-success dropdown-toggle">Export <span class="caret"></span></a>
+                                                    <ul class="dropdown-menu" role="menu" style="background-color: #57a9a8">
+                                                        @*<li role="presentation" class="dropdown-header">Dropdown header</li>*@
+                                                        @*<li><input class="btn btn-primary" type="button" value="View In Pdf" onclick="location.href='@Url.Action("Export", "Admission")?id=' + document.getElementById('BatchId').value" /></li>*@
+                                                        <li><input class="btn btn-primary" type="button" value="Excel List" onclick="location.href='@Url.Action("EntranceMarksEx", "Admission")?BatchId=' + document.getElementById('BatchId').value + '&CetMasterId=' + document.getElementById('CetMasterId').value" /></li>
+                                                    </ul>
+                                                </div>
                                             </div>
 
                                         </div>

@@ -7,7 +7,7 @@
 <ul class="breadcrumb push-down-0">
     <li><a href="#">Home</a></li>
     <li><a href="#">Admission</a></li>
-    <li><a href="#">Hall Tickets</a></li>
+    <li><a href="#">Hall Tickets Non Payment</a></li>
     @*<li class="active">Error 404</li>*@
 </ul>
 <!-- END BREADCRUMB -->
@@ -20,7 +20,7 @@
                 <form class="form-horizontal">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Hall Tickets</h3>
+                            <h3 class="panel-title">Hall Tickets Non Payments</h3>
 
                         </div>
 
@@ -45,34 +45,32 @@
                                             <div class="input-group">
                                                 <span class="input-group-addon">Batch</span>
                                                 @Html.DropDownList("BatchId",
-new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "BatchCode"), " ", new { @class = "form-control", @onchange = "FillCet()" })
+                   new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "BatchCode"), " ", new { @class = "form-control", @onchange = "FillCet()" })
                                             </div>
 
                                         </div>
 
                                         @*<div class="col-md-3">
-                                 <div class="input-group">
-                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                     @Html.DropDownList("CetMasterId",
-        new SelectList(Enumerable.Empty<SelectListItem>(), "CetMasterId", "CetCode"), " ", new { @class = "form-control" })
-                                 </div>
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                @Html.DropDownList("CetMasterId",
+                   new SelectList(Enumerable.Empty<SelectListItem>(), "CetMasterId", "CetCode"), " ", new { @class = "form-control" })
+                                            </div>
 
-                             </div>*@
-
-                                        
+                                        </div>*@
 
                                         <div class="col-md-6">
                                             <div class="input-group">
                                                 <input class="btn btn-primary" type="button" value="Search" onclick="Search()" />
                                                 @*&nbsp;&nbsp;&nbsp;&nbsp;<input class="btn btn-primary" type="button" value="Save All" onclick="location.href='@Url.Action("Export", "Admission")?id=' + document.getElementById('ApplicationId').value"   />*@
                                                 &nbsp;&nbsp;<input type="button" class="btn btn-primary" value="Refresh Page" onClick="window.location.reload()">
-                                                &nbsp;&nbsp;
+                                                &nbsp;&nbsp; 
                                                 <div class="btn-group">
                                                     <a href="#" data-toggle="dropdown" class="btn btn-success dropdown-toggle">Export <span class="caret"></span></a>
                                                     <ul class="dropdown-menu" role="menu" style="background-color: #57a9a8">
                                                         @*<li role="presentation" class="dropdown-header">Dropdown header</li>*@
-                                                        <li><input class="btn btn-primary" type="button" value="View In Pdf" onclick="location.href='@Url.Action("Export", "Admission")?id=' + document.getElementById('BatchId').value" /></li>
-                                                        <li><input class="btn btn-primary" type="button" value="Excel List" onclick="location.href='@Url.Action("ExportEx", "Admission")?id=' + document.getElementById('BatchId').value" /></li>
+                                                        <li><input class="btn btn-primary" type="button" value="View In Pdf" onclick="location.href='@Url.Action("ExportNonPay", "Admission")?id=' + document.getElementById('BatchId').value" /></li>
+                                                        <li><input class="btn btn-primary" type="button" value="Excel List" onclick="location.href='@Url.Action("ExportNonPayEx", "Admission")?id=' + document.getElementById('BatchId').value" /></li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -87,7 +85,7 @@ new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "BatchCode"), " ",
 
                             </div>
                             <div id="dvResult">
-                                @{Html.RenderPartial("_HallticketApplicant", Model);}
+                                @{Html.RenderPartial("_HallticketApplicantNonPay", Model);}
                                 <script src="~/Scripts/js/plugins/datatables/jquery.dataTables.min.js"></script>
                             </div>
                         </div>
@@ -148,6 +146,6 @@ new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "BatchCode"), " ",
   function Search() {
       var BatchId = $('#BatchId').val();
 
-      $("#dvResult").load('@(Url.Action("GetApplicantForHalltickets", "Admission",null, Request.Url.Scheme))?BatchId=' + BatchId);
+      $("#dvResult").load('@(Url.Action("GetApplicantForHallticketsNonPay", "Admission",null, Request.Url.Scheme))?BatchId=' + BatchId);
   }
 </script>

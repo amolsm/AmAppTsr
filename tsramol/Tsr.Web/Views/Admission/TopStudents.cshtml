@@ -73,10 +73,19 @@
 
                                     </div>
                                     <div class="form-group">
-                                        <div class="col-md-3">
+                                        <div class="col-md-6">
                                             <div class="input-group">
                                                 <input class="btn btn-primary" type="button" value="Search" onclick="Search()" />
                                                 &nbsp;&nbsp; <input type="button" class="btn btn-primary" value="Refresh Page" onClick="window.location.reload()">
+                                                &nbsp;
+                                                <div class="btn-group">
+                                                    <a href="#" data-toggle="dropdown" class="btn btn-success dropdown-toggle">Export <span class="caret"></span></a>
+                                                    <ul class="dropdown-menu" role="menu" style="background-color: #57a9a8">
+                                                        @*<li role="presentation" class="dropdown-header">Dropdown header</li>*@
+                                                        @*<li><input class="btn btn-primary" type="button" value="View In Pdf" onclick="location.href='@Url.Action("Export", "Admission")?id=' + document.getElementById('BatchId').value" /></li>*@
+                                                        <li><input class="btn btn-primary" type="button" value="Excel List" onclick="location.href='@Url.Action("TopStudentEx", "Admission")?BatchId=' + document.getElementById('BatchId').value + '&CetMasterId=' + document.getElementById('CetMasterId').value+ '&Count=' + document.getElementById('TopCount').value" /></li>
+                                                    </ul>
+                                                </div>
                                             </div>
 
                                         </div>

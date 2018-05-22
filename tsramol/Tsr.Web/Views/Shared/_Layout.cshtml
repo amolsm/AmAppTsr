@@ -92,7 +92,15 @@
     <!-- END PAGE CONTAINER -->
     <!-- MESSAGE BOX-->
     @Html.Partial("_logoff")
+ 
     <!-- END MESSAGE BOX-->
+    <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="defModalHead" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div id='myModalContent'></div>
+            </div>
+        </div>
+    </div>
     <!-- START PRELOADS -->
     <audio id="audio-alert" src="~/audio/alert.mp3" preload="auto"></audio>
     <audio id="audio-fail" src="~/audio/fail.mp3" preload="auto"></audio>
@@ -121,5 +129,6 @@
      $('#loading').hide();
   });
     </script>
+    <script src="~/Scripts/ModalForm2.js"></script>
 </body>
 </html>

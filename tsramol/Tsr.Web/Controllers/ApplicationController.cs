@@ -575,73 +575,73 @@ namespace Tsr.Web.Controllers
                     return View("ApplicationSummary", apsm);
                 }
             }
-            else
-            {
-                ValidApplication va = new ValidApplication
-                {
-                    BatchId = obj.BatchId,
-                    CellNo = obj.CellNo,
-                    CourseId = obj.CourseId,
-                    DateOfBirth = obj.DateOfBirth,
-                    Email = obj.Email,
-                    PackageId = (int)obj.PackageId
-                };
-                int vl = Valid.IsApplicationRepeat(va);
-                if (vl != 0)
-                {
-                    Application ap = db.Applications.Find(vl);
-                    //Application Package Details and Fee Calcuation
-                    decimal fee = 0, taxamount = 0, minBalance = 0;
-                    var pbid = db.ApplicationPackageDetails.Where(x => x.ApplicationId == vl).ToList();
-                    foreach (var item in pbid)
-                    {                                              
+            //else
+            //{
+            //    ValidApplication va = new ValidApplication
+            //    {
+            //        BatchId = obj.BatchId,
+            //        CellNo = obj.CellNo,
+            //        CourseId = obj.CourseId,
+            //        DateOfBirth = obj.DateOfBirth,
+            //        Email = obj.Email,
+            //        PackageId = (int)obj.PackageId
+            //    };
+            //    int vl = Valid.IsApplicationRepeat(va);
+            //    if (vl != 0)
+            //    {
+            //        Application ap = db.Applications.Find(vl);
+            //        //Application Package Details and Fee Calcuation
+            //        decimal fee = 0, taxamount = 0, minBalance = 0;
+            //        var pbid = db.ApplicationPackageDetails.Where(x => x.ApplicationId == vl).ToList();
+            //        foreach (var item in pbid)
+            //        {                                              
 
-                        //Fee Calculations
-                        var cf = await db.CourseFees.FirstOrDefaultAsync(x => x.CourseId == item.CourseId);
-                        if (cf.GstPercentage == 0)
-                        {
-                            fee = fee + (decimal)cf.PackageFee;
-                            if (cf.MinBalance == 0)
-                                minBalance = minBalance + (decimal)cf.PackageFee;
-                            else
-                                minBalance = minBalance + (decimal)cf.MinBalance;
-                        }
-                        else
-                        {
-                            fee = fee + (decimal)cf.PackageFee + (((decimal)cf.PackageFee / 100) * (decimal)cf.GstPercentage);
-                            taxamount = taxamount + (((decimal)cf.PackageFee / 100) * (decimal)cf.GstPercentage);
-                            if (cf.MinBalance == 0)
-                                minBalance = minBalance + (decimal)cf.PackageFee + (((decimal)cf.PackageFee / 100) * (decimal)cf.GstPercentage);
-                            else
-                                minBalance = minBalance + (decimal)cf.MinBalance;
-                        }
-                    }
+            //            //Fee Calculations
+            //            var cf = await db.CourseFees.FirstOrDefaultAsync(x => x.CourseId == item.CourseId);
+            //            if (cf.GstPercentage == 0)
+            //            {
+            //                fee = fee + (decimal)cf.PackageFee;
+            //                if (cf.MinBalance == 0)
+            //                    minBalance = minBalance + (decimal)cf.PackageFee;
+            //                else
+            //                    minBalance = minBalance + (decimal)cf.MinBalance;
+            //            }
+            //            else
+            //            {
+            //                fee = fee + (decimal)cf.PackageFee + (((decimal)cf.PackageFee / 100) * (decimal)cf.GstPercentage);
+            //                taxamount = taxamount + (((decimal)cf.PackageFee / 100) * (decimal)cf.GstPercentage);
+            //                if (cf.MinBalance == 0)
+            //                    minBalance = minBalance + (decimal)cf.PackageFee + (((decimal)cf.PackageFee / 100) * (decimal)cf.GstPercentage);
+            //                else
+            //                    minBalance = minBalance + (decimal)cf.MinBalance;
+            //            }
+            //        }
 
-                    ApplicationSumPayNonCetVM apsm = new ApplicationSumPayNonCetVM
-                    {
-                        ApplicationId = ap.ApplicationId,
-                        CategoryId = ap.CategoryId,
-                        CourseId = ap.CourseId,
-                        BatchId = ap.BatchId,
-                        ApplicationCode = ap.ApplicationCode,
-                        amount = minBalance, //package Fee Min Balance
-                        CellNo = ap.CellNo,
-                        Email = ap.Email,
-                        FirstName = ap.FirstName,
-                        LastName = ap.LastName,
-                        CourseName = db.packages.FirstOrDefault(x => x.PackageId == ap.PackageId).PackageName, //PackageName
-                        BatchCode = "",
-                        CourseFee = fee, //packageFee
-                        TaxAmount = taxamount,
-                        udf1 = ap.BatchId.ToString(), //udf1 BatchId
-                        udf2 = ap.ApplicationCode, //udf2 ApplicationCode 
-                        udf3 = ap.ApplicationId.ToString(), //udf3 ApplicationID 
-                        udf4 = ap.PackageId.ToString() //udf4 PackageId if package             
-                    };
+            //        ApplicationSumPayNonCetVM apsm = new ApplicationSumPayNonCetVM
+            //        {
+            //            ApplicationId = ap.ApplicationId,
+            //            CategoryId = ap.CategoryId,
+            //            CourseId = ap.CourseId,
+            //            BatchId = ap.BatchId,
+            //            ApplicationCode = ap.ApplicationCode,
+            //            amount = minBalance, //package Fee Min Balance
+            //            CellNo = ap.CellNo,
+            //            Email = ap.Email,
+            //            FirstName = ap.FirstName,
+            //            LastName = ap.LastName,
+            //            CourseName = db.packages.FirstOrDefault(x => x.PackageId == ap.PackageId).PackageName, //PackageName
+            //            BatchCode = "",
+            //            CourseFee = fee, //packageFee
+            //            TaxAmount = taxamount,
+            //            udf1 = ap.BatchId.ToString(), //udf1 BatchId
+            //            udf2 = ap.ApplicationCode, //udf2 ApplicationCode 
+            //            udf3 = ap.ApplicationId.ToString(), //udf3 ApplicationID 
+            //            udf4 = ap.PackageId.ToString() //udf4 PackageId if package             
+            //        };
 
-                    return View("ApplicationSummary", apsm);
-                }
-            }
+            //        return View("ApplicationSummary", apsm);
+            //    }
+            //}
 
                
 
@@ -2115,7 +2115,7 @@ namespace Tsr.Web.Controllers
                            ApplicationCode = ap.ApplicationCode,
                            ApplicationId = ap.ApplicationId,
                            BatchName = b.BatchCode,
-                           Name = ap.FirstName + " " + ap.LastName,
+                           Name = ap.FullName,
                            PaymentStatus = (apl == null)? "Pending" : "Success",
                            Email = ap.Email,
                            Cell = ap.CellNo
@@ -2372,6 +2372,15 @@ namespace Tsr.Web.Controllers
                     }).ToList()
                 };
                 ViewBag.Gender = Common.DropdownData.Gender();
+                foreach (var item in vm.PackageBatchId)
+                {
+                    if (item.RemainingSeats <= 0)
+                    {
+                        ViewBag.BatchCode = db.Courses.Find(item.CourseId).CourseName;
+                        return View("NonCetApplicationFull", vm);
+                    }
+                }
+                ViewBag.Gender = Common.DropdownData.Gender();
                 ViewBag.Meals = Common.DropdownData.Meals();
                 ViewBag.YesNo = Common.DropdownData.YesNo();
                 ViewBag.InfoFlag = "Package";
@@ -2384,6 +2393,44 @@ namespace Tsr.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> OfflineCetApplication(ApplicationCetVM obj, HttpPostedFileBase file)
         {
+            ValidApplication va = new ValidApplication
+            {
+                BatchId = obj.BatchId,
+                CellNo = obj.CellNo,
+                CourseId = obj.CourseId,
+                DateOfBirth = obj.DateOfBirth,
+                Email = obj.Email
+
+            };
+            int vl = Valid.IsApplicationRepeat(va);
+            if (vl != 0)
+            {
+                Application ap = db.Applications.Find(vl);
+                var cf = db.CourseFees.FirstOrDefault(x => x.CourseId == ap.CourseId);
+                var applicationFee = cf.ApplicationFee;
+
+                ApplicationSumPayCetVM apsm = new ApplicationSumPayCetVM
+                {
+                    ApplicationId = ap.ApplicationId,
+                    CategoryId = ap.CategoryId,
+                    CourseId = ap.CourseId,
+                    BatchId = ap.BatchId,
+                    ApplicationCode = ap.ApplicationCode,
+                    amount = applicationFee,
+                    CellNo = ap.CellNo,
+                    Email = ap.Email,
+                    FirstName = ap.FirstName,
+                    LastName = ap.LastName,
+                    CourseName = db.Courses.Find(ap.CourseId).CourseName,
+                    BatchCode = db.Batches.Find(ap.BatchId).BatchCode,
+                    udf1 = ap.BatchId.ToString(), //udf1 BatchId
+                    udf2 = ap.ApplicationCode, //udf2 ApplicationCode  
+                    udf3 = ap.ApplicationId.ToString(), //udf3 ApplicationID   
+                    udf4 = "0" //Single Course Non Package          
+                };
+
+                return View("OfflineApplicationSummaryPre", apsm);
+            }
             if (ModelState.IsValid)
             {
                 var b = db.Batches.FirstOrDefault(x => x.BatchId == obj.BatchId);
@@ -2541,6 +2588,138 @@ namespace Tsr.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> OfflineNonCetApplication(ApplicationNonCetVM obj)
         {
+            if (obj.PackageId == 0 || obj.PackageId == null)
+            {
+                ValidApplication va = new ValidApplication
+                {
+                    BatchId = obj.BatchId,
+                    CellNo = obj.CellNo,
+                    CourseId = obj.CourseId,
+                    DateOfBirth = obj.DateOfBirth,
+                    Email = obj.Email,
+                    PackageId = 0
+                };
+                int vl = Valid.IsApplicationRepeat(va);
+                if (vl != 0)
+                {
+                    Application ap = db.Applications.Find(vl);
+                    var cf = db.CourseFees.FirstOrDefault(x => x.CourseId == ap.CourseId);
+                    var actualFee = cf.ActualFee;
+                    var minBal = cf.MinBalance;
+                    var gstPercent = cf.GstPercentage;
+                    decimal taxAmount;
+
+                    if (gstPercent > 0)
+                    {
+                        taxAmount = ((decimal)actualFee / 100) * (decimal)gstPercent;
+                    }
+                    else { taxAmount = 0; }
+                    decimal amount = 0;
+
+                    if (actualFee > minBal && minBal > 1)
+                    {
+                        amount = (decimal)minBal + taxAmount;
+                    }
+                    else
+                    {
+                        amount = (decimal)actualFee;
+                    }
+
+
+                    ApplicationSumPayNonCetVM apsm = new ApplicationSumPayNonCetVM
+                    {
+
+                        ApplicationId = ap.ApplicationId,
+                        CategoryId = ap.CategoryId,
+                        CourseId = ap.CourseId,
+                        BatchId = ap.BatchId,
+                        ApplicationCode = ap.ApplicationCode,
+                        amount = amount,
+                        CellNo = ap.CellNo,
+                        Email = ap.Email,
+                        FirstName = ap.FirstName,
+                        LastName = ap.LastName,
+                        CourseName = db.Courses.Find(ap.CourseId).CourseName,
+                        BatchCode = db.Batches.Find(ap.BatchId).BatchCode,
+                        CourseFee = actualFee,
+                        TaxAmount = taxAmount,
+                        udf1 = ap.BatchId.ToString(), //udf1 BatchId
+                        udf2 = ap.ApplicationCode, //udf2 ApplicationCode 
+                        udf3 = ap.ApplicationId.ToString(), //udf3 ApplicationID     
+                        udf4 = "0" //Single Course, NonPackage        
+                    };
+
+                    return View("OfflineApplicationSummary", apsm);
+                }
+            }
+            //else
+            //{
+            //    ValidApplication va = new ValidApplication
+            //    {
+            //        BatchId = obj.BatchId,
+            //        CellNo = obj.CellNo,
+            //        CourseId = obj.CourseId,
+            //        DateOfBirth = obj.DateOfBirth,
+            //        Email = obj.Email,
+            //        PackageId = (int)obj.PackageId
+            //    };
+            //    int vl = Valid.IsApplicationRepeat(va);
+            //    if (vl != 0)
+            //    {
+            //        Application ap = db.Applications.Find(vl);
+            //        //Application Package Details and Fee Calcuation
+            //        decimal fee = 0, taxamount = 0, minBalance = 0;
+            //        var pbid = db.ApplicationPackageDetails.Where(x => x.ApplicationId == vl).ToList();
+            //        foreach (var item in pbid)
+            //        {
+
+            //            //Fee Calculations
+            //            var cf = await db.CourseFees.FirstOrDefaultAsync(x => x.CourseId == item.CourseId);
+            //            if (cf.GstPercentage == 0)
+            //            {
+            //                fee = fee + (decimal)cf.PackageFee;
+            //                if (cf.MinBalance == 0)
+            //                    minBalance = minBalance + (decimal)cf.PackageFee;
+            //                else
+            //                    minBalance = minBalance + (decimal)cf.MinBalance;
+            //            }
+            //            else
+            //            {
+            //                fee = fee + (decimal)cf.PackageFee + (((decimal)cf.PackageFee / 100) * (decimal)cf.GstPercentage);
+            //                taxamount = taxamount + (((decimal)cf.PackageFee / 100) * (decimal)cf.GstPercentage);
+            //                if (cf.MinBalance == 0)
+            //                    minBalance = minBalance + (decimal)cf.PackageFee + (((decimal)cf.PackageFee / 100) * (decimal)cf.GstPercentage);
+            //                else
+            //                    minBalance = minBalance + (decimal)cf.MinBalance;
+            //            }
+            //        }
+
+            //        ApplicationSumPayNonCetVM apsm = new ApplicationSumPayNonCetVM
+            //        {
+            //            ApplicationId = ap.ApplicationId,
+            //            CategoryId = ap.CategoryId,
+            //            CourseId = ap.CourseId,
+            //            BatchId = ap.BatchId,
+            //            ApplicationCode = ap.ApplicationCode,
+            //            amount = minBalance, //package Fee Min Balance
+            //            CellNo = ap.CellNo,
+            //            Email = ap.Email,
+            //            FirstName = ap.FirstName,
+            //            LastName = ap.LastName,
+            //            CourseName = db.packages.FirstOrDefault(x => x.PackageId == ap.PackageId).PackageName, //PackageName
+            //            BatchCode = "",
+            //            CourseFee = fee, //packageFee
+            //            TaxAmount = taxamount,
+            //            udf1 = ap.BatchId.ToString(), //udf1 BatchId
+            //            udf2 = ap.ApplicationCode, //udf2 ApplicationCode 
+            //            udf3 = ap.ApplicationId.ToString(), //udf3 ApplicationID 
+            //            udf4 = ap.PackageId.ToString() //udf4 PackageId if package             
+            //        };
+
+            //        return View("OfflineApplicationSummary", apsm);
+            //    }
+            //}
+
             if (ModelState.IsValid)
             {
                 if (obj.PackageId == 0 || obj.PackageId == null)

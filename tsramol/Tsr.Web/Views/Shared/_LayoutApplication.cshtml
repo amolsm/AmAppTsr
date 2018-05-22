@@ -274,6 +274,18 @@
       $("#PackageBatches").load('@(Url.Action("FillPackageBatches", "Application",null, Request.Url.Scheme))?PackageId=' + PackageId + '&CategoryId=' + CategoryId);
   }
     function show(input) {
+        //var ext = this.value.match(/\.(.+)$/)[1];
+        //switch (ext) {
+        //    case 'jpg':
+        //    case 'bmp':
+        //    case 'png':
+        //    case 'tif':
+        //        alert('allowed');
+        //        break;
+        //    default:
+        //        alert('not allowed');
+        //        this.value = '';
+        //}
         if (input.files && input.files[0]) {
             var filerdr = new FileReader();
             filerdr.onload = function (e) {
@@ -329,7 +341,8 @@
                             var content ="";
                             $.each(result, function (index, value) {
                                 //content += '<input type="checkbox" class="form-control" name="' + value.DocumentName + '" id="' + value.DocumentsListId + '"/>'
-                                content += '<div class="input-group"> <span class="input-group-addon"> <i class="material-icons">check</i> </span><input type="text" class="form-control" Value = "' + value.DocumentName + '" disabled></div>'
+                                content += '<div class="input-group"> <span class="input-group-addon"> <i class="material-icons">check</i> </span><textarea type="text" class="form-control" disabled>' + value.DocumentName + ' </textarea></div>'
+                                //content += '<div class="input-group"> <span class="input-group-addon"> <i class="material-icons">check</i> </span><input type="text" class="form-control" Value = "' + value.DocumentName + '" disabled></div>'
                             });
                             $('#checkboxContainer').html(content);
                         }
@@ -356,7 +369,7 @@
                     var content = "";
                     $.each(result, function (index, value) {
                         //content += '<input type="checkbox" class="form-control" name="' + value.DocumentName + '" id="' + value.DocumentsListId + '"/>'
-                        content += '<div class="input-group"> <span class="input-group-addon"> <i class="material-icons">check</i> </span><input type="text" class="form-control" Value = "' + value.DocumentName + '" disabled></div>'
+                        content += '<div class="input-group"> <span class="input-group-addon"> <i class="material-icons">check</i> </span><textarea type="text" class="form-control" disabled>' + value.DocumentName + ' </textarea></div>'
                     });
                     $('#checkboxContainer').html(content);
                 }

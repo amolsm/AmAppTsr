@@ -328,8 +328,8 @@
                             $('#checkboxContainer').empty();
                             var content ="";
                             $.each(result, function (index, value) {
-                                //content += '<input type="checkbox" class="form-control" name="' + value.DocumentName + '" id="' + value.DocumentsListId + '"/>'
-                                content += '<div class="input-group"> <span class="input-group-addon"> <i class="material-icons">check</i> </span><input type="text" class="form-control" Value = "' + value.DocumentName + '" disabled></div>'
+                                content += '<div class="input-group"> <span class="input-group-addon"> <i class="material-icons">check</i> </span><textarea type="text" class="form-control" disabled>' + value.DocumentName + ' </textarea></div>'
+                                //content += '<div class="input-group"> <span class="input-group-addon"> <i class="material-icons">check</i> </span><input type="text" class="form-control" Value = "' + value.DocumentName + '" disabled></div>'
                             });
                             $('#checkboxContainer').html(content);
                         }
@@ -356,7 +356,7 @@
                     var content = "";
                     $.each(result, function (index, value) {
                         //content += '<input type="checkbox" class="form-control" name="' + value.DocumentName + '" id="' + value.DocumentsListId + '"/>'
-                        content += '<div class="input-group"> <span class="input-group-addon"> <i class="material-icons">check</i> </span><input type="text" class="form-control" Value = "' + value.DocumentName + '" disabled></div>'
+                        content += '<div class="input-group"> <span class="input-group-addon"> <i class="material-icons">check</i> </span><textarea type="text" class="form-control" disabled>' + value.DocumentName + ' </textarea></div>'
                     });
                     $('#checkboxContainer').html(content);
                 }

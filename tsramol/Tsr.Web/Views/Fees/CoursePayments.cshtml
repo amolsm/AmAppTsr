@@ -37,7 +37,7 @@
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                                     @Html.DropDownList("CategoryId",
-                                                (IEnumerable<SelectListItem>)ViewBag.Categories, "Select Category", new { @class = "form-control", @onchange = "FillCourse()" })
+                                                     (IEnumerable<SelectListItem>)ViewBag.Categories, "Select Category", new { @class = "form-control", @onchange = "FillCourse()" })
                                                 </div>
 
                                             </div>
@@ -46,8 +46,8 @@
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                                     @Html.DropDownList("CourseId",
-                   new SelectList(Enumerable.Empty<SelectListItem>(), "CourseId", "CourseName"),
-              " ", new { @class = "form-control", @onchange = "FillBatch()" })
+new SelectList(Enumerable.Empty<SelectListItem>(), "CourseId", "CourseName"),
+" ", new { @class = "form-control", @onchange = "FillBatch()" })
                                                 </div>
 
                                             </div>
@@ -56,8 +56,8 @@
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                                     @Html.DropDownList("BatchId",
-                   new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "Name"),
-              " ", new { @class = "form-control", @onchange = "FillStudents()" })
+new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "Name"),
+" ", new { @class = "form-control", @onchange = "FillStudents()" })
                                                 </div>
 
                                             </div>
@@ -66,8 +66,8 @@
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                                     @Html.DropDownList("StudentId",
-                   new SelectList(Enumerable.Empty<SelectListItem>(), "ApplicationId", "Name"),
-              " ", new { @class = "form-control" })
+new SelectList(Enumerable.Empty<SelectListItem>(), "ApplicationId", "Name"),
+" ", new { @class = "form-control" })
                                                 </div>
 
                                             </div>
@@ -101,7 +101,7 @@
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                                 @Html.DropDownList("PackageId",
-                                                (IEnumerable<SelectListItem>)ViewBag.Packages, "Select Package", new { @class = "form-control", @onchange = "FillStudentsP()" })
+                                                     (IEnumerable<SelectListItem>)ViewBag.Packages, "Select Package", new { @class = "form-control", @onchange = "FillStudentsP()" })
                                             </div>
 
                                         </div>
@@ -110,8 +110,8 @@
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                                 @Html.DropDownList("StudentIdP",
-                   new SelectList(Enumerable.Empty<SelectListItem>(), "ApplicationId", "Name"),
-              " ", new { @class = "form-control" })
+new SelectList(Enumerable.Empty<SelectListItem>(), "ApplicationId", "Name"),
+" ", new { @class = "form-control" })
                                             </div>
 
                                         </div>

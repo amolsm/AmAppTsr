@@ -262,8 +262,9 @@ namespace Tsr.Web.Controllers
                        join b in db.Batches on ap.BatchId equals b.BatchId
                        join cr in db.Courses on ap.CourseId equals cr.CourseId
                        join appl in db.Applied on ap.ApplicationId equals appl.ApplicationId
-                    
-                       where (b.BatchId == BatchId && appl.AdmissionStatus == false)
+                       join ct in db.CetMarks on ap.ApplicationId equals ct.ApplicationId into cts
+                       from ct in cts.DefaultIfEmpty()
+                       where (b.BatchId == BatchId && appl.AdmissionStatus == false && ct==null)
                        select new HallTicketListVM
                        {
                            ApplicationCode = ap.ApplicationCode,
@@ -271,8 +272,8 @@ namespace Tsr.Web.Controllers
                            BatchName = b.BatchCode,
                            Name = ap.FullName,
                            BatchId = b.BatchId,
-
-                           //PaidAmount = opi.amount,
+                           //Dob = Convert.ToDateTime(ap.DateOfBirth).ToString("dd-mm-yyyy"),
+                           Dob = ap.DateOfBirth.ToString(),
                            Email = ap.Email,
                            Cell = ap.CellNo,
                            Select = false
@@ -358,388 +359,6 @@ namespace Tsr.Web.Controllers
                     cb.BeginText();
                     cb.SetFontAndSize(bf_verdanabold, 10);
                     cb.ShowTextAligned(Element.ALIGN_CENTER, "ENTRANCE EXAM", 313f, 730f, 0);
-                    cb.EndText();
-
-                    cb.BeginText();
-                    cb.SetFontAndSize(bf_verdana, 10);
-                    cb.ShowTextAligned(Element.ALIGN_CENTER, "EXAM ADMIT CARD", 320f, 710f, 0);
-                    cb.EndText();
-
-
-                    cb.Rectangle(36f, 450f, 410f, 250f);//Main box
-                    cb.Stroke();
-
-
-                    cb.BeginText();
-                    cb.SetFontAndSize(bf_verdana, 10f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Date of Exam", 38f, 650f, 0);
-                    cb.EndText();
-
-                    cb.BeginText();
-                    cb.SetFontAndSize(bf_verdana, 10f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Day", 185f, 650f, 0);
-                    cb.EndText();
-
-                    cb.BeginText();
-                    cb.SetFontAndSize(bf_verdana, 10f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Time", 380f, 650f, 0);
-                    cb.EndText();
-
-                    cb.SetLineWidth(1.0f);
-                    cb.SetColorStroke(BaseColor.BLACK);
-                    cb.MoveTo(36f, 640f);
-                    cb.LineTo(447f, 640f);
-                    cb.Stroke();
-                    // first horigentle line
-                    cb.SetLineWidth(1.0f);
-                    cb.SetColorStroke(BaseColor.BLACK);
-                    cb.MoveTo(36f, 670f);
-                    cb.LineTo(447f, 670f);
-                    cb.Stroke();
-
-                    cb.BeginText();
-                    cb.SetFontAndSize(bf_arial3, 8f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.CourseName == null ? "Course Applied : " : "Course Applied : " + app.CourseName, 38f, 675f, 0);
-                    cb.EndText();
-
-                    cb.BeginText();
-                    cb.SetFontAndSize(bf_arial3, 10f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.CetDate == null ? "" : Convert.ToDateTime(app.CetDate).ToString("dd-MM-yyyy"), 38f, 620f, 0);
-                    cb.EndText();
-
-                    cb.BeginText();
-                    cb.SetFontAndSize(bf_arial3, 10f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.CetDate == null ? "" : Convert.ToDateTime(app.CetDate).DayOfWeek.ToString(), 185f, 620f, 0);
-                    cb.EndText();
-
-                    cb.BeginText();
-                    cb.SetFontAndSize(bf_arial3, 10f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.CetTime == null ? "" : app.CetTime.ToString("hh:mm tt"), 380f, 620f, 0);
-                    cb.EndText();
-
-                    cb.SetLineWidth(1.0f);
-                    cb.SetColorStroke(BaseColor.BLACK);
-                    cb.MoveTo(36f, 610f);
-                    cb.LineTo(447f, 610f);
-                    cb.Stroke();
-
-                    cb.BeginText();
-                    cb.SetFontAndSize(bf_verdana, 10f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Name of Examination Centre", 38f, 585f, 0);
-                    cb.EndText();
-
-                    cb.BeginText();
-                    cb.SetFontAndSize(bf_verdana, 7.5f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, "T. S. Rahaman, Nhava Tal, Panvel, Dist Raigad", 185f, 595f, 0);
-                    cb.EndText();
-
-                    cb.BeginText();
-                    cb.SetFontAndSize(bf_verdana, 7.5f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Maharashtra 410206", 185f, 585f, 0);
-                    cb.EndText();
-
-                    cb.SetLineWidth(1.0f);
-                    cb.SetColorStroke(BaseColor.BLACK);
-                    cb.MoveTo(36f, 570f);
-                    cb.LineTo(447f, 570f);
-                    cb.Stroke();
-
-                    cb.BeginText();
-                    cb.SetFontAndSize(bf_verdana, 10f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Name of Candidate", 38f, 550f, 0);
-                    cb.EndText();
-
-                    cb.BeginText();
-                    cb.SetFontAndSize(bf_verdana, 8.5f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.Name == null ? "" : app.Name, 185f, 550f, 0);
-                    cb.EndText();
-
-                    cb.SetLineWidth(1.0f);
-                    cb.SetColorStroke(BaseColor.BLACK);
-                    cb.MoveTo(36f, 540f);
-                    cb.LineTo(447f, 540f);
-                    cb.Stroke();
-
-                    cb.BeginText();
-                    cb.SetFontAndSize(bf_verdana, 10f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Father's Name", 38f, 525f, 0);
-                    cb.EndText();
-
-                    cb.BeginText();
-                    cb.SetFontAndSize(bf_verdana, 8.5f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.Fathername == null ? "" : app.Fathername, 185f, 525f, 0);
-                    cb.EndText();
-
-                    cb.SetLineWidth(1.0f);
-                    cb.SetColorStroke(BaseColor.BLACK);
-                    cb.MoveTo(36f, 510f);
-                    cb.LineTo(447f, 510f);
-                    cb.Stroke();
-
-                    cb.BeginText();
-                    cb.SetFontAndSize(bf_verdana, 10f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Mother's Name", 38f, 490f, 0);
-                    cb.EndText();
-
-                    cb.BeginText();
-                    cb.SetFontAndSize(bf_verdana, 8.5f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.Mothername == null ? "" : app.Mothername, 185f, 490f, 0);
-                    cb.EndText();
-
-                    cb.Rectangle(460f, 640f, 106f, 60f);//Hallticket box
-                    cb.Stroke();
-                    cb.BeginText();
-                    cb.SetFontAndSize(bf_arialbold, 9f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Hall Ticket No", 465f, 675f, 0);
-                    cb.EndText();
-                    cb.BeginText();
-                    cb.SetFontAndSize(bf_arialbold, 9f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.ApplicationCode == null ? "" : app.ApplicationCode, 465f, 650f, 0);
-                    cb.EndText();
-
-                    cb.Rectangle(460f, 510f, 106f, 120f);//Picture box
-                    cb.Stroke();
-
-
-                    cb.Rectangle(36f, 370f, 160f, 70f);// candidate signature box
-                    cb.Stroke();
-                    cb.BeginText();
-                    cb.SetFontAndSize(bf_verdana, 10f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Candidates's Signature", 38f, 380f, 0);
-                    cb.EndText();
-
-
-                    cb.Rectangle(210f, 370f, 180f, 70f);//Hall Invigilator Singnature box
-                    cb.Stroke();
-                    cb.BeginText();
-                    cb.SetFontAndSize(bf_verdana, 10f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Hall Invigilator Singnature with date", 215f, 380f, 0);
-                    cb.EndText();
-
-                    cb.Rectangle(405f, 370f, 160f, 70f);//Principle's Signature box
-                    cb.Stroke();
-                    cb.BeginText();
-                    cb.SetFontAndSize(bf_verdana, 10f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Principle's Signature", 410f, 380f, 0);
-                    cb.EndText();
-
-                    cb.BeginText();
-                    cb.SetFontAndSize(bf_verdanabold, 10f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Admission to Pre-Sea Course is subject to qualifying in entrance exam and the", 38f, 350f, 0);
-                    cb.EndText();
-
-                    cb.BeginText();
-                    cb.SetFontAndSize(bf_verdanabold, 10f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, "eligiility Criteria as Per DG Shipping norms", 38f, 335f, 0);
-                    cb.EndText();
-
-                    cb.SetLineWidth(1.0f);                // Vertical line 
-                    cb.SetColorStroke(BaseColor.BLACK);
-                    cb.MoveTo(180f, 670f);
-                    cb.LineTo(180f, 450f);
-                    cb.Stroke();
-
-
-
-                    cb.SetLineWidth(1.0f);                // Vertical line 
-                    cb.SetColorStroke(BaseColor.BLACK);
-                    cb.MoveTo(375f, 670f);
-                    cb.LineTo(375f, 610f);
-                    cb.Stroke();
-                    string imageURL = string.Empty;
-                   
-                    string[] photos = Directory.GetFiles(Server.MapPath("~/Uploads/CetPhoto/"));
-                    for (int i = 0; i < photos.Length; i++)
-                    {
-                        if ((Path.GetFileNameWithoutExtension(photos[i])) ==app.ApplicationCode)
-                            imageURL = photos[i];
-                      
-                    }
-                    if (imageURL == string.Empty) { imageURL = Server.MapPath("~/Uploads/CetPhoto/nophoto.jpg"); }
-                   
-                    // Image 460f, 510f, 106f, 120f
-                    iTextSharp.text.Image png = iTextSharp.text.Image.GetInstance(imageURL);
-                    png.ScaleToFit(100f, 110f);
-                    png.SpacingBefore = 1f;
-                    png.SpacingAfter = 1f;
-                    
-                    png.Alignment = Element.ALIGN_LEFT;
-                    png.SetAbsolutePosition(465f, 520f);
-                    pdfDoc.Add(png);
-
-                    string imageURL1 = Server.MapPath("~/Img/signature.PNG"); // Image 
-                    iTextSharp.text.Image png1 = iTextSharp.text.Image.GetInstance(imageURL1);
-                    png1.ScaleToFit(135f, 50f);
-                    png1.SpacingBefore = 1f;
-                    png1.SpacingAfter = 1f;
-                    png1.Alignment = Element.ALIGN_LEFT;
-                    png1.SetAbsolutePosition(410f, 390f);
-                    pdfDoc.Add(png1);
-
-                    pdfDoc.NewPage();
-                }
-
-                pdfDoc.Close();
-
-
-
-                //write to file
-
-                return File(stream.ToArray(), "application/pdf");
-
-            }
-
-
-
-
-        }
-        [HttpPost]
-        public async Task<ActionResult> HallTickets(List<HallTicketListVM> ht, int? CetMasterId)
-        {
-         
-            if (ht != null && CetMasterId != null)
-            {
-                foreach (var item in ht)
-                {
-                    if (item.Select == true)
-                    {
-                        
-                        var hallticketpath= SavePdf(Convert.ToInt32(item.ApplicationId), (int)CetMasterId);
-
-                        if (db.CetMarks.Any(u => (u.CetMasterId == (int)CetMasterId) && (u.BatchId == item.BatchId) && (u.ApplicationId == item.ApplicationId)))
-                        {
-                            var CetMarkIds = db.CetMarks.Where(u => (u.CetMasterId == (int)CetMasterId) && (u.BatchId == item.BatchId) && (u.ApplicationId == item.ApplicationId)).Select(x=>x.CetMarkId).ToList();
-                            foreach (var cetmarkid in CetMarkIds)
-                            {
-                                CetMark c = new CetMark
-                                {
-                                    CetMarkId = cetmarkid,
-                                    CetMasterId = Convert.ToInt32(CetMasterId),
-                                    BatchId = item.BatchId,
-                                    ApplicationId = Convert.ToInt32(item.ApplicationId),
-                                    Marks1 = 0,
-                                    Marks2 = 0,
-                                    Marks3 = 0,
-                                    Marks4 = 0,
-                                    Total = 0,
-                                    SelectStatus = item.Select,
-                                    Hallticketpath = hallticketpath,
-                                    IsPublish = await SendHalltcketEmail(Convert.ToInt32(item.ApplicationId), Convert.ToInt32(CetMasterId), hallticketpath)
-
-
-
-                                };
-                                db.Entry(c).State = EntityState.Modified;
-                                db.SaveChanges();
-                            }
-                        }
-                        else {
-                            CetMark c = new CetMark
-                            {
-                                CetMasterId = Convert.ToInt32(CetMasterId),
-                                BatchId = item.BatchId,
-                                ApplicationId = Convert.ToInt32(item.ApplicationId),
-                                Marks1 = 0,
-                                Marks2 = 0,
-                                Marks3 = 0,
-                                Marks4 = 0,
-                                Total = 0,
-                                SelectStatus = item.Select,
-                                Hallticketpath = hallticketpath,
-                                IsPublish = await SendHalltcketEmail(Convert.ToInt32(item.ApplicationId), Convert.ToInt32(CetMasterId), hallticketpath)
-
-
-
-                            };
-                            db.CetMarks.Add(c);
-                        }
-
-                    }
-
-                }
-
-                await db.SaveChangesAsync();
-                return RedirectToAction("HallTickets");
-            }
-          
-            var a = from c in db.Courses
-                    join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
-                    where (c.IsActive == true && cc.CetRequired == true)
-                    select new { c.CourseId, c.CourseName };
-            ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
-           
-            var obj = new List<HallTicketListVM>();
-            return View(obj);
-        }
-        public string SavePdf(int applicationid, int cetmasterid)
-        {
-            string filpath = string.Empty;
-            var cm = db.CetMasters.Find(cetmasterid);
-
-            var list = (from ap in db.Applications.AsEnumerable()
-                        join b in db.Batches on ap.BatchId equals b.BatchId
-                        join cr in db.Courses on ap.CourseId equals cr.CourseId
-                        //join op in db.OnlinePaymentInfos on ap.ApplicationId equals op.ApplicationId
-                        //join cm in db.CetMasters on cr.CourseId equals cm.CourseId
-                        where (ap.ApplicationId == applicationid)
-                        select new HallTicketListVM
-                        {
-                            CetMasterId = cm.CetMasterId,
-                            ApplicationCode = ap.ApplicationCode,
-                            ApplicationId = ap.ApplicationId,
-                            CourseName = cr.ShortName,
-                            BatchName = b.BatchCode,
-                            CetDate = cm.CetDate,
-                            CetTime = cm.CetTime,
-                            Name = ap.FullName,
-                            Fathername = ap.MiddleName,
-                            Mothername = ap.MotherName
-                        });
-
-
-            using (MemoryStream stream = new System.IO.MemoryStream())
-            {
-
-                iTextSharp.text.Document pdfDoc = new iTextSharp.text.Document(PageSize.A4, 36, 72, 108, 180);
-                PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
-
-                pdfDoc.Open();
-                pdfDoc.AddTitle("Hall Ticket");
-                PdfContentByte cb = writer.DirectContent;
-
-
-                int count = 0;
-                foreach (var app in list)
-                {
-
-
-
-                    count++;
-
-                    cb.Stroke();
-                    iTextSharp.text.Font f = FontFactory.GetFont("Verdana", 50, iTextSharp.text.Font.BOLD, BaseColor.BLACK);
-                    BaseFont bf_verdanabold = f.GetCalculatedBaseFont(false);
-                    iTextSharp.text.Font f1 = FontFactory.GetFont("Verdana", 50, BaseColor.BLACK);
-                    BaseFont bf_verdana = f1.GetCalculatedBaseFont(false);
-                    iTextSharp.text.Font f2 = FontFactory.GetFont("Arial", 50, iTextSharp.text.Font.BOLD, BaseColor.BLACK);
-                    BaseFont bf_arialbold = f2.GetCalculatedBaseFont(false);
-                    iTextSharp.text.Font f3 = FontFactory.GetFont("Arial", 50, iTextSharp.text.Font.NORMAL, BaseColor.BLACK);
-                    BaseFont bf_arial3 = f3.GetCalculatedBaseFont(false);
-
-
-                    cb.BeginText();
-                    cb.SetFontAndSize(bf_verdanabold, 13);
-                    cb.ShowTextAligned(Element.ALIGN_CENTER, "SIR MOHAMED YUSUF SEAMEN WELFARE FOUNDATION", 300f, 785f, 0);
-                    cb.EndText();
-
-                    cb.BeginText();
-                    cb.SetFontAndSize(bf_verdana, 11.5f);
-                    cb.ShowTextAligned(Element.ALIGN_CENTER, "TRAINING SHIP RAHAMAN", 310f, 760f, 0);
-                    cb.EndText();
-
-                    cb.BeginText();
-                    cb.SetFontAndSize(bf_verdanabold, 10);
-                    cb.ShowTextAligned(Element.ALIGN_CENTER, "ENTRANCE EXAM October 2017", 313f, 730f, 0);
                     cb.EndText();
 
                     cb.BeginText();
@@ -902,12 +521,12 @@ namespace Tsr.Web.Controllers
                     cb.Stroke();
                     cb.BeginText();
                     cb.SetFontAndSize(bf_verdana, 10f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Principle's Signature", 410f, 380f, 0);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Principal's Signature", 410f, 380f, 0);
                     cb.EndText();
 
                     cb.BeginText();
                     cb.SetFontAndSize(bf_verdanabold, 10f);
-                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Admission to Pre-Sea Course is subject to qualifying in entrance exam October 2017 and the", 38f, 350f, 0);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Admission to Pre-Sea Course is subject to qualifying in entrance exam and the", 38f, 350f, 0);
                     cb.EndText();
 
                     cb.BeginText();
@@ -929,15 +548,456 @@ namespace Tsr.Web.Controllers
                     cb.LineTo(375f, 610f);
                     cb.Stroke();
                     string imageURL = string.Empty;
+                   
+                    string[] photos = Directory.GetFiles(Server.MapPath("~/Uploads/CetPhoto/"));
+                    for (int i = 0; i < photos.Length; i++)
+                    {
+                        if ((Path.GetFileNameWithoutExtension(photos[i])) ==app.ApplicationCode)
+                            imageURL = photos[i];
+                      
+                    }
+                    if (imageURL == string.Empty) { imageURL = Server.MapPath("~/Uploads/CetPhoto/nophoto.jpg"); }
+                   
+                    // Image 460f, 510f, 106f, 120f
+                    iTextSharp.text.Image png = iTextSharp.text.Image.GetInstance(imageURL);
+                    png.ScaleToFit(100f, 110f);
+                    png.SpacingBefore = 1f;
+                    png.SpacingAfter = 1f;
+                    
+                    png.Alignment = Element.ALIGN_LEFT;
+                    png.SetAbsolutePosition(465f, 520f);
+                    pdfDoc.Add(png);
+
+                    string imageURL1 = Server.MapPath("~/Img/signature.PNG"); // Image 
+                    iTextSharp.text.Image png1 = iTextSharp.text.Image.GetInstance(imageURL1);
+                    png1.ScaleToFit(135f, 50f);
+                    png1.SpacingBefore = 1f;
+                    png1.SpacingAfter = 1f;
+                    png1.Alignment = Element.ALIGN_LEFT;
+                    png1.SetAbsolutePosition(410f, 390f);
+                    pdfDoc.Add(png1);
+
+                    pdfDoc.NewPage();
+                }
+
+                pdfDoc.Close();
+
+
+
+                //write to file
+
+                return File(stream.ToArray(), "application/pdf");
+
+            }
+
+
+
+
+        }
+        public ActionResult ExportEx(int? id)
+        {
+            var gv = new GridView();
+            var list = (from ap in db.Applications.AsEnumerable()
+                        join b in db.Batches on ap.BatchId equals b.BatchId
+                        join cr in db.Courses on ap.CourseId equals cr.CourseId
+                        join appl in db.Applied on ap.ApplicationId equals appl.ApplicationId
+                        where (b.BatchId == id && appl.AdmissionStatus == false)
+                        join cm in db.CetMasters on b.BatchId equals cm.BatchId
+                        
+                        select new HallTicketListEx
+                        {
+                            Email = ap.Email,
+                            ApplicationCode = ap.ApplicationCode,
+                            Cell = ap.CellNo,
+                            CourseName = cr.ShortName,
+                            Batch = Convert.ToDateTime(b.StartDate).ToString("dd-mm-yyyy"),
+                            CetDate = cm.CetDate,
+                            CetTime = (TimeSpan)cm.CetTime,
+                            Name = ap.FullName
+
+                        });
+
+
+            gv.DataSource = list.ToList();
+            gv.DataBind();
+            Response.ClearContent();
+            Response.Buffer = true;
+            Response.AddHeader("content-disposition", "attachment; filename=excelList.xls");
+            Response.ContentType = "application/ms-excel";
+            Response.Charset = "";
+            StringWriter objStringWriter = new StringWriter();
+            HtmlTextWriter objHtmlTextWriter = new HtmlTextWriter(objStringWriter);
+            gv.RenderControl(objHtmlTextWriter);
+            Response.Output.Write(objStringWriter.ToString());
+            Response.Flush();
+            Response.End();
+            return View("HallTicketsNonPay");
+
+
+
+
+        }
+        [HttpPost]
+        public async Task<ActionResult> HallTickets(List<HallTicketListVM> ht, int? CetMasterId)
+        {
+         
+            if (ht != null && CetMasterId != null)
+            {
+                foreach (var item in ht)
+                {
+                    if (item.Select == true)
+                    {
+                        bool isp = false;
+                        var hallticketpath = SavePdf(Convert.ToInt32(item.ApplicationId), (int)CetMasterId);
+
+
+                        try
+                        {
+                            
+                            isp = await SendHalltcketEmail(Convert.ToInt32(item.ApplicationId), Convert.ToInt32(CetMasterId), hallticketpath);
+                        }
+                        catch (Exception) { }
+
+                        if (db.CetMarks.Any(u => (u.CetMasterId == (int)CetMasterId) && (u.BatchId == item.BatchId) && (u.ApplicationId == item.ApplicationId)))
+                        {
+                            var CetMarkIds = db.CetMarks.Where(u => (u.CetMasterId == (int)CetMasterId) && (u.BatchId == item.BatchId) && (u.ApplicationId == item.ApplicationId)).Select(x=>x.CetMarkId).ToList();
+                            foreach (var cetmarkid in CetMarkIds)
+                            {
+                                CetMark c = new CetMark
+                                {
+                                    CetMarkId = cetmarkid,
+                                    CetMasterId = Convert.ToInt32(CetMasterId),
+                                    BatchId = item.BatchId,
+                                    ApplicationId = Convert.ToInt32(item.ApplicationId),
+                                    Marks1 = 0,
+                                    Marks2 = 0,
+                                    Marks3 = 0,
+                                    Marks4 = 0,
+                                    Total = 0,
+                                    SelectStatus = item.Select,
+                                    Hallticketpath = hallticketpath,
+                                    IsPublish = isp
+
+
+
+                                };
+                                db.Entry(c).State = EntityState.Modified;
+                                db.SaveChanges();
+                            }
+                        }
+                        else {
+                            
+
+                            CetMark c = new CetMark
+                            {
+                                CetMasterId = Convert.ToInt32(CetMasterId),
+                                BatchId = item.BatchId,
+                                ApplicationId = Convert.ToInt32(item.ApplicationId),
+                                Marks1 = 0,
+                                Marks2 = 0,
+                                Marks3 = 0,
+                                Marks4 = 0,
+                                Total = 0,
+                                SelectStatus = item.Select,
+                                Hallticketpath = hallticketpath,
+
+                                IsPublish = isp
+
+
+
+                            };
+                            db.CetMarks.Add(c);
+                        }
+
+                    }
+
+                }
+
+                await db.SaveChangesAsync();
+                return RedirectToAction("HallTickets");
+            }
+          
+            var a = from c in db.Courses
+                    join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
+                    where (c.IsActive == true && cc.CetRequired == true)
+                    select new { c.CourseId, c.CourseName };
+            ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
+           
+            var obj = new List<HallTicketListVM>();
+            return View(obj);
+        }
+        public string SavePdf(int applicationid, int cetmasterid)
+        {
+            string filpath = string.Empty;
+            var cm = db.CetMasters.Find(cetmasterid);
+
+            var list = (from ap in db.Applications.AsEnumerable()
+                        join b in db.Batches on ap.BatchId equals b.BatchId
+                        join cr in db.Courses on ap.CourseId equals cr.CourseId
+                        //join op in db.OnlinePaymentInfos on ap.ApplicationId equals op.ApplicationId
+                        //join cm in db.CetMasters on cr.CourseId equals cm.CourseId
+                        where (ap.ApplicationId == applicationid)
+                        select new HallTicketListVM
+                        {
+                            CetMasterId = cm.CetMasterId,
+                            ApplicationCode = ap.ApplicationCode,
+                            ApplicationId = ap.ApplicationId,
+                            CourseName = cr.ShortName,
+                            BatchName = b.BatchCode,
+                            CetDate = cm.CetDate,
+                            CetTime = (TimeSpan) cm.CetTime,
+                            Name = ap.FullName,
+                            Fathername = ap.MiddleName,
+                            Mothername = ap.MotherName
+                        });
+
+
+            using (MemoryStream stream = new System.IO.MemoryStream())
+            {
+
+                iTextSharp.text.Document pdfDoc = new iTextSharp.text.Document(PageSize.A4, 36, 72, 108, 180);
+                PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
+
+                pdfDoc.Open();
+                pdfDoc.AddTitle("Hall Ticket");
+                PdfContentByte cb = writer.DirectContent;
+
+
+                int count = 0;
+                foreach (var app in list)
+                {
+
+
+
+                    count++;
+
+                    cb.Stroke();
+                    iTextSharp.text.Font f = FontFactory.GetFont("Verdana", 50, iTextSharp.text.Font.BOLD, BaseColor.BLACK);
+                    BaseFont bf_verdanabold = f.GetCalculatedBaseFont(false);
+                    iTextSharp.text.Font f1 = FontFactory.GetFont("Verdana", 50, BaseColor.BLACK);
+                    BaseFont bf_verdana = f1.GetCalculatedBaseFont(false);
+                    iTextSharp.text.Font f2 = FontFactory.GetFont("Arial", 50, iTextSharp.text.Font.BOLD, BaseColor.BLACK);
+                    BaseFont bf_arialbold = f2.GetCalculatedBaseFont(false);
+                    iTextSharp.text.Font f3 = FontFactory.GetFont("Arial", 50, iTextSharp.text.Font.NORMAL, BaseColor.BLACK);
+                    BaseFont bf_arial3 = f3.GetCalculatedBaseFont(false);
+
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdanabold, 13);
+                    cb.ShowTextAligned(Element.ALIGN_CENTER, "SIR MOHAMED YUSUF SEAMEN WELFARE FOUNDATION", 300f, 785f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 11.5f);
+                    cb.ShowTextAligned(Element.ALIGN_CENTER, "TRAINING SHIP RAHAMAN", 310f, 760f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdanabold, 10);
+                    cb.ShowTextAligned(Element.ALIGN_CENTER, "ENTRANCE EXAM ", 313f, 730f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10);
+                    cb.ShowTextAligned(Element.ALIGN_CENTER, "EXAM ADMIT CARD", 320f, 710f, 0);
+                    cb.EndText();
+
+
+                    cb.Rectangle(36f, 450f, 410f, 250f);//Main box
+                    cb.Stroke();
+
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Date of Exam", 38f, 650f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Day", 185f, 650f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Time", 380f, 650f, 0);
+                    cb.EndText();
+
+                    cb.SetLineWidth(1.0f);
+                    cb.SetColorStroke(BaseColor.BLACK);
+                    cb.MoveTo(36f, 640f);
+                    cb.LineTo(447f, 640f);
+                    cb.Stroke();
+                    // first horigentle line
+                    cb.SetLineWidth(1.0f);
+                    cb.SetColorStroke(BaseColor.BLACK);
+                    cb.MoveTo(36f, 670f);
+                    cb.LineTo(447f, 670f);
+                    cb.Stroke();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_arial3, 8f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.CourseName == null ? "Course Applied : " : "Course Applied : " + app.CourseName, 38f, 675f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_arial3, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.CetDate == null ? "" : Convert.ToDateTime(app.CetDate).ToString("dd-MM-yyyy"), 38f, 620f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_arial3, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.CetDate == null ? "" : Convert.ToDateTime(app.CetDate).DayOfWeek.ToString(), 185f, 620f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_arial3, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.CetTime == null ? "" : Convert.ToString(app.CetTime), 380f, 620f, 0);
+                    cb.EndText();
+
+                    cb.SetLineWidth(1.0f);
+                    cb.SetColorStroke(BaseColor.BLACK);
+                    cb.MoveTo(36f, 610f);
+                    cb.LineTo(447f, 610f);
+                    cb.Stroke();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Name of Examination Centre", 38f, 585f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 7.5f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "T. S. Rahaman, Nhava Tal, Panvel, Dist Raigad", 185f, 595f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 7.5f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Maharashtra 410206", 185f, 585f, 0);
+                    cb.EndText();
+
+                    cb.SetLineWidth(1.0f);
+                    cb.SetColorStroke(BaseColor.BLACK);
+                    cb.MoveTo(36f, 570f);
+                    cb.LineTo(447f, 570f);
+                    cb.Stroke();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Name of Candidate", 38f, 550f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 8.5f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.Name == null ? "" : app.Name, 185f, 550f, 0);
+                    cb.EndText();
+
+                    cb.SetLineWidth(1.0f);
+                    cb.SetColorStroke(BaseColor.BLACK);
+                    cb.MoveTo(36f, 540f);
+                    cb.LineTo(447f, 540f);
+                    cb.Stroke();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Father's Name", 38f, 525f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 8.5f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.Fathername == null ? "" : app.Fathername, 185f, 525f, 0);
+                    cb.EndText();
+
+                    cb.SetLineWidth(1.0f);
+                    cb.SetColorStroke(BaseColor.BLACK);
+                    cb.MoveTo(36f, 510f);
+                    cb.LineTo(447f, 510f);
+                    cb.Stroke();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Mother's Name", 38f, 490f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 8.5f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.Mothername == null ? "" : app.Mothername, 185f, 490f, 0);
+                    cb.EndText();
+
+                    cb.Rectangle(460f, 640f, 106f, 60f);//Hallticket box
+                    cb.Stroke();
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_arialbold, 9f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Hall Ticket No", 465f, 675f, 0);
+                    cb.EndText();
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_arialbold, 9f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.ApplicationCode == null ? "" : app.ApplicationCode, 465f, 650f, 0);
+                    cb.EndText();
+
+                    cb.Rectangle(460f, 510f, 106f, 120f);//Picture box
+                    cb.Stroke();
+
+
+                    cb.Rectangle(36f, 370f, 160f, 70f);// candidate signature box
+                    cb.Stroke();
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Candidates's Signature", 38f, 380f, 0);
+                    cb.EndText();
+
+
+                    cb.Rectangle(210f, 370f, 180f, 70f);//Hall Invigilator Singnature box
+                    cb.Stroke();
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Hall Invigilator Singnature with date", 215f, 380f, 0);
+                    cb.EndText();
+
+                    cb.Rectangle(405f, 370f, 160f, 70f);//Principle's Signature box
+                    cb.Stroke();
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Principal's Signature", 410f, 380f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdanabold, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Admission to Pre-Sea Course is subject to qualifying in entrance exam  and the", 38f, 350f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdanabold, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "eligiility Criteria as Per DG Shipping norms", 38f, 335f, 0);
+                    cb.EndText();
+
+                    cb.SetLineWidth(1.0f);                // Vertical line 
+                    cb.SetColorStroke(BaseColor.BLACK);
+                    cb.MoveTo(180f, 670f);
+                    cb.LineTo(180f, 450f);
+                    cb.Stroke();
+
+
+
+                    cb.SetLineWidth(1.0f);                // Vertical line 
+                    cb.SetColorStroke(BaseColor.BLACK);
+                    cb.MoveTo(375f, 670f);
+                    cb.LineTo(375f, 610f);
+                    cb.Stroke();
+                    string imageURL = string.Empty;
+                    string imageExtn = string.Empty;
                     
                     string[] photos = Directory.GetFiles(Server.MapPath("~/Uploads/CetPhoto/"));
                     for (int i = 0; i < photos.Length; i++)
                     {
                         if ((Path.GetFileNameWithoutExtension(photos[i])) == app.ApplicationCode)
+                        {
                             imageURL = photos[i];
-
+                            //if ((Path.GetExtension(photos[i])) == app.ApplicationCode)
+                            imageExtn = Path.GetExtension(photos[i]);
+                        }
                     }
-                    if (imageURL == string.Empty) { imageURL = Server.MapPath("~/Uploads/CetPhoto/nophoto.jpg"); }
+                    if (imageURL == string.Empty || (imageExtn != ".png" && imageExtn != ".jpg" && imageExtn != ".jpeg" && imageExtn != ".PNG" && imageExtn != ".JPG" && imageExtn != ".JPEG"))
+                    { imageURL = Server.MapPath("~/Uploads/CetPhoto/nophoto.jpg"); }
 
                     // Image 460f, 510f, 106f, 120f
                     iTextSharp.text.Image png = iTextSharp.text.Image.GetInstance(imageURL);
@@ -988,6 +1048,497 @@ namespace Tsr.Web.Controllers
         }
         #endregion
 
+        #region Halltickets without payment
+        public ActionResult HallTicketsNonPay()
+        {
+
+
+            var a = from c in db.Courses
+                    join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
+                    where (c.IsActive == true && cc.CetRequired == true)
+                    select new { c.CourseId, c.CourseName };
+            ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
+
+            var obj = new List<HallTicketListVM>();
+            return View(obj);
+        }
+        public ActionResult GetApplicantForHallticketsNonPay(int? BatchId)
+        {
+
+
+            var list = (from ap in db.Applications
+                       join b in db.Batches on ap.BatchId equals b.BatchId
+                       join cr in db.Courses on ap.CourseId equals cr.CourseId
+                       join appl in db.Applied on ap.ApplicationId equals appl.ApplicationId into aps
+                       from appl in aps.DefaultIfEmpty()
+                       join ct in db.CetMarks on ap.ApplicationId equals ct.ApplicationId into cts
+                       from ct in cts.DefaultIfEmpty()
+                       where (b.BatchId == BatchId && appl==null && ct == null )
+                       select new HallTicketListVM
+                       {
+                           ApplicationCode = ap.ApplicationCode,
+                           ApplicationId = ap.ApplicationId,
+                           BatchName = b.BatchCode,
+                           Name = ap.FullName,
+                           BatchId = b.BatchId,
+                          // Dob = Convert.ToDateTime(ap.DateOfBirth).ToString("dd-mm-yyyy"),
+                           Dob = ap.DateOfBirth.ToString(),
+                           Email = ap.Email,
+                           Cell = ap.CellNo,
+                           Select = false
+                       }).ToList();
+            var ci = db.CetMasters.FirstOrDefault(x => x.BatchId == BatchId);
+            if (ci != null)
+            {
+                ViewBag.Flag = "1";
+            }
+            else
+            { ViewBag.Flag = "0"; }
+            var C = db.CetMasters
+           .Where(x => (x.BatchId == BatchId && x.IsActive == true))
+           .Select(x => new { CetMasterId = x.CetMasterId, Name = x.CetDate });
+            var Cet = C.ToList().Select(x => new CetDropdown { CetMasterId = x.CetMasterId, CetCode = Convert.ToDateTime(x.Name).ToString("dd-MM-yyyy") });
+            ViewBag.CetMaster = new SelectList(Cet.ToList(), "CetMasterId", "CetCode");
+            return PartialView("_HallticketApplicant", list.ToList());
+        }
+
+        public ActionResult ExportNonPay(int? id)
+        {
+
+            var list = (from ap in db.Applications.AsEnumerable()
+                        join b in db.Batches on ap.BatchId equals b.BatchId
+                        join cr in db.Courses on ap.CourseId equals cr.CourseId
+                        join appl in db.Applied on ap.ApplicationId equals appl.ApplicationId into aps
+                        from appl in aps.DefaultIfEmpty()
+                        where (b.BatchId == id && appl == null)
+                        join cm in db.CetMasters on b.BatchId equals cm.BatchId
+                        select new HallTicketListVM
+                        {
+                            CetMasterId = cm.CetMasterId,
+                            ApplicationCode = ap.ApplicationCode,
+                            ApplicationId = ap.ApplicationId,
+                            CourseName = cr.ShortName,
+                            BatchName = b.BatchCode,
+                            CetDate = cm.CetDate,
+                            CetTime = (TimeSpan)cm.CetTime,
+                            Name = ap.FullName,
+                            Fathername = ap.MiddleName,
+                            Mothername = ap.MotherName
+                        });
+
+
+            using (MemoryStream stream = new System.IO.MemoryStream())
+            {
+
+                iTextSharp.text.Document pdfDoc = new iTextSharp.text.Document(PageSize.A4, 36, 72, 108, 180);
+                PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
+
+                pdfDoc.Open();
+                pdfDoc.AddTitle("Hall Ticket");
+                PdfContentByte cb = writer.DirectContent;
+
+
+                int count = 0;
+                foreach (var app in list)
+                {
+
+
+
+                    count++;
+
+                    cb.Stroke();
+                    iTextSharp.text.Font f = FontFactory.GetFont("Verdana", 50, iTextSharp.text.Font.BOLD, BaseColor.BLACK);
+                    BaseFont bf_verdanabold = f.GetCalculatedBaseFont(false);
+                    iTextSharp.text.Font f1 = FontFactory.GetFont("Verdana", 50, BaseColor.BLACK);
+                    BaseFont bf_verdana = f1.GetCalculatedBaseFont(false);
+                    iTextSharp.text.Font f2 = FontFactory.GetFont("Arial", 50, iTextSharp.text.Font.BOLD, BaseColor.BLACK);
+                    BaseFont bf_arialbold = f2.GetCalculatedBaseFont(false);
+                    iTextSharp.text.Font f3 = FontFactory.GetFont("Arial", 50, iTextSharp.text.Font.NORMAL, BaseColor.BLACK);
+                    BaseFont bf_arial3 = f3.GetCalculatedBaseFont(false);
+
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdanabold, 13);
+                    cb.ShowTextAligned(Element.ALIGN_CENTER, "SIR MOHAMED YUSUF SEAMEN WELFARE FOUNDATION", 300f, 785f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 11.5f);
+                    cb.ShowTextAligned(Element.ALIGN_CENTER, "TRAINING SHIP RAHAMAN", 310f, 760f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdanabold, 10);
+                    cb.ShowTextAligned(Element.ALIGN_CENTER, "ENTRANCE EXAM", 313f, 730f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10);
+                    cb.ShowTextAligned(Element.ALIGN_CENTER, "EXAM ADMIT CARD", 320f, 710f, 0);
+                    cb.EndText();
+
+
+                    cb.Rectangle(36f, 450f, 410f, 250f);//Main box
+                    cb.Stroke();
+
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Date of Exam", 38f, 650f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Day", 185f, 650f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Time", 380f, 650f, 0);
+                    cb.EndText();
+
+                    cb.SetLineWidth(1.0f);
+                    cb.SetColorStroke(BaseColor.BLACK);
+                    cb.MoveTo(36f, 640f);
+                    cb.LineTo(447f, 640f);
+                    cb.Stroke();
+                    // first horigentle line
+                    cb.SetLineWidth(1.0f);
+                    cb.SetColorStroke(BaseColor.BLACK);
+                    cb.MoveTo(36f, 670f);
+                    cb.LineTo(447f, 670f);
+                    cb.Stroke();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_arial3, 8f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.CourseName == null ? "Course Applied : " : "Course Applied : " + app.CourseName, 38f, 675f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_arial3, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.CetDate == null ? "" : Convert.ToDateTime(app.CetDate).ToString("dd-MM-yyyy"), 38f, 620f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_arial3, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.CetDate == null ? "" : Convert.ToDateTime(app.CetDate).DayOfWeek.ToString(), 185f, 620f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_arial3, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.CetTime == null ? "" : Convert.ToString(app.CetTime), 380f, 620f, 0);
+                    cb.EndText();
+
+                    cb.SetLineWidth(1.0f);
+                    cb.SetColorStroke(BaseColor.BLACK);
+                    cb.MoveTo(36f, 610f);
+                    cb.LineTo(447f, 610f);
+                    cb.Stroke();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Name of Examination Centre", 38f, 585f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 7.5f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "T. S. Rahaman, Nhava Tal, Panvel, Dist Raigad", 185f, 595f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 7.5f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Maharashtra 410206", 185f, 585f, 0);
+                    cb.EndText();
+
+                    cb.SetLineWidth(1.0f);
+                    cb.SetColorStroke(BaseColor.BLACK);
+                    cb.MoveTo(36f, 570f);
+                    cb.LineTo(447f, 570f);
+                    cb.Stroke();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Name of Candidate", 38f, 550f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 8.5f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.Name == null ? "" : app.Name, 185f, 550f, 0);
+                    cb.EndText();
+
+                    cb.SetLineWidth(1.0f);
+                    cb.SetColorStroke(BaseColor.BLACK);
+                    cb.MoveTo(36f, 540f);
+                    cb.LineTo(447f, 540f);
+                    cb.Stroke();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Father's Name", 38f, 525f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 8.5f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.Fathername == null ? "" : app.Fathername, 185f, 525f, 0);
+                    cb.EndText();
+
+                    cb.SetLineWidth(1.0f);
+                    cb.SetColorStroke(BaseColor.BLACK);
+                    cb.MoveTo(36f, 510f);
+                    cb.LineTo(447f, 510f);
+                    cb.Stroke();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Mother's Name", 38f, 490f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 8.5f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.Mothername == null ? "" : app.Mothername, 185f, 490f, 0);
+                    cb.EndText();
+
+                    cb.Rectangle(460f, 640f, 106f, 60f);//Hallticket box
+                    cb.Stroke();
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_arialbold, 9f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Hall Ticket No", 465f, 675f, 0);
+                    cb.EndText();
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_arialbold, 9f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, app.ApplicationCode == null ? "" : app.ApplicationCode, 465f, 650f, 0);
+                    cb.EndText();
+
+                    cb.Rectangle(460f, 510f, 106f, 120f);//Picture box
+                    cb.Stroke();
+
+
+                    cb.Rectangle(36f, 370f, 160f, 70f);// candidate signature box
+                    cb.Stroke();
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Candidates's Signature", 38f, 380f, 0);
+                    cb.EndText();
+
+
+                    cb.Rectangle(210f, 370f, 180f, 70f);//Hall Invigilator Singnature box
+                    cb.Stroke();
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Hall Invigilator Singnature with date", 215f, 380f, 0);
+                    cb.EndText();
+
+                    cb.Rectangle(405f, 370f, 160f, 70f);//Principle's Signature box
+                    cb.Stroke();
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdana, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Principal's Signature", 410f, 380f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdanabold, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "Admission to Pre-Sea Course is subject to qualifying in entrance exam and the", 38f, 350f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    cb.SetFontAndSize(bf_verdanabold, 10f);
+                    cb.ShowTextAligned(Element.ALIGN_LEFT, "eligiility Criteria as Per DG Shipping norms", 38f, 335f, 0);
+                    cb.EndText();
+
+                    cb.SetLineWidth(1.0f);                // Vertical line 
+                    cb.SetColorStroke(BaseColor.BLACK);
+                    cb.MoveTo(180f, 670f);
+                    cb.LineTo(180f, 450f);
+                    cb.Stroke();
+
+
+
+                    cb.SetLineWidth(1.0f);                // Vertical line 
+                    cb.SetColorStroke(BaseColor.BLACK);
+                    cb.MoveTo(375f, 670f);
+                    cb.LineTo(375f, 610f);
+                    cb.Stroke();
+                    string imageURL = string.Empty;
+
+                    string[] photos = Directory.GetFiles(Server.MapPath("~/Uploads/CetPhoto/"));
+                    for (int i = 0; i < photos.Length; i++)
+                    {
+                        if ((Path.GetFileNameWithoutExtension(photos[i])) == app.ApplicationCode)
+                            imageURL = photos[i];
+
+                    }
+                    if (imageURL == string.Empty) { imageURL = Server.MapPath("~/Uploads/CetPhoto/nophoto.jpg"); }
+
+                    // Image 460f, 510f, 106f, 120f
+                    iTextSharp.text.Image png = iTextSharp.text.Image.GetInstance(imageURL);
+                    png.ScaleToFit(100f, 110f);
+                    png.SpacingBefore = 1f;
+                    png.SpacingAfter = 1f;
+
+                    png.Alignment = Element.ALIGN_LEFT;
+                    png.SetAbsolutePosition(465f, 520f);
+                    pdfDoc.Add(png);
+
+                    string imageURL1 = Server.MapPath("~/Img/signature.PNG"); // Image 
+                    iTextSharp.text.Image png1 = iTextSharp.text.Image.GetInstance(imageURL1);
+                    png1.ScaleToFit(135f, 50f);
+                    png1.SpacingBefore = 1f;
+                    png1.SpacingAfter = 1f;
+                    png1.Alignment = Element.ALIGN_LEFT;
+                    png1.SetAbsolutePosition(410f, 390f);
+                    pdfDoc.Add(png1);
+
+                    pdfDoc.NewPage();
+                }
+
+                pdfDoc.Close();
+
+
+
+                //write to file
+
+                return File(stream.ToArray(), "application/pdf");
+
+            }
+
+
+
+
+        }
+        public ActionResult ExportNonPayEx(int? id)
+        {
+            var gv = new GridView();
+            var list = (from ap in db.Applications.AsEnumerable()
+                        join b in db.Batches on ap.BatchId equals b.BatchId
+                        join cr in db.Courses on ap.CourseId equals cr.CourseId
+                        join appl in db.Applied on ap.ApplicationId equals appl.ApplicationId into aps
+                        from appl in aps.DefaultIfEmpty()
+                        where (b.BatchId == id && appl == null)
+                        join cm in db.CetMasters on b.BatchId equals cm.BatchId
+                        select new HallTicketListEx
+                        {
+                            Email = ap.Email,
+                            ApplicationCode = ap.ApplicationCode,
+                            Cell = ap.CellNo,
+                            CourseName = cr.ShortName,
+                            Batch = Convert.ToDateTime(b.StartDate).ToString("dd-mm-yyyy"),
+                            CetDate = cm.CetDate,
+                            CetTime = (TimeSpan)cm.CetTime,
+                            Name = ap.FullName
+                            
+                        });
+
+            
+            gv.DataSource = list.ToList();
+            gv.DataBind();
+            Response.ClearContent();
+            Response.Buffer = true;
+            Response.AddHeader("content-disposition", "attachment; filename=excelList.xls");
+            Response.ContentType = "application/ms-excel";
+            Response.Charset = "";
+            StringWriter objStringWriter = new StringWriter();
+            HtmlTextWriter objHtmlTextWriter = new HtmlTextWriter(objStringWriter);
+            gv.RenderControl(objHtmlTextWriter);
+            Response.Output.Write(objStringWriter.ToString());
+            Response.Flush();
+            Response.End();
+            return View("HallTicketsNonPay");
+
+
+
+
+        }
+        [HttpPost]
+        public async Task<ActionResult> HallTicketsNonPay(List<HallTicketListVM> ht, int? CetMasterId)
+        {
+            //List<HallTicketListEx> ex = new List<HallTicketListEx>();
+            if (ht != null && CetMasterId != null)
+            {
+                foreach (var item in ht)
+                {
+                    if (item.Select == true)
+                    {
+
+                        var hallticketpath = SavePdf(Convert.ToInt32(item.ApplicationId), (int)CetMasterId);
+                        bool isp = false;
+                        //try
+                        //{
+                            isp = await SendHalltcketEmail(Convert.ToInt32(item.ApplicationId), Convert.ToInt32(CetMasterId), hallticketpath);
+                        //}
+                        //catch (Exception) { }
+                        if (db.CetMarks.Any(u => (u.CetMasterId == (int)CetMasterId) && (u.BatchId == item.BatchId) && (u.ApplicationId == item.ApplicationId)))
+                        {
+                            var CetMarkIds = db.CetMarks.Where(u => (u.CetMasterId == (int)CetMasterId) && (u.BatchId == item.BatchId) && (u.ApplicationId == item.ApplicationId)).Select(x => x.CetMarkId).ToList();
+                            foreach (var cetmarkid in CetMarkIds)
+                            {
+                                CetMark c = new CetMark
+                                {
+                                    CetMarkId = cetmarkid,
+                                    CetMasterId = Convert.ToInt32(CetMasterId),
+                                    BatchId = item.BatchId,
+                                    ApplicationId = Convert.ToInt32(item.ApplicationId),
+                                    Marks1 = 0,
+                                    Marks2 = 0,
+                                    Marks3 = 0,
+                                    Marks4 = 0,
+                                    Total = 0,
+                                    SelectStatus = item.Select,
+                                    Hallticketpath = hallticketpath,
+                                    IsPublish = isp
+
+
+
+                                };
+                                db.Entry(c).State = EntityState.Modified;
+                                db.SaveChanges();
+                            }
+                        }
+                        else
+                        {
+                           
+
+                            CetMark c = new CetMark
+                            {
+                                CetMasterId = Convert.ToInt32(CetMasterId),
+                                BatchId = item.BatchId,
+                                ApplicationId = Convert.ToInt32(item.ApplicationId),
+                                Marks1 = 0,
+                                Marks2 = 0,
+                                Marks3 = 0,
+                                Marks4 = 0,
+                                Total = 0,
+                                SelectStatus = item.Select,
+                                Hallticketpath = hallticketpath,
+                                IsPublish = isp
+
+
+
+                            };
+                            db.CetMarks.Add(c);
+                        }
+
+                        
+                    }
+
+                }
+
+                await db.SaveChangesAsync();
+                
+                return RedirectToAction("HallTicketsNonPay");
+            }
+
+            var a = from c in db.Courses
+                    join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
+                    where (c.IsActive == true && cc.CetRequired == true)
+                    select new { c.CourseId, c.CourseName };
+            ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
+
+            var obj = new List<HallTicketListVM>();
+            return View(obj);
+        }
+        
+
+        #endregion
 
         #region AppliedList
 
@@ -1093,6 +1644,7 @@ namespace Tsr.Web.Controllers
                        join b in db.Batches on ap.BatchId equals b.BatchId
                        join ct in db.CetMasters on b.BatchId equals ct.BatchId
                        join sm in db.CetMarks on ap.ApplicationId equals sm.ApplicationId
+                       join apl in db.Applied on ap.ApplicationId equals apl.ApplicationId
                        //into sml 
                        //from sm in sml.DefaultIfEmpty()
                        where (b.BatchId == BatchId && ct.CetMasterId == CetMasterId)
@@ -1110,6 +1662,51 @@ namespace Tsr.Web.Controllers
 
 
             return PartialView("EntranceMarksList", list.ToList());
+        }
+
+        public ActionResult EntranceMarksEx(int? BatchId, int? CetMasterId)
+        {
+            var gv = new GridView();
+            var list = from ap in db.Applications
+                       join b in db.Batches on ap.BatchId equals b.BatchId
+                       join ct in db.CetMasters on b.BatchId equals ct.BatchId
+                       join sm in db.CetMarks on ap.ApplicationId equals sm.ApplicationId
+                       join apl in db.Applied on ap.ApplicationId equals apl.ApplicationId
+                       //into sml 
+                       //from sm in sml.DefaultIfEmpty()
+                       where (b.BatchId == BatchId && ct.CetMasterId == CetMasterId)
+                       select new EntranceMarksListVM
+                       {
+                           ApplicationCode = ap.ApplicationCode,
+                           ApplicationId = ap.ApplicationId,
+                           //BatchName = b.BatchCode,
+                           Name = ap.FullName,
+                           Marks1 = sm.Marks1,
+                           Marks2 = sm.Marks2,
+                           Marks3 = sm.Marks3,
+                           Marks4 = sm.Marks4,
+                           Total = (sm.Marks1 + sm.Marks2 + sm.Marks3 + sm.Marks4)
+                       };
+
+
+            gv.DataSource = list.ToList();
+            gv.DataBind();
+            Response.ClearContent();
+            Response.Buffer = true;
+            Response.AddHeader("content-disposition", "attachment; filename=excelList.xls");
+            Response.ContentType = "application/ms-excel";
+            Response.Charset = "";
+            StringWriter objStringWriter = new StringWriter();
+            HtmlTextWriter objHtmlTextWriter = new HtmlTextWriter(objStringWriter);
+            gv.RenderControl(objHtmlTextWriter);
+            Response.Output.Write(objStringWriter.ToString());
+            Response.Flush();
+            Response.End();
+            return View("EntranceMarksList");
+
+
+
+
         }
 
         #endregion
@@ -1218,7 +1815,48 @@ namespace Tsr.Web.Controllers
             var obj = new List<EntranceMarksListVM>();
             return PartialView("TopStudentsList", obj.ToList());
         }
+        public ActionResult TopStudentEx(int? BatchId, int? CetMasterId, int? Count)
+        {
+            var gv = new GridView();
+            var list = from ap in db.Applications
+                       join b in db.Batches on ap.BatchId equals b.BatchId
+                       join ct in db.CetMasters on b.BatchId equals ct.BatchId
+                       join sm in db.CetMarks on ap.ApplicationId equals sm.ApplicationId
+                       //into sml 
+                       //from sm in sml.DefaultIfEmpty()
+                       where (b.BatchId == BatchId && ct.CetMasterId == CetMasterId)
+                       orderby sm.Total descending
+                       select new TopStudentEx
+                       {
+                           ApplicationCode = ap.ApplicationCode,
+                           Email = ap.Email,
+                           Name = ap.FullName,
+                           Marks1 = sm.Marks1,
+                           Marks2 = sm.Marks2,
+                           Marks3 = sm.Marks3,
+                           Marks4 = sm.Marks4,
+                           Total = sm.Marks1 + sm.Marks2 + sm.Marks3 + sm.Marks4
+                       };
 
+            gv.DataSource = list.ToList();
+            gv.DataBind();
+            Response.ClearContent();
+            Response.Buffer = true;
+            Response.AddHeader("content-disposition", "attachment; filename=excelList.xls");
+            Response.ContentType = "application/ms-excel";
+            Response.Charset = "";
+            StringWriter objStringWriter = new StringWriter();
+            HtmlTextWriter objHtmlTextWriter = new HtmlTextWriter(objStringWriter);
+            gv.RenderControl(objHtmlTextWriter);
+            Response.Output.Write(objStringWriter.ToString());
+            Response.Flush();
+            Response.End();
+            return View("EntranceMarksList");
+
+
+
+
+        }
         #endregion
 
         #region Interview
@@ -1294,6 +1932,42 @@ namespace Tsr.Web.Controllers
             }
             var obj = new List<AdmissionInterviewListVM>();
             return PartialView("InterviewList", obj.ToList());
+        }
+        public ActionResult InterviewEx(int? BatchId)
+        {
+            var gv = new GridView();
+            var list = from cis in db.CetInterviews
+                       join ap in db.Applications on cis.ApplicationId equals ap.ApplicationId
+                       join b in db.Batches on cis.BatchId equals b.BatchId
+                       join cim in db.InterviewMasters on cis.InterviewMasterId equals cim.InterviewMasterId
+                       where (cis.BatchId == BatchId)
+                       select new AdmissionInterviewListVM
+                       {
+                           ApplicationId = ap.ApplicationId,
+                           ApplicationCode = ap.ApplicationCode,
+                           Cell = ap.CellNo,
+                           Email = ap.Email,
+                           Name = ap.FullName
+                       };
+
+            gv.DataSource = list.ToList();
+            gv.DataBind();
+            Response.ClearContent();
+            Response.Buffer = true;
+            Response.AddHeader("content-disposition", "attachment; filename=excelList.xls");
+            Response.ContentType = "application/ms-excel";
+            Response.Charset = "";
+            StringWriter objStringWriter = new StringWriter();
+            HtmlTextWriter objHtmlTextWriter = new HtmlTextWriter(objStringWriter);
+            gv.RenderControl(objHtmlTextWriter);
+            Response.Output.Write(objStringWriter.ToString());
+            Response.Flush();
+            Response.End();
+            return View("EntranceMarksList");
+
+
+
+
         }
         #endregion
 
