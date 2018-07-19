@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Tsr.Core.Models.EditFeesRecieptList>
+<table id="customers2" class="table datatable">
+    <thead>
+        <tr>
+
+            <th>RecieptNo</th>
+
+            <th>Name</th>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.ReceiptNo)</td>
+
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.ReceiptDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+                <td>
+                    @Html.ActionLink("Edit", "EditFeesRecieptMP", new { id = item.RecieptId }, new { data_modal = "" }) 
+                </td>
+            </tr>
+        }
+
+    </tbody>
+
+</table>
+<!-- MODALS -->
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="defModalHead" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/ModalForm2.js"></script>

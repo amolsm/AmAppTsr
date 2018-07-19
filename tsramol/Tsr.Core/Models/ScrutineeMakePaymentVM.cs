@@ -26,4 +26,24 @@ namespace Tsr.Core.Models
         [Display(Name = "Bank Name")]
         public string BankName { get; set; }
     }
+    public class EditRecieptMpVm
+    {
+        [Required]
+        public decimal? Amount { get; set; }
+        public string ReceiptNo { get; set; }
+        //public int ApplicationId { get; set; }
+       
+        public string FeesType { get; set; }
+       
+        public string PaymentMode { get; set; }
+        public string PaymentLocation { get; set; }
+        [Display(Name = "DD No")]
+        public string DdNo { get; set; }
+        [Display(Name = "Cheque No")]
+        public string ChequeNo { get; set; }
+        [Display(Name = "Bank Name")]
+        public string BankName { get; set; }
+        public DateTime? ReceiptDate { get; set; }
+        public int? RecieptId { get; set; }
+    }
 }

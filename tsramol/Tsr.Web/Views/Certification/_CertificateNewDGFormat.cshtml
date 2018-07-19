@@ -70,10 +70,10 @@
                             <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:120px" value="@(c.DateofBirth == null ? "" : @Convert.ToDateTime(c.DateofBirth).ToString("dd-MM-yyyy"))" />
                         </span>
                         <span style="padding-right: 10px;">
-                            Holder of C.D.C.No.
+                            Holder of Passport No.
                         </span>
                         <span>
-                            <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:245px" value="@(c.CDCNo == null ? "" : c.CDCNo)" />
+                            <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:auto" value="@(c.PassportNo == null ? "" : c.PassportNo)" />
                         </span>
                    </td>
 
@@ -81,46 +81,37 @@
             <tr>
                 <td colspan="15">
                     <span style="padding-right: 10px;">
-                        Passport No.</span>
-                    <span style="padding-right:10px;"><input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:120px" value="@(c.PassportNo == null ? "" : c.PassportNo)" /></span>
+                        Indian National Database (INDoS No)</span>
+                    <span style="padding-right:10px;"><input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:120px" value="@(c.Indosno == null ? "" : c.Indosno)" /></span>
                     <span>
 
-                        Certificate of Competency,(if any)
+                        @*has successfully attended and completed*@
                         </span>
 </td>
 
             </tr>
 
-            <tr>
-
-                <td colspan="15">
-                    <span style="padding-right: 10px;">
-                        Grade:
-                    </span>
-                    <span style="padding-right: 10px;">
-                        <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:220px" value="@(c.Grade == null ? "" : c.Grade)" />
-                       </span> No.
-                    <span style="padding-right: 10px;">
-                        <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:120px" value="@(c.Number == null ? "" : c.Number)" />
-                      </span> 
-                    <span> Indian National Database</span>
-</td>
-            </tr>
-            <tr>
-                <td colspan="15"><span style="padding-right: 10px;">
-    of Seafarers(INDoS No.)</span>
-                    <span>
-                        <input readonly style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:440px" value="@(c.Indosno == null ? "" : c.Indosno)" />
-</span></td>
-            </tr>
+            
             <tr>
                 <td colspan="15">@Html.Raw(c.LineOfCertificate == null ? "" : c.LineOfCertificate)</td>
             </tr>
-            <tr>
+            <tr> 
                 <td style="text-align:center" colspan="15"><span style="font-family:Calibri;font-size:22px; font-weight:bold;color:#3e4095">@(c.CourseName == null ? "" : c.CourseName)</span></td>
             </tr>
-
-            <tr>
+            <tr><td colspan="2"></td>
+                <td style="text-align:left" colspan="15"><span style="font-family:Calibri;font-size:22px; font-weight:bold;color:#3e4095">PERSONAL SURVIVAL TECHNIQUES; </span></td>
+            </tr>
+            <tr><td colspan="2"></td>
+                <td style="text-align:left" colspan="15"><span style="font-family:Calibri;font-size:22px; font-weight:bold;color:#3e4095">FIRE PREVENTION AND FIRE FIGHTING; </span></td>
+            </tr>
+            <tr><td colspan="2"></td>
+                <td style="text-align:left" colspan="15"><span style="font-family:Calibri;font-size:22px; font-weight:bold;color:#3e4095">ELEMENTARY FIRST AID; AND  </span></td>
+            </tr>
+            <tr><td colspan="2"></td>
+                <td style="text-align:left" colspan="15"><span style="font-family:Calibri;font-size:22px; font-weight:bold;color:#3e4095">PERSONAL SAFETY AND SOCIAL RESPONSIBILITIES. </span> <br />&nbsp;</td>
+            
+            </tr> 
+            <tr >
                 <td colspan="2">held from </td>
                 <td colspan="5">
                     <input readonly style="font-family:'Times New Roman';font-size:15px; font-weight:bold" value="@(c.StartDate == null ? "" : @Convert.ToDateTime(c.StartDate).ToString("dd-MM-yyyy"))" />
@@ -140,18 +131,33 @@
             <tr>
                 <td colspan="15"><p>@Html.Raw(c.Paragraph3 == null ? "" : c.Paragraph3)</p></td>
             </tr>
+            <tr>
+                <td colspan="15">
+                    Date of Issue:
+                    <span style="padding-right:5px;">
+                        <input readonly style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:120px" value="@(c.DateOfIssue == null ? "" : Convert.ToDateTime(c.DateOfIssue).ToString("dd-MM-yyyy"))" />
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="15">
+                    <div >
+                        @Html.Raw(c.Topic4 == null ? "" : c.Topic4)
+                    </div>
+                </td>
+            </tr>
             <tr style="padding-top: 20px;">
-                <td colspan="9">Signature of Candidate:__________________</td>
-
+                <td colspan="6">
+                    <input readonly type="text" style="padding-top: 25px;" /><br>
+                    <center>Signature Of Candidate</center>
+                </td>
+                <td colspan="3"></td>
                 <td  colspan="6"><input readonly type="text" style="padding-top: 25px;"/><br>
                 <center>Course Incharge<br><span style="text-transform:capitalize">(@(c.CourseInCharge == null ? "" : c.CourseInCharge))</span></center></td>
 
             </tr>
             <tr>
-                <td colspan="7">Date of Issue: 
-                    <span style="padding-right:5px;">
-                        <input readonly style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:120px" value="@(c.DateOfIssue == null ? "" : Convert.ToDateTime(c.DateOfIssue).ToString("dd-MM-yyyy"))" />
-</span></td>
+               <td colspan="7"></td>
                 <td rowspan="2" colspan="10" style="text-align:center;padding-top:10px">
                     
                         @Html.Image(c.PrincipalSign, "No Signature Available", "75", "180")
@@ -159,13 +165,11 @@
 
 </td>
             </tr>
-            <tr>
-                <td colspan="7">
-                    <div style="width:250px">
-                       @Html.Raw(c.Topic4 == null ? "" : c.Topic4)
-                        </div>
-</td>
-            </tr>
+           <tr>
+               <td align="center" colspan="7">
+                   
+               </td>
+           </tr>
             <tr>
                 <td  colspan="8">
                     <div>
@@ -174,7 +178,7 @@
 
                 <td align="center" colspan="7">
                     <div style="align-content:center">
-                        Principal<br />(@(c.PrincipalName == null ? "" : c.PrincipalName))<br /> INDoS No. : 98NL1339
+                        Principal<br />(@(c.PrincipalName == null ? "" : c.PrincipalName))<br /> INDoS No. : 98NL1339<br />
                         <br />
                         <div style="padding-left:50%">
                             <img src="~/Img/DNV LOGO.jpg" style="width:50px;height:85px;" />

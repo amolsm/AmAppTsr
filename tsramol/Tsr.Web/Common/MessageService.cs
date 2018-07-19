@@ -138,6 +138,7 @@ namespace Tsr.Web.Common
                 smtp.Host = "smtp.gmail.com";
                 smtp.Port = 587;
                 smtp.EnableSsl = true;
+
                 await smtp.SendMailAsync(message);
                 message.Dispose();
                

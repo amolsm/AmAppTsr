@@ -1104,6 +1104,10 @@
     <Content Include="Views\Admission\_HallticketApplicantNonPay.cshtml" />
     <Content Include="Views\Shared\_changePassword.cshtml" />
     <Content Include="Views\Shared\_changePassword - Copy.cshtml" />
+    <Content Include="Views\Certification\_CertificateNewDGFormat.cshtml" />
+    <Content Include="Views\Fees\EditFeesReciept.cshtml" />
+    <Content Include="Views\Fees\EditFeeRecieptList.cshtml" />
+    <Content Include="Views\Fees\EditFeesRecieptMP.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

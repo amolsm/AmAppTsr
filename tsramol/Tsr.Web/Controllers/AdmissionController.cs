@@ -32,7 +32,7 @@ namespace Tsr.Web.Controllers
         public JsonResult FillBatch(int? CourseId)
         {
             var C = db.Batches
-                .Where(c => c.CourseId == CourseId && c.IsActive == true && c.OnlineBookingStatus == true)
+                .Where(c => c.CourseId == CourseId && c.IsActive == true )
                 .Select(x => new { BatchId = x.BatchId, Name = x.StartDate });
 
             var Batches = C.ToList().Select(x => new BatchDropdown { BatchId = x.BatchId, BatchCode = Convert.ToDateTime(x.Name).ToString("dd-MM-yyyy") });
@@ -1730,34 +1730,38 @@ namespace Tsr.Web.Controllers
             {
                 foreach (var item in obj)
                 {
-                    var ap = await db.Applications.FindAsync(item.ApplicationId);
-                    var cim = await db.InterviewMasters.FindAsync(InterviewMasterId);
-                    CetInterview ci = new CetInterview
+                    if (item.Select == true)
                     {
-                        ApplicationId = item.ApplicationId,
-                        BatchId = (int)ap.BatchId,
-                        InterviewMasterId = (int)InterviewMasterId
-                    };
-                    db.CetInterviews.Add(ci);
-                    int Id = (int)InterviewMasterId;
+                        var ap = await db.Applications.FindAsync(item.ApplicationId);
+                        var cim = await db.InterviewMasters.FindAsync(InterviewMasterId);
+                        CetInterview ci = new CetInterview
+                        {
+                            ApplicationId = item.ApplicationId,
+                            BatchId = (int)ap.BatchId,
+                            InterviewMasterId = (int)InterviewMasterId
+                        };
+                        db.CetInterviews.Add(ci);
+                        int Id = (int)InterviewMasterId;
 
-                    EmailModel em = new EmailModel
-                    {
-                        From = ConfigurationManager.AppSettings["admsmail"],
-                        FromPass = ConfigurationManager.AppSettings["admsps"],
-                        To = ap.Email,
-                        Subject = "Interview for Pre Sea Course",
-                        Body = "Dear " + ap.FullName + ", with the reference to your Enrolment ID " + ap.ApplicationCode + " you are selected for the Interview Date " + Convert.ToDateTime(cim.InterviewDate).ToString("dd-MM-yyyy") + " Time " + cim.InterviewTime + "  Thanking you T.S.Rahaman",
-                        File1 = HttpContext.Server.MapPath(db.InterviewMasters.Where(x => x.InterviewMasterId == Id).Select(x => x.FilePath).FirstOrDefault())
-                        
-                };
+                        EmailModel em = new EmailModel
+                        {
+                            From = ConfigurationManager.AppSettings["admsmail"],
+                            FromPass = ConfigurationManager.AppSettings["admsps"],
+                            To = ap.Email,
+                            Subject = "Interview for Pre Sea Course",
+                            Body = "Dear " + ap.FullName + ", with the reference to your Enrolment ID " + ap.ApplicationCode + " you are selected for the Interview Date " + Convert.ToDateTime(cim.InterviewDate).ToString("dd-MM-yyyy") + " Time " + cim.InterviewTime + "  Thanking you T.S.Rahaman",
+                            File1 = HttpContext.Server.MapPath(db.InterviewMasters.Where(x => x.InterviewMasterId == Id).Select(x => x.FilePath).FirstOrDefault())
 
-                    var res = await MessageService.sendAttachmentEmail(em);
+                        };
 
-                    MessageService ms = new MessageService();
-                    string msg = "Dear " + ap.FullName + ", with the reference to your Enrolment ID " + ap.ApplicationCode + " you are selected for the Interview Date " + Convert.ToDateTime(cim.InterviewDate).ToString("dd-MM-yyyy") + " Time " + cim.InterviewTime + "  Thanking you T.S.Rahaman";
-                    string mobileno = ap.CellNo;
-                    await ms.SendSmsAsync(msg, mobileno);
+                        var res = await MessageService.sendAttachmentEmail(em);
+
+                        MessageService ms = new MessageService();
+                        string msg = "Dear " + ap.FullName + ", with the reference to your Enrolment ID " + ap.ApplicationCode + " you are selected for the Interview Date " + Convert.ToDateTime(cim.InterviewDate).ToString("dd-MM-yyyy") + " Time " + cim.InterviewTime + "  Thanking you T.S.Rahaman";
+                        string mobileno = ap.CellNo;
+                        await ms.SendSmsAsync(msg, mobileno);
+                    }
+                    
                 }
 
                 await db.SaveChangesAsync();
@@ -1782,9 +1786,10 @@ namespace Tsr.Web.Controllers
                            join b in db.Batches on ap.BatchId equals b.BatchId
                            join ct in db.CetMasters on b.BatchId equals ct.BatchId
                            join sm in db.CetMarks on ap.ApplicationId equals sm.ApplicationId
-                           //into sml 
-                           //from sm in sml.DefaultIfEmpty()
-                           where (b.BatchId == BatchId && ct.CetMasterId == CetMasterId)
+                           join cti in db.CetInterviews on ap.ApplicationId equals cti.ApplicationId
+                           into ctil 
+                           from cti in ctil.DefaultIfEmpty()
+                           where (b.BatchId == BatchId && ct.CetMasterId == CetMasterId && cti == null)
                            orderby sm.Total descending
                            select new EntranceMarksListVM
                            {

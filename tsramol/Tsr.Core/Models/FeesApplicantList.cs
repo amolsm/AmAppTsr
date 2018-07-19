@@ -22,4 +22,14 @@ namespace Tsr.Core.Models
         public string FeeReceiptNo { get; set; }
         public bool? Flag { get; set; }
     }
+
+    public class EditFeesRecieptList
+    {
+        public int Id { get; set; }
+        public int RecieptId { get; set; }
+        public string Name { get; set; }
+        public string ReceiptNo { get; set; }
+        public decimal? Amount { get; set; }
+        public DateTime? ReceiptDate { get; set; }
+    }
 }

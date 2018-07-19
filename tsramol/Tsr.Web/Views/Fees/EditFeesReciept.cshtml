@@ -1,0 +1,85 @@
+﻿
+@{
+    ViewBag.Title = "Edit Fee Receipt";
+}
+
+<!-- START BREADCRUMB -->
+<ul class="breadcrumb push-down-0">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Fees</a></li>
+    <li><a href="#">Edit Reciept</a></li>
+    @*<li class="active">Error 404</li>*@
+</ul>
+<!-- END BREADCRUMB -->
+<!-- PAGE CONTENT WRAPPER -->
+<div class="page-content-wrap">
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+
+                <form class="form-horizontal">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">List</h3>
+
+                        </div>
+
+                        <div class="panel-body">
+                            <div style="border:solid; padding:18px">
+                                <h4>Search Reciept No</h4>
+                                <div class="row">
+
+                                    <div class="col-md-12">
+
+                                       
+                                        <div class="form-group">
+                                            <div class="col-md-3">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="txtSearch" />
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="input-group">
+                                                    <input class="btn btn-primary" type="button" value="Search" onclick="Search()" />
+                                                    &nbsp;&nbsp; <input type="button" class="btn btn-primary" value="Refresh Page" onClick="window.location.reload()">
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <br /><br /><br />
+                            <div id="dvResult">
+                               
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>
+<!-- END PAGE CONTENT WRAPPER -->
+<script>
+
+  function Search() {
+      var RNo = $('#txtSearch').val();
+
+      $("#dvResult").load('@(Url.Action("EditReceiptSearch", "Fees",null, Request.Url.Scheme))?RNo=' + RNo);
+  }
+    
+
+</script>
+<script src="~/Scripts/commonjs/FeesCoursePayments.js"></script>

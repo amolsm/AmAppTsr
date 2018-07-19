@@ -57,7 +57,7 @@
                                         <div class="col-xs-6 form-group">
                                             @Html.LabelFor(model => model.BatchId, htmlAttributes: new { @class = "control-label col-md-3" })
                                             <div class="col-md-6">
-                                                @Html.DropDownListFor(model => model.BatchId, (IEnumerable<SelectListItem>)ViewBag.Batches, "Select Batch", new { @class = "form-control",@onchange= "CheckIsCetScheduleExists()" })
+                                                @Html.DropDownListFor(model => model.BatchId, (IEnumerable<SelectListItem>)ViewBag.Batches, "Select Batch", new { @class = "form-control" })
                                                 @Html.ValidationMessageFor(model => model.BatchId, "", new { @class = "text-danger" })
                                             </div>
                                         </div>

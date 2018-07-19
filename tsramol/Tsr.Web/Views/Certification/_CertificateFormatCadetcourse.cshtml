@@ -161,10 +161,20 @@
                     <input readonly type="text" style="font-family:'Times New Roman';font-size:15px; font-weight:bold;width:80px" value="@(c.DateOfIssue == null ? "" : Convert.ToDateTime(c.DateOfIssue).ToString("dd-MM-yyyy"))" />
                 </td>
                 <td style="text-align:center" colspan="9">
-                    Principal <br />(@(c.PrincipalName == null ? "" : c.PrincipalName))
+                    @*Principal <br />(@(c.PrincipalName == null ? "" : c.PrincipalName))*@
                 </td>
                 <td colspan="2" style="text-align:center;padding-top:5px">
                     @Html.Image(c.PrincipalSign, "No Signature Available", "75", "180")
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                </td>
+                <td style="text-align:center" colspan="9">
+                   
+                </td>
+                <td colspan="2" style="text-align:center;padding-top:5px">
+                    Principal <br />(@(c.PrincipalName == null ? "" : c.PrincipalName)) <br /> INDoS No. : 98NL1339
                 </td>
             </tr>
             <tr>

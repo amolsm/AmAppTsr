@@ -119,11 +119,14 @@
             <tr>
                 <td colspan="15"><p style="text-align:justify">@Html.Raw(c.Paragraph3 == null ? "" : c.Paragraph3)</p></td>
             </tr>
+            <tr></tr>
+            <tr></tr>
             <tr>
                 <td colspan="15">
                     <div style="width:100px;height:125px;border:1px solid #000; display: flex;align-items: center;justify-content: center;"><p style="text-align:center;vertical-align:middle">Photograph</p></div>
                 </td>
             </tr>
+            <tr></tr>
             <tr>
                 <td colspan="3" style="text-align:center;padding-top:20px">
                     <br />
@@ -134,25 +137,19 @@
                     <br />
                     <b>Date of Issue</b>
                 </td>
-                <td colspan="8" style="text-align:center;padding-top:20px">
-                    <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"> @(c.PrincipalName == null ? "" : c.PrincipalName)</span>
+                <td colspan="6" style="text-align:center;padding-top:20px">
+                    <span style="font-family:'Times New Roman';font-size:15px; font-weight:bold"> @(c.PrincipalName == null ? "" : c.PrincipalName)</span><br /> INDoS No. : 98NL1339
                     <br />
                     <b>PRINCIPAL</b>
                 </td>
-            </tr>
-            <tr>
-
-
-                <td align="right" colspan="15">
+                <td align="right" colspan="2">
 
 
                     <img src="~/Img/DNV LOGO.jpg" style="width:50px;height:90px;" />
 
                 </td>
-
-
-
             </tr>
+            
             <tr>
                 <td colspan="15">
                     <span style="font-weight:normal;font-size:xx-small"> @Html.Raw(c.Topic5 == null ? "" : c.Topic5)</span>

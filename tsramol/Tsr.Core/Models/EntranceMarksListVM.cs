@@ -17,6 +17,7 @@ namespace Tsr.Core.Models
         public float Marks3 { get; set; }
         public float Marks4 { get; set; }
         public float Total { get; set; }
+        public bool Select { get; set; }
     }
     public class TopStudentEx
     {

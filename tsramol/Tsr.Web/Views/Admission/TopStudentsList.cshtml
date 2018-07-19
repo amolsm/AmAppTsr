@@ -14,6 +14,7 @@
                 <th>Marks3</th>
                 <th>Marks4</th>*@
                 <th>Total</th>
+                <th>Select</th>
             </tr>
         </thead>
         <tbody>
@@ -29,6 +30,9 @@
                     <td>@Html.TextBox("obj[" + @i + "].Marks3", Model[i].Marks3, new { @readonly = "readonly" })</td>
                     <td>@Html.TextBox("obj[" + @i + "].Marks4", Model[i].Marks4, new { @readonly = "readonly" })</td>*@
                     <td>@Html.TextBox("obj[" + @i + "].Marks4", Model[i].Total, new { @readonly = "readonly" })</td>
+                    <td>
+                        @Html.CheckBox("obj[" + @i + "].Select", Model[i].Select)
+                    </td>
                 </tr>
             }
 

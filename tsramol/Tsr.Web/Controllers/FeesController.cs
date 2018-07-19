@@ -1119,7 +1119,49 @@ namespace Tsr.Web.Controllers
         #endregion
 
         #region EditFeesReciept
+        public ActionResult EditFeesReciept()
+        {
 
-#endregion
+            return View();
+        }
+        public ActionResult EditReceiptSearch(string RNo)
+        {
+            var list = (from fr in db.FeeReceipts
+                       join ap in db.Applications on fr.ApplicationId equals ap.ApplicationId
+                       where fr.FeeReceiptNo.Contains(RNo)
+                        select new EditFeesRecieptList
+                       {
+                           Name = ap.FullName,
+                           ReceiptNo = fr.FeeReceiptNo,
+                           Amount = fr.Amount,
+                           ReceiptDate = fr.ReceiptDate,
+                           RecieptId = fr.FeeReceiptId
+                       }).ToList();
+           
+            return PartialView("EditFeeRecieptList",list);
+        }
+
+        public async Task<ActionResult> EditFeesRecieptMP(int? id)
+        {
+            //var ap = await db.Applications.FindAsync(id);
+            //var sfd = await db.StudentFeeDetails.FirstOrDefaultAsync(x => x.ApplicationId == id);
+            var fr = await db.FeeReceipts.FirstOrDefaultAsync(x => x.FeeReceiptId == id);
+            EditRecieptMpVm vm = new EditRecieptMpVm
+            {
+                Amount = fr.Amount,
+                BankName = fr.BankName,
+                ChequeNo = fr.ChequeNo,
+                DdNo = fr.DDNo,
+                FeesType = fr.FeesType,
+                PaymentMode = fr.PaymentMode,
+                ReceiptNo = fr.FeeReceiptNo,
+                ReceiptDate = fr.ReceiptDate,
+                RecieptId = fr.FeeReceiptId
+                
+            };
+            
+            return PartialView("EditFeesRecieptMP", vm);
+        }
+        #endregion
     }
 }
