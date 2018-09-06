@@ -193,12 +193,13 @@
   function checkAge() {
       //debugger;
       var CourseId = $('#CourseId').val();
+      var BatchId = $('#BatchId').val();
       var DateOfBirth = $('#DateOfBirth').val();
       $.ajax({
           url: '/Application/checkAge',
           type: "GET",
           dataType: "JSON",
-          data: { CourseId: CourseId, DateOfBirth: DateOfBirth },
+          data: { CourseId: CourseId, DateOfBirth: DateOfBirth, BatchId: BatchId },
           success: function (res) {
               debugger;
               if (res == true)

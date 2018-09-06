@@ -125,12 +125,17 @@ namespace Tsr.Web.Controllers
 
             return Json(obj, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult checkAge(int CourseId, string DateOfBirth)
+        public JsonResult checkAge(int CourseId, string DateOfBirth, int BatchId)
         {
             bool res;
             var c = db.Courses.Find(CourseId);
             var dob = Convert.ToDateTime(DateOfBirth);
-            var age = DateTime.Now.Year - dob.Year;
+            
+            var startDate = Convert.ToDateTime(db.Batches.Find(BatchId).StartDate);
+            var p = (startDate - dob).Days;
+
+            var age = p/365.25;
+
             if (c.MinAge == 0 && c.MaxAge == 0)
             {
                 res = true;
