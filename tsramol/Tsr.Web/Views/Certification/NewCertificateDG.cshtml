@@ -1,0 +1,142 @@
+﻿@model Tsr.Core.Models.CertificationCertificateVM
+@using Tsr.Web.Common
+@{
+    ViewBag.Title = "New Certificate";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/commonjs/commondropdown.js"></script>
+<link href="~/Content/css/Certificate.css" rel="stylesheet" />
+<ul class="breadcrumb push-down-0">
+    <li><a href="#">Certification</a></li>
+    <li class="active">New Cerificate</li>
+
+</ul>
+<!-- END BREADCRUMB -->
+
+<div class="page-content-wrap">
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="form-horizontal">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">New Certificate</h3>
+
+                        </div>
+
+
+                        <div class="panel-body">
+                            @using (Html.BeginForm("NewCertificateDG", "Certification", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                            {
+                                @Html.AntiForgeryToken()
+
+
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            Category
+                                        </div>
+                                        @Html.DropDownListFor(model => model.CategoryId
+           , (IEnumerable<SelectListItem>)ViewBag.Categories, " ", new { @class = "form-control", @onchange = "FillCourse()" })
+                                    </div>
+                                </div>
+
+
+                                <div class="col-lg-3">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            Course
+                                        </div>
+                                        @Html.DropDownListFor(model => model.CourseId,
+                                         new SelectList(Enumerable.Empty<SelectListItem>(), "CourseId", "CourseName"), " ", new { @class = "form-control", @onchange = "FillBatch()" })
+                                    </div>
+                                </div>
+
+
+                                <div class="col-lg-3">
+
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            Batch
+                                        </div>
+                                        @Html.DropDownListFor(model => model.BatchId,
+                                         new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "Name"), " ", new { @class = "form-control" })
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3">
+
+                                    <div class="input-group">
+                                        <input class="btn btn-primary" type="submit" style="width:150px" value="Generate Certificate" />
+
+                                        &nbsp; <input type="button" class="btn btn-primary" style="width:60px" value="Print" id="btnPrint" />
+                                        &nbsp;  <input class="btn btn-primary" type="button" value="Result" style="width:60px" onclick="window.open('@Url.Action("ViewResultFormat", "Certification")?id=' + @ViewBag.batchId,'_blank')" />
+
+
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3 pull-right">
+
+                                    <div class="input-group">
+                                        <br />
+                                        <input type="button" class="btn btn-primary" value="Refresh Page" onClick="window.location.href=window.location.href">
+                                    </div>
+                                </div>
+
+                            }
+                        </div>
+
+                        <div class="panel-body">
+
+
+                            <div id="Grid">
+                                @if (Model._CertificateList != null && Model.PerformAction != null)
+                                {
+                                    Html.RenderPartial(Model.PerformAction, Model);
+
+                                }
+                            </div>
+
+
+
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<script type="text/javascript">
+    $("#btnPrint").click(function () {
+            var divContents = $("#Grid").html();
+            var printWindow = window.open('', '', 'height=400,width=800');
+            printWindow.document.write('<html><head><title>Certificate</title><style>@@media{@@page{size:A4}}</style>');
+            printWindow.document.write('</head><body >');
+            printWindow.document.write(divContents);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.print();
+        });
+
+
+
+
+
+</script>
+
+
+

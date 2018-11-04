@@ -51,3 +51,13 @@ ALTER TABLE [dbo].[FeeReceipts] ADD [Fy] [nvarchar](max)
 
 --10/04
 ALTER TABLE [dbo].[Document] ALTER COLUMN [DocumentName] [nvarchar](max) NOT NULL
+
+--03/11/18
+CREATE TABLE [dbo].[CertificateNumberNews] (
+    [CertificateNumberNewId] [int] NOT NULL IDENTITY,
+    [ApplicationId] [int] NOT NULL,
+    [FullName] [nvarchar](max),
+    [CertificateNumber] [nvarchar](max),
+    CONSTRAINT [PK_dbo.CertificateNumberNews] PRIMARY KEY ([CertificateNumberNewId])
+)
+ALTER TABLE [dbo].[CertificateNumberNews] ADD [BatchId] [int] NOT NULL DEFAULT 0

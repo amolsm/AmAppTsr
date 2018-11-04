@@ -93,6 +93,7 @@
     <Compile Include="Entities\Certificate.cs" />
     <Compile Include="Entities\CertificateDesign.cs" />
     <Compile Include="Entities\CertificateFormat.cs" />
+    <Compile Include="Entities\CertificateNumber.cs" />
     <Compile Include="Entities\CetInterview.cs" />
     <Compile Include="Entities\CetMark.cs" />
     <Compile Include="Entities\CetMaster.cs" />
@@ -145,6 +146,7 @@
     <Compile Include="Models\CertificatePrincipalVM.cs" />
     <Compile Include="Models\CertificateViewResultFormat.cs" />
     <Compile Include="Models\CertificationCertificateVM.cs" />
+    <Compile Include="Models\CertNumberExcelSheetVM.cs" />
     <Compile Include="Models\CheckListVM.cs" />
     <Compile Include="Models\CompReservCetVM.cs" />
     <Compile Include="Models\CompReservNonCetVM.cs" />

@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Tsr.Core.Entities;
@@ -14,8 +12,13 @@ using Tsr.Core.Models;
 using Tsr.Infra;
 using Tsr.ToPdf;
 using Tsr.Web.Common;
-
 using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Data.OleDb;
+using System.Data;
+using LinqToExcel;
+using System.Data.Entity.Validation;
+using System.Configuration;
 
 namespace Tsr.Web.Controllers
 {
@@ -549,6 +552,7 @@ namespace Tsr.Web.Controllers
 
 
         #endregion
+
         #region Certificate
         [HttpGet]
         public ActionResult Certificate()
@@ -697,6 +701,7 @@ namespace Tsr.Web.Controllers
             return View(obj);
         }
         #endregion
+
         #region UniqueIdentifier
         public JsonResult IsCourseFormatExists(string CourseId)
         {
@@ -802,6 +807,318 @@ namespace Tsr.Web.Controllers
             return View(ccvm);
         }
 
+        #endregion
+
+        #region Excel Upload Certificate Number
+        public ActionResult UploadExcelCertNumber()
+        {
+            var a = from c in db.Courses
+                    join cc in db.CourseCategories on c.CategoryId equals cc.CourseCategoryId
+                    where (c.IsActive == true && cc.CetRequired == true)
+                    select new { c.CourseId, c.CourseName };
+            ViewBag.Course = new SelectList(a.ToList(), "CourseId", "CourseName");
+
+            ViewBag.Categories = new SelectList(db.CourseCategories.ToList(), "CourseCategoryId", "CategoryName");
+            //var obj = new List<ApplicationNonCetVM>();
+            return View();
+        }
+
+        public ActionResult DownloadExcelForCompanyReserv(int id)
+        {
+            var gv = new GridView();
+
+            var list = from apl in db.Applied
+                           join ap in db.Applications on apl.ApplicationId equals ap.ApplicationId
+                           where (apl.BatchId == id && apl.AdmissionStatus == true)
+                           select new CertNumberExcelSheetVM
+                           {
+                               ApplicationId = apl.ApplicationId,
+                               BatchId = apl.BatchId,
+                               FullName = ap.FullName,
+                               CertificateNumber = ""
+                           };
+           
+            
+
+            gv.DataSource = list.ToList();
+            gv.DataBind();
+            Response.ClearContent();
+            Response.Buffer = true;
+            Response.AddHeader("content-disposition", "attachment; filename=CertificateNumbers.xls");
+            Response.ContentType = "application/ms-excel";
+            Response.Charset = "";
+            StringWriter objStringWriter = new StringWriter();
+            HtmlTextWriter objHtmlTextWriter = new HtmlTextWriter(objStringWriter);
+            gv.RenderControl(objHtmlTextWriter);
+            Response.Output.Write(objStringWriter.ToString());
+            Response.Flush();
+            Response.End();
+            return View("Index");
+        }
+
+        [HttpPost]
+        public JsonResult UploadExcel(HttpPostedFileBase FileUpload)
+        {
+
+            List<string> data = new List<string>();
+            if (FileUpload != null)
+            {
+
+                if (FileUpload.ContentType == "application/vnd.ms-excel" || FileUpload.ContentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                {
+
+
+                    string filename = FileUpload.FileName;
+                    string targetpath = Server.MapPath("~/Uploads/");
+                    FileUpload.SaveAs(targetpath + filename);
+                    string pathToExcelFile = targetpath + filename;
+                    var connectionString = "";
+                    if (filename.EndsWith(".xls"))
+                    {
+                        connectionString = string.Format("Provider=Microsoft.Jet.OLEDB.4.0; data source={0}; Extended Properties=Excel 8.0;", pathToExcelFile);
+                    }
+                    else if (filename.EndsWith(".xlsx"))
+                    {
+                        connectionString = string.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=\"Excel 12.0 Xml;HDR=YES;IMEX=1\";", pathToExcelFile);
+                    }
+
+                    var adapter = new OleDbDataAdapter("SELECT * FROM [Sheet1$]", connectionString);
+                    var ds = new DataSet();
+
+                    adapter.Fill(ds, "ExcelTable");
+
+                    DataTable dtable = ds.Tables["ExcelTable"];
+
+                    string sheetName = "Sheet1";
+
+                    var excelFile = new ExcelQueryFactory(pathToExcelFile);
+                    var artistAlbums = from a in excelFile.Worksheet<CertNumberExcelSheetVM>(sheetName) select a;
+
+                    foreach (var a in artistAlbums)
+                    {
+                        try
+                        {
+                            var cns = db.CertificateNumbersNew.FirstOrDefault(x => x.ApplicationId == a.ApplicationId && x.BatchId == a.BatchId);
+                            
+                            
+                            if (cns != null)
+                            {
+                                cns.CertificateNumber = a.CertificateNumber;
+                                db.SaveChanges();
+                            }
+                            else
+                            {
+                                CertificateNumberNew cn = new CertificateNumberNew()
+                                {
+                                    ApplicationId = a.ApplicationId,
+                                    BatchId = a.BatchId,
+                                    CertificateNumber = a.CertificateNumber,
+                                    FullName = a.FullName
+                                };
+                                db.CertificateNumbersNew.Add(cn);
+                                db.SaveChanges();
+                            }
+                            
+                        }
+
+                        catch (DbEntityValidationException ex)
+                        {
+                            foreach (var entityValidationErrors in ex.EntityValidationErrors)
+                            {
+
+                                foreach (var validationError in entityValidationErrors.ValidationErrors)
+                                {
+
+                                    Response.Write("Property: " + validationError.PropertyName + " Error: " + validationError.ErrorMessage);
+
+                                }
+
+                            }
+                        }
+                    }                    
+                    //deleting excel file from folder  
+                    if ((System.IO.File.Exists(pathToExcelFile)))
+                    {
+                        System.IO.File.Delete(pathToExcelFile);
+                    }
+
+                    RedirectToAction("UploadExcelCertNumber");
+                    return Json("success", JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    //alert message for invalid file format  
+                    data.Add("<ul>");
+                    data.Add("<li>Only Excel file format is allowed</li>");
+                    data.Add("</ul>");
+                    data.ToArray();
+                    return Json(data, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                data.Add("<ul>");
+                if (FileUpload == null) data.Add("<li>Please choose Excel file</li>");
+                data.Add("</ul>");
+                data.ToArray();
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+            //return Json("", JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+
+
+
+
+        #region Certificate
+        [HttpGet]
+        public ActionResult NewCertificateDG()
+        {
+            ViewBag.Categories = new SelectList(db.CourseCategories.Where(x => x.IsActive == true).ToList(), "CourseCategoryId", "CategoryName");
+            CertificationCertificateVM ccvm = new CertificationCertificateVM();
+            var obj = new List<CertificationCertificateVM.Certificate>();
+            ccvm._CertificateList = obj.ToList();
+            ccvm.PerformAction = null;
+            return View(ccvm);
+        }
+
+        [HttpPost]
+        public ActionResult NewCertificateDG(CertificationCertificateVM obj)
+        {
+            if (ModelState.IsValid)
+            {
+
+
+                var CertifcateList = from appld in db.Applied.Where(x => x.BatchId == obj.BatchId && x.AdmissionStatus == true).Select(m => new { m.ApplicationId, m.CourseId, m.BatchId }).Distinct()
+                                     join app in db.Applications on appld.ApplicationId equals app.ApplicationId
+                                     join cd in db.CertificateDesigns on appld.CourseId equals cd.CourseId
+                                     join c in db.Courses on appld.CourseId equals c.CourseId
+                                     join pr in db.Principals on cd.PrincipalId equals pr.PrincipalId
+                                     join b in db.Batches on appld.BatchId equals b.BatchId
+                                     join e in db.Employees on b.CoordinatorId equals e.EmployeeId
+                                     join cer in db.CertificateNumbersNew on appld.ApplicationId equals cer.ApplicationId
+                                     select new CertificationCertificateVM.Certificate
+                                     {
+
+                                         CertificateNo = cer.CertificateNumber,
+                                         BatchCode = b.BatchCode,
+                                         CourseCode = c.CourseCode,
+                                         ApplicationID = app.ApplicationId,
+                                         ApplicationCode = app.ApplicationCode,
+                                         BatchId = b.BatchId,
+                                         ApplicantName = app.FullName,
+                                         CDCNo = app.CdcNo,
+                                         DateofBirth = app.DateOfBirth,
+                                         PassportNo = app.PassportNo,
+                                         Grade = app.GradeOfCompetencyNo,
+                                         Number = app.CertOfCompetencyNo,
+                                         Indosno = app.InDosNo,
+                                         LineOfCertificate = cd.LineOfCertificate,
+                                         CourseName = cd.CourseName,
+                                         StartDate = b.StartDate,
+                                         EndDate = b.EndDate,
+                                         Paragraph1 = cd.Paragraph1,
+                                         Paragraph2 = cd.Paragraph2,
+                                         Paragraph3 = cd.Paragraph3,
+                                         CourseInCharge = e.FirstName + " " + e.MiddleName + " " + e.LastName,
+                                         Topic4 = cd.Topic4 == null ? "" : cd.Topic4,
+                                         Topic5 = cd.Topic5 == null ? "" : cd.Topic5,
+                                         DateOfIssue = b.EndDate,
+                                         PrincipalName = pr.PricipalName,
+                                         PrincipalSign = pr.SignatureImgUrl,
+                                         DateofExpiry = b.CourseExpiryDate,
+                                         OldCertificateNo = app.OldCertificateNo,
+                                         OldCertificateDate = app.OldCertificateDate,
+                                         OldCertificateIssuedBy = app.OldCertificateIssuedBy
+
+
+                                     };
+
+                var certificateformatid = db.CertificateDesigns.Where(m => m.CourseId == obj.CourseId).Select(m => m.CertificateFormatId).FirstOrDefault();
+                var performaction = db.CertificateFormats.Where(m => m.CertificateFormatId == certificateformatid).Select(m => m.ActionName).FirstOrDefault();
+                CertificationCertificateVM ccvm = new CertificationCertificateVM();
+                ccvm.PerformAction = performaction;
+
+                ViewBag.Categories = new SelectList(db.CourseCategories.Where(x => x.IsActive == true).ToList(), "CourseCategoryId", "CategoryName");
+                int count = db.Certificates.Where(x => x.BatchId == obj.BatchId).Count();
+                string year = DateTime.Now.Year.ToString();
+                foreach (var item in CertifcateList.ToList())
+                {
+                    var existingitem = db.Certificates.Where(c => (c.ApplicationId == item.ApplicationID && c.BatchId == item.BatchId)).Select(m => m.CertificateId).ToList();
+
+                    if (existingitem.Count == 0)
+                    {
+                        count++;
+
+                        Certificate c = new Certificate
+                        {
+                            //CertificateCode = item.CourseCode + item.BatchCode + count.ToString().PadLeft(3, '0') + year,
+                            CertificateCode = item.CertificateNo,
+                            ApplicationId = item.ApplicationID,
+                            BatchId = item.BatchId,
+                            CreateDate = DateTime.Now,
+                            IsPrint = true
+                        };
+                        db.Certificates.Add(c);
+                        db.SaveChanges();
+                    }
+                }
+                int indexcount = 1;
+
+                var CertifcatesList = from appld in db.Applied.Where(x => x.BatchId == obj.BatchId && x.AdmissionStatus == true).Select(m => new { m.ApplicationId, m.CourseId, m.BatchId }).Distinct().AsEnumerable()
+                                      join app in db.Applications on appld.ApplicationId equals app.ApplicationId
+                                      join cd in db.CertificateDesigns on appld.CourseId equals cd.CourseId
+                                      join c in db.Courses on appld.CourseId equals c.CourseId
+                                      join pr in db.Principals on cd.PrincipalId equals pr.PrincipalId
+                                      join b in db.Batches on appld.BatchId equals b.BatchId
+                                      join e in db.Employees on b.CoordinatorId equals e.EmployeeId
+                                      join temp in db.CertificateNumbersNew on app.ApplicationId equals temp.ApplicationId
+                                      select new CertificationCertificateVM.Certificate
+                                      {
+
+                                          //CertificateNo = c.CourseCode + b.BatchCode + (indexcount++).ToString().PadLeft(3, '0') + year,
+                                          CertificateNo = temp.CertificateNumber,
+                                          BatchCode = b.BatchCode,
+                                          CourseCode = c.CourseCode,
+                                          ApplicationID = app.ApplicationId,
+                                          ApplicationCode = app.ApplicationCode,
+                                          BatchId = b.BatchId,
+                                          ApplicantName = app.FullName,
+                                          CDCNo = app.CdcNo,
+                                          DateofBirth = app.DateOfBirth,
+                                          PassportNo = app.PassportNo,
+                                          Grade = app.GradeOfCompetencyNo,
+                                          Number = app.CertOfCompetencyNo,
+                                          Indosno = app.InDosNo,
+                                          LineOfCertificate = cd.LineOfCertificate,
+                                          CourseName = cd.CourseName,
+                                          StartDate = b.StartDate,
+                                          EndDate = b.EndDate,
+                                          Paragraph1 = cd.Paragraph1,
+                                          Paragraph2 = cd.Paragraph2,
+                                          Paragraph3 = cd.Paragraph3,
+                                          CourseInCharge = e.FirstName + " " + e.MiddleName + " " + e.LastName,
+                                          Topic4 = cd.Topic4 == null ? "" : cd.Topic4,
+                                          Topic5 = cd.Topic5 == null ? "" : cd.Topic5,
+                                          DateOfIssue = b.EndDate,
+                                          PrincipalName = pr.PricipalName,
+                                          PrincipalSign = pr.SignatureImgUrl,
+                                          DateofExpiry = b.CourseExpiryDate,
+                                          OldCertificateNo = app.OldCertificateNo,
+                                          OldCertificateDate = app.OldCertificateDate,
+                                          OldCertificateIssuedBy = app.OldCertificateIssuedBy
+
+
+                                      };
+
+                ccvm._CertificateList = CertifcatesList.OrderBy(x => x.CertificateNo).ToList();
+                ViewBag.batchId = obj.BatchId;
+                return View(ccvm);
+            }
+            ViewBag.Categories = new SelectList(db.CourseCategories.Where(x => x.IsActive == true).ToList(), "CourseCategoryId", "CategoryName");
+
+            return View(obj);
+        }
         #endregion
 
     }

@@ -25,6 +25,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -1108,6 +1109,8 @@
     <Content Include="Views\Fees\EditFeesReciept.cshtml" />
     <Content Include="Views\Fees\EditFeeRecieptList.cshtml" />
     <Content Include="Views\Fees\EditFeesRecieptMP.cshtml" />
+    <Content Include="Views\Certification\UploadExcelCertNumber.cshtml" />
+    <Content Include="Views\Certification\NewCertificateDG.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

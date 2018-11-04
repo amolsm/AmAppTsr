@@ -1,0 +1,171 @@
+﻿
+
+
+@{
+    ViewBag.Title = "Upload Certificate Number";
+}
+
+<!-- START BREADCRUMB -->
+<ul class="breadcrumb push-down-0">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Admission</a></li>
+    <li><a href="#">Upload Certificate Number</a></li>
+    @*<li class="active">Error 404</li>*@
+</ul>
+<!-- END BREADCRUMB -->
+<!-- PAGE CONTENT WRAPPER -->
+<div class="page-content-wrap">
+    <div>
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="form-horizontal">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Upload Certificate Number</h3>
+
+                        </div>
+                        @using (Html.BeginForm("UploadExcel", "Certification", FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "return myFunction()" }))
+                        {
+                            <div class="panel-body">
+                                <div class="row">
+
+                                    <div class="col-md-12">
+
+                                        <div class="form-group">
+
+                                            <div class="col-md-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                    @Html.DropDownList("CategoryId",
+             (IEnumerable<SelectListItem>)ViewBag.Categories, "Select Category", new { @class = "form-control", @onchange = "FillCourse()" })
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                    @Html.DropDownList("CourseId",
+             (IEnumerable<SelectListItem>)ViewBag.Course, "Select Course", new { @class = "form-control", @onchange = "FillBatch()" })
+                                                </div>
+
+                                            </div>
+
+
+
+                                            <div class="col-md-3">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                    @Html.DropDownList("BatchId",
+    new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "BatchCode"),
+    " ", new { @class = "form-control" })
+                                                </div>
+
+                                            </div>
+
+
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-3">Step 1 : Download Excel Format</div>
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+
+                                                <input class="btn btn-primary" type="button" value="Download" onclick="location.href='@Url.Action("DownloadExcelForCompanyReserv", "Certification")?id=' + document.getElementById('BatchId').value" />
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-3">Step 2 : Copy All Data In New Excel File</div>
+
+
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-3"> Step 3 : Upload New Excel File </div>
+                                        <div class="col-md-3">
+                                            @*@Html.TextBox("FileUpload", new { type = "file", @class = "form-control" })*@
+                                            <input type="file" id="FileUpload" name="FileUpload" class="form-control" />
+
+                                        </div>
+                                        <div class="col-md-3">
+                                            <input type="submit" value="Upload" id="btnSubmit" class="btn btn-primary" />
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                        }
+                        @*<div id="dvResult">
+                                @{Html.RenderPartial("ConfirmAdmissionsList", Model);}
+
+                            </div>*@
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+
+</div>
+<!-- END PAGE CONTENT WRAPPER -->
+<script>
+    function FillCourse() {
+        var CategoryId = $('#CategoryId').val();
+        $.ajax({
+            url: '/Application/FillCourse',
+            type: "GET",
+            dataType: "JSON",
+            data: { CategoryId: CategoryId },
+            success: function (Courses) {
+                $("#CourseId").html(""); // clear before appending new list
+                $("#CourseId").append(
+                        $('<option></option>').val(0).html("Select Course"));
+
+                $.each(Courses, function (i, c) {
+                    $("#CourseId").append(
+                        $('<option></option>').val(c.CourseId).html(c.CourseName));
+                });
+            }
+        });
+    }
+    function FillBatch() {
+        //debugger;
+        var CourseId = $('#CourseId').val();
+        $.ajax({
+            url: '/Admission/FillBatch',
+            type: "GET",
+            dataType: "JSON",
+            data: { CourseId: CourseId },
+            success: function (Batches) {
+                $("#BatchId").html(""); // clear before appending new list
+                $("#BatchId").append(
+                        $('<option></option>').val(0).html("Select Batch"));
+                $.each(Batches, function (i, c) {
+                    $("#BatchId").append(
+                        $('<option></option>').val(c.BatchId).html(c.BatchCode));
+                });
+            }
+        });
+    }
+
+
+   function Search() {
+      var BatchId = $('#BatchId').val();
+
+      $("#dvResult").load('@(Url.Action("GetListConfirmedStudents", "Admission",null, Request.Url.Scheme))?BatchId=' + BatchId );
+      //$('#customers2').DataTable();
+  }
+</script>
+
+

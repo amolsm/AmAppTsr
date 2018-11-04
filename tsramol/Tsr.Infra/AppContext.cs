@@ -53,7 +53,7 @@ namespace Tsr.Infra
         public DbSet<MainMenu> MainMenus { get; set; }
         public DbSet<SubMenu> SubMenus { get; set; }
         public DbSet<UserMenu> UserMenus { get; set; }
-
+        public DbSet<CertificateNumberNew> CertificateNumbersNew { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             //modelBuilder.Entity<Course>()
