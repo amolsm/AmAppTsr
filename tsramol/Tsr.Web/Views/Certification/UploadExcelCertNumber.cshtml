@@ -4,7 +4,7 @@
 @{
     ViewBag.Title = "Upload Certificate Number";
 }
-
+<script src="~/Scripts/commonjs/commondropdown.js"></script>
 <!-- START BREADCRUMB -->
 <ul class="breadcrumb push-down-0">
     <li><a href="#">Home</a></li>
@@ -58,7 +58,7 @@
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                                     @Html.DropDownList("BatchId",
-    new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "BatchCode"),
+    new SelectList(Enumerable.Empty<SelectListItem>(), "BatchId", "Name"),
     " ", new { @class = "form-control" })
                                                 </div>
 
@@ -120,44 +120,44 @@
 </div>
 <!-- END PAGE CONTENT WRAPPER -->
 <script>
-    function FillCourse() {
-        var CategoryId = $('#CategoryId').val();
-        $.ajax({
-            url: '/Application/FillCourse',
-            type: "GET",
-            dataType: "JSON",
-            data: { CategoryId: CategoryId },
-            success: function (Courses) {
-                $("#CourseId").html(""); // clear before appending new list
-                $("#CourseId").append(
-                        $('<option></option>').val(0).html("Select Course"));
+    //function FillCourse() {
+    //    var CategoryId = $('#CategoryId').val();
+    //    $.ajax({
+    //        url: '/Application/FillCourse',
+    //        type: "GET",
+    //        dataType: "JSON",
+    //        data: { CategoryId: CategoryId },
+    //        success: function (Courses) {
+    //            $("#CourseId").html(""); // clear before appending new list
+    //            $("#CourseId").append(
+    //                    $('<option></option>').val(0).html("Select Course"));
 
-                $.each(Courses, function (i, c) {
-                    $("#CourseId").append(
-                        $('<option></option>').val(c.CourseId).html(c.CourseName));
-                });
-            }
-        });
-    }
-    function FillBatch() {
-        //debugger;
-        var CourseId = $('#CourseId').val();
-        $.ajax({
-            url: '/Admission/FillBatch',
-            type: "GET",
-            dataType: "JSON",
-            data: { CourseId: CourseId },
-            success: function (Batches) {
-                $("#BatchId").html(""); // clear before appending new list
-                $("#BatchId").append(
-                        $('<option></option>').val(0).html("Select Batch"));
-                $.each(Batches, function (i, c) {
-                    $("#BatchId").append(
-                        $('<option></option>').val(c.BatchId).html(c.BatchCode));
-                });
-            }
-        });
-    }
+    //            $.each(Courses, function (i, c) {
+    //                $("#CourseId").append(
+    //                    $('<option></option>').val(c.CourseId).html(c.CourseName));
+    //            });
+    //        }
+    //    });
+    //}
+    //function FillBatch() {
+    //    //debugger;
+    //    var CourseId = $('#CourseId').val();
+    //    $.ajax({
+    //        url: '/Admission/FillBatch',
+    //        type: "GET",
+    //        dataType: "JSON",
+    //        data: { CourseId: CourseId },
+    //        success: function (Batches) {
+    //            $("#BatchId").html(""); // clear before appending new list
+    //            $("#BatchId").append(
+    //                    $('<option></option>').val(0).html("Select Batch"));
+    //            $.each(Batches, function (i, c) {
+    //                $("#BatchId").append(
+    //                    $('<option></option>').val(c.BatchId).html(c.BatchCode));
+    //            });
+    //        }
+    //    });
+    //}
 
 
    function Search() {

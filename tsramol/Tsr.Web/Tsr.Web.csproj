@@ -1111,6 +1111,8 @@
     <Content Include="Views\Fees\EditFeesRecieptMP.cshtml" />
     <Content Include="Views\Certification\UploadExcelCertNumber.cshtml" />
     <Content Include="Views\Certification\NewCertificateDG.cshtml" />
+    <Content Include="Views\Certification\ViewResultFormatNew.cshtml" />
+    <Content Include="Views\Certification\_CertificateFormatTwoWeekCourse.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
