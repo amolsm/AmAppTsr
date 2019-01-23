@@ -30,6 +30,7 @@ namespace Tsr.Core.Models
     {
         [Required]
         public decimal? Amount { get; set; }
+        public decimal? PrvAmount { get; set; }
         public string ReceiptNo { get; set; }
         //public int ApplicationId { get; set; }
        

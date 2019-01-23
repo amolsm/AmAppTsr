@@ -12,6 +12,7 @@
 {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(model => model.RecieptId)
+    @Html.HiddenFor(model => model.PrvAmount)
     <div class="modal-body">
         <div class="form-horizontal">
 
@@ -45,7 +46,7 @@
                     @Html.ValidationMessageFor(model => model.FeesType, "", new { @class = "text-danger" })
                 </div>
             </div>
-            
+
             <div class="form-group">
                 @Html.LabelFor(model => model.PaymentMode, htmlAttributes: new { @class = "control-label col-md-3" })
                 <div class="col-md-8">
@@ -92,12 +93,12 @@
 
 <script>
 
-$('.btn').on('click', function() {
-    var $this = $(this);
-  $this.button('loading');
-    setTimeout(function() {
-       $this.button('reset');
-   }, 8000);
-});
+    $('.btn').on('click', function () {
+        var $this = $(this);
+        $this.button('loading');
+        setTimeout(function () {
+            $this.button('reset');
+        }, 8000);
+    });
 </script>
 

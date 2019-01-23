@@ -226,34 +226,34 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/29/2018 18:06:02</publishTime>
     </File>
     <File Include="bin/Tsr.Core.dll">
-      <publishTime>12/18/2018 22:20:36</publishTime>
+      <publishTime>01/13/2019 20:26:05</publishTime>
     </File>
     <File Include="bin/Tsr.Core.dll.config">
       <publishTime>09/04/2018 20:10:11</publishTime>
     </File>
     <File Include="bin/Tsr.Core.pdb">
-      <publishTime>12/18/2018 22:20:36</publishTime>
+      <publishTime>01/13/2019 20:26:05</publishTime>
     </File>
     <File Include="bin/Tsr.Infra.dll">
-      <publishTime>12/18/2018 22:20:38</publishTime>
+      <publishTime>01/13/2019 20:26:09</publishTime>
     </File>
     <File Include="bin/Tsr.Infra.dll.config">
-      <publishTime>12/18/2018 18:45:22</publishTime>
+      <publishTime>01/13/2019 20:23:44</publishTime>
     </File>
     <File Include="bin/Tsr.Infra.pdb">
-      <publishTime>12/18/2018 22:20:38</publishTime>
+      <publishTime>01/13/2019 20:26:09</publishTime>
     </File>
     <File Include="bin/Tsr.ToPdf.dll">
-      <publishTime>12/18/2018 22:20:36</publishTime>
+      <publishTime>01/13/2019 20:26:05</publishTime>
     </File>
     <File Include="bin/Tsr.ToPdf.pdb">
-      <publishTime>12/18/2018 22:20:36</publishTime>
+      <publishTime>01/13/2019 20:26:05</publishTime>
     </File>
     <File Include="bin/Tsr.Web.dll">
-      <publishTime>12/18/2018 22:21:13</publishTime>
+      <publishTime>01/13/2019 20:26:37</publishTime>
     </File>
     <File Include="bin/Tsr.Web.pdb">
-      <publishTime>12/18/2018 22:21:13</publishTime>
+      <publishTime>01/13/2019 20:26:37</publishTime>
     </File>
     <File Include="bin/TugberkUg.MVC.dll">
       <publishTime>07/29/2018 18:06:06</publishTime>
@@ -2311,7 +2311,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/29/2018 18:05:45</publishTime>
     </File>
     <File Include="Views/Certification/_CertificateFormatTwoWeekCourse.cshtml">
-      <publishTime>12/18/2018 21:49:25</publishTime>
+      <publishTime>12/25/2018 09:16:42</publishTime>
     </File>
     <File Include="Views/Certification/_CertificateFormatWorkshopskills.cshtml">
       <publishTime>07/29/2018 18:05:45</publishTime>
@@ -2350,7 +2350,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/29/2018 18:05:45</publishTime>
     </File>
     <File Include="Views/Fees/EditFeesRecieptMP.cshtml">
-      <publishTime>07/29/2018 18:05:45</publishTime>
+      <publishTime>01/13/2019 19:12:36</publishTime>
     </File>
     <File Include="Views/Fees/FeeReciept.cshtml">
       <publishTime>07/29/2018 18:05:45</publishTime>
@@ -2617,13 +2617,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/29/2018 18:05:46</publishTime>
     </File>
     <File Include="Views/Shared/_SidebarAdmin.cshtml">
-      <publishTime>11/04/2018 07:50:34</publishTime>
+      <publishTime>01/13/2019 20:19:50</publishTime>
     </File>
     <File Include="Views/Shared/_SidebarAdmission.cshtml">
       <publishTime>07/29/2018 18:05:46</publishTime>
     </File>
     <File Include="Views/Shared/_SidebarFees.cshtml">
-      <publishTime>07/29/2018 18:05:47</publishTime>
+      <publishTime>01/13/2019 20:19:47</publishTime>
     </File>
     <File Include="Views/Shared/_SidebarPrinting.cshtml">
       <publishTime>11/04/2018 07:51:02</publishTime>
@@ -2635,7 +2635,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/29/2018 18:05:47</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>12/18/2018 22:21:21</publishTime>
+      <publishTime>01/13/2019 20:26:42</publishTime>
     </File>
   </ItemGroup>
 </Project>

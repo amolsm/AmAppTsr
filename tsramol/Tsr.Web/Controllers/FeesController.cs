@@ -30,7 +30,7 @@ namespace Tsr.Web.Controllers
             var Students = from apl in db.Applied
                            join ap in db.Applications on apl.ApplicationId equals ap.ApplicationId
                            where (apl.BatchId == BatchId && apl.AdmissionStatus == true)
-                           select new { ApplicationId = apl.ApplicationId, Name = ap.FullName};                          
+                           select new { ApplicationId = apl.ApplicationId, Name = ap.FullName };
 
             return Json(Students, JsonRequestBehavior.AllowGet);
         }
@@ -102,10 +102,10 @@ namespace Tsr.Web.Controllers
                             join fr in db.FeeReceipts on ap.ApplicationId equals fr.ApplicationId
                             join sd in db.StudentFeeDetails on ap.ApplicationId equals sd.ApplicationId
                             join cr in db.Courses on ap.CourseId equals cr.CourseId
-                        
+
 
                             where (ap.ApplicationId == Id)
-                            
+
                             select new FeesViewPaymentDetailsVM
                             {
                                 FeeReceiptNo = Common.FeeReceiptNumber.GetReceiptNo(fr.FeeReceiptId, fr.PaymentMode),
@@ -145,7 +145,7 @@ namespace Tsr.Web.Controllers
                             join fr in db.FeeReceipts on ap.ApplicationId equals fr.ApplicationId
                             join sd in db.StudentFeeDetails on ap.ApplicationId equals sd.ApplicationId
                             join cr in db.Courses on ap.CourseId equals cr.CourseId
-                           
+
                             where (ap.BatchId == Id)
                             select new FeesViewPaymentDetailsVM
                             {
@@ -205,7 +205,7 @@ namespace Tsr.Web.Controllers
 
             List<FeesApplicantList> obj = new List<FeesApplicantList>();
             obj.Add(list.FirstOrDefault());
-            return PartialView("CoursePaymentsList",obj);
+            return PartialView("CoursePaymentsList", obj);
         }
 
         public async Task<ActionResult> CoursePaymentsMP(int? id)
@@ -221,7 +221,7 @@ namespace Tsr.Web.Controllers
                 FeesType = "CourseFee"
             };
 
-            
+
             ViewBag.PaymentMode = DropdownData.PaymentMode();
             return PartialView("CoursePaymentsMP", vm);
         }
@@ -310,8 +310,8 @@ namespace Tsr.Web.Controllers
         #endregion
 
         #region PrintReceipts
-        public ActionResult CoursePaymentPrintReceipt(int?  id )
-         {
+        public ActionResult CoursePaymentPrintReceipt(int? id)
+        {
 
             if (id != null)
             {
@@ -319,7 +319,7 @@ namespace Tsr.Web.Controllers
                 if (app.IsPackage == null || app.IsPackage == false)
                 {
                     var list1 = (
-                              
+
                                  from ap in db.Applications.AsEnumerable()
                                  join b in db.Batches on ap.BatchId equals b.BatchId
                                  join fr in db.FeeReceipts on ap.ApplicationId equals fr.ApplicationId
@@ -332,28 +332,28 @@ namespace Tsr.Web.Controllers
 
                                  where (ap.ApplicationId == id)
 
-                                select new FeesViewPaymentDetailsVM
-                                {
-                                    // FeeReceiptNo = Common.FeeReceiptNumber.GetReceiptNo(fr.FeeReceiptId, fr.PaymentMode),//fr.FeeReceiptNo,
-                                    FeeReceiptNo = fr.FeeReceiptNo,
-                                    PaymentMode = fr.PaymentMode,
-                                    FeesType = fr.FeesType,
-                                    ReceiptDate = fr.ReceiptDate,
-                                    Name = ap.FullName,
-                                    Course = cr.ShortName,
-                                    Batch = b.BatchCode,
-                                    StudentId = ap.ApplicationId,
-                                    ApplicationId = ap.ApplicationId,
-                                    ApplicationCode = ap.ApplicationCode,
-                                    FeePaid = fr.Amount,
-                                    FeeBal = (sd == null) ? 0 : sd.FeeBal,
-                                    AmountInRs = Common.AmountInWords.ConvertNumbertoWords(Convert.ToInt64(fr.Amount)),
-                                    BatchStartDate = b.StartDate,
-                                    PaymentDate = DateTime.Now,
-                                    FeeReceiptId = fr.FeeReceiptId,
-                                    GST = (gst == null) ? 0 : Convert.ToDecimal(gst.GstPercentage)
+                                 select new FeesViewPaymentDetailsVM
+                                 {
+                                     // FeeReceiptNo = Common.FeeReceiptNumber.GetReceiptNo(fr.FeeReceiptId, fr.PaymentMode),//fr.FeeReceiptNo,
+                                     FeeReceiptNo = fr.FeeReceiptNo,
+                                     PaymentMode = fr.PaymentMode,
+                                     FeesType = fr.FeesType,
+                                     ReceiptDate = fr.ReceiptDate,
+                                     Name = ap.FullName,
+                                     Course = cr.ShortName,
+                                     Batch = b.BatchCode,
+                                     StudentId = ap.ApplicationId,
+                                     ApplicationId = ap.ApplicationId,
+                                     ApplicationCode = ap.ApplicationCode,
+                                     FeePaid = fr.Amount,
+                                     FeeBal = (sd == null) ? 0 : sd.FeeBal,
+                                     AmountInRs = Common.AmountInWords.ConvertNumbertoWords(Convert.ToInt64(fr.Amount)),
+                                     BatchStartDate = b.StartDate,
+                                     PaymentDate = DateTime.Now,
+                                     FeeReceiptId = fr.FeeReceiptId,
+                                     GST = (gst == null) ? 0 : Convert.ToDecimal(gst.GstPercentage)
 
-                                }).ToList();
+                                 }).ToList();
 
                     var list = list1.OrderByDescending(x => x.FeeReceiptId).Take(1).ToList();
                     foreach (var l in list)
@@ -416,7 +416,7 @@ namespace Tsr.Web.Controllers
                                      GST = 0
 
 
-                                }).ToList();
+                                 }).ToList();
                     var list = list1.OrderByDescending(x => x.FeeReceiptId).Take(1).ToList();
                     foreach (var l in list)
                     {
@@ -459,7 +459,7 @@ namespace Tsr.Web.Controllers
         #region Scrutinee
         public ActionResult Scrutinee()
         {
-            
+
             ViewBag.Categories = new SelectList(db.CourseCategories.ToList(), "CourseCategoryId", "CategoryName");
             ViewBag.Packages = new SelectList(db.packages.ToList(), "PackageId", "PackageName");
             return View();
@@ -467,11 +467,11 @@ namespace Tsr.Web.Controllers
         public ActionResult FillStudentsForScrutinee(int BatchId)
         {
             var Students = from ap in db.Applications
-                    
-                    where (ap.BatchId == BatchId && ap.Scrutinee == true)
-                    select new { ApplicationId = ap.ApplicationId, Name = ap.FullName};
 
-            
+                           where (ap.BatchId == BatchId && ap.Scrutinee == true)
+                           select new { ApplicationId = ap.ApplicationId, Name = ap.FullName };
+
+
             return Json(Students, JsonRequestBehavior.AllowGet);
         }
         public ActionResult FillStudentsForPackageScrutinee(int PackageId)
@@ -489,14 +489,14 @@ namespace Tsr.Web.Controllers
             Application ap = await db.Applications.FindAsync(ApplicationId);
 
             var obj = new List<FeesScrutineeListVM>();
-            
-                var t = db.Applied.FirstOrDefault(x => x.ApplicationId == ap.ApplicationId);
-                string ps;
-                bool mpf;
-                if (t == null)
-                { ps = "Pending"; mpf = true; }
-                else
-                { ps = "Success"; mpf = false; }
+
+            var t = db.Applied.FirstOrDefault(x => x.ApplicationId == ap.ApplicationId);
+            string ps;
+            bool mpf;
+            if (t == null)
+            { ps = "Pending"; mpf = true; }
+            else
+            { ps = "Success"; mpf = false; }
             if (ap.IsPackage == false || ap.IsPackage == null)
             {
                 FeesScrutineeListVM vm = new FeesScrutineeListVM
@@ -530,7 +530,7 @@ namespace Tsr.Web.Controllers
                             PaymentStatus = ps,
                             MakePaymentFlag = mpf,
                             BatchName = bn,
-                            CourseName = cn ,
+                            CourseName = cn,
                             Cell = ap.CellNo,
                             Email = ap.Email,
                             Name = ap.FirstName + " " + ap.MiddleName + " " + ap.LastName
@@ -576,7 +576,7 @@ namespace Tsr.Web.Controllers
                 var cc = await db.CourseCategories.FindAsync(c.CategoryId);
                 var cf = await db.CourseFees.FirstOrDefaultAsync(x => x.CourseId == ap.CourseId);
 
-               
+
 
                 if (cc.CetRequired == true)
                 {
@@ -637,7 +637,7 @@ namespace Tsr.Web.Controllers
             }
             ViewBag.PaymentMode = DropdownData.PaymentMode();
             ViewBag.PaymentLocation = DropdownData.PaymentLocation();
-            return PartialView("ScrutineeMakePayment",vm);
+            return PartialView("ScrutineeMakePayment", vm);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -884,13 +884,14 @@ namespace Tsr.Web.Controllers
             if (id != null)
             {
                 var app = db.Applications.Find(id);
-                if (app.IsPackage == null || app.IsPackage==false)
+                if (app.IsPackage == null || app.IsPackage == false)
                 {
                     var list = (from ap in db.Applications.AsEnumerable()
                                 join b in db.Batches on ap.BatchId equals b.BatchId
                                 join fr in db.FeeReceipts on ap.ApplicationId equals fr.ApplicationId
                                 join sd in db.StudentFeeDetails on ap.ApplicationId equals sd.ApplicationId
-                                into sdf from sd in sdf.DefaultIfEmpty()
+                                into sdf
+                                from sd in sdf.DefaultIfEmpty()
                                 join cr in db.Courses on ap.CourseId equals cr.CourseId
                                 join gst in db.CourseFees on ap.CourseId equals gst.CourseId into pi4
                                 from gst in pi4.DefaultIfEmpty()
@@ -930,23 +931,24 @@ namespace Tsr.Web.Controllers
                     }
                     list.AddRange(Enumerable.Repeat(0, 1).Select(
                         x => new FeesViewPaymentDetailsVM()
-                        { FeeReceiptNo =list[0].FeeReceiptNo,
-                          PaymentMode = list[0].PaymentMode,
-                          FeesType = list[0].FeesType,
-                          ReceiptDate = list[0].ReceiptDate,
-                          Name =  list[0].Name,
-                          Course = list[0].Course,
-                          Batch = list[0].Batch,
-                          StudentId = list[0].StudentId,
-                          ApplicationId = list[0].ApplicationId,
-                          ApplicationCode = list[0].ApplicationCode,
-                          FeePaid = list[0].FeePaid,
-                          FeeBal = list[0].FeeBal,
-                          AmountInRs = list[0].AmountInRs,
-                          BatchStartDate = list[0].BatchStartDate,
-                          PaymentDate = list[0].PaymentDate,
-                          FeeReceiptId = list[0].FeeReceiptId,
-                          GST= list[0].GST
+                        {
+                            FeeReceiptNo = list[0].FeeReceiptNo,
+                            PaymentMode = list[0].PaymentMode,
+                            FeesType = list[0].FeesType,
+                            ReceiptDate = list[0].ReceiptDate,
+                            Name = list[0].Name,
+                            Course = list[0].Course,
+                            Batch = list[0].Batch,
+                            StudentId = list[0].StudentId,
+                            ApplicationId = list[0].ApplicationId,
+                            ApplicationCode = list[0].ApplicationCode,
+                            FeePaid = list[0].FeePaid,
+                            FeeBal = list[0].FeeBal,
+                            AmountInRs = list[0].AmountInRs,
+                            BatchStartDate = list[0].BatchStartDate,
+                            PaymentDate = list[0].PaymentDate,
+                            FeeReceiptId = list[0].FeeReceiptId,
+                            GST = list[0].GST
                         }));
                     return new PdfActionResult(list);
                 }
@@ -972,15 +974,15 @@ namespace Tsr.Web.Controllers
                                     ApplicationCode = ap.ApplicationCode,
                                     FeePaid = fr.Amount,
                                     FeeBal = sd.FeeBal,
-                                    AmountInRs = Common.AmountInWords.ConvertNumbertoWords(Convert.ToInt64( fr.Amount)),
+                                    AmountInRs = Common.AmountInWords.ConvertNumbertoWords(Convert.ToInt64(fr.Amount)),
                                     BatchStartDate = null,
                                     PaymentDate = DateTime.Now,
                                     FeeReceiptId = fr.FeeReceiptId,
-                                    GST=0
+                                    GST = 0
 
 
                                 }).ToList();
-                 
+
                     foreach (var l in list)
                     {
                         FeeReceipt fr = db.FeeReceipts.Find(l.FeeReceiptId);
@@ -1041,7 +1043,7 @@ namespace Tsr.Web.Controllers
                 vm.Email = app.Email;
                 vm.Phone = app.CellNo;
                 vm.FullName = app.FullName;
-                
+
             }
             else
             {
@@ -1127,18 +1129,18 @@ namespace Tsr.Web.Controllers
         public ActionResult EditReceiptSearch(string RNo)
         {
             var list = (from fr in db.FeeReceipts
-                       join ap in db.Applications on fr.ApplicationId equals ap.ApplicationId
-                       where fr.FeeReceiptNo.Contains(RNo)
+                        join ap in db.Applications on fr.ApplicationId equals ap.ApplicationId
+                        where fr.FeeReceiptNo.Contains(RNo)
                         select new EditFeesRecieptList
-                       {
-                           Name = ap.FullName,
-                           ReceiptNo = fr.FeeReceiptNo,
-                           Amount = fr.Amount,
-                           ReceiptDate = fr.ReceiptDate,
-                           RecieptId = fr.FeeReceiptId
-                       }).ToList();
-           
-            return PartialView("EditFeeRecieptList",list);
+                        {
+                            Name = ap.FullName,
+                            ReceiptNo = fr.FeeReceiptNo,
+                            Amount = fr.Amount,
+                            ReceiptDate = fr.ReceiptDate,
+                            RecieptId = fr.FeeReceiptId
+                        }).ToList();
+
+            return PartialView("EditFeeRecieptList", list);
         }
 
         public async Task<ActionResult> EditFeesRecieptMP(int? id)
@@ -1149,6 +1151,7 @@ namespace Tsr.Web.Controllers
             EditRecieptMpVm vm = new EditRecieptMpVm
             {
                 Amount = fr.Amount,
+                PrvAmount = fr.Amount,
                 BankName = fr.BankName,
                 ChequeNo = fr.ChequeNo,
                 DdNo = fr.DDNo,
@@ -1157,10 +1160,24 @@ namespace Tsr.Web.Controllers
                 ReceiptNo = fr.FeeReceiptNo,
                 ReceiptDate = fr.ReceiptDate,
                 RecieptId = fr.FeeReceiptId
-                
             };
-            
             return PartialView("EditFeesRecieptMP", vm);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditFeesRecieptMP(EditRecieptMpVm vm)
+        {
+            var t = db.FeeReceipts.Find(vm.RecieptId);
+            var diffAmount = vm.Amount - vm.PrvAmount;
+            var sfd = db.StudentFeeDetails.FirstOrDefault(x => x.ApplicationId == t.ApplicationId);
+            var s = db.StudentFeeDetails.Find(sfd.StudentFeeDetailId);
+            t.Amount = vm.Amount;
+           
+            s.FeePaid = s.FeePaid + diffAmount;
+            s.FeeBal = s.TotalFee - s.FeePaid;
+           
+            db.SaveChanges();
+            return Json(new { success = true });
         }
         #endregion
     }
